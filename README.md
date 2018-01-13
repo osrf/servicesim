@@ -21,4 +21,4 @@
 # Run
 
     cd servicesim
-    GAZEBO_PLUGIN_PATH=`pwd`/plugins/build gazebo --verbose worlds/service.world
+    GAZEBO_MODEL_PATH=`pwd`/models:$GAZEBO_MODEL_PATH GAZEBO_PLUGIN_PATH=`pwd`/plugins/build gazebo --verbose worlds/service.world

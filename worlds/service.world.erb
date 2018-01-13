@@ -27,7 +27,7 @@
 
   ###############################################
   #                                             #
-  #             IMPORT OTHER FILES              #
+  #           IMPORT OTHER ERB FILES            #
   #                                             #
   ###############################################
 
@@ -35,6 +35,48 @@
   def fromFile filename
     return ERB.new(File.read(filename), nil, nil, '_sub01').result(binding)
   end
+
+  ###############################################
+  #                                             #
+  #                   ACTORS                    #
+  #                                             #
+  ###############################################
+
+  skins =
+  [
+    "SKIN_man_blue_shirt.dae",
+    "SKIN_man_green_shirt.dae",
+    "SKIN_man_red_shirt.dae"
+  ]
+
+  animations =
+  [
+    "ANIMATION_walking.dae",
+    "ANIMATION_running.dae",
+    "ANIMATION_talking_a.dae",
+    "ANIMATION_talking_b.dae"
+  ]
+
+  actors =
+  [
+    {:skin => skins.sample, :anim => animations[0], :traj => "traj1"},
+    {:skin => skins.sample, :anim => animations[2]},
+  ]
+
+  ###############################################
+  #                                             #
+  #               INITIALIZATION                #
+  #                                             #
+  ###############################################
+
+  require 'csv'
+
+  # Relative path from where the script is being run to the script's directory
+  DIR = File.dirname(__FILE__)
+
+  # Actor's Z position
+  actor_pos_z = 1.25
+
 %>
 
 <!-- Seed: <%= seed %> -->
@@ -58,7 +100,7 @@
     <!-- A global light source -->
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 <%= rand(-1.0...1.0) %> <%= rand(-1.6...-0.8)%> 0</pose>
+      <pose>0 0 1000 0 0 0</pose>
       <diffuse>0.8 0.8 0.8 1</diffuse>
       <specular>0.2 0.2 0.2 1</specular>
       <attenuation>
@@ -90,32 +132,47 @@
       <uri>model://willowgarage</uri>
     </include>
 
-    <!-- Actors -->
-    <actor name="actor1">
-      <pose>-11.1 -16.8 1.25 0 0 0</pose>
-      <skin>
-        <filename>walk.dae</filename>
-        <scale>1.0</scale>
-      </skin>
-      <animation name="walking">
-        <filename>walk.dae</filename>
-        <scale>1.000000</scale>
-        <interpolate_x>true</interpolate_x>
-      </animation>
+    <!-- People -->
+    <%
+      count = 0
+      for actor in actors
+        count = count + 1
+        skin = actor[:skin]
+        anim = actor[:anim]
+        if (actor[:traj])
+          traj = CSV.read(DIR + "/" + actor[:traj] + ".csv");
+        else
+         traj = [[0, 0]]
+        end
+    %>
+      <actor name="person_<%= count %>">
+        <!-- Starting pose -->
+        <pose><%= traj[0][0] %> <%= traj[0][1] %> <%= actor_pos_z %> 0 0 0</pose>
+        <skin>
+          <filename>model://actor/meshes/<%= skin %></filename>
+        </skin>
+        <animation name="animation">
+          <filename>model://actor/meshes/<%= anim %></filename>
+          <% if traj.length > 1 %>
+            <interpolate_x>true</interpolate_x>
+          <% end %>
+        </animation>
 
-      <plugin name="actor1_plugin" filename="libWanderingActorPlugin.so">
-        <target>-9.325820 -15.967300 1.25 0 0 0</target>
-        <target>-9.201666 -7.601102 1.25 0 0 0</target>
-        <target>5.877820 -7.593150 1.25 0 0 0</target>
-        <target>13.218100 -10.697100 1.25 0 0 0</target>
-        <target>15.234600 -13.723600 1.25 0 0 0</target>
-        <target>15.255800 -16.017600 1.25 0 0 0</target>
-        <target>-9.325820 -15.967300 1.25 0 0 0</target>
-        <target_weight>1.15</target_weight>
-        <obstacle_weight>1.8</obstacle_weight>
-        <animation_factor>5.1</animation_factor>
-      </plugin>
-    </actor>
+        <% if traj.length > 1 %>
+          <plugin name="actor1_plugin" filename="libWanderingActorPlugin.so">
+            <%
+              for line in traj
+            %>
+            <target><%= line[0] %> <%= line[1] %> <%= actor_pos_z %> 0 0 0</target>
+            <% end %>
+
+            <target_weight>1.15</target_weight>
+            <obstacle_weight>1.8</obstacle_weight>
+            <animation_factor>5.1</animation_factor>
+          </plugin>
+        <% end %>
+      </actor>
+    <% end %>
 
   </world>
 </sdf>

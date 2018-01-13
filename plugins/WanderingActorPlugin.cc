@@ -64,7 +64,7 @@ class servicesim::WanderingActorPluginPrivate
   public: physics::TrajectoryInfoPtr trajectoryInfo;
 
   /// \brief Animation
-  public: std::string animation{"walking"};
+  public: std::string animation{"animation"};
 };
 
 /////////////////////////////////////////////////
