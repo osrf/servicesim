@@ -21,11 +21,15 @@
   #include <Winsock2.h>
 #endif
 
+#include <gazebo/common/ModelDatabase.hh>
+#include <gazebo/rendering/Scene.hh>
 #include <gazebo/transport/Node.hh>
+#include <gazebo/transport/TransportIface.hh>
 #include "CreateActorPlugin.hh"
 
 std::map<std::string, std::string> skinMap;
 std::map<std::string, std::string> animMap;
+std::map<std::string, ignition::math::Pose3d> animPoseMap;
 unsigned int count{0};
 
 namespace gazebo
@@ -40,6 +44,7 @@ namespace gazebo
     public: transport::PublisherPtr factoryPub;
 
     public: std::string currentSDF{""};
+    public: gui::ModelMaker *modelMaker;
   };
 }
 
@@ -58,7 +63,10 @@ CreateActorPlugin::CreateActorPlugin()
   skinMap["Blue shirt"] = "SKIN_man_blue_shirt";
 
   animMap["Talking A"] = "ANIMATION_talking_a";
+  animPoseMap["Talking A"] = ignition::math::Pose3d(0, -1, 0, 0, 0, IGN_PI);
+
   animMap["Talking B"] = "ANIMATION_talking_b";
+  animPoseMap["Talking B"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
 
   // Stacked layout
   auto mainLayout = new QStackedLayout();
@@ -77,24 +85,44 @@ CreateActorPlugin::CreateActorPlugin()
   this->dataPtr->factoryPub =
       this->dataPtr->gzNode->Advertise<msgs::Factory>("~/factory");
 
-  // 0: Actor type
+  // Skin combo
+  auto skinCombo = new QComboBox();
+  for (auto s : skinMap)
+    skinCombo->addItem(QString::fromStdString(s.first));
+
+  // Animation combo
+  auto animCombo = new QComboBox();
+  for (auto a : animMap)
+    animCombo->addItem(QString::fromStdString(a.first));
+
+  // 0: Skin and animation
   {
     // Label
-    auto label = new QLabel(tr("<b>Choose actor type</b>"));
+    auto label = new QLabel(tr("Choose skin and animation"));
     label->setMaximumHeight(50);
 
-    // Idler
-    auto idlerButton = new QPushButton(tr("Idler"));
-    this->connect(idlerButton, &QPushButton::clicked, [=]()
+    // Next button
+    auto nextButton = new QPushButton(tr("Next"));
+    this->connect(nextButton, &QPushButton::clicked, [=]()
     {
+      // Ghost insertion
+      auto filename = common::ModelDatabase::Instance()->GetModelFile(
+          "model://ghost");
+      gui::Events::createEntity("model", filename);
+
       mainLayout->setCurrentIndex(1);
+      count++;
     });
 
     // Layout
     auto layout = new QGridLayout;
     layout->setSpacing(0);
-    layout->addWidget(label, 0, 0);
-    layout->addWidget(idlerButton, 1, 0);
+    layout->addWidget(label, 0, 0, 1, 2);
+    layout->addWidget(new QLabel("Skin"), 1, 0);
+    layout->addWidget(skinCombo, 1, 1);
+    layout->addWidget(new QLabel("Animation"), 2, 0);
+    layout->addWidget(animCombo, 2, 1);
+    layout->addWidget(nextButton, 3, 1);
 
     // Widget
     auto widget = new QWidget();
@@ -103,51 +131,74 @@ CreateActorPlugin::CreateActorPlugin()
     mainLayout->addWidget(widget);
   }
 
-  // 1: Idler skin
+  // 1: Pose(s)
   {
     // Label
-    auto label = new QLabel(tr("<b>Choose a skin and animation for the actor</b>"));
+    auto label = new QLabel(
+        "Position the ghost and press Next when done.<br>\
+         <b>Tip</b>: Use the translation and rotation tools.<br>\
+         <b>You won't be able to reposition the actor after spawned</b>");
     label->setMaximumHeight(50);
-
-    // Skin combo
-    auto skinCombo = new QComboBox();
-    for (auto s : skinMap)
-      skinCombo->addItem(QString::fromStdString(s.first));
-
-    // Animation combo
-    auto animCombo = new QComboBox();
-    for (auto a : animMap)
-      animCombo->addItem(QString::fromStdString(a.first));
-
-    // Back button
-    auto backButton = new QPushButton(tr("Back"));
-    this->connect(backButton, &QPushButton::clicked, [=]()
-    {
-      mainLayout->setCurrentIndex(0);
-    });
 
     // Next button
     auto nextButton = new QPushButton(tr("Next"));
     this->connect(nextButton, &QPushButton::clicked, [=]()
     {
+      // Get ghost
+      auto scene = rendering::get_scene();
+      if (!scene)
+      {
+        gzerr << "Failed to get scene" << std::endl;
+        return;
+      }
+
+      auto ghostVis = scene->GetVisual("ghost");
+      if (!ghostVis)
+      {
+        gzerr << "Failed to get ghost visual" << std::endl;
+        return;
+      }
+
+      // Actor SDF
       auto skin = skinMap[skinCombo->currentText().toStdString()];
       auto anim = animMap[animCombo->currentText().toStdString()];
+      auto poseOffset = animPoseMap[animCombo->currentText().toStdString()];
+
+      auto pose = ghostVis->WorldPose();
+      pose = poseOffset + pose;
+      std::ostringstream poseStr;
+      poseStr << pose;
+
+      auto name = "actor_" + std::to_string(count);
 
       this->dataPtr->currentSDF =
           "<?xml version='1.0' ?>\
            <sdf version='" SDF_VERSION "'>\
-             <actor name='actor_" + std::to_string(count) + "'>\
-               <pose>0 0 1.25 0 0 0</pose>\
+             <actor name='" + name + "'>\
+               <pose>" + poseStr.str() + "</pose>\
                <skin>\
                  <filename>model://actor/meshes/" + skin + ".dae</filename>\
                </skin>\
                <animation name=\"animation\">\
                  <filename>model://actor/meshes/" + anim + ".dae</filename>\
                </animation>\
+                <script>\
+                  <trajectory id='0' type='animation'>\
+                      <waypoint>\
+                        <time>100</time>\
+                        <pose>" + poseStr.str() + "</pose>\
+                      </waypoint>\
+                  </trajectory>\
+                </script>\
              </actor>\
            </sdf>\
           ";
 
+      // Delete ghost
+      transport::requestNoReply("CreateActor", "entity_delete",
+                                ghostVis->Name());
+
+      // Spawn actor
       gazebo::msgs::Factory msg;
       msg.set_sdf(this->dataPtr->currentSDF);
 
@@ -161,11 +212,6 @@ CreateActorPlugin::CreateActorPlugin()
     auto layout = new QGridLayout;
     layout->setSpacing(0);
     layout->addWidget(label, 0, 0, 1, 3);
-    layout->addWidget(new QLabel("Skin"), 1, 0);
-    layout->addWidget(skinCombo, 1, 1);
-    layout->addWidget(new QLabel("Animation"), 2, 0);
-    layout->addWidget(animCombo, 2, 1);
-    layout->addWidget(backButton, 3, 0);
     layout->addWidget(nextButton, 3, 1);
 
     // Widget
@@ -175,10 +221,11 @@ CreateActorPlugin::CreateActorPlugin()
     mainLayout->addWidget(widget);
   }
 
-  // 2: Idler pose and export
+  // 2: Export
   {
     // Label
-    auto label = new QLabel(tr("<b>The actor has been spawned, reposition it and export.</b>"));
+    auto label = new QLabel(
+        "The actor has been spawned,<br>export to a file or start a new actor.");
     label->setMaximumHeight(50);
 
     // New actor
@@ -260,7 +307,7 @@ CreateActorPlugin::CreateActorPlugin()
 
   // Make this invisible
   this->move(1, 1);
-  this->resize(400, 400);
+  this->resize(400, 150);
 
   this->setStyleSheet(
       "QFrame {background-color: rgba(100, 100, 100, 255); color: black;}");
