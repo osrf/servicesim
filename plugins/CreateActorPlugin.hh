@@ -41,6 +41,9 @@ namespace gazebo
     /// \brief Destructor.
     public: virtual ~CreateActorPlugin();
 
+    /// \brief Spawn current actor
+    private: void Spawn();
+
     /// \internal
     /// \brief Pointer to private data.
     private: std::unique_ptr<CreateActorPluginPrivate> dataPtr;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Open Source Robotics Foundation
+ * Copyright (C) 2018 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,8 @@ namespace gazebo
     /// \brief keyboard publisher.
     public: transport::PublisherPtr factoryPub;
 
+    /// \brief Latest SDF
     public: std::string currentSDF{""};
-    public: gui::ModelMaker *modelMaker;
   };
 }
 
@@ -52,6 +52,15 @@ using namespace gazebo;
 
 // Register this plugin with the simulator
 GZ_REGISTER_GUI_PLUGIN(CreateActorPlugin)
+
+/////////////////////////////////////////////////
+// Initiate the insertion of a ghost model
+void insertGhost()
+{
+  auto filename = common::ModelDatabase::Instance()->GetModelFile(
+      "model://ghost");
+  gui::Events::createEntity("model", filename);
+}
 
 /////////////////////////////////////////////////
 CreateActorPlugin::CreateActorPlugin()
@@ -67,6 +76,12 @@ CreateActorPlugin::CreateActorPlugin()
 
   animMap["Talking B"] = "ANIMATION_talking_b";
   animPoseMap["Talking B"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
+
+  animMap["Walking"] = "ANIMATION_walking";
+  animPoseMap["Walking"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
+
+  animMap["Running"] = "ANIMATION_running";
+  animPoseMap["Running"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
 
   // Stacked layout
   auto mainLayout = new QStackedLayout();
@@ -87,11 +102,13 @@ CreateActorPlugin::CreateActorPlugin()
 
   // Skin combo
   auto skinCombo = new QComboBox();
+  skinCombo->setObjectName("skinCombo");
   for (auto s : skinMap)
     skinCombo->addItem(QString::fromStdString(s.first));
 
   // Animation combo
   auto animCombo = new QComboBox();
+  animCombo->setObjectName("animCombo");
   for (auto a : animMap)
     animCombo->addItem(QString::fromStdString(a.first));
 
@@ -105,10 +122,7 @@ CreateActorPlugin::CreateActorPlugin()
     auto nextButton = new QPushButton(tr("Next"));
     this->connect(nextButton, &QPushButton::clicked, [=]()
     {
-      // Ghost insertion
-      auto filename = common::ModelDatabase::Instance()->GetModelFile(
-          "model://ghost");
-      gui::Events::createEntity("model", filename);
+      insertGhost();
 
       mainLayout->setCurrentIndex(1);
       count++;
@@ -144,68 +158,8 @@ CreateActorPlugin::CreateActorPlugin()
     auto nextButton = new QPushButton(tr("Next"));
     this->connect(nextButton, &QPushButton::clicked, [=]()
     {
-      // Get ghost
-      auto scene = rendering::get_scene();
-      if (!scene)
-      {
-        gzerr << "Failed to get scene" << std::endl;
-        return;
-      }
-
-      auto ghostVis = scene->GetVisual("ghost");
-      if (!ghostVis)
-      {
-        gzerr << "Failed to get ghost visual" << std::endl;
-        return;
-      }
-
-      // Actor SDF
-      auto skin = skinMap[skinCombo->currentText().toStdString()];
-      auto anim = animMap[animCombo->currentText().toStdString()];
-      auto poseOffset = animPoseMap[animCombo->currentText().toStdString()];
-
-      auto pose = ghostVis->WorldPose();
-      pose = poseOffset + pose;
-      std::ostringstream poseStr;
-      poseStr << pose;
-
-      auto name = "actor_" + std::to_string(count);
-
-      this->dataPtr->currentSDF =
-          "<?xml version='1.0' ?>\
-           <sdf version='" SDF_VERSION "'>\
-             <actor name='" + name + "'>\
-               <pose>" + poseStr.str() + "</pose>\
-               <skin>\
-                 <filename>model://actor/meshes/" + skin + ".dae</filename>\
-               </skin>\
-               <animation name=\"animation\">\
-                 <filename>model://actor/meshes/" + anim + ".dae</filename>\
-               </animation>\
-                <script>\
-                  <trajectory id='0' type='animation'>\
-                      <waypoint>\
-                        <time>100</time>\
-                        <pose>" + poseStr.str() + "</pose>\
-                      </waypoint>\
-                  </trajectory>\
-                </script>\
-             </actor>\
-           </sdf>\
-          ";
-
-      // Delete ghost
-      transport::requestNoReply("CreateActor", "entity_delete",
-                                ghostVis->Name());
-
-      // Spawn actor
-      gazebo::msgs::Factory msg;
-      msg.set_sdf(this->dataPtr->currentSDF);
-
-      this->dataPtr->factoryPub->Publish(msg);
-
+      this->Spawn();
       mainLayout->setCurrentIndex(2);
-      count++;
     });
 
     // Layout
@@ -318,4 +272,70 @@ CreateActorPlugin::~CreateActorPlugin()
 {
   this->dataPtr->factoryPub.reset();
   this->dataPtr->gzNode->Fini();
+}
+
+/////////////////////////////////////////////////
+void CreateActorPlugin::Spawn()
+{
+  // Get ghost
+  auto ghostVis = rendering::get_scene()->GetVisual("ghost");
+  if (!ghostVis)
+  {
+    gzerr << "Failed to get ghost visual" << std::endl;
+    return;
+  }
+
+  // Skin
+  auto skinValue = this->findChild<QComboBox *>("skinCombo")
+      ->currentText().toStdString();
+  auto skin = skinMap[skinValue];
+
+  // Anim
+  auto animValue = this->findChild<QComboBox *>("animCombo")
+      ->currentText().toStdString();
+  auto anim = animMap[animValue];
+
+  // Pose
+  auto poseOffset = animPoseMap[animValue];
+
+  auto pose = ghostVis->WorldPose();
+  pose = poseOffset + pose;
+  std::ostringstream poseStr;
+  poseStr << pose;
+
+  // Name
+  auto name = "actor_" + std::to_string(count++);
+
+  this->dataPtr->currentSDF =
+      "<?xml version='1.0' ?>\
+       <sdf version='" SDF_VERSION "'>\
+         <actor name='" + name + "'>\
+           <pose>" + poseStr.str() + "</pose>\
+           <skin>\
+             <filename>model://actor/meshes/" + skin + ".dae</filename>\
+           </skin>\
+           <animation name=\"animation\">\
+             <filename>model://actor/meshes/" + anim + ".dae</filename>\
+           </animation>\
+            <script>\
+              <trajectory id='0' type='animation'>\
+                  <waypoint>\
+                    <time>100</time>\
+                    <pose>" + poseStr.str() + "</pose>\
+                  </waypoint>\
+              </trajectory>\
+            </script>\
+         </actor>\
+       </sdf>\
+      ";
+
+  // Delete ghost
+  transport::requestNoReply("CreateActor", "entity_delete",
+                            ghostVis->Name());
+
+  // Spawn actor
+  gazebo::msgs::Factory msg;
+  msg.set_sdf(this->dataPtr->currentSDF);
+
+  this->dataPtr->factoryPub->Publish(msg);
 }
