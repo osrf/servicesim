@@ -28,9 +28,10 @@
 #include "CreateActorPlugin.hh"
 
 std::map<std::string, std::string> skinMap;
-std::map<std::string, std::string> animMap;
+std::map<std::string, std::string> animIdleMap;
+std::map<std::string, std::string> animTrajectoryMap;
 std::map<std::string, ignition::math::Pose3d> animPoseMap;
-unsigned int count{0};
+unsigned int actorCount{0};
 
 namespace gazebo
 {
@@ -71,16 +72,16 @@ CreateActorPlugin::CreateActorPlugin()
   skinMap["Red shirt"] = "SKIN_man_red_shirt";
   skinMap["Blue shirt"] = "SKIN_man_blue_shirt";
 
-  animMap["Talking A"] = "ANIMATION_talking_a";
+  animIdleMap["Talking A"] = "ANIMATION_talking_a";
   animPoseMap["Talking A"] = ignition::math::Pose3d(0, -1, 0, 0, 0, IGN_PI);
 
-  animMap["Talking B"] = "ANIMATION_talking_b";
+  animIdleMap["Talking B"] = "ANIMATION_talking_b";
   animPoseMap["Talking B"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
 
-  animMap["Walking"] = "ANIMATION_walking";
+  animTrajectoryMap["Walking"] = "ANIMATION_walking";
   animPoseMap["Walking"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
 
-  animMap["Running"] = "ANIMATION_running";
+  animTrajectoryMap["Running"] = "ANIMATION_running";
   animPoseMap["Running"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
 
   // Stacked layout
@@ -109,7 +110,9 @@ CreateActorPlugin::CreateActorPlugin()
   // Animation combo
   auto animCombo = new QComboBox();
   animCombo->setObjectName("animCombo");
-  for (auto a : animMap)
+  for (auto a : animIdleMap)
+    animCombo->addItem(QString::fromStdString(a.first));
+  for (auto a : animTrajectoryMap)
     animCombo->addItem(QString::fromStdString(a.first));
 
   // 0: Skin and animation
@@ -125,7 +128,7 @@ CreateActorPlugin::CreateActorPlugin()
       insertGhost();
 
       mainLayout->setCurrentIndex(1);
-      count++;
+      actorCount++;
     });
 
     // Layout
@@ -147,12 +150,23 @@ CreateActorPlugin::CreateActorPlugin()
 
   // 1: Pose(s)
   {
+    // Check animation type
+    std::string animType{"idle"};
+
     // Label
     auto label = new QLabel(
         "Position the ghost and press Next when done.<br>\
          <b>Tip</b>: Use the translation and rotation tools.<br>\
          <b>You won't be able to reposition the actor after spawned</b>");
     label->setMaximumHeight(50);
+
+    // Add button
+    // TODO: hide for idle
+    auto addButton = new QPushButton(tr("New waypoint"));
+    this->connect(addButton, &QPushButton::clicked, [=]()
+    {
+      insertGhost();
+    });
 
     // Next button
     auto nextButton = new QPushButton(tr("Next"));
@@ -165,7 +179,8 @@ CreateActorPlugin::CreateActorPlugin()
     // Layout
     auto layout = new QGridLayout;
     layout->setSpacing(0);
-    layout->addWidget(label, 0, 0, 1, 3);
+    layout->addWidget(label, 0, 0, 1, 2);
+    layout->addWidget(addButton, 1, 1);
     layout->addWidget(nextButton, 3, 1);
 
     // Widget
@@ -261,7 +276,7 @@ CreateActorPlugin::CreateActorPlugin()
 
   // Make this invisible
   this->move(1, 1);
-  this->resize(400, 150);
+  this->resize(450, 150);
 
   this->setStyleSheet(
       "QFrame {background-color: rgba(100, 100, 100, 255); color: black;}");
@@ -277,14 +292,6 @@ CreateActorPlugin::~CreateActorPlugin()
 /////////////////////////////////////////////////
 void CreateActorPlugin::Spawn()
 {
-  // Get ghost
-  auto ghostVis = rendering::get_scene()->GetVisual("ghost");
-  if (!ghostVis)
-  {
-    gzerr << "Failed to get ghost visual" << std::endl;
-    return;
-  }
-
   // Skin
   auto skinValue = this->findChild<QComboBox *>("skinCombo")
       ->currentText().toStdString();
@@ -293,45 +300,101 @@ void CreateActorPlugin::Spawn()
   // Anim
   auto animValue = this->findChild<QComboBox *>("animCombo")
       ->currentText().toStdString();
-  auto anim = animMap[animValue];
 
-  // Pose
+  std::string anim;
+  if (animIdleMap.find(animValue) != animIdleMap.end())
+  {
+    anim = animIdleMap[animValue];
+  }
+  else
+  {
+    anim = animTrajectoryMap[animValue];
+  }
+
+  // Get ghost poses and delete them
   auto poseOffset = animPoseMap[animValue];
+  std::vector<std::string> poses;
 
-  auto pose = ghostVis->WorldPose();
-  pose = poseOffset + pose;
-  std::ostringstream poseStr;
-  poseStr << pose;
+  std::string ghostPrefix{"ghost"};
+  std::string ghostName{ghostPrefix};
+
+  int count{0};
+
+  while (rendering::get_scene()->GetVisual(ghostName))
+  {
+    // Get visual
+    auto vis = rendering::get_scene()->GetVisual(ghostName);
+
+    // Get pose
+    auto pose = vis->WorldPose();
+    pose.Pos().Z(1.25);
+
+    // Apply offset
+    pose = poseOffset + pose;
+
+    // Convert to string
+    std::ostringstream poseStr;
+    poseStr << pose;
+    poses.push_back(poseStr.str());
+
+    // Delete ghost
+    transport::requestNoReply("CreateActor", "entity_delete",
+                              ghostName);
+
+    // Next ghost
+    ghostName = ghostPrefix + "_" + std::to_string(count++);
+  }
+
+  // Idle actors need one trajectory waypoint
+  std::string trajectory;
+  if (poses.size() == 1)
+  {
+    trajectory +=
+        "<script>\
+           <trajectory id='0' type='animation'>\
+             <waypoint>\
+               <time>100</time>\
+               <pose>" + poses[0] + "</pose>\
+             </waypoint>\
+           </trajectory>\
+         </script>";
+  }
+  // Trajectory actors use the plugin
+  else
+  {
+    trajectory +=
+        "<plugin name='wandering_plugin' filename='libWanderingActorPlugin.so'>\
+            <target_weight>1.15</target_weight>\
+            <obstacle_weight>1.8</obstacle_weight>\
+            <animation_factor>5.1</animation_factor>";
+
+    for (const auto &pose : poses)
+    {
+      trajectory += "<target>" + pose + "</target>";
+    }
+
+    trajectory += "</plugin>";
+  }
 
   // Name
-  auto name = "actor_" + std::to_string(count++);
+  auto name = "actor_" + std::to_string(actorCount++);
 
   this->dataPtr->currentSDF =
       "<?xml version='1.0' ?>\
        <sdf version='" SDF_VERSION "'>\
          <actor name='" + name + "'>\
-           <pose>" + poseStr.str() + "</pose>\
+           <pose>" + poses[0] + "</pose>\
            <skin>\
              <filename>model://actor/meshes/" + skin + ".dae</filename>\
            </skin>\
-           <animation name=\"animation\">\
+           <animation name='animation'>\
              <filename>model://actor/meshes/" + anim + ".dae</filename>\
+             <interpolate_x>true</interpolate_x>\
            </animation>\
-            <script>\
-              <trajectory id='0' type='animation'>\
-                  <waypoint>\
-                    <time>100</time>\
-                    <pose>" + poseStr.str() + "</pose>\
-                  </waypoint>\
-              </trajectory>\
-            </script>\
+           " + trajectory + "\
          </actor>\
        </sdf>\
       ";
-
-  // Delete ghost
-  transport::requestNoReply("CreateActor", "entity_delete",
-                            ghostVis->Name());
 
   // Spawn actor
   gazebo::msgs::Factory msg;
