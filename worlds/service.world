@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 
-<!-- Seed: 4153536 -->
+<!-- Seed: 9224278 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -60,7 +60,7 @@
         <!-- Starting pose -->
         <pose>-9.325820  -15.967300 1.25 0 0 0</pose>
         <skin>
-          <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+          <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
         </skin>
         <animation name="animation">
           <filename>model://actor/meshes/ANIMATION_running.dae</filename>
@@ -103,16 +103,16 @@
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
-    -12.3277
-    -16.7406
+    -11.969092
+    -17.137756
     0.15
-    0
-    0
-    0.735022
+    0.0
+    -0.0
+    0.719669
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -125,12 +125,54 @@
       <waypoint>
         <time>100</time>
           <pose>
-            -12.3277
-            -16.7406
+            -11.969092
+            -17.137756
             0.15
-            0
-            0
-            0.735022
+            0.0
+            -0.0
+            0.719669
+          </pose>
+      </waypoint>
+    </trajectory>
+  </script>
+
+</actor>
+
+    
+      
+
+<actor name="actor_3">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    6.323622
+    -6.638186
+    0.15
+    0.0
+    0.0
+    -0.22373
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
+  </animation>
+
+  <!-- Need one waypoint to idle at -->
+  <script>
+    <trajectory id='0' type='animation'>
+      <waypoint>
+        <time>100</time>
+          <pose>
+            6.323622
+            -6.638186
+            0.15
+            0.0
+            0.0
+            -0.22373
           </pose>
       </waypoint>
     </trajectory>
