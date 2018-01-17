@@ -2,15 +2,293 @@
 <sdf version="1.6">
   <model name="ghost">
     <static>true</static>
-    <link name="link">
-      <visual name="visual">
-        <pose>0 0 0.02 0.04 0 0</pose>
-        <transparency>0.5</transparency>
+    <pose>0 0 1.4 0 0 0</pose>
+    <link name="hip">
+      <visual name="hip_geom_visual">
+        <pose>0 0 0.125000 0 0 0</pose>
         <geometry>
-          <mesh>
-            <uri>model://ghost/meshes/standing.dae</uri>
-          </mesh>
+          <box>
+            <size>0.100000 0.500000 0.250000</size>
+          </box>
         </geometry>
+      </visual>
+    </link>
+    <link name="l_thigh_pan">
+      <pose>0 0.220000 0 0 0 0</pose>
+      <visual name="l_thigh_pan_geom_visual">
+        <pose>0 0 -0.030000 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.060000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_thigh_lift">
+      <pose>0 0.220000 0 0 0 0</pose>
+      <visual name="l_thigh_lift_geom_visual">
+        <pose>0 0 -0.350000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.060000</radius>
+            <length>0.700000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_calf">
+      <pose>0 0.220000 -0.700000 0 0 0</pose>
+      <visual name="l_calf_geom_visual">
+        <pose>0 0 -0.300000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.050000</radius>
+            <length>0.600000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_ankle">
+      <pose>0 0.220000 -1.325000 0 0 0</pose>
+      <visual name="l_ankle_geom_visual">
+        <geometry>
+          <sphere>
+            <radius>0.050000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_foot">
+      <pose>0 0.220000 -1.350000 0 0 0</pose>
+      <visual name="l_foot_geom_visual">
+        <pose>0.100000 0 -0.025000 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.200000 0.030000 0.050000</size>
+          </box>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_thigh_pan">
+      <pose>0 -0.220000 0 0 0 0</pose>
+      <visual name="r_thigh_pan_geom_visual">
+        <pose>0 0 -0.030000 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.060000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_thigh_lift">
+      <pose>0 -0.220000 0 0 0 0</pose>
+      <visual name="r_thigh_lift_geom_visual">
+        <pose>0 0 -0.350000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.060000</radius>
+            <length>0.700000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_calf">
+      <pose>0 -0.220000 -0.700000 0 0 0</pose>
+      <visual name="r_calf_geom_visual">
+        <pose>0 0 -0.300000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.050000</radius>
+            <length>0.600000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_ankle">
+      <pose>0 -0.220000 -1.325000 0 0 0</pose>
+      <visual name="r_ankle_geom_visual">
+        <geometry>
+          <sphere>
+            <radius>0.050000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_foot">
+      <pose>0 -0.220000 -1.350000 0 0 0</pose>
+      <visual name="r_foot_geom_visual">
+        <pose>0.100000 0 -0.025000 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.200000 0.030000 0.050000</size>
+          </box>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="torso">
+      <pose>0 0 0.250000 0 0 0</pose>
+      <visual name="torso_geom_visual">
+        <pose>0 0 0.350000 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.100000 0.600000 0.700000</size>
+          </box>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_shoulder">
+      <pose>0 0.327500 0.922500 0 0 0</pose>
+      <visual name="l_shoulder_geom_visual">
+        <geometry>
+          <sphere>
+            <radius>0.055000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_upper_arm">
+      <pose>0 0.327500 0.922500 0 0 0</pose>
+      <visual name="l_upper_arm_geom_visual">
+        <pose>0 0 -0.300000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.055000</radius>
+            <length>0.600000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_forearm">
+      <pose>0 0.327500 0.322500 0 0 0</pose>
+      <visual name="l_forearm_geom_visual">
+        <pose>0 0 -0.225000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.050000</radius>
+            <length>0.450000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_wrist">
+      <pose>0 0.327500 -0.142500 0 0 0</pose>
+      <visual name="l_wrist_geom_visual">
+        <geometry>
+          <sphere>
+            <radius>0.030000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="l_hand">
+      <pose>0 0.327500 -0.157500 0 0 0</pose>
+      <visual name="l_hand_geom_visual">
+        <pose>0 0 -0.100000 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.030000 0.100000 0.200000</size>
+          </box>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="neck">
+      <pose>0 0 0.950000 0 0 0</pose>
+      <visual name="neck_geom_visual">
+        <pose>0 0 0.100000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.075000</radius>
+            <length>0.200000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="head">
+      <pose>0 0 1.225000 0 0 0</pose>
+      <visual name="head_geom_visual">
+        <geometry>
+          <sphere>
+            <radius>0.150000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_shoulder">
+      <pose>0 -0.327500 0.922500 0 0 0</pose>
+      <visual name="r_shoulder_geom_visual">
+        <geometry>
+          <sphere>
+            <radius>0.055000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_upper_arm">
+      <pose>0 -0.327500 0.922500 0 0 0</pose>
+      <visual name="r_upper_arm_geom_visual">
+        <pose>0 0 -0.300000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.055000</radius>
+            <length>0.600000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_forearm">
+      <pose>0 -0.327500 0.322500 0 0 0</pose>
+      <visual name="r_forearm_geom_visual">
+        <pose>0 0 -0.225000 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.050000</radius>
+            <length>0.450000</length>
+          </cylinder>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_wrist">
+      <pose>0 -0.327500 -0.142500 0 0 0</pose>
+      <visual name="r_wrist_geom_visual">
+        <geometry>
+          <sphere>
+            <radius>0.030000</radius>
+          </sphere>
+        </geometry>
+        <transparency>0.5</transparency>
+      </visual>
+    </link>
+    <link name="r_hand">
+      <pose>0 -0.327500 -0.157500 0 0 0</pose>
+      <visual name="r_hand_geom_visual">
+        <pose>0 0 -0.100000 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.030000 0.100000 0.200000</size>
+          </box>
+        </geometry>
+        <transparency>0.5</transparency>
       </visual>
     </link>
   </model>

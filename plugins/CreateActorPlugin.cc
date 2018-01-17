@@ -73,16 +73,16 @@ CreateActorPlugin::CreateActorPlugin()
   skinMap["Blue shirt"] = "SKIN_man_blue_shirt";
 
   animIdleMap["Talking A"] = "ANIMATION_talking_a";
-  animPoseMap["Talking A"] = ignition::math::Pose3d(0, -1, 0, 0, 0, IGN_PI);
+  animPoseMap["Talking A"] = ignition::math::Pose3d(1, 0, -1.25, 0, 0, -IGN_PI_2);
 
   animIdleMap["Talking B"] = "ANIMATION_talking_b";
-  animPoseMap["Talking B"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
+  animPoseMap["Talking B"] = ignition::math::Pose3d(1, 0, -1.25, 0, 0, IGN_PI_2);
 
   animTrajectoryMap["Walking"] = "ANIMATION_walking";
-  animPoseMap["Walking"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
+  animPoseMap["Walking"] = ignition::math::Pose3d(0, -1, -1.4, 0, 0, IGN_PI);
 
   animTrajectoryMap["Running"] = "ANIMATION_running";
-  animPoseMap["Running"] = ignition::math::Pose3d(0, -1, 0, 0, 0, 0);
+  animPoseMap["Running"] = ignition::math::Pose3d(0, -1, -1.4, 0, 0, IGN_PI);
 
   // Stacked layout
   auto mainLayout = new QStackedLayout();
@@ -327,7 +327,6 @@ void CreateActorPlugin::Spawn()
 
     // Get pose
     auto pose = vis->WorldPose();
-    pose.Pos().Z(1.25);
 
     // Apply offset
     pose = poseOffset + pose;
@@ -352,6 +351,10 @@ void CreateActorPlugin::Spawn()
     trajectory +=
         "<script>\
            <trajectory id='0' type='animation'>\
+             <waypoint>\
+               <time>100</time>\
+               <pose>" + poses[0] + "</pose>\
+             </waypoint>\
              <waypoint>\
                <time>100</time>\
                <pose>" + poses[0] + "</pose>\
@@ -388,9 +391,13 @@ void CreateActorPlugin::Spawn()
              <filename>model://actor/meshes/" + skin + ".dae</filename>\
            </skin>\
            <animation name='animation'>\
-             <filename>model://actor/meshes/" + anim + ".dae</filename>\
-             <interpolate_x>true</interpolate_x>\
-           </animation>\
+             <filename>model://actor/meshes/" + anim + ".dae</filename>";
+
+   if (poses.size() > 1)
+     this->dataPtr->currentSDF += "<interpolate_x>true</interpolate_x>";
+
+  this->dataPtr->currentSDF +=
+           "</animation>\
            " + trajectory + "\
          </actor>\
        </sdf>\

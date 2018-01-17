@@ -174,12 +174,14 @@ void WanderingActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Time delta
   double dt = (_info.simTime - this->dataPtr->lastUpdate).Double();
 
-  auto pose = this->dataPtr->actor->WorldPose();
-  auto pos = this->dataPtr->targets[this->dataPtr->currentTarget].Pos() -
-      pose.Pos();
-  auto rpy = pose.Rot().Euler();
+  auto actorPose = this->dataPtr->actor->WorldPose();
 
-  double distance = pos.Length();
+  // 2D distance to target
+  auto posDiff = this->dataPtr->targets[this->dataPtr->currentTarget].Pos() -
+      actorPose.Pos();
+  posDiff.Z(0);
+
+  double distance = posDiff.Length();
 
   // Get next target position if the actor has reached its current
   // target.
@@ -188,38 +190,39 @@ void WanderingActorPlugin::OnUpdate(const common::UpdateInfo &_info)
     this->dataPtr->currentTarget++;
     if (this->dataPtr->currentTarget > this->dataPtr->targets.size() - 1)
       this->dataPtr->currentTarget = 0;
-    pos = this->dataPtr->targets[this->dataPtr->currentTarget].Pos() - pose.Pos();
+    posDiff = this->dataPtr->targets[this->dataPtr->currentTarget].Pos() - actorPose.Pos();
   }
 
   // Normalize the direction vector, and apply the target weight
-  pos = pos.Normalize() * this->dataPtr->targetWeight;
+  posDiff = posDiff.Normalize() * this->dataPtr->targetWeight;
 
   // Adjust the direction vector by avoiding obstacles
-  this->HandleObstacles(pos);
+  this->HandleObstacles(posDiff);
 
   // Compute the yaw orientation
-  ignition::math::Angle yaw = atan2(pos.Y(), pos.X()) + 1.5707 - rpy.Z();
+  auto rpy = actorPose.Rot().Euler();
+  ignition::math::Angle yaw = atan2(posDiff.Y(), posDiff.X()) + 1.5707 - rpy.Z();
   yaw.Normalize();
 
   // Rotate in place, instead of jumping.
   if (std::abs(yaw.Radian()) > IGN_DTOR(10))
   {
-    pose.Rot() = ignition::math::Quaterniond(1.5707, 0, rpy.Z()+
+    actorPose.Rot() = ignition::math::Quaterniond(1.5707, 0, rpy.Z()+
         yaw.Radian()*0.001);
   }
   else
   {
-    pose.Pos() += pos * this->dataPtr->velocity * dt;
-    pose.Rot() = ignition::math::Quaterniond(1.5707, 0, rpy.Z()+yaw.Radian());
+    actorPose.Pos() += posDiff * this->dataPtr->velocity * dt;
+    actorPose.Rot() = ignition::math::Quaterniond(1.5707, 0, rpy.Z()+yaw.Radian());
   }
-  pose.Pos().Z(1.2138);
+  actorPose.Pos().Z(1.2138);
 
   // Distance traveled is used to coordinate motion with the walking
   // animation
-  double distanceTraveled = (pose.Pos() -
+  double distanceTraveled = (actorPose.Pos() -
       this->dataPtr->actor->WorldPose().Pos()).Length();
 
-  this->dataPtr->actor->SetWorldPose(pose, false, false);
+  this->dataPtr->actor->SetWorldPose(actorPose, false, false);
   this->dataPtr->actor->SetScriptTime(this->dataPtr->actor->ScriptTime() +
     (distanceTraveled * this->dataPtr->animationFactor));
   this->dataPtr->lastUpdate = _info.simTime;
