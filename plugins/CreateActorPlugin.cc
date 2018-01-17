@@ -31,7 +31,32 @@ std::map<std::string, std::string> skinMap;
 std::map<std::string, std::string> animIdleMap;
 std::map<std::string, std::string> animTrajectoryMap;
 std::map<std::string, ignition::math::Pose3d> animPoseMap;
+
+// Keep track of how many actors have been spawned
 unsigned int actorCount{0};
+
+// Ghost poses as string
+std::vector<std::string> ghostPoses;
+
+struct Current
+{
+  // Current skin DAE
+  std::string skinDae{""};
+
+  // Current animation DAE
+  std::string animDae{""};
+
+  // Pose offset for the current animDae
+  ignition::math::Pose3d poseOffset{ignition::math::Pose3d::Zero};
+
+  // Latest SDF as string
+  std::string sdf{""};
+
+  // Latest ERB as string
+  std::string erb{""};
+};
+
+Current current;
 
 namespace gazebo
 {
@@ -45,7 +70,7 @@ namespace gazebo
     public: transport::PublisherPtr factoryPub;
 
     /// \brief Latest SDF
-    public: std::string currentSDF{""};
+    public: std::string currentERB{""};
   };
 }
 
@@ -55,12 +80,119 @@ using namespace gazebo;
 GZ_REGISTER_GUI_PLUGIN(CreateActorPlugin)
 
 /////////////////////////////////////////////////
-// Initiate the insertion of a ghost model
+/// \brief Initiate the insertion of a ghost model
 void insertGhost()
 {
   auto filename = common::ModelDatabase::Instance()->GetModelFile(
       "model://ghost");
   gui::Events::createEntity("model", filename);
+}
+
+/////////////////////////////////////////////////
+/// \brief Fill ghostPoses and delete ghosts
+void processGhostPoses()
+{
+  ghostPoses.clear();
+
+  std::string ghostPrefix{"ghost"};
+  std::string ghostName{ghostPrefix};
+
+  int count{0};
+
+  while (rendering::get_scene()->GetVisual(ghostName))
+  {
+    // Get visual
+    auto vis = rendering::get_scene()->GetVisual(ghostName);
+
+    // Get pose
+    auto pose = vis->WorldPose();
+
+    // Apply offset
+    pose = current.poseOffset + pose;
+
+    // Convert to string
+    std::ostringstream poseStr;
+    poseStr << pose;
+    ghostPoses.push_back(poseStr.str());
+
+    // Delete ghost
+    transport::requestNoReply("CreateActor", "entity_delete",
+                              ghostName);
+
+    // Next ghost
+    ghostName = ghostPrefix + "_" + std::to_string(count++);
+  }
+}
+
+/////////////////////////////////////////////////
+/// \brief Fill SDF
+void fillSDF()
+{
+  // Idle actors need one trajectory waypoint
+  std::string trajectory;
+  if (ghostPoses.size() == 1)
+  {
+    trajectory += "\
+            <script>\n\
+              <trajectory id='0' type='animation'>\n\
+                <waypoint>\n\
+                  <time>100</time>\n\
+                  <pose>" + ghostPoses[0] + "</pose>\n\
+                </waypoint>\n\
+              </trajectory>\n\
+            </script>\n";
+  }
+  // Trajectory actors use the plugin
+  else
+  {
+    trajectory += "\
+         <plugin name='wandering_plugin' filename='libWanderingActorPlugin.so'>\n\
+           <target_weight>1.15</target_weight>\n\
+           <obstacle_weight>1.8</obstacle_weight>\n\
+           <animation_factor>5.1</animation_factor>\n";
+
+    for (const auto &pose : ghostPoses)
+    {
+      trajectory += "\
+             <target>" + pose + "</target>\n";
+    }
+
+    trajectory += "\
+         </plugin>\n";
+  }
+
+  // Name
+  auto name = "actor_" + std::to_string(actorCount++);
+
+  current.sdf = "\
+      <?xml version='1.0' ?>\n\
+        <sdf version='" SDF_VERSION "'>\n\
+          <actor name='" + name + "'>\n\
+            <pose>" + ghostPoses[0] + "</pose>\n\
+            <skin>\n\
+              <filename>model://actor/meshes/" + current.skinDae + ".dae</filename>\n\
+            </skin>\n\
+            <animation name='animation'>\n\
+              <filename>model://actor/meshes/" + current.animDae + ".dae</filename>\n";
+
+  if (ghostPoses.size() > 1)
+  {
+    current.sdf += "\
+              <interpolate_x>true</interpolate_x>\n";
+  }
+
+  current.sdf += "\
+            </animation>\n\
+            " + trajectory + "\n\
+          </actor>\n\
+        </sdf>";
+}
+
+/////////////////////////////////////////////////
+/// \brief Fill ERB
+void fillERB()
+{
+  current.erb = "TODO";
 }
 
 /////////////////////////////////////////////////
@@ -104,16 +236,42 @@ CreateActorPlugin::CreateActorPlugin()
   // Skin combo
   auto skinCombo = new QComboBox();
   skinCombo->setObjectName("skinCombo");
+
   for (auto s : skinMap)
     skinCombo->addItem(QString::fromStdString(s.first));
+
+  this->connect(skinCombo, static_cast<void (QComboBox::*)(const QString &)>(
+      &QComboBox::currentIndexChanged), [=](const QString &_value)
+  {
+    current.skinDae = skinMap[_value.toStdString()];
+  });
+  current.skinDae = skinMap[skinCombo->currentText().toStdString()];
 
   // Animation combo
   auto animCombo = new QComboBox();
   animCombo->setObjectName("animCombo");
+
   for (auto a : animIdleMap)
     animCombo->addItem(QString::fromStdString(a.first));
+
   for (auto a : animTrajectoryMap)
     animCombo->addItem(QString::fromStdString(a.first));
+
+  this->connect(animCombo, static_cast<void (QComboBox::*)(const QString &)>(
+      &QComboBox::currentIndexChanged), [=](const QString &_value)
+  {
+    if (animIdleMap.find(_value.toStdString()) != animIdleMap.end())
+    {
+      current.animDae = animIdleMap[_value.toStdString()];
+    }
+    else
+    {
+      current.animDae = animTrajectoryMap[_value.toStdString()];
+    }
+    current.poseOffset = animPoseMap[_value.toStdString()];
+  });
+  current.animDae = animIdleMap[animCombo->currentText().toStdString()];
+  current.poseOffset = animPoseMap[animCombo->currentText().toStdString()];
 
   // 0: Skin and animation
   {
@@ -238,15 +396,6 @@ CreateActorPlugin::CreateActorPlugin()
 
       // Save model.sdf
       {
-        sdf::ElementPtr sdf(new sdf::Element());
-        sdf::initFile("actor.sdf", sdf);
-
-        sdf::readString(this->dataPtr->currentSDF, sdf);
-
-        sdf::SDFPtr modelSDF;
-        modelSDF.reset(new sdf::SDF);
-        modelSDF->Root(sdf);
-
         std::ofstream savefile;
         savefile.open(selected[0].toStdString().c_str());
         if (!savefile.is_open())
@@ -254,7 +403,54 @@ CreateActorPlugin::CreateActorPlugin()
           gzerr << "Couldn't open file for writing: " << selected[0].toStdString() << std::endl;
           return;
         }
-        savefile << modelSDF->ToString();
+        savefile << current.sdf;
+        savefile.close();
+        gzdbg << "Saved file to " << selected[0].toStdString() << std::endl;
+      }
+    });
+
+    // Export to ERB
+    auto erbButton = new QPushButton(tr("Export to ERB"));
+    this->connect(erbButton, &QPushButton::clicked, [=]()
+    {
+      // Choose destination file
+      QFileDialog fileDialog(this, tr("Destination ERB file"), QDir::homePath());
+      fileDialog.setFileMode(QFileDialog::AnyFile);
+      fileDialog.setNameFilter("*.erb");
+      fileDialog.setAcceptMode(QFileDialog::AcceptSave);
+      fileDialog.setOptions(QFileDialog::DontResolveSymlinks |
+                            QFileDialog::DontUseNativeDialog);
+      fileDialog.setWindowFlags(Qt::Window | Qt::WindowCloseButtonHint |
+          Qt::WindowStaysOnTopHint | Qt::CustomizeWindowHint);
+
+      if (fileDialog.exec() != QDialog::Accepted)
+        return;
+
+      auto selected = fileDialog.selectedFiles();
+      if (selected.empty())
+        return;
+
+      // Create dir
+      {
+        boost::filesystem::path path(selected[0].toStdString().substr(0,
+                                     selected[0].toStdString().rfind("/")+1));
+
+        if (!boost::filesystem::create_directories(path))
+          gzerr << "Couldn't create folder [" << path << "]" << std::endl;
+        else
+          gzmsg << "Created folder [" << path << "]" << std::endl;
+      }
+
+      // Save model.erb
+      {
+        std::ofstream savefile;
+        savefile.open(selected[0].toStdString().c_str());
+        if (!savefile.is_open())
+        {
+          gzerr << "Couldn't open file for writing: " << selected[0].toStdString() << std::endl;
+          return;
+        }
+        savefile << this->dataPtr->currentERB;
         savefile.close();
         gzdbg << "Saved file to " << selected[0].toStdString() << std::endl;
       }
@@ -264,8 +460,9 @@ CreateActorPlugin::CreateActorPlugin()
     auto layout = new QGridLayout;
     layout->setSpacing(0);
     layout->addWidget(label, 0, 0, 1, 2);
-    layout->addWidget(newButton, 1, 0);
+    layout->addWidget(erbButton, 1, 0);
     layout->addWidget(sdfButton, 1, 1);
+    layout->addWidget(newButton, 2, 0, 1, 2);
 
     // Widget
     auto widget = new QWidget();
@@ -279,7 +476,8 @@ CreateActorPlugin::CreateActorPlugin()
   this->resize(450, 150);
 
   this->setStyleSheet(
-      "QFrame {background-color: rgba(100, 100, 100, 255); color: black;}");
+      "QFrame {background-color: rgba(100, 100, 100, 255);\
+               color: rgba(200, 200, 200, 255);}");
 }
 
 /////////////////////////////////////////////////
@@ -292,120 +490,19 @@ CreateActorPlugin::~CreateActorPlugin()
 /////////////////////////////////////////////////
 void CreateActorPlugin::Spawn()
 {
-  // Skin
-  auto skinValue = this->findChild<QComboBox *>("skinCombo")
-      ->currentText().toStdString();
-  auto skin = skinMap[skinValue];
-
-  // Anim
-  auto animValue = this->findChild<QComboBox *>("animCombo")
-      ->currentText().toStdString();
-
-  std::string anim;
-  if (animIdleMap.find(animValue) != animIdleMap.end())
-  {
-    anim = animIdleMap[animValue];
-  }
-  else
-  {
-    anim = animTrajectoryMap[animValue];
-  }
-
   // Get ghost poses and delete them
-  auto poseOffset = animPoseMap[animValue];
-  std::vector<std::string> poses;
+  processGhostPoses();
 
-  std::string ghostPrefix{"ghost"};
-  std::string ghostName{ghostPrefix};
+  // Fill SDF
+  fillSDF();
 
-  int count{0};
-
-  while (rendering::get_scene()->GetVisual(ghostName))
-  {
-    // Get visual
-    auto vis = rendering::get_scene()->GetVisual(ghostName);
-
-    // Get pose
-    auto pose = vis->WorldPose();
-
-    // Apply offset
-    pose = poseOffset + pose;
-
-    // Convert to string
-    std::ostringstream poseStr;
-    poseStr << pose;
-    poses.push_back(poseStr.str());
-
-    // Delete ghost
-    transport::requestNoReply("CreateActor", "entity_delete",
-                              ghostName);
-
-    // Next ghost
-    ghostName = ghostPrefix + "_" + std::to_string(count++);
-  }
-
-  // Idle actors need one trajectory waypoint
-  std::string trajectory;
-  if (poses.size() == 1)
-  {
-    trajectory +=
-        "<script>\
-           <trajectory id='0' type='animation'>\
-             <waypoint>\
-               <time>100</time>\
-               <pose>" + poses[0] + "</pose>\
-             </waypoint>\
-             <waypoint>\
-               <time>100</time>\
-               <pose>" + poses[0] + "</pose>\
-             </waypoint>\
-           </trajectory>\
-         </script>";
-  }
-  // Trajectory actors use the plugin
-  else
-  {
-    trajectory +=
-        "<plugin name='wandering_plugin' filename='libWanderingActorPlugin.so'>\
-            <target_weight>1.15</target_weight>\
-            <obstacle_weight>1.8</obstacle_weight>\
-            <animation_factor>5.1</animation_factor>";
-
-    for (const auto &pose : poses)
-    {
-      trajectory += "<target>" + pose + "</target>";
-    }
-
-    trajectory += "</plugin>";
-  }
-
-  // Name
-  auto name = "actor_" + std::to_string(actorCount++);
-
-  this->dataPtr->currentSDF =
-      "<?xml version='1.0' ?>\
-       <sdf version='" SDF_VERSION "'>\
-         <actor name='" + name + "'>\
-           <pose>" + poses[0] + "</pose>\
-           <skin>\
-             <filename>model://actor/meshes/" + skin + ".dae</filename>\
-           </skin>\
-           <animation name='animation'>\
-             <filename>model://actor/meshes/" + anim + ".dae</filename>";
-
-   if (poses.size() > 1)
-     this->dataPtr->currentSDF += "<interpolate_x>true</interpolate_x>";
-
-  this->dataPtr->currentSDF +=
-           "</animation>\
-           " + trajectory + "\
-         </actor>\
-       </sdf>\
-      ";
+  // Fill ERB
+  fillERB();
 
   // Spawn actor
   gazebo::msgs::Factory msg;
-  msg.set_sdf(this->dataPtr->currentSDF);
+  msg.set_sdf(current.sdf);
 
   this->dataPtr->factoryPub->Publish(msg);
 }
+
