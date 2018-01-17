@@ -1,0 +1,52 @@
+<%
+  # Template to generate an animated actor which moves along a given trajectory.
+  #
+  # Required variables
+  # * $actor_name (string) Unique name for the actor
+  # * $actor_skin (string) A skin Collada file from model://actor/meshes/
+  # * $actor_anim (string) An animation Collada file from model://actor/meshes/
+  # * $actor_trajectory (array[array[6]]) Array or waypoint poses
+%>
+
+<actor name="<%= $actor_name %>">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    <%= $actor_trajectory[0][0] %>
+    <%= $actor_trajectory[0][1] %>
+    <%= $actor_trajectory[0][2] %>
+    <%= $actor_trajectory[0][3] %>
+    <%= $actor_trajectory[0][4] %>
+    <%= $actor_trajectory[0][5] %>
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/<%= $actor_skin %></filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/<%= $actor_anim %></filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libWanderingActorPlugin.so">
+    <%
+      for pose in $actor_trajectory
+    %>
+      <target>
+        <%= pose[0] %>
+        <%= pose[1] %>
+        <%= pose[2] %>
+        <%= pose[3] %>
+        <%= pose[4] %>
+        <%= pose[5] %>
+      </target>
+    <% end %>
+
+    <target_weight>1.15</target_weight>
+    <obstacle_weight>1.8</obstacle_weight>
+    <animation_factor>5.1</animation_factor>
+
+  </plugin>
+
+</actor>

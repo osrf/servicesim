@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 
-<!-- Seed: 9224278 -->
+<!-- Seed: 9082797 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -55,49 +55,109 @@
     </include>
 
     <!-- Trajectory actors -->
-    
-      <actor name="person_1">
-        <!-- Starting pose -->
-        <pose>-9.325820  -15.967300 1.25 0 0 0</pose>
-        <skin>
-          <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
-        </skin>
-        <animation name="animation">
-          <filename>model://actor/meshes/ANIMATION_running.dae</filename>
-          
-            <interpolate_x>true</interpolate_x>
-          
-        </animation>
 
-        
-          <plugin name="actor1_plugin" filename="libWanderingActorPlugin.so">
-            
-            <target>-9.325820  -15.967300 1.25 0 0 0</target>
-            
-            <target>-9.201666  -7.601102 1.25 0 0 0</target>
-            
-            <target>5.877820  -7.593150 1.25 0 0 0</target>
-            
-            <target>13.218100  -10.697100 1.25 0 0 0</target>
-            
-            <target>15.234600  -13.723600 1.25 0 0 0</target>
-            
-            <target>15.255800  -16.017600 1.25 0 0 0</target>
-            
-            <target>-9.325820  -15.967300 1.25 0 0 0</target>
-            
 
-            <target_weight>1.15</target_weight>
-            <obstacle_weight>1.8</obstacle_weight>
-            <animation_factor>5.1</animation_factor>
-          </plugin>
-        
-      </actor>
-    
+
+<actor name="actor_1">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -9.32582
+    -15.9673
+    0.15
+    0.0
+    0.0
+    -0.22373
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_running.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libWanderingActorPlugin.so">
+
+      <target>
+        -9.32582
+        -15.9673
+        0.15
+        0.0
+        0.0
+        -0.22373
+      </target>
+
+      <target>
+        -9.201666
+        -7.601102
+        0.15
+        0.0
+        0.0
+        -0.22373
+      </target>
+
+      <target>
+        5.87782
+        -7.59315
+        0.15
+        0.0
+        0.0
+        -0.22373
+      </target>
+
+      <target>
+        13.2181
+        -10.6971
+        0.15
+        0.0
+        0.0
+        -0.22373
+      </target>
+
+      <target>
+        15.2346
+        -13.7236
+        0.15
+        0.0
+        0.0
+        -0.22373
+      </target>
+
+      <target>
+        15.2558
+        -16.0176
+        0.15
+        0.0
+        0.0
+        -0.22373
+      </target>
+
+      <target>
+        -9.32582
+        -15.9673
+        0.15
+        0.0
+        0.0
+        -0.22373
+      </target>
+
+
+    <target_weight>1.15</target_weight>
+    <obstacle_weight>1.8</obstacle_weight>
+    <animation_factor>5.1</animation_factor>
+
+  </plugin>
+
+</actor>
+
+
 
     <!-- Idling actors -->
-    
-      
+
+
 
 <actor name="actor_2">
 
@@ -112,7 +172,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -138,8 +198,8 @@
 
 </actor>
 
-    
-      
+
+
 
 <actor name="actor_3">
 
@@ -180,7 +240,7 @@
 
 </actor>
 
-    
+
 
   </world>
 </sdf>
