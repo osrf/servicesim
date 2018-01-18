@@ -39,11 +39,12 @@ namespace servicesim
     /// \param[in] _info Timing information
     private: void OnUpdate(const gazebo::common::UpdateInfo &_info);
 
-    /// \brief Helper function to avoid obstacles. This implements a very
-    /// simple vector-field algorithm.
-    /// \param[in] _pos Direction vector that should be adjusted according
-    /// to nearby obstacles.
-    private: void HandleObstacles(ignition::math::Vector3d &_pos);
+    /// \brief Checks if there is an obstacle on the way.
+    /// \return True if there is
+    private: bool ObstacleOnTheWay() const;
+
+    /// \brief Update target
+    private: void UpdateTarget();
 
     /// \internal
     private: TrajectoryActorPluginPrivate *dataPtr;

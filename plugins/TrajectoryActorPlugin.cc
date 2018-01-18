@@ -44,11 +44,12 @@ class servicesim::TrajectoryActorPluginPrivate
   public: std::vector<ignition::math::Pose3d> targets;
   public: unsigned int currentTarget{0};
 
-  /// \brief Target location weight (used for vector field)
-  public: double targetWeight{1.15};
+  /// \brief Radius around target pose where we consider it was reached.
+  public: double targetRadius{0.5};
 
-  /// \brief Obstacle weight (used for vector field)
-  public: double obstacleWeight{1.5};
+  /// \brief Margin by which to increase an obstacle's bounding box on every
+  /// direction (2x per axis).
+  public: double obstacleMargin{0.5};
 
   /// \brief Time scaling factor. Used to coordinate translational motion
   /// with the actor's walking animation.
@@ -57,7 +58,7 @@ class servicesim::TrajectoryActorPluginPrivate
   /// \brief Time of the last update.
   public: common::Time lastUpdate;
 
-  /// \brief List of models to ignore. Used for vector field
+  /// \brief List of models to ignore when checking collisions.
   public: std::vector<std::string> ignoreModels;
 
   /// \brief Custom trajectory info.
@@ -94,15 +95,15 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     targetElem = targetElem->GetNextElement("target");
   }
 
-  // Read in the target weight
-  if (_sdf->HasElement("target_weight"))
-    this->dataPtr->targetWeight = _sdf->Get<double>("target_weight");
+  // Read in the target mradius
+  if (_sdf->HasElement("target_mradius"))
+    this->dataPtr->targetRadius = _sdf->Get<double>("target_mradius");
 
-  // Read in the obstacle weight
-  if (_sdf->HasElement("obstacle_weight"))
-    this->dataPtr->obstacleWeight = _sdf->Get<double>("obstacle_weight");
+  // Read in the obstacle margin
+  if (_sdf->HasElement("obstacle_margin"))
+    this->dataPtr->obstacleMargin = _sdf->Get<double>("obstacle_margin");
 
-  // Read in the animation factor (applied in the OnUpdate function).
+  // Read in the animation factor
   if (_sdf->HasElement("animation_factor"))
     this->dataPtr->animationFactor = _sdf->Get<double>("animation_factor");
 
@@ -110,11 +111,14 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   this->dataPtr->ignoreModels.push_back(this->dataPtr->actor->GetName());
 
   // Read in the other obstacles to ignore
-  auto ignoreElem = _sdf->GetElement("ignore");
-  while (ignoreElem)
+  if (_sdf->HasElement("ignore_obstacle"))
   {
-    this->dataPtr->ignoreModels.push_back(ignoreElem->Get<std::string>());
-    ignoreElem = ignoreElem->GetNextElement("ignore");
+    auto ignoreElem = _sdf->GetElement("ignore_obstacle");
+    while (ignoreElem)
+    {
+      this->dataPtr->ignoreModels.push_back(ignoreElem->Get<std::string>());
+      ignoreElem = ignoreElem->GetNextElement("ignore_obstacle");
+    }
   }
 
   // Read in the animation
@@ -139,33 +143,70 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 }
 
 /////////////////////////////////////////////////
-void TrajectoryActorPlugin::HandleObstacles(ignition::math::Vector3d &_pos)
+bool TrajectoryActorPlugin::ObstacleOnTheWay() const
 {
+  auto actorPose = this->dataPtr->actor->WorldPose().Pos();
+
   // Iterate over all models in the world
   for (unsigned int i = 0; i < this->dataPtr->world->ModelCount(); ++i)
   {
     // Skip models we're ignoring
-    physics::ModelPtr model = this->dataPtr->world->ModelByIndex(i);
-    if (std::find(this->dataPtr->ignoreModels.begin(), this->dataPtr->ignoreModels.end(),
-        model->GetName()) != this->dataPtr->ignoreModels.end())
+    auto model = this->dataPtr->world->ModelByIndex(i);
+    if (std::find(this->dataPtr->ignoreModels.begin(),
+                  this->dataPtr->ignoreModels.end(), model->GetName()) !=
+                  this->dataPtr->ignoreModels.end())
     {
       continue;
     }
 
-    // Check against point obstacles
-    auto offset = model->WorldPose().Pos() - this->dataPtr->actor->WorldPose().Pos();
-    double modelDist = offset.Length();
-    if (modelDist < 1.5)
+    // Obstacle's bounding box
+    auto bb = model->BoundingBox();
+
+    // Increase box by margin
+    bb.Min() -= ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
+    bb.Max() += ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
+
+    // Increase vertically
+    bb.Min().Z() -= 5;
+    bb.Max().Z() += 5;
+
+    // Check
+    if (bb.Contains(actorPose))
     {
-      double invModelDist = this->dataPtr->obstacleWeight / modelDist;
-      offset.Normalize();
-      offset *= invModelDist;
-      _pos -= offset;
+      return true;
     }
 
     // TODO: Improve obstacle avoidance. Some ideas: check contacts, ray-query
     // the path forward, check against bounding box of each collision shape...
   }
+  return false;
+}
+
+/////////////////////////////////////////////////
+void TrajectoryActorPlugin::UpdateTarget()
+{
+  // Current actor position
+  auto actorPos = this->dataPtr->actor->WorldPose().Pos();
+
+  // Current target
+  auto target = this->dataPtr->targets[this->dataPtr->currentTarget].Pos();
+
+  // Not reached current target yet
+
+  // 2D distance to target
+  auto posDiff = target - actorPos;
+  posDiff.Z(0);
+
+  double distance = posDiff.Length();
+
+  // Still far from target?
+  if (distance > this->dataPtr->targetRadius)
+    return;
+
+  // Move on to next target
+  this->dataPtr->currentTarget++;
+  if (this->dataPtr->currentTarget > this->dataPtr->targets.size() - 1)
+    this->dataPtr->currentTarget = 0;
 }
 
 /////////////////////////////////////////////////
@@ -174,47 +215,42 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Time delta
   double dt = (_info.simTime - this->dataPtr->lastUpdate).Double();
 
+  this->dataPtr->lastUpdate = _info.simTime;
+
+  // Don't move if there's an obstacle on the way
+  if (this->ObstacleOnTheWay())
+    return;
+
+  // Target
+  this->UpdateTarget();
+
+  // Current pose
   auto actorPose = this->dataPtr->actor->WorldPose();
 
-  // 2D distance to target
-  auto posDiff = this->dataPtr->targets[this->dataPtr->currentTarget].Pos() -
-      actorPose.Pos();
-  posDiff.Z(0);
+  // Current target
+  auto targetPose = this->dataPtr->targets[this->dataPtr->currentTarget];
 
-  double distance = posDiff.Length();
+  // Direction to target
+  auto dir = (targetPose.Pos() - actorPose.Pos()).Normalize();
 
-  // Get next target position if the actor has reached its current
-  // target.
-  if (distance < 0.3)
-  {
-    this->dataPtr->currentTarget++;
-    if (this->dataPtr->currentTarget > this->dataPtr->targets.size() - 1)
-      this->dataPtr->currentTarget = 0;
-    posDiff = this->dataPtr->targets[this->dataPtr->currentTarget].Pos() - actorPose.Pos();
-  }
-
-  // Normalize the direction vector, and apply the target weight
-  posDiff = posDiff.Normalize() * this->dataPtr->targetWeight;
-
-  // Adjust the direction vector by avoiding obstacles
-  this->HandleObstacles(posDiff);
-
-  // Compute the yaw orientation
-  auto rpy = actorPose.Rot().Euler();
-  ignition::math::Angle yaw = atan2(posDiff.Y(), posDiff.X()) + 1.5707 - rpy.Z();
-  yaw.Normalize();
+  // Compute the yaw
+  auto currentYaw = actorPose.Rot().Yaw();
+  ignition::math::Angle desiredYaw = atan2(dir.Y(), dir.X()) + IGN_PI_2 - currentYaw;
+  desiredYaw.Normalize();
 
   // Rotate in place, instead of jumping.
-  if (std::abs(yaw.Radian()) > IGN_DTOR(10))
+  // TODO: Improve turning
+  if (std::abs(desiredYaw.Radian()) > IGN_DTOR(10))
   {
-    actorPose.Rot() = ignition::math::Quaterniond(1.5707, 0, rpy.Z()+
-        yaw.Radian()*0.001);
+    actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, currentYaw +
+        desiredYaw.Radian()*0.001);
   }
   else
   {
-    actorPose.Pos() += posDiff * this->dataPtr->velocity * dt;
-    actorPose.Rot() = ignition::math::Quaterniond(1.5707, 0, rpy.Z()+yaw.Radian());
+    actorPose.Pos() += dir * this->dataPtr->velocity * dt;
+    actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, currentYaw + desiredYaw.Radian());
   }
+  // TODO: Remove hardcoded height
   actorPose.Pos().Z(1.2138);
 
   // Distance traveled is used to coordinate motion with the walking
@@ -222,8 +258,8 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   double distanceTraveled = (actorPose.Pos() -
       this->dataPtr->actor->WorldPose().Pos()).Length();
 
+  // Update actor
   this->dataPtr->actor->SetWorldPose(actorPose, false, false);
   this->dataPtr->actor->SetScriptTime(this->dataPtr->actor->ScriptTime() +
     (distanceTraveled * this->dataPtr->animationFactor));
-  this->dataPtr->lastUpdate = _info.simTime;
 }
