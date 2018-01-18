@@ -23,12 +23,12 @@
 
 namespace servicesim
 {
-  class WanderingActorPluginPrivate;
+  class TrajectoryActorPluginPrivate;
 
-  class GAZEBO_VISIBLE WanderingActorPlugin : public gazebo::ModelPlugin
+  class GAZEBO_VISIBLE TrajectoryActorPlugin : public gazebo::ModelPlugin
   {
     /// \brief Constructor
-    public: WanderingActorPlugin();
+    public: TrajectoryActorPlugin();
 
     /// \brief Load the actor plugin.
     /// \param[in] _model Pointer to the parent model.
@@ -46,7 +46,7 @@ namespace servicesim
     private: void HandleObstacles(ignition::math::Vector3d &_pos);
 
     /// \internal
-    private: WanderingActorPluginPrivate *dataPtr;
+    private: TrajectoryActorPluginPrivate *dataPtr;
   };
 }
 #endif

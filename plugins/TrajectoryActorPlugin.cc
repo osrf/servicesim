@@ -20,13 +20,13 @@
 #include <ignition/math/Pose3.hh>
 #include <ignition/math/Vector3.hh>
 #include <gazebo/physics/physics.hh>
-#include "WanderingActorPlugin.hh"
+#include "TrajectoryActorPlugin.hh"
 
 using namespace gazebo;
 using namespace servicesim;
-GZ_REGISTER_MODEL_PLUGIN(servicesim::WanderingActorPlugin)
+GZ_REGISTER_MODEL_PLUGIN(servicesim::TrajectoryActorPlugin)
 
-class servicesim::WanderingActorPluginPrivate
+class servicesim::TrajectoryActorPluginPrivate
 {
   /// \brief Pointer to the parent actor.
   public: physics::ActorPtr actor{nullptr};
@@ -68,19 +68,19 @@ class servicesim::WanderingActorPluginPrivate
 };
 
 /////////////////////////////////////////////////
-WanderingActorPlugin::WanderingActorPlugin()
-    : dataPtr(new WanderingActorPluginPrivate)
+TrajectoryActorPlugin::TrajectoryActorPlugin()
+    : dataPtr(new TrajectoryActorPluginPrivate)
 {
 }
 
 /////////////////////////////////////////////////
-void WanderingActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
+void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 {
   this->dataPtr->actor = boost::dynamic_pointer_cast<physics::Actor>(_model);
   this->dataPtr->world = this->dataPtr->actor->GetWorld();
 
   this->dataPtr->connections.push_back(event::Events::ConnectWorldUpdateBegin(
-      std::bind(&WanderingActorPlugin::OnUpdate, this, std::placeholders::_1)));
+      std::bind(&TrajectoryActorPlugin::OnUpdate, this, std::placeholders::_1)));
 
   // Read in the velocity
   if (_sdf->HasElement("velocity"))
@@ -139,7 +139,7 @@ void WanderingActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 }
 
 /////////////////////////////////////////////////
-void WanderingActorPlugin::HandleObstacles(ignition::math::Vector3d &_pos)
+void TrajectoryActorPlugin::HandleObstacles(ignition::math::Vector3d &_pos)
 {
   // Iterate over all models in the world
   for (unsigned int i = 0; i < this->dataPtr->world->ModelCount(); ++i)
@@ -169,7 +169,7 @@ void WanderingActorPlugin::HandleObstacles(ignition::math::Vector3d &_pos)
 }
 
 /////////////////////////////////////////////////
-void WanderingActorPlugin::OnUpdate(const common::UpdateInfo &_info)
+void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
 {
   // Time delta
   double dt = (_info.simTime - this->dataPtr->lastUpdate).Double();

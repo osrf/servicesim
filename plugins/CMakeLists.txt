@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 set (CMAKE_AUTOMOC ON)
 
-project(WanderingActorPlugin)
-
 # Find packages
-
 find_package (Qt5Widgets REQUIRED)
 find_package (Qt5Core REQUIRED)
 find_package(Gazebo REQUIRED)
@@ -15,8 +12,8 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 
 # Non-GUI library
-add_library(WanderingActorPlugin SHARED WanderingActorPlugin.cc)
-target_link_libraries(WanderingActorPlugin ${GAZEBO_LIBRARIES})
+add_library(TrajectoryActorPlugin SHARED TrajectoryActorPlugin.cc)
+target_link_libraries(TrajectoryActorPlugin ${GAZEBO_LIBRARIES})
 
 # GUI library
 add_library(CreateActorPlugin SHARED ${headers_MOC}

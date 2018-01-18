@@ -147,7 +147,7 @@ void fillSDF()
   else
   {
     trajectory += "\
-   <plugin name='wandering_plugin' filename='libWanderingActorPlugin.so'>\n\
+   <plugin name='wandering_plugin' filename='libTrajectoryActorPlugin.so'>\n\
      <target_weight>1.15</target_weight>\n\
      <obstacle_weight>1.8</obstacle_weight>\n\
      <animation_factor>5.1</animation_factor>\n";
