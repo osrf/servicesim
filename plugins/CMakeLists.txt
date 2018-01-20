@@ -11,11 +11,15 @@ include_directories(SYSTEM ${GAZEBO_INCLUDE_DIRS} ${Qt5Core_INCLUDE_DIRS})
 link_directories(${GAZEBO_LIBRARY_DIRS})
 list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 
-# Non-GUI library
+# TrajectoryActor
 add_library(TrajectoryActorPlugin SHARED TrajectoryActorPlugin.cc)
 target_link_libraries(TrajectoryActorPlugin ${GAZEBO_LIBRARIES})
 
-# GUI library
+# NumberVisual
+add_library(NumberVisualPlugin SHARED NumberVisualPlugin.cc)
+target_link_libraries(NumberVisualPlugin ${GAZEBO_LIBRARIES})
+
+# CreateActor
 add_library(CreateActorPlugin SHARED ${headers_MOC}
   CreateActorPlugin.cc)
 target_link_libraries(CreateActorPlugin
