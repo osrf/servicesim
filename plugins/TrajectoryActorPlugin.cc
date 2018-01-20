@@ -235,21 +235,25 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
 
   // Compute the yaw
   auto currentYaw = actorPose.Rot().Yaw();
-  ignition::math::Angle desiredYaw = atan2(dir.Y(), dir.X()) + IGN_PI_2 - currentYaw;
-  desiredYaw.Normalize();
+  ignition::math::Angle yawDiff = atan2(dir.Y(), dir.X()) + IGN_PI_2 - currentYaw;
+  yawDiff.Normalize();
 
-  // Rotate in place, instead of jumping.
-  // TODO: Improve turning
-  if (std::abs(desiredYaw.Radian()) > IGN_DTOR(10))
+  // Rotate
+  if (std::abs(yawDiff.Radian()) > IGN_DTOR(10))
   {
-    actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, currentYaw +
-        desiredYaw.Radian()*0.001);
+    // Rotate only by a fraction
+    yawDiff = yawDiff*0.01;
+
+    // New direction
+    dir.X() = dir.X() * sin(yawDiff.Radian());
+    dir.Y() = dir.Y() * cos(yawDiff.Radian());
+    dir.Normalize();
   }
-  else
-  {
-    actorPose.Pos() += dir * this->dataPtr->velocity * dt;
-    actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, currentYaw + desiredYaw.Radian());
-  }
+  actorPose.Pos() += dir * this->dataPtr->velocity * dt;
+
+  // TODO: remove hardcoded roll
+  actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, currentYaw + yawDiff.Radian());
+
   // TODO: Remove hardcoded height
   actorPose.Pos().Z(1.2138);
 
