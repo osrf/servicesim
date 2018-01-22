@@ -148,9 +148,9 @@ void fillSDF()
   {
     trajectory += "\
    <plugin name='wandering_plugin' filename='libTrajectoryActorPlugin.so'>\n\
-     <target_weight>1.15</target_weight>\n\
-     <obstacle_weight>1.8</obstacle_weight>\n\
-     <animation_factor>5.1</animation_factor>\n";
+     <animation_factor>5.1</animation_factor>\n\
+     <ignore_obstacle>willowgarage</ignore_obstacle>\n\
+     <ignore_obstacle>ground_collision</ignore_obstacle>\n";
 
     for (const auto &pose : ghostPoses)
     {
@@ -320,6 +320,14 @@ CreateActorPlugin::CreateActorPlugin()
   this->dataPtr->factoryPub =
       this->dataPtr->gzNode->Advertise<msgs::Factory>("~/factory");
 
+  // Add button
+  auto waypointButton = new QPushButton(tr("New waypoint"));
+  waypointButton->setVisible(false);
+  this->connect(waypointButton, &QPushButton::clicked, [=]()
+  {
+    insertGhost();
+  });
+
   // Skin combo
   auto skinCombo = new QComboBox();
   skinCombo->setObjectName("skinCombo");
@@ -350,10 +358,12 @@ CreateActorPlugin::CreateActorPlugin()
     if (animIdleMap.find(_value.toStdString()) != animIdleMap.end())
     {
       current.animDae = animIdleMap[_value.toStdString()];
+      waypointButton->setVisible(false);
     }
     else
     {
       current.animDae = animTrajectoryMap[_value.toStdString()];
+      waypointButton->setVisible(true);
     }
     current.poseOffset = animPoseMap[_value.toStdString()];
   });
@@ -404,14 +414,6 @@ CreateActorPlugin::CreateActorPlugin()
          <b>You won't be able to reposition the actor after spawned</b>");
     label->setMaximumHeight(50);
 
-    // Add button
-    // TODO: hide for idle
-    auto addButton = new QPushButton(tr("New waypoint"));
-    this->connect(addButton, &QPushButton::clicked, [=]()
-    {
-      insertGhost();
-    });
-
     // Next button
     auto nextButton = new QPushButton(tr("Next"));
     this->connect(nextButton, &QPushButton::clicked, [=]()
@@ -424,8 +426,8 @@ CreateActorPlugin::CreateActorPlugin()
     auto layout = new QGridLayout;
     layout->setSpacing(0);
     layout->addWidget(label, 0, 0, 1, 2);
-    layout->addWidget(addButton, 1, 1);
-    layout->addWidget(nextButton, 3, 1);
+    layout->addWidget(waypointButton, 1, 0);
+    layout->addWidget(nextButton, 1, 1);
 
     // Widget
     auto widget = new QWidget();

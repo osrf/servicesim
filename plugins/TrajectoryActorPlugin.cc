@@ -20,6 +20,7 @@
 #include <ignition/math/Pose3.hh>
 #include <ignition/math/Vector3.hh>
 #include "gazebo/common/Animation.hh"
+#include "gazebo/common/Console.hh"
 #include "gazebo/common/KeyFrame.hh"
 #include <gazebo/physics/physics.hh>
 #include "TrajectoryActorPlugin.hh"
@@ -59,6 +60,8 @@ class servicesim::TrajectoryActorPluginPrivate
 
   /// \brief Time of the last update.
   public: common::Time lastUpdate;
+
+  /// \brief Time when the corner starts
   public: common::Time firstCornerUpdate;
 
   /// \brief List of models to ignore when checking collisions.
@@ -102,8 +105,8 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   }
 
   // Read in the target mradius
-  if (_sdf->HasElement("target_mradius"))
-    this->dataPtr->targetRadius = _sdf->Get<double>("target_mradius");
+  if (_sdf->HasElement("target_radius"))
+    this->dataPtr->targetRadius = _sdf->Get<double>("target_radius");
 
   // Read in the obstacle margin
   if (_sdf->HasElement("obstacle_margin"))
