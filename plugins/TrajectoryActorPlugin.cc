@@ -19,6 +19,8 @@
 
 #include <ignition/math/Pose3.hh>
 #include <ignition/math/Vector3.hh>
+#include "gazebo/common/Animation.hh"
+#include "gazebo/common/KeyFrame.hh"
 #include <gazebo/physics/physics.hh>
 #include "TrajectoryActorPlugin.hh"
 
@@ -238,21 +240,53 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   ignition::math::Angle yawDiff = atan2(dir.Y(), dir.X()) + IGN_PI_2 - currentYaw;
   yawDiff.Normalize();
 
-  // Rotate
+  // Rotate if needed
   if (std::abs(yawDiff.Radian()) > IGN_DTOR(10))
   {
-    // Rotate only by a fraction
-    yawDiff = yawDiff*0.01;
+    // Total time to finish the curve
+    auto curveTime = this->dataPtr->velocity * std::abs(yawDiff.Radian()) * 0.5;
 
-    // New direction
-    dir.X() = dir.X() * sin(yawDiff.Radian());
-    dir.Y() = dir.Y() * cos(yawDiff.Radian());
-    dir.Normalize();
+    // Use pose animation for spline
+    auto animation = new common::PoseAnimation("anim", curveTime, true);
+
+    // Start from actor's current pose
+    auto start = animation->CreateKeyFrame(0.0);
+    start->Translation(actorPose.Pos());
+    start->Rotation(actorPose.Rot());
+
+    // End of curve
+    auto previousTarget = this->dataPtr->currentTarget - 1;
+    if (previousTarget < 0)
+      previousTarget = this->dataPtr->targets.size() - 1;
+
+    auto prevTargetPos = this->dataPtr->targets[previousTarget].Pos();
+
+    auto prevDir = (targetPose.Pos() - actorPose.Pos()).Normalize() *
+        this->dataPtr->targetRadius;
+
+    auto prevYaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
+
+    auto endPt = prevTargetPos + prevDir;
+
+    auto end = animation->CreateKeyFrame(curveTime);
+    end->Translation(endPt);
+    end->Rotation(ignition::math::Quaterniond(IGN_PI_2, 0, prevYaw));
+
+    // Get point in curve
+    common::PoseKeyFrame pose(dt);
+    animation->SetTime(dt);
+    animation->GetInterpolatedKeyFrame(pose);
+
+    actorPose.Pos() = pose.Translation();
+    actorPose.Rot() = pose.Rotation();
   }
-  actorPose.Pos() += dir * this->dataPtr->velocity * dt;
+  else
+  {
+    actorPose.Pos() += dir * this->dataPtr->velocity * dt;
 
-  // TODO: remove hardcoded roll
-  actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, currentYaw + yawDiff.Radian());
+    // TODO: remove hardcoded roll
+    actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, currentYaw + yawDiff.Radian());
+  }
 
   // TODO: Remove hardcoded height
   actorPose.Pos().Z(1.2138);
