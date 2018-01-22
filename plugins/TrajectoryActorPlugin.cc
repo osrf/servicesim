@@ -59,6 +59,7 @@ class servicesim::TrajectoryActorPluginPrivate
 
   /// \brief Time of the last update.
   public: common::Time lastUpdate;
+  public: common::Time firstCornerUpdate;
 
   /// \brief List of models to ignore when checking collisions.
   public: std::vector<std::string> ignoreModels;
@@ -68,6 +69,9 @@ class servicesim::TrajectoryActorPluginPrivate
 
   /// \brief Animation
   public: std::string animation{"animation"};
+
+  /// \brief Animation for corners
+  public: common::PoseAnimation *cornerAnimation{nullptr};
 };
 
 /////////////////////////////////////////////////
@@ -240,48 +244,57 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   ignition::math::Angle yawDiff = atan2(dir.Y(), dir.X()) + IGN_PI_2 - currentYaw;
   yawDiff.Normalize();
 
-  // Rotate if needed
+  // If rotating
   if (std::abs(yawDiff.Radian()) > IGN_DTOR(10))
   {
-    // Total time to finish the curve
-    auto curveTime = this->dataPtr->velocity * std::abs(yawDiff.Radian()) * 0.5;
+    if (!this->dataPtr->cornerAnimation)
+    {
+      // Curve end point
+      auto previousTarget = this->dataPtr->currentTarget - 1;
+      if (previousTarget < 0)
+        previousTarget = this->dataPtr->targets.size() - 1;
 
-    // Use pose animation for spline
-    auto animation = new common::PoseAnimation("anim", curveTime, true);
+      auto prevTargetPos = this->dataPtr->targets[previousTarget].Pos();
 
-    // Start from actor's current pose
-    auto start = animation->CreateKeyFrame(0.0);
-    start->Translation(actorPose.Pos());
-    start->Rotation(actorPose.Rot());
+      auto prevDir = (targetPose.Pos() - actorPose.Pos()).Normalize() *
+          this->dataPtr->targetRadius;
 
-    // End of curve
-    auto previousTarget = this->dataPtr->currentTarget - 1;
-    if (previousTarget < 0)
-      previousTarget = this->dataPtr->targets.size() - 1;
+      auto prevYaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
+      auto endPt = prevTargetPos + prevDir;
 
-    auto prevTargetPos = this->dataPtr->targets[previousTarget].Pos();
+      // Total time to finish the curve
+      auto curveDist = (endPt - actorPose.Pos()).Length();
+      auto curveTime = curveDist / this->dataPtr->velocity;
 
-    auto prevDir = (targetPose.Pos() - actorPose.Pos()).Normalize() *
-        this->dataPtr->targetRadius;
+      // Use pose animation for spline
+      this->dataPtr->cornerAnimation = new common::PoseAnimation("anim", curveTime, false);
 
-    auto prevYaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
+      // Start from actor's current pose
+      auto start = this->dataPtr->cornerAnimation->CreateKeyFrame(0.0);
+      start->Translation(actorPose.Pos());
+      start->Rotation(actorPose.Rot());
 
-    auto endPt = prevTargetPos + prevDir;
+      // End of curve
+      auto end = this->dataPtr->cornerAnimation->CreateKeyFrame(curveTime);
+      end->Translation(endPt);
+      end->Rotation(ignition::math::Quaterniond(IGN_PI_2, 0, prevYaw));
 
-    auto end = animation->CreateKeyFrame(curveTime);
-    end->Translation(endPt);
-    end->Rotation(ignition::math::Quaterniond(IGN_PI_2, 0, prevYaw));
+      this->dataPtr->firstCornerUpdate = _info.simTime;
+    }
 
     // Get point in curve
-    common::PoseKeyFrame pose(dt);
-    animation->SetTime(dt);
-    animation->GetInterpolatedKeyFrame(pose);
+    auto cornerDt = (_info.simTime - this->dataPtr->firstCornerUpdate).Double();
+    common::PoseKeyFrame pose(cornerDt);
+    this->dataPtr->cornerAnimation->SetTime(cornerDt);
+    this->dataPtr->cornerAnimation->GetInterpolatedKeyFrame(pose);
 
     actorPose.Pos() = pose.Translation();
-    actorPose.Rot() = pose.Rotation();
+    actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, pose.Rotation().Yaw());
   }
   else
   {
+    this->dataPtr->cornerAnimation = nullptr;
+
     actorPose.Pos() += dir * this->dataPtr->velocity * dt;
 
     // TODO: remove hardcoded roll
