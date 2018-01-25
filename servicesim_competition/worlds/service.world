@@ -1,0 +1,147 @@
+<?xml version="1.0" ?>
+
+
+<!-- Seed: 2087672 -->
+<sdf version="1.6">
+  <world name="ServiceSim">
+
+    <!-- GUI -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>-14.41 -19.9 4.14 0 0.5 0.76</pose>
+      </camera>
+    </gui>
+
+    <!-- Scene -->
+    <scene>
+      <background>0.66 0.77 0.84 1.0</background>
+      <grid>0</grid>
+      <origin_visual>0</origin_visual>
+    </scene>
+
+    <!-- A global light source -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 1000 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Ground collision -->
+    <model name="ground_collision">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>80 80</size>
+            </plane>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- Office -->
+    <include>
+      <uri>model://willowgarage</uri>
+    </include>
+
+    <!-- TODO: Trajectory actors -->
+
+    <!-- Idling actors -->
+
+
+
+<actor name="actor_1">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -11.969092
+    -17.137756
+    0.15
+    0.0
+    -0.0
+    0.719669
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
+  </animation>
+
+  <!-- Need one waypoint to idle at -->
+  <script>
+    <trajectory id='0' type='animation'>
+      <waypoint>
+        <time>100</time>
+          <pose>
+            -11.969092
+            -17.137756
+            0.15
+            0.0
+            -0.0
+            0.719669
+          </pose>
+      </waypoint>
+    </trajectory>
+  </script>
+
+</actor>
+
+
+
+
+<actor name="actor_2">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    6.323622
+    -6.638186
+    0.15
+    0.0
+    0.0
+    -0.22373
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
+  </animation>
+
+  <!-- Need one waypoint to idle at -->
+  <script>
+    <trajectory id='0' type='animation'>
+      <waypoint>
+        <time>100</time>
+          <pose>
+            6.323622
+            -6.638186
+            0.15
+            0.0
+            0.0
+            -0.22373
+          </pose>
+      </waypoint>
+    </trajectory>
+  </script>
+
+</actor>
+
+
+
+  </world>
+</sdf>
