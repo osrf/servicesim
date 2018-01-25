@@ -1,11 +1,9 @@
 <launch>
-  <arg name="dummy_arg" default="false" />
 
   <include file="$(find servicebot_description)/launch/upload_servicebot.launch" />
 
-  <include file="$(find servicesim_competition)/launch/dummy_competition.launch">
-    <arg name="dummy_arg" value="$(arg dummy_arg)"/>
+  <include file="$(find servicesim_competition)/launch/competition.launch">
   </include>
 
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x 1 -y 1 -z 1 -model servicebot" />
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x -9.75 -y -17.9 -z 0.2 -Y 1.57  -model servicebot" />
 </launch>

@@ -1,0 +1,173 @@
+<?xml version="1.0" ?>
+<%
+  # ServiceSim world generator
+  #
+  # Command line options:
+  # -s seed for random
+
+  ###############################################
+  #                                             #
+  #           COMMAND LINE ARGUMENTS            #
+  #                                             #
+  ###############################################
+
+  # Read task number from command line
+  vars = ARGV.take_while {|arg| arg[/^\w+=/]}
+  ARGV.slice!(0, vars.size)
+  vars.each do |var|
+    k, v = var.split('=', 2)
+    TOPLEVEL_BINDING.eval %Q(#{k} = "#{v}")
+  end
+
+  seed = rand(0..10000000)
+  if (defined? s)
+    seed = s.to_i
+  end
+  srand(seed)
+
+  ###############################################
+  #                                             #
+  #           IMPORT OTHER ERB FILES            #
+  #                                             #
+  ###############################################
+
+  # Helper function to import another erb file
+  def fromFile filename
+    return ERB.new(File.read(filename), nil, nil, '_sub01').result(binding)
+  end
+
+  ###############################################
+  #                                             #
+  #                   ACTORS                    #
+  #                                             #
+  ###############################################
+
+  # Skin files under model://actor/meshes
+  skins =
+  [
+    "SKIN_man_blue_shirt.dae",
+    "SKIN_man_green_shirt.dae",
+    "SKIN_man_red_shirt.dae"
+  ]
+
+  # Idling animation files under model://actor/meshes
+  animations_idle =
+  [
+    "ANIMATION_talking_a.dae",
+    "ANIMATION_talking_b.dae"
+  ]
+
+  # List of idle actors to be inserted
+  actors_idle =
+  [
+    # Example randomizing skin and animation
+    {:skin => skins.sample, :anim => animations_idle.sample, :config_file => 'idle_near_entrance.erb'},
+    # Example using skin and animation from config
+    {:config_file => 'idle_near_fridge.erb'}
+  ]
+
+  ###############################################
+  #                                             #
+  #               INITIALIZATION                #
+  #                                             #
+  ###############################################
+
+  # Relative path from where the script is being run to the script's directory
+  DIR = File.dirname(__FILE__)
+
+  # Actor's Z position
+  actor_pos_z = 1.25
+%>
+
+<!-- Seed: <%= seed %> -->
+<sdf version="1.6">
+  <world name="ServiceSim">
+
+    <!-- GUI -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>-14.41 -19.9 4.14 0 0.5 0.76</pose>
+      </camera>
+    </gui>
+
+    <!-- Scene -->
+    <scene>
+      <background>0.66 0.77 0.84 1.0</background>
+      <grid>0</grid>
+      <origin_visual>0</origin_visual>
+    </scene>
+
+    <!-- A global light source -->
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 1000 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Ground collision -->
+    <model name="ground_collision">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>80 80</size>
+            </plane>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+
+    <!-- Office -->
+    <include>
+      <uri>model://willowgarage</uri>
+    </include>
+
+    <!-- TODO: Trajectory actors -->
+
+    <!-- Idling actors -->
+    <%
+      count = 0
+      for actor in actors_idle
+
+        # unique name
+        count = count + 1
+        $actor_name = 'actor_' + count.to_s;
+
+        # skin
+        $actor_skin = nil
+        if actor.has_key? :skin
+          $actor_skin = actor[:skin]
+        end
+
+        # animation
+        $actor_anim = nil
+        if actor.has_key? :anim
+          $actor_anim = actor[:anim]
+        end
+
+        # idling pose
+        $actor_pose = nil
+        if actor.has_key? :pose
+          $actor_pose = actor[:pose]
+        end
+
+        # Set undefined values from the config file if one was given
+        if actor.has_key? :config_file
+          fromFile(DIR + "/" + actor[:config_file])
+        end
+    %>
+      <%= fromFile(DIR + "/" + "actor_idle.erb") %>
+    <% end %>
+
+  </world>
+</sdf>
