@@ -1,11 +1,19 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(servicesim_competition)
+set (CMAKE_AUTOMOC ON)
 
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
   std_msgs
 )
+
+# Gazebo
+find_package(gazebo 8.2.0 REQUIRED)
+
+# Qt for GUI plugins
+find_package (Qt5Widgets REQUIRED)
+find_package (Qt5Core REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -63,7 +71,72 @@ catkin_package(
 ## Build ##
 ###########
 
-include_directories()
+include_directories(
+  include
+  ${GAZEBO_INCLUDE_DIRS}
+  ${roscpp_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
+)
+
+link_directories(
+  ${GAZEBO_LIBRARY_DIRS}
+)
+
+#############################
+## Trajectory Actor plugin ##
+#############################
+
+# Create the libTrajectoryActorPlugin.so library.
+set(trajectory_actor_plugin_name TrajectoryActorPlugin)
+add_library(${trajectory_actor_plugin_name} SHARED
+  src/TrajectoryActorPlugin.cc
+)
+target_link_libraries(${trajectory_actor_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+install(TARGETS ${trajectory_actor_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+#########################
+## Create Actor plugin ##
+#########################
+
+# Create the libCreateActorPlugin.so library.
+set(create_actor_plugin_name CreateActorPlugin)
+add_library(${create_actor_plugin_name} SHARED
+  src/CreateActorPlugin.cc
+)
+target_link_libraries(${create_actor_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+  ${Qt5Core_LIBRARIES}
+  ${Qt5Widgets_LIBRARIES}
+)
+install(TARGETS ${create_actor_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+##########################
+## Number Visual plugin ##
+##########################
+
+# Create the libNumberVisualPlugin.so library.
+set(number_visual_plugin_name NumberVisualPlugin)
+add_library(${number_visual_plugin_name} SHARED
+  src/NumberVisualPlugin.cc
+)
+target_link_libraries(${number_visual_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+install(TARGETS ${number_visual_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
 
 #############
 ## Install ##
