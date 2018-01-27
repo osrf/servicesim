@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
   std_msgs
+  roscpp
 )
 
 # Gazebo
@@ -17,7 +18,6 @@ find_package (Qt5Core REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -64,7 +64,10 @@ generate_messages(
 )
 
 catkin_package(
-  CATKIN_DEPENDS geometry_msgs message_runtime std_msgs
+  CATKIN_DEPENDS
+    geometry_msgs
+    message_runtime
+    std_msgs
 )
 
 ###########
@@ -79,6 +82,7 @@ include_directories(
 )
 
 link_directories(
+  ${catkin_LIBRARY_DIRS}
   ${GAZEBO_LIBRARY_DIRS}
 )
 
