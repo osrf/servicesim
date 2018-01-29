@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 
-<!-- Seed: 8440311 -->
+<!-- Seed: 7304717 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -55,8 +55,8 @@
     </include>
 
     <!-- Trajectory actors -->
-
-
+    
+      
 
 <actor name="actor_1">
 
@@ -64,10 +64,108 @@
   <pose>
     -9.32582
     -15.9673
-    0.15
-    0.0
+    1.2138
+    1.57
     0.0
     -0.22373
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_running.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -9.32582
+        -15.9673
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        -9.201666
+        -7.601102
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        5.87782
+        -7.59315
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        13.2181
+        -10.6971
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        15.2346
+        -13.7236
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        15.2558
+        -16.0176
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        -9.32582
+        -15.9673
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+
+    <velocity>1.5</velocity>
+    <ignore_obstacle>willowgarage</ignore_obstacle>
+    <ignore_obstacle>ground_collision</ignore_obstacle>
+
+  </plugin>
+
+</actor>
+
+    
+      
+
+<actor name="actor_2">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    13.4107
+    8.18946
+    1.2138
+    1.570796
+    -0.0
+    3.141593
   </pose>
 
   <skin>
@@ -80,72 +178,63 @@
   </animation>
 
   <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
-
+    
       <target>
-        -9.32582
-        -15.9673
-        0.15
-        0.0
-        0.0
-        -0.22373
+        13.4107
+        8.18946
+        1.2138
+        1.570796
+        -0.0
+        3.141593
       </target>
-
+    
       <target>
-        -9.201666
-        -7.601102
-        0.15
-        0.0
-        0.0
-        -0.22373
+        12.9881
+        19.467501
+        1.2138
+        1.570796
+        -0.0
+        3.141593
       </target>
-
+    
       <target>
-        5.87782
-        -7.59315
-        0.15
-        0.0
-        0.0
-        -0.22373
+        35.577293
+        19.779964
+        1.2138
+        1.570796
+        -0.0
+        3.141593
       </target>
-
+    
       <target>
-        13.2181
-        -10.6971
-        0.15
-        0.0
-        0.0
-        -0.22373
+        35.539101
+        17.879601
+        1.2138
+        1.570796
+        -0.0
+        3.141593
       </target>
-
+    
       <target>
-        15.2346
-        -13.7236
-        0.15
-        0.0
-        0.0
-        -0.22373
+        27.718399
+        17.094101
+        1.2138
+        1.570796
+        -0.0
+        3.141593
       </target>
-
+    
       <target>
-        15.2558
-        -16.0176
-        0.15
-        0.0
-        0.0
-        -0.22373
+        28.0737
+        8.25699
+        1.2138
+        1.570796
+        -0.0
+        3.141593
       </target>
+    
 
-      <target>
-        -9.32582
-        -15.9673
-        0.15
-        0.0
-        0.0
-        -0.22373
-      </target>
-
-
-    <animation_factor>5.1</animation_factor>
+    <velocity>1.0533352867179104</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
 
@@ -153,13 +242,13 @@
 
 </actor>
 
-
+    
 
     <!-- Idling actors -->
+    
+      
 
-
-
-<actor name="actor_2">
+<actor name="actor_3">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -172,7 +261,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -198,10 +287,10 @@
 
 </actor>
 
+    
+      
 
-
-
-<actor name="actor_3">
+<actor name="actor_4">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -240,7 +329,7 @@
 
 </actor>
 
-
+    
 
   </world>
 </sdf>

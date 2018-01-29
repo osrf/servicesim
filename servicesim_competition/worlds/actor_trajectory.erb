@@ -5,6 +5,7 @@
   # * $actor_name (string) Unique name for the actor
   # * $actor_skin (string) A skin Collada file from model://actor/meshes/
   # * $actor_anim (string) An animation Collada file from model://actor/meshes/
+  # * $actor_velocity (double) Velocity for trajectory actors, in m/s
   # * $actor_trajectory (array[array[6]]) Array or waypoint poses
 %>
 
@@ -43,7 +44,7 @@
       </target>
     <% end %>
 
-    <animation_factor>5.1</animation_factor>
+    <velocity><%= $actor_velocity %></velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
 

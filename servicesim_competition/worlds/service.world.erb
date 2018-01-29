@@ -76,7 +76,10 @@
   # List of trajectory actors to be inserted
   actors_trajectory =
   [
-    {:skin => skins.sample, :anim => animations_trajectory.sample, :config_file => 'trajectory_front.erb'}
+    # Example randomizing skin
+    {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
+    # Example setting velocity
+    {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
   ]
 
   ###############################################
@@ -164,6 +167,12 @@
         $actor_anim = nil
         if actor.has_key? :anim
           $actor_anim = actor[:anim]
+        end
+
+        # velocity
+        $actor_velocity = nil
+        if actor.has_key? :velocity
+          $actor_velocity = actor[:velocity]
         end
 
         # trajectory waypoints

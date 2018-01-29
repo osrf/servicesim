@@ -49,6 +49,9 @@ struct Current
   // Current animation DAE
   std::string animDae{""};
 
+  // Current velocity if it is a trajectory
+  double velocity{0.8};
+
   // Pose offset for the current animDae
   ignition::math::Pose3d poseOffset{ignition::math::Pose3d::Zero};
 
@@ -66,10 +69,10 @@ namespace gazebo
   /// \brief Private data for the CreateActorPlugin class
   class CreateActorPluginPrivate
   {
-    /// \brief Pointer to a node for communication.
+    /// \brief Gazebo node for communication.
     public: transport::NodePtr gzNode;
 
-    /// \brief keyboard publisher.
+    /// \brief Publisher for factory messages
     public: transport::PublisherPtr factoryPub;
   };
 }
@@ -110,6 +113,9 @@ void processGhostPoses()
     // Apply offset
     pose = current.poseOffset + pose;
 
+    // Remove ghost's Z pose
+    pose.Pos().Z(current.poseOffset.Pos().Z());
+
     // Convert to string
     ghostPoses.push_back(pose);
 
@@ -147,8 +153,8 @@ void fillSDF()
   else
   {
     trajectory += "\
-   <plugin name='wandering_plugin' filename='libTrajectoryActorPlugin.so'>\n\
-     <animation_factor>5.1</animation_factor>\n\
+   <plugin name='trajectory_plugin' filename='libTrajectoryActorPlugin.so'>\n\
+     <velocity>" + std::to_string(current.velocity) + "</velocity>\n\
      <ignore_obstacle>willowgarage</ignore_obstacle>\n\
      <ignore_obstacle>ground_collision</ignore_obstacle>\n";
 
@@ -221,7 +227,8 @@ void fillERB()
   if (ghostPoses.size() > 1)
   {
     current.erb += "\
-  # * $actor_trajectory (array[array[6]]) Array or waypoint poses\n";
+  # * $actor_trajectory (array[array[6]]) Array or waypoint poses\n\
+  # * $actor_velocity (double) Velocity in m/s\n";
   }
   else
   {
@@ -264,6 +271,11 @@ void fillERB()
 
     current.erb += "\
     ];\n\
+  end\n\n";
+
+    current.erb += "\
+  if defined?($actor_velocity).nil? or $actor_velocity.nil?\n\
+    $actor_velocity = " + std::to_string(current.velocity) + "\n\
   end\n\
 %>";
   }
@@ -292,16 +304,16 @@ CreateActorPlugin::CreateActorPlugin()
   skinMap["Blue shirt"] = "SKIN_man_blue_shirt";
 
   animIdleMap["Talking A"] = "ANIMATION_talking_a";
-  animPoseMap["Talking A"] = ignition::math::Pose3d(1, 0, -1.25, 0, 0, -IGN_PI_2);
+  animPoseMap["Talking A"] = ignition::math::Pose3d(1, 0, 1.2138, 0, 0, -IGN_PI_2);
 
   animIdleMap["Talking B"] = "ANIMATION_talking_b";
-  animPoseMap["Talking B"] = ignition::math::Pose3d(1, 0, -1.25, 0, 0, IGN_PI_2);
+  animPoseMap["Talking B"] = ignition::math::Pose3d(1, 0, 1.2138, 0, 0, IGN_PI_2);
 
   animTrajectoryMap["Walking"] = "ANIMATION_walking";
-  animPoseMap["Walking"] = ignition::math::Pose3d(0, 0, -1.25, 0, 0, IGN_PI);
+  animPoseMap["Walking"] = ignition::math::Pose3d(0, 0, 1.2138, IGN_PI_2, 0, IGN_PI);
 
   animTrajectoryMap["Running"] = "ANIMATION_running";
-  animPoseMap["Running"] = ignition::math::Pose3d(0, 0, -1.4, 0, 0, IGN_PI);
+  animPoseMap["Running"] = ignition::math::Pose3d(0, 0, 1.2138, IGN_PI_2, 0, IGN_PI);
 
   // Stacked layout
   auto mainLayout = new QStackedLayout();
@@ -586,6 +598,15 @@ void CreateActorPlugin::Spawn()
 
   // Get ghost poses and delete them
   processGhostPoses();
+
+  if (ghostPoses.size() > 1)
+  {
+    current.velocity = 0.8;
+    if (current.animDae.find("running") != std::string::npos)
+    {
+      current.velocity = 1.5;
+    }
+  }
 
   // Fill SDF
   fillSDF();

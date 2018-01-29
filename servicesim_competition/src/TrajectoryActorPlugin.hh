@@ -33,11 +33,15 @@ namespace servicesim
     /// \brief Load the actor plugin.
     /// \param[in] _model Pointer to the parent model.
     /// \param[in] _sdf Pointer to the plugin's SDF elements.
-    public: virtual void Load(gazebo::physics::ModelPtr _model, sdf::ElementPtr _sdf);
+    public: virtual void Load(gazebo::physics::ModelPtr _model, sdf::ElementPtr _sdf)
+        override;
 
     /// \brief Function that is called every update cycle.
     /// \param[in] _info Timing information
     private: void OnUpdate(const gazebo::common::UpdateInfo &_info);
+
+    /// \brief When user requests reset.
+    private: void Reset() override;
 
     /// \brief Checks if there is an obstacle on the way.
     /// \return True if there is

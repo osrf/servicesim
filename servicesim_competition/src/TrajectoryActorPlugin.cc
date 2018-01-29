@@ -19,10 +19,12 @@
 
 #include <ignition/math/Pose3.hh>
 #include <ignition/math/Vector3.hh>
-#include "gazebo/common/Animation.hh"
-#include "gazebo/common/Console.hh"
-#include "gazebo/common/KeyFrame.hh"
+
+#include <gazebo/common/Animation.hh>
+#include <gazebo/common/Console.hh>
+#include <gazebo/common/KeyFrame.hh>
 #include <gazebo/physics/physics.hh>
+
 #include "TrajectoryActorPlugin.hh"
 
 using namespace gazebo;
@@ -31,23 +33,23 @@ GZ_REGISTER_MODEL_PLUGIN(servicesim::TrajectoryActorPlugin)
 
 class servicesim::TrajectoryActorPluginPrivate
 {
-  /// \brief Pointer to the parent actor.
+  /// \brief Pointer to the actor.
   public: physics::ActorPtr actor{nullptr};
-
-  /// \brief Pointer to the world, for convenience.
-  public: physics::WorldPtr world{nullptr};
 
   /// \brief Velocity of the actor
   public: double velocity{0.8};
 
-  /// \brief List of connections
+  /// \brief List of connections such as WorldUpdateBegin
   public: std::vector<event::ConnectionPtr> connections;
 
-  /// \brief Current target location
+  /// \brief List of targets
   public: std::vector<ignition::math::Pose3d> targets;
+
+  /// \brief Current target index
   public: unsigned int currentTarget{0};
 
-  /// \brief Radius around target pose where we consider it was reached.
+  /// \brief Radius in meters around target pose where we consider it was
+  /// reached.
   public: double targetRadius{0.5};
 
   /// \brief Margin by which to increase an obstacle's bounding box on every
@@ -56,7 +58,7 @@ class servicesim::TrajectoryActorPluginPrivate
 
   /// \brief Time scaling factor. Used to coordinate translational motion
   /// with the actor's walking animation.
-  public: double animationFactor{4.5};
+  public: double animationFactor{5.1};
 
   /// \brief Time of the last update.
   public: common::Time lastUpdate;
@@ -66,12 +68,6 @@ class servicesim::TrajectoryActorPluginPrivate
 
   /// \brief List of models to ignore when checking collisions.
   public: std::vector<std::string> ignoreModels;
-
-  /// \brief Custom trajectory info.
-  public: physics::TrajectoryInfoPtr trajectoryInfo;
-
-  /// \brief Animation
-  public: std::string animation{"animation"};
 
   /// \brief Animation for corners
   public: common::PoseAnimation *cornerAnimation{nullptr};
@@ -87,7 +83,6 @@ TrajectoryActorPlugin::TrajectoryActorPlugin()
 void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 {
   this->dataPtr->actor = boost::dynamic_pointer_cast<physics::Actor>(_model);
-  this->dataPtr->world = this->dataPtr->actor->GetWorld();
 
   this->dataPtr->connections.push_back(event::Events::ConnectWorldUpdateBegin(
       std::bind(&TrajectoryActorPlugin::OnUpdate, this, std::placeholders::_1)));
@@ -130,37 +125,47 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     }
   }
 
-  // Read in the animation
+  // Read in the animation name
+  std::string animation{"animation"};
   if (_sdf->HasElement("animation"))
-    this->dataPtr->animation = _sdf->Get<std::string>("animation");
+    animation = _sdf->Get<std::string>("animation");
 
   auto skelAnims = this->dataPtr->actor->SkeletonAnimations();
-  if (skelAnims.find(this->dataPtr->animation) == skelAnims.end())
+  if (skelAnims.find(animation) == skelAnims.end())
   {
-    gzerr << "Skeleton animation [" << this->dataPtr->animation << "] not found."
+    gzerr << "Skeleton animation [" << animation << "] not found in Actor."
           << std::endl;
   }
   else
   {
-    // Create custom trajectory
-    this->dataPtr->trajectoryInfo.reset(new physics::TrajectoryInfo());
-    this->dataPtr->trajectoryInfo->type = this->dataPtr->animation;
-    this->dataPtr->trajectoryInfo->duration = 1.0;
+    // Set custom trajectory
+    gazebo::physics::TrajectoryInfoPtr trajectoryInfo(new physics::TrajectoryInfo());
+    trajectoryInfo->type = animation;
+    trajectoryInfo->duration = 1.0;
 
-    this->dataPtr->actor->SetCustomTrajectory(this->dataPtr->trajectoryInfo);
+    this->dataPtr->actor->SetCustomTrajectory(trajectoryInfo);
   }
+}
+
+/////////////////////////////////////////////////
+void TrajectoryActorPlugin::Reset()
+{
+  this->dataPtr->currentTarget = 0;
+  this->dataPtr->cornerAnimation = nullptr;
+  this->dataPtr->lastUpdate = common::Time::Zero;
 }
 
 /////////////////////////////////////////////////
 bool TrajectoryActorPlugin::ObstacleOnTheWay() const
 {
   auto actorPose = this->dataPtr->actor->WorldPose().Pos();
+  auto world = this->dataPtr->actor->GetWorld();
 
   // Iterate over all models in the world
-  for (unsigned int i = 0; i < this->dataPtr->world->ModelCount(); ++i)
+  for (unsigned int i = 0; i < world->ModelCount(); ++i)
   {
     // Skip models we're ignoring
-    auto model = this->dataPtr->world->ModelByIndex(i);
+    auto model = world->ModelByIndex(i);
     if (std::find(this->dataPtr->ignoreModels.begin(),
                   this->dataPtr->ignoreModels.end(), model->GetName()) !=
                   this->dataPtr->ignoreModels.end())
@@ -200,8 +205,6 @@ void TrajectoryActorPlugin::UpdateTarget()
   // Current target
   auto target = this->dataPtr->targets[this->dataPtr->currentTarget].Pos();
 
-  // Not reached current target yet
-
   // 2D distance to target
   auto posDiff = target - actorPos;
   posDiff.Z(0);
@@ -233,7 +236,7 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Target
   this->UpdateTarget();
 
-  // Current pose
+  // Current pose - actor is oriented Y-up and Z-front
   auto actorPose = this->dataPtr->actor->WorldPose();
 
   // Current target
@@ -242,30 +245,36 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Direction to target
   auto dir = (targetPose.Pos() - actorPose.Pos()).Normalize();
 
-  // Compute the yaw
+  // TODO: generalize for actors facing other directions
   auto currentYaw = actorPose.Rot().Yaw();
+
+  // Difference to target
   ignition::math::Angle yawDiff = atan2(dir.Y(), dir.X()) + IGN_PI_2 - currentYaw;
   yawDiff.Normalize();
 
-  // If rotating
+  // Rotate if needed
   if (std::abs(yawDiff.Radian()) > IGN_DTOR(10))
   {
+    // Not rotating yet
     if (!this->dataPtr->cornerAnimation)
     {
-      // Curve end point
-      auto previousTarget = this->dataPtr->currentTarget - 1;
+      // Previous target (we assume we just reached it)
+      int previousTarget = this->dataPtr->currentTarget - 1;
       if (previousTarget < 0)
         previousTarget = this->dataPtr->targets.size() - 1;
 
       auto prevTargetPos = this->dataPtr->targets[previousTarget].Pos();
 
-      auto prevDir = (targetPose.Pos() - actorPose.Pos()).Normalize() *
+      // Direction from previous target to current target
+      auto prevDir = (targetPose.Pos() - prevTargetPos).Normalize() *
           this->dataPtr->targetRadius;
 
-      auto prevYaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
+      // Curve end point
       auto endPt = prevTargetPos + prevDir;
 
-      // Total time to finish the curve
+      // Total time to finish the curve, we try to keep about the same speed,
+      // it will be a bit slower because we're doing an arch, not a straight
+      // line
       auto curveDist = (endPt - actorPose.Pos()).Length();
       auto curveTime = curveDist / this->dataPtr->velocity;
 
@@ -278,9 +287,10 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
       start->Rotation(actorPose.Rot());
 
       // End of curve
+      auto endYaw = atan2(prevDir.Y(), prevDir.X()) + IGN_PI_2;
       auto end = this->dataPtr->cornerAnimation->CreateKeyFrame(curveTime);
       end->Translation(endPt);
-      end->Rotation(ignition::math::Quaterniond(IGN_PI_2, 0, prevYaw));
+      end->Rotation(ignition::math::Quaterniond(IGN_PI_2, 0, endYaw));
 
       this->dataPtr->firstCornerUpdate = _info.simTime;
     }
@@ -303,9 +313,6 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
     // TODO: remove hardcoded roll
     actorPose.Rot() = ignition::math::Quaterniond(IGN_PI_2, 0, currentYaw + yawDiff.Radian());
   }
-
-  // TODO: Remove hardcoded height
-  actorPose.Pos().Z(1.2138);
 
   // Distance traveled is used to coordinate motion with the walking
   // animation
