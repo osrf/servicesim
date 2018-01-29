@@ -7,9 +7,11 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
 )
 
+# Gazebo
+find_package(gazebo 8.2.0 REQUIRED)
+
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -56,14 +58,45 @@ generate_messages(
 )
 
 catkin_package(
-  CATKIN_DEPENDS geometry_msgs message_runtime std_msgs
+  CATKIN_DEPENDS
+    geometry_msgs
+    message_runtime
+    std_msgs
 )
 
 ###########
 ## Build ##
 ###########
 
-include_directories()
+include_directories(
+  include
+  ${GAZEBO_INCLUDE_DIRS}
+  ${roscpp_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
+)
+
+link_directories(
+  ${catkin_LIBRARY_DIRS}
+  ${GAZEBO_LIBRARY_DIRS}
+)
+
+#############################
+## Trajectory Actor plugin ##
+#############################
+
+# Create the libTrajectoryActorPlugin.so library.
+set(trajectory_actor_plugin_name TrajectoryActorPlugin)
+add_library(${trajectory_actor_plugin_name} SHARED
+  src/TrajectoryActorPlugin.cc
+)
+target_link_libraries(${trajectory_actor_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+install(TARGETS ${trajectory_actor_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
 
 #############
 ## Install ##
