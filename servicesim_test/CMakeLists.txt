@@ -9,8 +9,6 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(gazebo 8.2.0 REQUIRED)
 
-find_package(servicesim_competition)
-
 catkin_package(
   CATKIN_DEPENDS
     roscpp
@@ -42,9 +40,6 @@ if (CATKIN_ENABLE_TESTING)
   add_rostest_gtest(trajectory_actor_plugin-test
                     trajectory_actor_plugin/trajectory_actor_plugin.test
                     trajectory_actor_plugin/trajectory_actor_plugin.cpp)
-  add_dependencies(trajectory_actor_plugin-test
-    servicesim_competition
-  )
   target_link_libraries(trajectory_actor_plugin-test
     ${catkin_LIBRARIES}
     ${GAZEBO_LIBRARIES}
