@@ -82,6 +82,11 @@
     {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
   ]
 
+  # Guest
+  guest_pose = [-12.7, -18.78, 1.19, 1.54, 0, 1.9]
+  guest_skin = skins.sample
+  guest_anim = animations_trajectory[0]
+
   ###############################################
   #                                             #
   #               INITIALIZATION                #
@@ -147,6 +152,51 @@
     <include>
       <uri>model://willowgarage</uri>
     </include>
+
+    <!-- Guest -->
+    <actor name="guest">
+
+      <!-- Starting pose, nice for when the world is reset -->
+      <pose>
+        <%= guest_pose[0] %>
+        <%= guest_pose[1] %>
+        <%= guest_pose[2] %>
+        <%= guest_pose[3] %>
+        <%= guest_pose[4] %>
+        <%= guest_pose[5] %>
+      </pose>
+
+      <skin>
+        <filename>model://actor/meshes/<%= guest_skin %></filename>
+      </skin>
+
+      <animation name="animation">
+        <filename>model://actor/meshes/<%= guest_anim %></filename>
+      </animation>
+
+      <!-- Need one waypoint to idle at -->
+      <script>
+        <trajectory id='0' type='animation'>
+          <waypoint>
+            <time>100</time>
+              <pose>
+                <%= guest_pose[0] %>
+                <%= guest_pose[1] %>
+                <%= guest_pose[2] %>
+                <%= guest_pose[3] %>
+                <%= guest_pose[4] %>
+                <%= guest_pose[5] %>
+              </pose>
+          </waypoint>
+        </trajectory>
+      </script>
+
+      <plugin name="trajectory" filename="libFollowActorPlugin.so">
+        <ignore_obstacle>willowgarage</ignore_obstacle>
+        <ignore_obstacle>ground_collision</ignore_obstacle>
+      </plugin>
+
+    </actor>
 
     <!-- Trajectory actors -->
     <%

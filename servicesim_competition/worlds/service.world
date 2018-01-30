@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 
-<!-- Seed: 7630238 -->
+<!-- Seed: 2395209 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -54,6 +54,51 @@
       <uri>model://willowgarage</uri>
     </include>
 
+    <!-- Guest -->
+    <actor name="guest">
+
+      <!-- Starting pose, nice for when the world is reset -->
+      <pose>
+        -12.7
+        -18.78
+        1.19
+        1.54
+        0
+        1.9
+      </pose>
+
+      <skin>
+        <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+      </skin>
+
+      <animation name="animation">
+        <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+      </animation>
+
+      <!-- Need one waypoint to idle at -->
+      <script>
+        <trajectory id='0' type='animation'>
+          <waypoint>
+            <time>100</time>
+              <pose>
+                -12.7
+                -18.78
+                1.19
+                1.54
+                0
+                1.9
+              </pose>
+          </waypoint>
+        </trajectory>
+      </script>
+
+      <plugin name="trajectory" filename="libFollowActorPlugin.so">
+        <ignore_obstacle>willowgarage</ignore_obstacle>
+        <ignore_obstacle>ground_collision</ignore_obstacle>
+      </plugin>
+
+    </actor>
+
     <!-- Trajectory actors -->
     
       
@@ -71,7 +116,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -234,7 +279,7 @@
       </target>
     
 
-    <velocity>1.1947813060411603</velocity>
+    <velocity>0.941606905189809</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
 
@@ -265,7 +310,7 @@
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->
