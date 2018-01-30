@@ -18,6 +18,7 @@
 #include <functional>
 
 #include <ignition/math/Pose3.hh>
+#include <ignition/math/Rand.hh>
 #include <ignition/math/Vector3.hh>
 
 #include <gazebo/common/Animation.hh>
@@ -66,8 +67,17 @@ class servicesim::FollowActorPluginPrivate
   /// with the actor's walking animation.
   public: double animationFactor{5.1};
 
+  /// \brief Maximum angle when drifting
+  public: double maxDriftAngle{IGN_PI * 0.2};
+
+  /// \brief List of times when guest should drift away
+  public: std::vector<common::Time> driftTimes;
+
   /// \brief Time of the last update.
   public: common::Time lastUpdate;
+
+  /// \brief Time tolerance when checking drift time
+  public: common::Time timeTolerance{0.5};
 
   /// \brief List of models to ignore when checking collisions.
   public: std::vector<std::string> ignoreModels;
@@ -128,6 +138,17 @@ void FollowActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     {
       this->dataPtr->ignoreModels.push_back(ignoreElem->Get<std::string>());
       ignoreElem = ignoreElem->GetNextElement("ignore_obstacle");
+    }
+  }
+
+  // Read in drift times
+  if (_sdf->HasElement("drift_time"))
+  {
+    auto driftElem = _sdf->GetElement("drift_time");
+    while (driftElem)
+    {
+      this->dataPtr->driftTimes.push_back(driftElem->Get<double>());
+      driftElem = driftElem->GetNextElement("drift_time");
     }
   }
 
@@ -240,6 +261,21 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   if (this->ObstacleOnTheWay())
     return;
 
+  // Is it drift time?
+  bool drift{false};
+  for (auto t : this->dataPtr->driftTimes)
+  {
+    double diff = abs((t - _info.simTime).Double());
+    if (diff <= this->dataPtr->timeTolerance.Double())
+    {
+      drift = true;
+      break;
+    }
+
+    if (t > _info.simTime)
+      break;
+  }
+
   // Current pose - actor is oriented Y-up and Z-front
   auto actorPose = this->dataPtr->actor->WorldPose();
   auto zPos = actorPose.Pos().Z();
@@ -251,7 +287,7 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   auto dir = targetPose.Pos() - actorPose.Pos();
 
   // Stop if too close to target
-  if (dir.Length() <= this->dataPtr->minDistance)
+  if (!drift && dir.Length() <= this->dataPtr->minDistance)
     return;
 
   // Stop following if too far from target
@@ -261,11 +297,19 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
     this->dataPtr->target = nullptr;
     return;
   }
-
-  // Difference to target
-  ignition::math::Angle yaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
-  yaw.Normalize();
   dir.Normalize();
+
+  // Towards target
+  ignition::math::Angle yaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
+
+  // If drift, change direction a bit
+  if (drift)
+  {
+    yaw += ignition::math::Rand::DblUniform(-1, 1) *
+        this->dataPtr->maxDriftAngle;
+    this->dataPtr->target = nullptr;
+  }
+  yaw.Normalize();
 
   actorPose.Pos() += dir * this->dataPtr->velocity * dt;
   actorPose.Pos().Z(zPos);
