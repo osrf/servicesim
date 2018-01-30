@@ -1,7 +1,9 @@
+
+<!--
+  Generated from servicesim.world.erb
+  Seed: 6140442
+-->
 <?xml version="1.0" ?>
-
-
-<!-- Seed: 7304717 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -54,6 +56,114 @@
       <uri>model://willowgarage</uri>
     </include>
 
+    <!-- Guest -->
+    <actor name="guest">
+
+      <!-- Starting pose, nice for when the world is reset -->
+      <pose>
+        -12.7
+        -18.78
+        1.19
+        1.54
+        0
+        1.9
+      </pose>
+
+      <skin>
+        <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+      </skin>
+
+      <animation name="animation">
+        <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+      </animation>
+
+      <!-- Need one waypoint to idle at -->
+      <script>
+        <trajectory id='0' type='animation'>
+          <waypoint>
+            <time>100</time>
+              <pose>
+                -12.7
+                -18.78
+                1.19
+                1.54
+                0
+                1.9
+              </pose>
+          </waypoint>
+        </trajectory>
+      </script>
+
+      <plugin name="trajectory" filename="libFollowActorPlugin.so">
+        <ignore_obstacle>willowgarage</ignore_obstacle>
+        <ignore_obstacle>ground_collision</ignore_obstacle>
+
+
+          <drift_time>10</drift_time>
+
+          <drift_time>496</drift_time>
+
+          <drift_time>724</drift_time>
+
+          <drift_time>953</drift_time>
+
+          <drift_time>1223</drift_time>
+
+          <drift_time>1230</drift_time>
+
+          <drift_time>1259</drift_time>
+
+          <drift_time>1288</drift_time>
+
+          <drift_time>1480</drift_time>
+
+          <drift_time>1634</drift_time>
+
+          <drift_time>1872</drift_time>
+
+          <drift_time>2004</drift_time>
+
+          <drift_time>2060</drift_time>
+
+          <drift_time>2282</drift_time>
+
+          <drift_time>2499</drift_time>
+
+          <drift_time>2552</drift_time>
+
+          <drift_time>2653</drift_time>
+
+          <drift_time>2731</drift_time>
+
+          <drift_time>2739</drift_time>
+
+          <drift_time>3008</drift_time>
+
+          <drift_time>3263</drift_time>
+
+          <drift_time>3272</drift_time>
+
+          <drift_time>3396</drift_time>
+
+          <drift_time>3412</drift_time>
+
+          <drift_time>3603</drift_time>
+
+          <drift_time>3867</drift_time>
+
+          <drift_time>4142</drift_time>
+
+          <drift_time>4157</drift_time>
+
+          <drift_time>4334</drift_time>
+
+          <drift_time>4435</drift_time>
+
+
+      </plugin>
+
+    </actor>
+
     <!-- Trajectory actors -->
     
       
@@ -71,7 +181,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -234,7 +344,7 @@
       </target>
     
 
-    <velocity>1.0533352867179104</velocity>
+    <velocity>1.1947813060411603</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
 

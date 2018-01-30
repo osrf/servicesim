@@ -21,10 +21,10 @@
 #include <gtest/gtest.h>
 
 bool receivedPoseInfo = false;
-gazebo::msgs::PosesStamped lastPoseInfo;
+gazebo::msgs::PoseAnimation lastPoseInfo;
 
 /////////////////////////////////////////////////
-void onPoseInfo(ConstPosesStampedPtr &_msg)
+void onSkeletonPose(ConstPoseAnimationPtr &_msg)
 {
   lastPoseInfo.CopyFrom(*_msg);
   receivedPoseInfo = true;
@@ -34,69 +34,96 @@ void onPoseInfo(ConstPosesStampedPtr &_msg)
 TEST (TrajectoryActorPluginTest, Load)
 {
   // Gazebo transport node
-  gazebo::transport::NodePtr node(new gazebo::transport::Node());
-  ASSERT_NE(nullptr, node);
-  node->Init();
+  gazebo::transport::NodePtr gzNode(new gazebo::transport::Node());
+  ASSERT_NE(nullptr, gzNode);
+  gzNode->Init();
 
-/*
-  // Listen pose/info topic
-  auto sub = node->Subscribe("~/pose/info", onPoseInfo);
-  ASSERT_NE(nullptr, sub);
+  // Skeleton pose subscriber
+  auto skeletonPoseSub = gzNode->Subscribe("~/skeleton_pose/info",
+      onSkeletonPose);
+  ASSERT_NE(nullptr, skeletonPoseSub);
 
+  // World control publisher
+  auto worldControlPub = gzNode->Advertise<gazebo::msgs::WorldControl>(
+      "/gazebo/default/world_control");
+  ASSERT_NE(nullptr, worldControlPub);
+  worldControlPub->WaitForConnection();
+  EXPECT_TRUE(worldControlPub->HasConnections());
+
+  // Actor updates at 30 Hz, so we step forward
   unsigned int sleep = 0;
-  unsigned int maxSleep = 30;
+  unsigned int maxSleep = 300;
   while (!receivedPoseInfo && sleep < maxSleep)
   {
+    gazebo::msgs::WorldControl msg;
+    msg.set_multi_step(1);
+    worldControlPub->Publish(msg);
     gazebo::common::Time::MSleep(100);
     sleep++;
   }
   EXPECT_TRUE(receivedPoseInfo);
-  EXPECT_EQ(lastPoseInfo.pose_size(), 34);
 
-  // Check initial actor pose
-  bool hasActor{false};
+  // Check initial pose
+  EXPECT_EQ(lastPoseInfo.model_name(), "actor::actor_pose::actor_visual");
+  EXPECT_EQ(lastPoseInfo.pose().size(), 63);
+  EXPECT_EQ(lastPoseInfo.time().size(), 1);
+  EXPECT_EQ(lastPoseInfo.time(0).sec(), 0);
+  EXPECT_GT(lastPoseInfo.time(0).nsec(), 0);
+
+  ignition::math::Vector3d initialPos;
   for (auto pose : lastPoseInfo.pose())
   {
     if (pose.name() == "actor")
     {
-      hasActor = true;
-      EXPECT_EQ(pose.position().x(), 1);
-      EXPECT_EQ(pose.position().y(), 2);
-      EXPECT_EQ(pose.position().z(), 3);
+      initialPos = gazebo::msgs::ConvertIgn(pose.position());
       break;
     }
   }
-  EXPECT_TRUE(hasActor);
+  EXPECT_NE(initialPos, ignition::math::Vector3d::Zero);
+  EXPECT_NEAR(initialPos.X(), 1.0, 0.05);
+  EXPECT_NEAR(initialPos.Y(), 2.0, 0.05);
+  EXPECT_NEAR(initialPos.Z(), 0.0, 0.05);
 
-  // World control publiher
-  auto worldControlPub = node->Advertise<gazebo::msgs::WorldControl>(
-      "/gazebo/default/world_control");
-  ASSERT_NE(nullptr, worldControlPub);
+  // Step until at least 3 seconds sim time
+  sleep = 0;
+  maxSleep = 300;
+  while (lastPoseInfo.time(0).sec() < 3 && sleep < maxSleep)
+  {
+    gazebo::msgs::WorldControl msg;
+    msg.set_multi_step(1000);
+    worldControlPub->Publish(msg);
+    gazebo::common::Time::MSleep(10);
+    sleep++;
+  }
+  EXPECT_GE(lastPoseInfo.time(0).sec(), 3);
 
-  worldControlPub->WaitForConnection();
-  EXPECT_TRUE(worldControlPub->HasConnections());
-
-  // Step world
-  gazebo::msgs::WorldControl msg;
-  msg.set_multi_step(1000);
-
-  worldControlPub->Publish(msg);
-
-  // Check new actor pose
-  hasActor = false;
+  // Check actor has moved
+  ignition::math::Vector3d newPos;
   for (auto pose : lastPoseInfo.pose())
   {
     if (pose.name() == "actor")
     {
-      hasActor = true;
-      EXPECT_EQ(pose.position().x(), 1);
-      EXPECT_EQ(pose.position().y(), 2);
-      EXPECT_EQ(pose.position().z(), 3);
+      newPos = gazebo::msgs::ConvertIgn(pose.position());
       break;
     }
   }
-  EXPECT_TRUE(hasActor);
-*/
+  EXPECT_NE(newPos, ignition::math::Vector3d::Zero);
+  EXPECT_NEAR(newPos.Z(), 0.0, 0.05);
+
+  // Expected new position based on default velocity
+  const double velocity{0.8};
+  auto duration = gazebo::msgs::Convert(lastPoseInfo.time(0));
+  auto expectedDist = velocity * duration.Double();
+
+  auto realDist = (newPos - initialPos).Length();
+
+  EXPECT_NEAR(expectedDist, realDist, 0.006);
+
+  // Cleanup
+  skeletonPoseSub.reset();
+  worldControlPub.reset();
+  gzNode->Fini();
+  gzNode.reset();
 }
 
 //////////////////////////////////////////////////

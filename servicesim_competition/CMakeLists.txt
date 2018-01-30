@@ -104,6 +104,27 @@ install(TARGETS ${trajectory_actor_plugin_name}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 
+#############################
+## Follow Actor plugin ##
+#############################
+
+# Create the libFollowActorPlugin.so library.
+set(follow_actor_plugin_name FollowActorPlugin)
+add_library(${follow_actor_plugin_name} SHARED
+  src/FollowActorPlugin.cc
+)
+target_link_libraries(${follow_actor_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+add_dependencies(${follow_actor_plugin_name}
+  servicesim_competition_generate_messages_cpp
+)
+install(TARGETS ${follow_actor_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
 #########################
 ## Create Actor plugin ##
 #########################
