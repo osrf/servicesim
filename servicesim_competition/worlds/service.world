@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 
-<!-- Seed: 6116590 -->
+<!-- Seed: 7630238 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -54,13 +54,201 @@
       <uri>model://willowgarage</uri>
     </include>
 
-    <!-- TODO: Trajectory actors -->
+    <!-- Trajectory actors -->
+    
+      
+
+<actor name="actor_1">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -9.32582
+    -15.9673
+    1.2138
+    1.57
+    0.0
+    -0.22373
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_running.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -9.32582
+        -15.9673
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        -9.201666
+        -7.601102
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        5.87782
+        -7.59315
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        13.2181
+        -10.6971
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        15.2346
+        -13.7236
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        15.2558
+        -16.0176
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        -9.32582
+        -15.9673
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+
+    <velocity>1.5</velocity>
+    <ignore_obstacle>willowgarage</ignore_obstacle>
+    <ignore_obstacle>ground_collision</ignore_obstacle>
+
+  </plugin>
+
+</actor>
+
+    
+      
+
+<actor name="actor_2">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    13.4107
+    8.18946
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        13.4107
+        8.18946
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        12.9881
+        19.467501
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        35.577293
+        19.779964
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        35.539101
+        17.879601
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        27.718399
+        17.094101
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        28.0737
+        8.25699
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>1.1947813060411603</velocity>
+    <ignore_obstacle>willowgarage</ignore_obstacle>
+    <ignore_obstacle>ground_collision</ignore_obstacle>
+
+  </plugin>
+
+</actor>
+
+    
 
     <!-- Idling actors -->
     
       
 
-<actor name="actor_1">
+<actor name="actor_3">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -77,7 +265,7 @@
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->
@@ -102,7 +290,7 @@
     
       
 
-<actor name="actor_2">
+<actor name="actor_4">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>

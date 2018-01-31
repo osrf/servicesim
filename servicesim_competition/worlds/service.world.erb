@@ -57,6 +57,13 @@
     "ANIMATION_talking_b.dae"
   ]
 
+  # Trajectory animation files under model://actor/meshes
+  animations_trajectory =
+  [
+    "ANIMATION_walking.dae",
+    "ANIMATION_running.dae"
+  ]
+
   # List of idle actors to be inserted
   actors_idle =
   [
@@ -64,6 +71,15 @@
     {:skin => skins.sample, :anim => animations_idle.sample, :config_file => 'idle_near_entrance.erb'},
     # Example using skin and animation from config
     {:config_file => 'idle_near_fridge.erb'}
+  ]
+
+  # List of trajectory actors to be inserted
+  actors_trajectory =
+  [
+    # Example randomizing skin
+    {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
+    # Example setting velocity
+    {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
   ]
 
   ###############################################
@@ -132,11 +148,49 @@
       <uri>model://willowgarage</uri>
     </include>
 
-    <!-- TODO: Trajectory actors -->
+    <!-- Trajectory actors -->
+    <%
+      count = 0
+      for actor in actors_trajectory
+
+        # unique name
+        count = count + 1
+        $actor_name = 'actor_' + count.to_s;
+
+        # skin
+        $actor_skin = nil
+        if actor.has_key? :skin
+          $actor_skin = actor[:skin]
+        end
+
+        # animation
+        $actor_anim = nil
+        if actor.has_key? :anim
+          $actor_anim = actor[:anim]
+        end
+
+        # velocity
+        $actor_velocity = nil
+        if actor.has_key? :velocity
+          $actor_velocity = actor[:velocity]
+        end
+
+        # trajectory waypoints
+        $actor_trajectory = nil
+        if actor.has_key? :trajectory
+          $actor_trajectory = actor[:trajectory]
+        end
+
+        # Set undefined values from the config file if one was given
+        if actor.has_key? :config_file
+          fromFile(DIR + "/" + actor[:config_file])
+        end
+    %>
+      <%= fromFile(DIR + "/" + "actor_trajectory.erb") %>
+    <% end %>
 
     <!-- Idling actors -->
     <%
-      count = 0
       for actor in actors_idle
 
         # unique name
