@@ -82,6 +82,7 @@
   ]
 
   # Guest
+  guest_name = 'guest'
   guest_pose = [-12.7, -18.78, 1.19, 1.54, 0, 1.9]
   guest_skin = skins.sample
   guest_anim = animations_trajectory[0]
@@ -115,6 +116,31 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="ServiceSim">
+
+    <!-- Competition plugin -->
+    <plugin name="competition" filename="libCompetitionPlugin.so">
+
+      <pick_up_location>0 0 0 0 0 0</pick_up_location>
+      <drop_off_location>0 0 0 0 0 0</drop_off_location>
+      <guest_name><%= guest_name %></guest_name>
+
+      <checkpoint1>
+        <weight>1.0</weight>
+      </checkpoint1>
+
+      <checkpoint2>
+        <weight>1.0</weight>
+      </checkpoint2>
+
+      <checkpoint3>
+        <weight>1.0</weight>
+      </checkpoint3>
+
+      <checkpoint4>
+        <weight>1.0</weight>
+      </checkpoint4>
+
+    </plugin>
 
     <!-- GUI -->
     <gui fullscreen='0'>
@@ -166,7 +192,7 @@
     </include>
 
     <!-- Guest -->
-    <actor name="guest">
+    <actor name="<%= guest_name %>>">
 
       <!-- Starting pose, nice for when the world is reset -->
       <pose>

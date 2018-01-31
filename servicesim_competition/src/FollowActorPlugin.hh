@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef SERVICESIM_PLUGINS_FOLLOWACTORPLUGIN_HH_
-#define SERVICESIM_PLUGINS_FOLLOWACTORPLUGIN_HH_
+#ifndef SERVICESIM_FOLLOWACTORPLUGIN_HH_
+#define SERVICESIM_FOLLOWACTORPLUGIN_HH_
 
 #include <gazebo/common/Plugin.hh>
 #include "gazebo/util/system.hh"

@@ -1,11 +1,36 @@
 
 <!--
   Generated from servicesim.world.erb
-  Seed: 6140442
+  Seed: 6924716
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="ServiceSim">
+
+    <!-- Competition plugin -->
+    <plugin name="competition" filename="libCompetitionPlugin.so">
+
+      <pick_up_location>0 0 0 0 0 0</pick_up_location>
+      <drop_off_location>0 0 0 0 0 0</drop_off_location>
+      <guest_name>guest</guest_name>
+
+      <checkpoint1>
+        <weight>1.0</weight>
+      </checkpoint1>
+
+      <checkpoint2>
+        <weight>1.0</weight>
+      </checkpoint2>
+
+      <checkpoint3>
+        <weight>1.0</weight>
+      </checkpoint3>
+
+      <checkpoint4>
+        <weight>1.0</weight>
+      </checkpoint4>
+
+    </plugin>
 
     <!-- GUI -->
     <gui fullscreen='0'>
@@ -57,7 +82,7 @@
     </include>
 
     <!-- Guest -->
-    <actor name="guest">
+    <actor name="guest>">
 
       <!-- Starting pose, nice for when the world is reset -->
       <pose>
@@ -98,75 +123,75 @@
         <ignore_obstacle>willowgarage</ignore_obstacle>
         <ignore_obstacle>ground_collision</ignore_obstacle>
 
-
-          <drift_time>10</drift_time>
-
-          <drift_time>496</drift_time>
-
-          <drift_time>724</drift_time>
-
-          <drift_time>953</drift_time>
-
-          <drift_time>1223</drift_time>
-
-          <drift_time>1230</drift_time>
-
-          <drift_time>1259</drift_time>
-
-          <drift_time>1288</drift_time>
-
-          <drift_time>1480</drift_time>
-
-          <drift_time>1634</drift_time>
-
-          <drift_time>1872</drift_time>
-
-          <drift_time>2004</drift_time>
-
-          <drift_time>2060</drift_time>
-
-          <drift_time>2282</drift_time>
-
-          <drift_time>2499</drift_time>
-
-          <drift_time>2552</drift_time>
-
-          <drift_time>2653</drift_time>
-
-          <drift_time>2731</drift_time>
-
-          <drift_time>2739</drift_time>
-
-          <drift_time>3008</drift_time>
-
-          <drift_time>3263</drift_time>
-
-          <drift_time>3272</drift_time>
-
-          <drift_time>3396</drift_time>
-
-          <drift_time>3412</drift_time>
-
-          <drift_time>3603</drift_time>
-
-          <drift_time>3867</drift_time>
-
-          <drift_time>4142</drift_time>
-
-          <drift_time>4157</drift_time>
-
-          <drift_time>4334</drift_time>
-
-          <drift_time>4435</drift_time>
-
+        
+          <drift_time>226</drift_time>
+        
+          <drift_time>267</drift_time>
+        
+          <drift_time>475</drift_time>
+        
+          <drift_time>739</drift_time>
+        
+          <drift_time>905</drift_time>
+        
+          <drift_time>969</drift_time>
+        
+          <drift_time>1013</drift_time>
+        
+          <drift_time>1068</drift_time>
+        
+          <drift_time>1143</drift_time>
+        
+          <drift_time>1267</drift_time>
+        
+          <drift_time>1416</drift_time>
+        
+          <drift_time>1587</drift_time>
+        
+          <drift_time>1676</drift_time>
+        
+          <drift_time>1754</drift_time>
+        
+          <drift_time>1773</drift_time>
+        
+          <drift_time>1795</drift_time>
+        
+          <drift_time>1938</drift_time>
+        
+          <drift_time>2181</drift_time>
+        
+          <drift_time>2238</drift_time>
+        
+          <drift_time>2258</drift_time>
+        
+          <drift_time>2468</drift_time>
+        
+          <drift_time>2507</drift_time>
+        
+          <drift_time>2772</drift_time>
+        
+          <drift_time>3049</drift_time>
+        
+          <drift_time>3122</drift_time>
+        
+          <drift_time>3155</drift_time>
+        
+          <drift_time>3288</drift_time>
+        
+          <drift_time>3315</drift_time>
+        
+          <drift_time>3371</drift_time>
+        
+          <drift_time>3587</drift_time>
+        
 
       </plugin>
 
     </actor>
 
     <!-- Trajectory actors -->
-
-
+    
+      
 
 <actor name="actor_1">
 
@@ -181,7 +206,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -190,7 +215,7 @@
   </animation>
 
   <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
-
+    
       <target>
         -9.32582
         -15.9673
@@ -199,7 +224,7 @@
         0.0
         -0.22373
       </target>
-
+    
       <target>
         -9.201666
         -7.601102
@@ -208,7 +233,7 @@
         0.0
         -0.22373
       </target>
-
+    
       <target>
         5.87782
         -7.59315
@@ -217,7 +242,7 @@
         0.0
         -0.22373
       </target>
-
+    
       <target>
         13.2181
         -10.6971
@@ -226,7 +251,7 @@
         0.0
         -0.22373
       </target>
-
+    
       <target>
         15.2346
         -13.7236
@@ -235,7 +260,7 @@
         0.0
         -0.22373
       </target>
-
+    
       <target>
         15.2558
         -16.0176
@@ -244,7 +269,7 @@
         0.0
         -0.22373
       </target>
-
+    
       <target>
         -9.32582
         -15.9673
@@ -253,7 +278,7 @@
         0.0
         -0.22373
       </target>
-
+    
 
     <velocity>1.5</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
@@ -263,8 +288,8 @@
 
 </actor>
 
-
-
+    
+      
 
 <actor name="actor_2">
 
@@ -288,7 +313,7 @@
   </animation>
 
   <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
-
+    
       <target>
         13.4107
         8.18946
@@ -297,7 +322,7 @@
         -0.0
         3.141593
       </target>
-
+    
       <target>
         12.9881
         19.467501
@@ -306,7 +331,7 @@
         -0.0
         3.141593
       </target>
-
+    
       <target>
         35.577293
         19.779964
@@ -315,7 +340,7 @@
         -0.0
         3.141593
       </target>
-
+    
       <target>
         35.539101
         17.879601
@@ -324,7 +349,7 @@
         -0.0
         3.141593
       </target>
-
+    
       <target>
         27.718399
         17.094101
@@ -333,7 +358,7 @@
         -0.0
         3.141593
       </target>
-
+    
       <target>
         28.0737
         8.25699
@@ -342,9 +367,9 @@
         -0.0
         3.141593
       </target>
+    
 
-
-    <velocity>1.0349583415501227</velocity>
+    <velocity>1.009403657346254</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
 
@@ -352,11 +377,11 @@
 
 </actor>
 
-
+    
 
     <!-- Idling actors -->
-
-
+    
+      
 
 <actor name="actor_3">
 
@@ -397,8 +422,8 @@
 
 </actor>
 
-
-
+    
+      
 
 <actor name="actor_4">
 
@@ -439,7 +464,7 @@
 
 </actor>
 
-
+    
 
   </world>
 </sdf>

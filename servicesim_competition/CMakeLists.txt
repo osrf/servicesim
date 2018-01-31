@@ -43,18 +43,24 @@ find_package(gazebo 8.2.0 REQUIRED)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 
+add_message_files(
+  FILES
+  Score.msg
+)
+
 # Generate services in the 'srv' folder
 add_service_files(
   FILES
   DropOffGuest.srv
-  GetGuestIdentity.srv
   PickUpGuest.srv
+  Start.srv
 )
 
 # Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  geometry_msgs std_msgs
+    geometry_msgs
+    std_msgs
 )
 
 catkin_package(
@@ -115,6 +121,29 @@ add_dependencies(${follow_actor_plugin_name}
   servicesim_competition_generate_messages_cpp
 )
 install(TARGETS ${follow_actor_plugin_name}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+
+##########################
+##      Competition     ##
+##########################
+
+# Create the libCompetitionPlugin.so library.
+set(competition_plugin_name CompetitionPlugin)
+add_library(${competition_plugin_name} SHARED
+  src/CompetitionPlugin.cc
+  src/Conversions.cc
+  src/Checkpoint1.cc
+  src/Checkpoint.cc
+)
+target_link_libraries(${competition_plugin_name}
+  ${GAZEBO_LIBRARIES}
+)
+add_dependencies(${competition_plugin_name}
+  servicesim_generate_messages_cpp
+)
+install(TARGETS ${competition_plugin_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
