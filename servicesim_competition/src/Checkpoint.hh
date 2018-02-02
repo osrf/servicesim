@@ -21,6 +21,8 @@
 #include <ros/ros.h>
 #include <sdf/sdf.hh>
 #include <ignition/math/Pose3.hh>
+#include <ignition/msgs/boolean.pb.h>
+#include <ignition/transport/Node.hh>
 #include <gazebo/common/Time.hh>
 
 namespace servicesim
@@ -58,6 +60,35 @@ namespace servicesim
 
     /// \brief The weight for this checkpoint when scoring.
     private: double weight{0.0};
+  };
+
+  /// \brief A checkpoint tied to a gazebo::ContainPlugin.
+  class ContainCheckpoint : public Checkpoint
+  {
+    /// \brief Constructor
+    /// \param[in] _sdf SDF element for this checkpoint.
+    public: ContainCheckpoint(const sdf::ElementPtr &_sdf,
+        const unsigned int _number);
+
+    /// \brief Check whether the contain checkpoint has been completed.
+    /// \return True if completed.
+    protected: bool Check() override;
+
+    /// \brief Callback when messages are received from the ContainPlugin.
+    /// \param[in] _msg True if contains.
+    private: void OnContain(const ignition::msgs::Boolean &_msg);
+
+    /// \brief Ignition transport node for communication.
+    protected: ignition::transport::Node ignNode;
+
+    /// \brief Namespace for transport
+    protected: std::string ns;
+
+    /// \brief True if enabled
+    private: bool enabled{false};
+
+    /// \brief Flag to indicate whether contain has been achieved.
+    private: bool containDone{false};
   };
 }
 #endif

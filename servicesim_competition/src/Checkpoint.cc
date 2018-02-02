@@ -49,6 +49,63 @@ void Checkpoint::Start()
 {
   this->startTime = gazebo::physics::get_world()->SimTime();
 
-  gzmsg << "Started Checkpoint " << this->number << " at " <<
-    this->startTime.FormattedString() << std::endl;
+  gzmsg << "[ServiceSim] Started Checkpoint " << this->number << " at "
+    << this->startTime.FormattedString(gazebo::common::Time::HOURS,
+                                       gazebo::common::Time::MILLISECONDS)
+    << std::endl;
+}
+
+/////////////////////////////////////////////////
+ContainCheckpoint::ContainCheckpoint(const sdf::ElementPtr &_sdf,
+    const unsigned int _number) : Checkpoint(_sdf, _number)
+{
+  if (!_sdf->HasElement("namespace"))
+    gzwarn << "Missing <namespace> for contain checkpoint" << std::endl;
+  else
+    this->ns = _sdf->Get<std::string>("namespace");
+}
+
+/////////////////////////////////////////////////
+bool ContainCheckpoint::Check()
+{
+  // Call enable service
+  std::function<void(const ignition::msgs::Boolean &, const bool)> cb =
+      [this](const ignition::msgs::Boolean &, const bool _result)
+  {
+    if (_result)
+      this->enabled = !this->enabled;
+  };
+
+  // First time checking
+  if (!this->enabled && !this->containDone)
+  {
+    // Setup contain subscriber
+    this->ignNode.Subscribe(this->ns + "/contain",
+        &ContainCheckpoint::OnContain, this);
+
+    // Enable contain plugin
+    ignition::msgs::Boolean req;
+    req.set_data(true);
+    this->ignNode.Request(this->ns + "/enable", req, cb);
+  }
+
+  if (this->enabled && this->containDone)
+  {
+    // Unsubscribe
+    for (auto const &sub : this->ignNode.SubscribedTopics())
+      this->ignNode.Unsubscribe(sub);
+
+    // Disable contain plugin
+    ignition::msgs::Boolean req;
+    req.set_data(false);
+    this->ignNode.Request(this->ns + "/enable", req, cb);
+  }
+
+  return this->containDone;
+}
+
+//////////////////////////////////////////////////
+void ContainCheckpoint::OnContain(const ignition::msgs::Boolean &_msg)
+{
+  this->containDone = _msg.data();
 }

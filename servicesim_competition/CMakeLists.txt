@@ -103,7 +103,6 @@ set(competition_plugin_name CompetitionPlugin)
 add_library(${competition_plugin_name} SHARED
   src/CompetitionPlugin.cc
   src/Conversions.cc
-  src/Checkpoint1.cc
   src/Checkpoint.cc
 )
 target_link_libraries(${competition_plugin_name}

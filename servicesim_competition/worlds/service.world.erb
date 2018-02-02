@@ -37,7 +37,7 @@
 
   ###############################################
   #                                             #
-  #                   ACTORS                    #
+  #                NON-GUEST HUMANS             #
   #                                             #
   ###############################################
 
@@ -81,7 +81,12 @@
     {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
   ]
 
-  # Guest
+  ###############################################
+  #                                             #
+  #                   GUEST                     #
+  #                                             #
+  ###############################################
+
   guest_name = 'guest'
   guest_pose = [-12.7, -18.78, 1.19, 1.54, 0, 1.9]
   guest_skin = skins.sample
@@ -99,6 +104,25 @@
 
   ###############################################
   #                                             #
+  #                   ROBOT                     #
+  #                                             #
+  ###############################################
+
+  robot_name = 'servicebot'
+
+  ###############################################
+  #                                             #
+  #               CHECKPOINTS                   #
+  #                                             #
+  ###############################################
+
+  # Pickup location
+  # TODO: Use room name once we have rooms
+  pickup_pose = [0, 0, 0, 0, 0, 0]
+  pickup_size = [1, 1, 1]
+
+  ###############################################
+  #                                             #
   #               INITIALIZATION                #
   #                                             #
   ###############################################
@@ -110,7 +134,7 @@
   actor_pos_z = 1.25
 %>
 <!--
-  Generated from servicesim.world.erb
+  Generated from service.world.erb
   Seed: <%= seed %>
 -->
 <?xml version="1.0" ?>
@@ -120,12 +144,22 @@
     <!-- Competition plugin -->
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
-      <pick_up_location>0 0 0 0 0 0</pick_up_location>
+      <pick_up_location>
+        <%= pickup_pose[0] %>
+        <%= pickup_pose[1] %>
+        <%= pickup_pose[2] %>
+        <%= pickup_pose[3] %>
+        <%= pickup_pose[4] %>
+        <%= pickup_pose[5] %>
+      </pick_up_location>
+
       <drop_off_location>0 0 0 0 0 0</drop_off_location>
       <guest_name><%= guest_name %></guest_name>
 
       <checkpoint1>
         <weight>1.0</weight>
+        <!-- contain checkpoint -->
+        <namespace>/servicesim/checkpoint1</namespace>
       </checkpoint1>
 
       <checkpoint2>
@@ -140,6 +174,28 @@
         <weight>1.0</weight>
       </checkpoint4>
 
+    </plugin>
+
+    <!-- Checkpoint 1: reach pick-up area -->
+    <plugin name="checkpoint1" filename="libContainPlugin.so">
+      <entity><%= robot_name %></entity>
+      <namespace>servicesim/checkpoint1</namespace>
+      <enabled>false</enabled>
+      <shape type="box">
+        <pose>
+          <%= pickup_pose[0] %>
+          <%= pickup_pose[1] %>
+          <%= pickup_pose[2] %>
+          <%= pickup_pose[3] %>
+          <%= pickup_pose[4] %>
+          <%= pickup_pose[5] %>
+        </pose>
+        <size>
+          <%= pickup_size[0] %>
+          <%= pickup_size[1] %>
+          <%= pickup_size[2] %>
+        </size>
+      </shape>
     </plugin>
 
     <!-- GUI -->

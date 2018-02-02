@@ -23,13 +23,9 @@
 namespace servicesim
 {
   /// \brief Checkpoint 1
-  class Checkpoint1 : public Checkpoint
+  class Checkpoint1 : public ContainCheckpoint
   {
-    using Checkpoint::Checkpoint;
-
-    /// \brief Check
-    /// \return True if the checkpoint is complete.
-    public: bool Check();
+    using ContainCheckpoint::ContainCheckpoint;
   };
 }
 #endif

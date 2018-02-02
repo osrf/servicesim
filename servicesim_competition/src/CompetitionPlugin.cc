@@ -75,8 +75,6 @@ CompetitionPlugin::CompetitionPlugin() : WorldPlugin(),
 void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
     sdf::ElementPtr _sdf)
 {
-  gzmsg << "Initializing Competition plugin ... " << std::endl;
-
   // Load parameters
   this->dataPtr->pickUpLocation =
       _sdf->Get<ignition::math::Pose3d>("pick_up_location");
@@ -126,7 +124,7 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
   this->dataPtr->updateConnection = gazebo::event::Events::ConnectWorldUpdateBegin(
       std::bind(&CompetitionPlugin::OnUpdate, this, std::placeholders::_1));
 
-  gzmsg << "Competition plugin loaded." << std::endl;
+  gzmsg << "[ServiceSim] Competition plugin loaded" << std::endl;
 }
 
 /////////////////////////////////////////////////
@@ -161,7 +159,9 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   // Checkpoint
   if (this->dataPtr->checkpoints[this->dataPtr->current - 1]->Check())
   {
-    gzmsg << "Checkpoint [" << this->dataPtr->current << "] complete." << std::endl;
+    gzmsg << "[ServiceSim] Checkpoint ["
+          << std::to_string(this->dataPtr->current) << "] complete"
+          << std::endl;
 
     // Next checkpoint
     this->dataPtr->current++;
@@ -169,7 +169,7 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
     // Check if competition complete
     if (this->dataPtr->current > this->dataPtr->checkpoints.size())
     {
-      gzmsg << "Competition complete!" << std::endl;
+      gzmsg << "[ServiceSim] Competition complete!" << std::endl;
       this->dataPtr->current = 0;
     }
     else
