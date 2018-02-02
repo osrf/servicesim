@@ -3,6 +3,8 @@ project(servicesim)
 
 set(CMAKE_CXX_STANDARD 11)
 
+find_package(catkin REQUIRED)
+
 catkin_package()
 
 include_directories()
