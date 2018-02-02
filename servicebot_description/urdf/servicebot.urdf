@@ -1,18 +1,45 @@
 <?xml version="1.0"?>
 <robot name="servicebot">
+  <!-- NOte: this doesnt follow REP 120 as this robot, while having a humanoid shape, will behave like a mobile base
+-->
+  <!--link name="base_link">
+    <visual>
+      <origin rpy="0 0 -1.5707963267948966" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/servicebot.obj" scale="0.01 0.01 0.01" />
+      </geometry>
+    </visual>
+  </link-->
 
+  <!-- setting the base_link as the center of mass of the torso -->
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.6 0.3 0.3"/>
+        <mesh filename="package://servicebot_description/meshes/Torso.obj" />
       </geometry>
-      <material name="silver">
-        <color rgba="0.75 0.75 0.75 1"/>
-      </material>
     </visual>
     <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.02"/>
       <geometry>
-        <box size="0.6 0.3 0.3"/>
+        <box size="0.32 0.3 0.32"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.18"/>
+      <geometry>
+        <cylinder radius="0.07" length="0.10"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="-0.005 0.2 0.07"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.10"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="-0.005 -0.2 0.07"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.10"/>
       </geometry>
     </collision>
     <inertial>
@@ -21,108 +48,411 @@
     </inertial>
   </link>
 
-  <link name="front_caster">
-    <visual>
-      <geometry>
-        <box size="0.1 0.1 0.3"/>
-      </geometry>
-      <material name="silver"/>
-    </visual>
-    <collision>
-      <geometry>
-        <box size="0.1 0.1 0.3"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <mass value="0.1"/>
-      <inertia ixx="0.00083" iyy="0.00083" izz="0.000167" ixy="0" ixz="0" iyz="0"/>
-    </inertial>
-  </link>
-
-  <joint name="front_caster_joint" type="continuous">
+  <!--joint name="torso_fixedjoint" type="fixed">
     <axis xyz="0 0 1"/>
     <parent link="base_link"/>
-    <child link="front_caster"/>
-    <origin rpy="0 0 0" xyz="0.3 0 0"/>
-  </joint>
+    <child link="torso_link"/>
+    <origin rpy="0 0 0" xyz="0 0.00486918 0.832498"/>
+  </joint-->
 
-  <link name="front_wheel">
+  <link name="head_link">
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.035"/>
+        <mesh filename="package://servicebot_description/meshes/Head.obj" />
       </geometry>
-      <material name="black"/>
     </visual>
     <collision>
+      <origin rpy="0 0 0" xyz="0.01 0 0"/>
       <geometry>
-        <cylinder length="0.05" radius="0.035"/>
+        <sphere radius="0.13"/>
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.1"/>
-      <inertia ixx="5.1458e-5" iyy="5.1458e-5" izz="6.125e-5" ixy="0" ixz="0" iyz="0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
-  <joint name="front_wheel_joint" type="continuous">
-    <axis xyz="0 0 1"/>
-    <parent link="front_caster"/>
-    <child link="front_wheel"/>
-    <origin rpy="-1.5708 0 0" xyz="0.05 0 -.15"/>
+  <joint name="head_tilt_joint" type="revolute">
+    <axis xyz="0 -1 0"/>
+    <parent link="head_pan_link"/>
+    <child link="head_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
   </joint>
 
-  <link name="right_wheel">
-    <visual>
-      <geometry>
-        <cylinder length="0.05" radius="0.035"/>
-      </geometry>
-      <material name="black">
-        <color rgba="0 0 0 1"/>
-      </material>
-    </visual>
-    <collision>
-      <geometry>
-        <cylinder length="0.05" radius="0.035"/>
-      </geometry>
-    </collision>
+  <link name="head_pan_link">
     <inertial>
-      <mass value="0.1"/>
-      <inertia ixx="5.1458e-5" iyy="5.1458e-5" izz="6.125e-5" ixy="0" ixz="0" iyz="0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
-  <joint name="right_wheel_joint" type="continuous">
-    <axis xyz="0 0 1"/>
+  <joint name="head_pan_joint" type="revolute">
+    <axis xyz="0 0 -1"/>
     <parent link="base_link"/>
-    <child link="right_wheel"/>
-    <origin rpy="-1.5708 0 0" xyz="-0.2825 -0.125 -.15"/>
+    <child link="head_pan_link"/>
+    <origin rpy="0 0 0" xyz="0 0.009 0.250" />
+    <limit effort="30" velocity="1.0" lower="-1.5707963267948966" upper="1.5707963267948966" />
   </joint>
 
-  <link name="left_wheel">
+  <link name="pelvis_link">
     <visual>
       <geometry>
-        <cylinder length="0.05" radius="0.035"/>
+        <mesh filename="package://servicebot_description/meshes/Pelvis.obj" />
       </geometry>
-      <material name="black"/>
     </visual>
     <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
       <geometry>
-        <cylinder length="0.05" radius="0.035"/>
+        <cylinder radius="0.11" length="0.20"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.12 -0.02"/>
+      <geometry>
+        <cylinder radius="0.12" length="0.26"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 -0.12 -0.02"/>
+      <geometry>
+        <cylinder radius="0.12" length="0.26"/>
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.1"/>
-      <inertia ixx="5.1458e-5" iyy="5.1458e-5" izz="6.125e-5" ixy="0" ixz="0" iyz="0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="pelvis_fixedjoint" type="fixed">
+    <parent link="base_link"/>
+    <child link="pelvis_link"/>
+    <origin rpy="0 0 0" xyz="0 0.00 -0.286"/>
+  </joint>
+
+  <link name="left_upper_leg_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Calf_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.03"/>
+      <geometry>
+        <cylinder radius="0.12" length="0.3"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_upper_leg_fixedjoint" type="fixed">
+    <parent link="pelvis_link"/>
+    <child link="left_upper_leg_link"/>
+    <origin rpy="0 0 0" xyz="0.019 0.125 -0.256"/>
+  </joint>
+
+
+  <link name="right_upper_leg_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Calf_Right.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.03"/>
+      <geometry>
+        <cylinder radius="0.12" length="0.3"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_upper_leg_fixedjoint" type="fixed">
+    <parent link="pelvis_link"/>
+    <child link="right_upper_leg_link"/>
+    <origin rpy="0 0 0" xyz="0.019 -0.125 -0.256"/>
+  </joint>
+
+
+  <link name="left_foot_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.015 0 -0.004"/>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/CasterBracket_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+      <geometry>
+        <box size="0.35 0.2 0.15" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_foot_fixedjoint" type="fixed">
+    <parent link="left_upper_leg_link"/>
+    <child link="left_foot_link"/>
+    <origin rpy="0 0 0" xyz="0.041 0 -0.19"/>
+  </joint>
+
+  <link name="right_foot_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 -0.007"/>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/CasterBracket_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+      <geometry>
+        <box size="0.35 0.2 0.15" />
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_foot_fixedjoint" type="fixed">
+    <parent link="right_upper_leg_link"/>
+    <child link="right_foot_link"/>
+    <origin rpy="0 0 0" xyz="0.041 0 -0.19"/>
+  </joint>
+
+<!-- Wheels -->
+
+  <link name="left_wheel_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Wheel_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.103"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
   <joint name="left_wheel_joint" type="continuous">
-    <axis xyz="0 0 1"/>
-    <parent link="base_link"/>
-    <child link="left_wheel"/>
-    <origin rpy="-1.5708 0 0" xyz="-0.2825 0.125 -.15"/>
+    <axis xyz="0 1 0"/>
+    <parent link="left_foot_link"/>
+    <child link="left_wheel_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
   </joint>
 
+  <link name="right_wheel_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Wheel_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.103"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="right_foot_link"/>
+    <child link="right_wheel_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
+  <link name="left_caster_wheel_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/CasterWheel_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.032"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_caster_wheel_joint" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="left_foot_link"/>
+    <child link="left_caster_wheel_link"/>
+    <origin rpy="0 0 0" xyz="-0.14 0 -0.066"/>
+  </joint>
+
+  <link name="right_caster_wheel_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/CasterWheel_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.032"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_caster_wheel_joint" type="continuous">
+    <axis xyz="0 1 0"/>
+    <parent link="right_foot_link"/>
+    <child link="right_caster_wheel_link"/>
+    <origin rpy="0 0 0" xyz="-0.143 0 -0.064"/>
+  </joint>
+
+
+<!-- Arms -->
+
+  <link name="left_upper_arm_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/UpperArm_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.02 0.0"/>
+      <geometry>
+        <cylinder radius="0.065" length="0.22"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_shoulder_fixedjoint" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_upper_arm_link"/>
+    <origin rpy="0 0 0" xyz="0 0.236 0.056"/>
+  </joint>
+
+  <link name="right_upper_arm_link">
+    <visual>
+      <origin rpy="0 0 3.14159265" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/UpperArm_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 -0.02 0.0"/>
+      <geometry>
+        <cylinder radius="0.065" length="0.22"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_shoulder_fixedjoint" type="fixed">
+    <parent link="base_link"/>
+    <child link="right_upper_arm_link"/>
+    <origin rpy="0 0 0" xyz="0 -0.236 0.056"/>
+  </joint>
+
+
+  <link name="left_forearm_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Forearm_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.06" length="0.3"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_elbow_fixedjoint" type="fixed">
+    <parent link="left_upper_arm_link"/>
+    <child link="left_forearm_link"/>
+    <origin rpy="0 0 0" xyz="0.006 0.179 0"/>
+  </joint>
+
+  <link name="right_forearm_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Forearm_Right.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.06" length="0.3"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_elbow_fixedjoint" type="fixed">
+    <parent link="right_upper_arm_link"/>
+    <child link="right_forearm_link"/>
+    <origin rpy="0 0 0" xyz="0.006 -0.179 0"/>
+  </joint>
+
+
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <legacyMode>false</legacyMode>
+      <publishTf>true</publishTf>
+      <publishWheelTF>true</publishWheelTF>
+      <leftJoint>left_caster_wheel_joint</leftJoint>
+      <rightJoint>right_caster_wheel_joint</rightJoint>
+      <robotBaseFrame>base_link</robotBaseFrame>
+      <wheelSeparation>0.25</wheelSeparation>
+      <wheelDiameter>0.064</wheelDiameter>
+      <publishWheelJointState>true</publishWheelJointState>
+    </plugin>
+  </gazebo>
+
+
+
+
+
+<!-- Tortoisebot model -->
+<!--
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
       <leftJoint>left_wheel_joint</leftJoint>
@@ -133,4 +463,5 @@
       <publishWheelJointState>true</publishWheelJointState>
     </plugin>
   </gazebo>
+-->
 </robot>
