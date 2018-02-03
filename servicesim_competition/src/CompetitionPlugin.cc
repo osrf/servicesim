@@ -24,6 +24,7 @@
 #include "CompetitionPlugin.hh"
 #include "Conversions.hh"
 #include "Checkpoint1.hh"
+#include "Checkpoint2.hh"
 
 /////////////////////////////////////////////////
 class servicesim::CompetitionPluginPrivate
@@ -86,12 +87,13 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
   std::unique_ptr<Checkpoint1> checkpoint1(new Checkpoint1(
       _sdf->GetElement("checkpoint1"), 1));
   this->dataPtr->checkpoints.push_back(std::move(checkpoint1));
-/*
+
   // Checkpoint 2
   std::unique_ptr<Checkpoint2> checkpoint2(new Checkpoint2(
       _sdf->GetElement("checkpoint2"), 2));
   this->dataPtr->checkpoints.push_back(std::move(checkpoint2));
 
+/*
   // Checkpoint 3
   std::unique_ptr<Checkpoint3> checkpoint3(new Checkpoint3(
       _sdf->GetElement("checkpoint3"), 3));

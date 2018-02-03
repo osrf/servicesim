@@ -27,6 +27,13 @@ using namespace servicesim;
 Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf, const unsigned int _number)
 {
   this->number = _number;
+
+  if (!_sdf)
+  {
+    gzerr << "Missing <checkpointN> element" << std::endl;
+    return;
+  }
+
   this->weight = _sdf->Get<double>("weight");
 }
 
@@ -59,25 +66,25 @@ void Checkpoint::Start()
 ContainCheckpoint::ContainCheckpoint(const sdf::ElementPtr &_sdf,
     const unsigned int _number) : Checkpoint(_sdf, _number)
 {
-  if (!_sdf->HasElement("namespace"))
+  if (!_sdf || !_sdf->HasElement("namespace"))
     gzwarn << "Missing <namespace> for contain checkpoint" << std::endl;
   else
     this->ns = _sdf->Get<std::string>("namespace");
 }
 
 /////////////////////////////////////////////////
+void ContainCheckpoint::EnableCallback(const ignition::msgs::Boolean &/*_rep*/,
+    const bool _result)
+{
+  if (_result)
+    this->enabled = !this->enabled;
+}
+
+/////////////////////////////////////////////////
 bool ContainCheckpoint::Check()
 {
-  // Call enable service
-  std::function<void(const ignition::msgs::Boolean &, const bool)> cb =
-      [this](const ignition::msgs::Boolean &, const bool _result)
-  {
-    if (_result)
-      this->enabled = !this->enabled;
-  };
-
   // First time checking
-  if (!this->enabled && !this->containDone)
+  if (!this->enabled && !this->done)
   {
     // Setup contain subscriber
     this->ignNode.Subscribe(this->ns + "/contain",
@@ -86,10 +93,11 @@ bool ContainCheckpoint::Check()
     // Enable contain plugin
     ignition::msgs::Boolean req;
     req.set_data(true);
-    this->ignNode.Request(this->ns + "/enable", req, cb);
+    this->ignNode.Request(this->ns + "/enable", req,
+        &ContainCheckpoint::EnableCallback, this);
   }
 
-  if (this->enabled && this->containDone)
+  if (this->enabled && this->done)
   {
     // Unsubscribe
     for (auto const &sub : this->ignNode.SubscribedTopics())
@@ -98,14 +106,15 @@ bool ContainCheckpoint::Check()
     // Disable contain plugin
     ignition::msgs::Boolean req;
     req.set_data(false);
-    this->ignNode.Request(this->ns + "/enable", req, cb);
+    this->ignNode.Request(this->ns + "/enable", req,
+        &ContainCheckpoint::EnableCallback, this);
   }
 
-  return this->containDone;
+  return this->done;
 }
 
 //////////////////////////////////////////////////
 void ContainCheckpoint::OnContain(const ignition::msgs::Boolean &_msg)
 {
-  this->containDone = _msg.data();
+  this->done = _msg.data();
 }

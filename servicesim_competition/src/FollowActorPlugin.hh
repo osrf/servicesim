@@ -47,20 +47,20 @@ namespace servicesim
     /// \return True if there is
     private: bool ObstacleOnTheWay() const;
 
-    /// \brief Service for picking up the actor
-    /// \param[in] _req Request
-    /// \param[in] _res Response
-    private: bool OnPickUpRosRequest(
-        servicesim_competition::PickUpGuest::Request &_req,
-        servicesim_competition::PickUpGuest::Response &_res);
-
+    /// \brief Callback for Ignition follow service
+    /// \param[in] _req
+    /// \param[out] _res
+    /// \param[out] _result
+    private: void OnFollow(const ignition::msgs::StringMsg &_req,
+        ignition::msgs::Boolean &_res, bool &_result);
+/*
     /// \brief Service for dropping off the actor
     /// \param[in] _req Request
     /// \param[in] _res Response
     private: bool OnDropOffRosRequest(
         servicesim_competition::DropOffGuest::Request &_req,
         servicesim_competition::DropOffGuest::Response &_res);
-
+*/
     /// \internal
     private: FollowActorPluginPrivate *dataPtr;
   };

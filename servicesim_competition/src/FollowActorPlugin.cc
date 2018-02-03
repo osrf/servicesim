@@ -21,14 +21,13 @@
 #include <ignition/math/Rand.hh>
 #include <ignition/math/Vector3.hh>
 
+#include <ignition/msgs/boolean.pb.h>
+#include <ignition/transport/Node.hh>
+
 #include <gazebo/common/Animation.hh>
 #include <gazebo/common/Console.hh>
 #include <gazebo/common/KeyFrame.hh>
 #include <gazebo/physics/physics.hh>
-
-#include <ros/ros.h>
-#include <servicesim_competition/DropOffGuest.h>
-#include <servicesim_competition/PickUpGuest.h>
 
 #include "FollowActorPlugin.hh"
 
@@ -82,14 +81,8 @@ class servicesim::FollowActorPluginPrivate
   /// \brief List of models to ignore when checking collisions.
   public: std::vector<std::string> ignoreModels;
 
-  /// \brief Ros node handle
-  public: std::unique_ptr<ros::NodeHandle> rosNode;
-
-  /// \brief PickUp ROS service
-  public: ros::ServiceServer pickUpRosService;
-
-  /// \brief DropOff ROS service
-  public: ros::ServiceServer dropOffRosService;
+  /// \brief Ignition transport node for communication
+  public: ignition::transport::Node ignNode;
 };
 
 /////////////////////////////////////////////////
@@ -173,28 +166,19 @@ void FollowActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     this->dataPtr->actor->SetCustomTrajectory(trajectoryInfo);
   }
 
-
   // Update loop
   this->dataPtr->connections.push_back(event::Events::ConnectWorldUpdateBegin(
       std::bind(&FollowActorPlugin::OnUpdate, this, std::placeholders::_1)));
 
-  // ROS transport
-  if (!ros::isInitialized())
-  {
-    ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized,"
-        << "unable to load plugin. Load the Gazebo system plugin "
-        << "'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
-    return;
-  }
-
-  this->dataPtr->rosNode.reset(new ros::NodeHandle());
-
-  this->dataPtr->pickUpRosService = this->dataPtr->rosNode->advertiseService(
-      "/servicesim/pickup_guest", &FollowActorPlugin::OnPickUpRosRequest, this);
-
-  this->dataPtr->dropOffRosService = this->dataPtr->rosNode->advertiseService(
+  // Pickup service
+  this->dataPtr->ignNode.Advertise(
+      "/servicesim/" + this->dataPtr->actor->GetName() + "/follow",
+      &FollowActorPlugin::OnFollow, this);
+/*
+  this->dataPtr->dropOffRosService = this->dataPtr->ignNode->advertiseService(
       "/servicesim/dropoff_guest", &FollowActorPlugin::OnDropOffRosRequest,
       this);
+*/
 }
 
 /////////////////////////////////////////////////
@@ -327,23 +311,14 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
 }
 
 /////////////////////////////////////////////////
-bool FollowActorPlugin::OnPickUpRosRequest(
-    servicesim_competition::PickUpGuest::Request &_req,
-    servicesim_competition::PickUpGuest::Response &_res)
+void FollowActorPlugin::OnFollow(const ignition::msgs::StringMsg &_req,
+    ignition::msgs::Boolean &_res, bool &_result)
 {
-  _res.success = true;
+  _res.set_data(false);
+  _result = false;
 
-  // Requesting the correct guest?
-  auto actorName = _req.guest_name;
-  if (actorName != this->dataPtr->actor->GetName())
-  {
-    gzwarn << "Wrong guest name: [" << actorName << "]" << std::endl;
-    _res.success = false;
-    return false;
-  }
-
-  // Get target model (robot)
-  auto targetName = _req.robot_name;
+  // Get target model
+  auto targetName = _req.data();
 
   auto world = this->dataPtr->actor->GetWorld();
 
@@ -351,8 +326,7 @@ bool FollowActorPlugin::OnPickUpRosRequest(
   if (!model)
   {
     gzwarn << "Failed to find model: [" << targetName << "]" << std::endl;
-    _res.success = false;
-    return false;
+    return;
   }
 
   // Check pickup radius
@@ -365,14 +339,14 @@ bool FollowActorPlugin::OnPickUpRosRequest(
   if (posDiff.Length() > this->dataPtr->pickUpRadius)
   {
     gzwarn << "Robot too far from guest" << std::endl;
-    _res.success = false;
-    return false;
+    return;
   }
 
   this->dataPtr->target = model;
-  return true;
+  _res.set_data(true);
+  _result = true;
 }
-
+/*
 /////////////////////////////////////////////////
 bool FollowActorPlugin::OnDropOffRosRequest(
     servicesim_competition::DropOffGuest::Request &_req,
@@ -391,4 +365,4 @@ bool FollowActorPlugin::OnDropOffRosRequest(
 
   this->dataPtr->target = nullptr;
   return true;
-}
+}*/

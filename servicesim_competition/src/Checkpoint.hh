@@ -18,7 +18,6 @@
 #ifndef SERVICESIM_CHECKPOINT_HH_
 #define SERVICESIM_CHECKPOINT_HH_
 
-#include <ros/ros.h>
 #include <sdf/sdf.hh>
 #include <ignition/math/Pose3.hh>
 #include <ignition/msgs/boolean.pb.h>
@@ -49,8 +48,11 @@ namespace servicesim
     /// \return Score
     public: double Score() const;
 
+    /// \brief True when checkpoint is complete.
+    protected: bool done{false};
+
     /// \brief Sim time when the checkpoint ended
-    protected: gazebo::common::Time endTime;
+    private: gazebo::common::Time endTime;
 
     /// \brief Sim time when the checkpoint started
     private: gazebo::common::Time startTime;
@@ -78,6 +80,12 @@ namespace servicesim
     /// \param[in] _msg True if contains.
     private: void OnContain(const ignition::msgs::Boolean &_msg);
 
+    /// \brief Callabck for enable service
+    /// \param[in] _rep Response
+    /// \param[in] _result Result
+    private: void EnableCallback(const ignition::msgs::Boolean &_rep,
+        const bool _result);
+
     /// \brief Ignition transport node for communication.
     protected: ignition::transport::Node ignNode;
 
@@ -86,9 +94,6 @@ namespace servicesim
 
     /// \brief True if enabled
     private: bool enabled{false};
-
-    /// \brief Flag to indicate whether contain has been achieved.
-    private: bool containDone{false};
   };
 }
 #endif
