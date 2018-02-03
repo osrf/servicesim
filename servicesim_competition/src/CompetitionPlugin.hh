@@ -25,7 +25,7 @@
 #include <gazebo/common/UpdateInfo.hh>
 
 #include <ros/ros.h>
-#include <servicesim_competition/Start.h>
+#include <servicesim_competition/NewTask.h>
 
 namespace servicesim
 {
@@ -43,9 +43,9 @@ namespace servicesim
     /// \brief Service when competitor asks to start competition.
     /// \param[in] _req Request
     /// \param[out] _res Response
-    private: bool OnStartRosService(
-        servicesim_competition::Start::Request &_req,
-        servicesim_competition::Start::Response &_res);
+    private: bool OnNewTaskRosService(
+        servicesim_competition::NewTask::Request &_req,
+        servicesim_competition::NewTask::Response &_res);
 
     /// \brief Update on world update begin
     /// \param[in] _info Update info

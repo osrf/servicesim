@@ -20,7 +20,7 @@ add_service_files(
   FILES
   DropOffGuest.srv
   PickUpGuest.srv
-  Start.srv
+  NewTask.srv
 )
 
 # Generate added messages and services with any dependencies listed here

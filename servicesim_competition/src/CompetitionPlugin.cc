@@ -55,8 +55,8 @@ class servicesim::CompetitionPluginPrivate
   /// \brief ROS node handle
   public: std::unique_ptr<ros::NodeHandle> rosNode;
 
-  /// \brief ROS start service server
-  public: ros::ServiceServer startRosService;
+  /// \brief ROS new task service server
+  public: ros::ServiceServer newTaskRosService;
 
   /// \brief ROS publisher which publishes the score.
   public: ros::Publisher scoreRosPub;
@@ -115,8 +115,8 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
 
   this->dataPtr->rosNode.reset(new ros::NodeHandle());
 
-  this->dataPtr->startRosService = this->dataPtr->rosNode->advertiseService(
-      "/servicesim/start", &CompetitionPlugin::OnStartRosService, this);
+  this->dataPtr->newTaskRosService = this->dataPtr->rosNode->advertiseService(
+      "/servicesim/new_task", &CompetitionPlugin::OnNewTaskRosService, this);
 
   this->dataPtr->scoreRosPub =
       this->dataPtr->rosNode->advertise<servicesim_competition::Score>(
@@ -130,9 +130,9 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
 }
 
 /////////////////////////////////////////////////
-bool CompetitionPlugin::OnStartRosService(
-    servicesim_competition::Start::Request &_req,
-    servicesim_competition::Start::Response &_res)
+bool CompetitionPlugin::OnNewTaskRosService(
+    servicesim_competition::NewTask::Request &_req,
+    servicesim_competition::NewTask::Response &_res)
 {
   if (this->dataPtr->current != 0)
   {
