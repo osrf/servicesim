@@ -43,8 +43,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.00001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -68,8 +68,14 @@
       </geometry>
     </collision>
     <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.00338" iyy="0.00338" izz="0.00338" ixy="0" ixz="0.0" iyz="0"/>
+      <!--
       <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <inertia ixx="0.00760589" iyy="0.01" izz="0.00760589" ixy="0" ixz="0.00649234" iyz="0"/>
+      -->
+      <!--mass value="0.5"/>
+      <inertia ixx="0.00338" iyy="0.0" izz="0.00338" ixy="0" ixz="0.00338" iyz="0"/-->
     </inertial>
   </link>
 
@@ -82,10 +88,23 @@
   </joint>
 
   <link name="head_pan_link">
-    <inertial>
+    <!--inertial>
       <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <inertia ixx="0.00760589" iyy="0.01" izz="0.00760589" ixy="0" ixz="0.00649234" iyz="0"/>
+    </inertial-->
+    <inertial>
+      <mass value="0.5"/>
+      <!-- box model -->
+      <!--inertia ixx="0.0046" iyy="0.0" izz="0.0046" ixy="0" ixz="0.0046" iyz="0"/-->
+      <!-- sphere model -->
+      <inertia ixx="0.00338" iyy="0.00338" izz="0.00338" ixy="0" ixz="0.0" iyz="0"/>
+      <!--mass value="1.0"/>
+      <inertia ixx="0.00760589" iyy="0.01" izz="0.00760589" ixy="0" ixz="0.00649234" iyz="0"/-->
     </inertial>
+    <!--inertial>
+      <mass value="0.0001"/>
+      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial-->
   </link>
 
   <joint name="head_pan_joint" type="revolute">
@@ -121,8 +140,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -145,8 +164,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -170,8 +189,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -195,8 +214,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -219,8 +238,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -244,8 +263,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.3"/>
+      <inertia iyy="0.00211023" izz="0.00142144" ixx="0.00142144" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -268,8 +287,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.3"/>
+      <inertia iyy="0.00211023" izz="0.00142144" ixx="0.00142144" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -292,8 +311,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.03"/>
+      <inertia ixx="0.00001324" iyy="0.00001955" izz="0.00001304" ixy="0" ixz="0.0" iyz="0"/>
     </inertial>
   </link>
 
@@ -316,8 +335,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.03"/>
+      <inertia ixx="0.00001324" iyy="0.00001955" izz="0.00001304" ixy="0" ixz="0.0" iyz="0"/>
     </inertial>
   </link>
 
@@ -326,7 +345,6 @@
     <parent link="right_foot_link"/>
     <child link="right_caster_wheel_link"/>
     <origin rpy="0 0 0" xyz="-0.14 0 -0.066"/>
-    <!-- <origin rpy="0 0 0" xyz="-0.143 0 -0.064"/> -->
   </joint>
 
 
@@ -345,8 +363,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -370,8 +388,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -395,8 +413,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -420,8 +438,8 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.015" iyy="0.0375" izz="0.0375" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -437,11 +455,11 @@
       <legacyMode>false</legacyMode>
       <publishTf>true</publishTf>
       <publishWheelTF>true</publishWheelTF>
-      <leftJoint>left_caster_wheel_joint</leftJoint>
-      <rightJoint>right_caster_wheel_joint</rightJoint>
+      <leftJoint>left_wheel_joint</leftJoint>
+      <rightJoint>right_wheel_joint</rightJoint>
       <robotBaseFrame>base_link</robotBaseFrame>
       <wheelSeparation>0.25</wheelSeparation>
-      <wheelDiameter>0.064</wheelDiameter>
+      <wheelDiameter>0.206</wheelDiameter>
       <publishWheelJointState>true</publishWheelJointState>
     </plugin>
   </gazebo>
@@ -544,6 +562,37 @@
   </gazebo>
 
 
+<!-- Transmissions -->
+<!--
+	<transmission name="head_tilt_Transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="head_tilt_joint">
+        	<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+        <actuator name="head_tilt_Motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+	<transmission name="head_pan_Transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="head_pan_joint">
+        	<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+        <actuator name="head_pan_Motor">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+-->
+<!--
+  <gazebo>
+     <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+         <robotNamespace></robotNamespace>
+         <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+     </plugin>
+  </gazebo>
+-->
 <!-- Tortoisebot model -->
 <!--
   <gazebo>
