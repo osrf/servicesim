@@ -156,30 +156,30 @@
       <drop_off_location>0 0 0 0 0 0</drop_off_location>
       <guest_name><%= guest_name %></guest_name>
 
-      <checkpoint1>
+      <go_to_pick_up>
         <weight>1.0</weight>
         <!-- contain checkpoint -->
-        <namespace>/servicesim/checkpoint1</namespace>
-      </checkpoint1>
+        <namespace>/servicesim/go_to_pick_up</namespace>
+      </go_to_pick_up>
 
-      <checkpoint2>
+      <pick_up>
         <weight>1.0</weight>
-      </checkpoint2>
+      </pick_up>
 
-      <checkpoint3>
+      <drop_off>
         <weight>1.0</weight>
-      </checkpoint3>
+      </drop_off>
 
-      <checkpoint4>
+      <return_to_start>
         <weight>1.0</weight>
-      </checkpoint4>
+      </return_to_start>
 
     </plugin>
 
     <!-- Checkpoint 1: reach pick-up area -->
-    <plugin name="checkpoint1" filename="libContainPlugin.so">
+    <plugin name="go_to_pick_up" filename="libContainPlugin.so">
       <entity><%= robot_name %></entity>
-      <namespace>servicesim/checkpoint1</namespace>
+      <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <shape type="box">
         <pose>

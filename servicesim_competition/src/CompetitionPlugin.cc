@@ -23,8 +23,8 @@
 
 #include "CompetitionPlugin.hh"
 #include "Conversions.hh"
-#include "Checkpoint1.hh"
-#include "Checkpoint2.hh"
+#include "CP_GoToPickUp.hh"
+#include "CP_PickUp.hh"
 
 /////////////////////////////////////////////////
 class servicesim::CompetitionPluginPrivate
@@ -84,26 +84,19 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
   this->dataPtr->guestName = _sdf->Get<std::string>("guest_name");
 
   // Checkpoint 1
-  std::unique_ptr<Checkpoint1> checkpoint1(new Checkpoint1(
-      _sdf->GetElement("checkpoint1"), 1));
-  this->dataPtr->checkpoints.push_back(std::move(checkpoint1));
+  {
+    std::unique_ptr<CP_GoToPickUp> cp(new CP_GoToPickUp(
+        _sdf->GetElement("go_to_pick_up"), 1));
+    this->dataPtr->checkpoints.push_back(std::move(cp));
+  }
 
   // Checkpoint 2
-  std::unique_ptr<Checkpoint2> checkpoint2(new Checkpoint2(
-      _sdf->GetElement("checkpoint2"), 2));
-  this->dataPtr->checkpoints.push_back(std::move(checkpoint2));
+  {
+    std::unique_ptr<CP_PickUp> cp(new CP_PickUp(
+        _sdf->GetElement("pick_up"), 2));
+    this->dataPtr->checkpoints.push_back(std::move(cp));
+  }
 
-/*
-  // Checkpoint 3
-  std::unique_ptr<Checkpoint3> checkpoint3(new Checkpoint3(
-      _sdf->GetElement("checkpoint3"), 3));
-  this->dataPtr->checkpoints.push_back(std::move(checkpoint3));
-
-  // Checkpoint 4
-  std::unique_ptr<Checkpoint4> checkpoint4(new Checkpoint4(
-      _sdf->GetElement("checkpoint4"), 4));
-  this->dataPtr->checkpoints.push_back(std::move(checkpoint4));
-*/
   // ROS transport
   if (!ros::isInitialized())
   {

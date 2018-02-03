@@ -19,12 +19,12 @@
 #include <sdf/sdf.hh>
 #include <gazebo/common/Console.hh>
 
-#include "Checkpoint2.hh"
+#include "CP_PickUp.hh"
 
 using namespace servicesim;
 
 /////////////////////////////////////////////////
-Checkpoint2::Checkpoint2(const sdf::ElementPtr &_sdf,
+CP_PickUp::CP_PickUp(const sdf::ElementPtr &_sdf,
     const unsigned int _number) : Checkpoint(_sdf, _number)
 {
   // ROS transport
@@ -39,17 +39,17 @@ Checkpoint2::Checkpoint2(const sdf::ElementPtr &_sdf,
   this->rosNode.reset(new ros::NodeHandle());
 
   this->pickUpRosService = this->rosNode->advertiseService(
-      "/servicesim/pickup_guest", &Checkpoint2::OnPickUpRosRequest, this);
+      "/servicesim/pickup_guest", &CP_PickUp::OnPickUpRosRequest, this);
 }
 
 /////////////////////////////////////////////////
-bool Checkpoint2::Check()
+bool CP_PickUp::Check()
 {
   return this->done;
 }
 
 /////////////////////////////////////////////////
-bool Checkpoint2::OnPickUpRosRequest(
+bool CP_PickUp::OnPickUpRosRequest(
     servicesim_competition::PickUpGuest::Request &_req,
     servicesim_competition::PickUpGuest::Response &_res)
 {

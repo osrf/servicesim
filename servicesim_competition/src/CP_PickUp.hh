@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef SERVICESIM_CHECKPOINT2_HH_
-#define SERVICESIM_CHECKPOINT2_HH_
+#ifndef SERVICESIM_CP_PICKUP_HH_
+#define SERVICESIM_CP_PICKUP_HH_
 
 #include <servicesim_competition/PickUpGuest.h>
 
@@ -24,15 +24,15 @@
 
 namespace servicesim
 {
-  class Checkpoint2Private;
+  class CP_PickUpPrivate;
 
-  /// \brief Checkpoint 2
-  class Checkpoint2 : public Checkpoint
+  /// \brief Checkpoint: Pick-up guest
+  class CP_PickUp : public Checkpoint
   {
     /// \brief Constructor
     /// \param[in] _sdf SDF element for this checkpoint.
     /// \param[in] _number Unique number for this checkpoint
-    public: Checkpoint2(const sdf::ElementPtr &_sdf,
+    public: CP_PickUp(const sdf::ElementPtr &_sdf,
         const unsigned int _number);
 
     // Documentation inherited

@@ -15,15 +15,15 @@
  *
 */
 
-#ifndef SERVICESIM_CHECKPOINT1_HH_
-#define SERVICESIM_CHECKPOINT1_HH_
+#ifndef SERVICESIM_CP_GOTOPICKUP_HH_
+#define SERVICESIM_CP_GOTOPICKUP_HH_
 
 #include "Checkpoint.hh"
 
 namespace servicesim
 {
-  /// \brief Checkpoint 1
-  class Checkpoint1 : public ContainCheckpoint
+  /// \brief Checkpoint: go to the pick-up location
+  class CP_GoToPickUp : public ContainCheckpoint
   {
     using ContainCheckpoint::ContainCheckpoint;
   };
