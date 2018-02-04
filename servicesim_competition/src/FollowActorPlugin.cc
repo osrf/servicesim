@@ -83,6 +83,9 @@ class servicesim::FollowActorPluginPrivate
 
   /// \brief Ignition transport node for communication
   public: ignition::transport::Node ignNode;
+
+  /// \brief Publishes drift notifications
+  public: ignition::transport::Node::Publisher driftIgnPub;
 };
 
 /////////////////////////////////////////////////
@@ -174,11 +177,15 @@ void FollowActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   this->dataPtr->ignNode.Advertise(
       "/servicesim/" + this->dataPtr->actor->GetName() + "/follow",
       &FollowActorPlugin::OnFollow, this);
-/*
-  this->dataPtr->dropOffRosService = this->dataPtr->ignNode->advertiseService(
-      "/servicesim/dropoff_guest", &FollowActorPlugin::OnDropOffRosRequest,
-      this);
-*/
+
+  this->dataPtr->ignNode.Advertise(
+      "/servicesim/" + this->dataPtr->actor->GetName() + "/unfollow",
+      &FollowActorPlugin::OnUnfollow, this);
+
+  // Drift publisher
+  this->dataPtr->driftIgnPub =
+      this->dataPtr->ignNode.Advertise<ignition::msgs::Time>(
+      "/servicesim/" + this->dataPtr->actor->GetName() + "/drift");
 }
 
 /////////////////////////////////////////////////
@@ -246,13 +253,13 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
     return;
 
   // Is it drift time?
-  bool drift{false};
+  gazebo::common::Time driftTime;
   for (auto t : this->dataPtr->driftTimes)
   {
     double diff = abs((t - _info.simTime).Double());
     if (diff <= this->dataPtr->timeTolerance.Double())
     {
-      drift = true;
+      driftTime = t;
       break;
     }
 
@@ -271,8 +278,11 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   auto dir = targetPose.Pos() - actorPose.Pos();
 
   // Stop if too close to target
-  if (!drift && dir.Length() <= this->dataPtr->minDistance)
+  if (driftTime == gazebo::common::Time::Zero &&
+      dir.Length() <= this->dataPtr->minDistance)
+  {
     return;
+  }
 
   // Stop following if too far from target
   if (dir.Length() > this->dataPtr->maxDistance)
@@ -287,11 +297,17 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   ignition::math::Angle yaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
 
   // If drift, change direction a bit
-  if (drift)
+  if (driftTime != gazebo::common::Time::Zero)
   {
     yaw += ignition::math::Rand::DblUniform(-1, 1) *
         this->dataPtr->maxDriftAngle;
     this->dataPtr->target = nullptr;
+
+    // Publish drift notification
+    ignition::msgs::Time msg;
+    msg.set_sec(driftTime.sec);
+    msg.set_nsec(driftTime.nsec);
+    this->dataPtr->driftIgnPub.Publish(msg);
   }
   yaw.Normalize();
 
@@ -342,27 +358,22 @@ void FollowActorPlugin::OnFollow(const ignition::msgs::StringMsg &_req,
     return;
   }
 
+  gzmsg << "Actor [" << this->dataPtr->actor->GetName()
+        << "] is following model [" << targetName << "]" << std::endl;
   this->dataPtr->target = model;
   _res.set_data(true);
   _result = true;
 }
-/*
+
 /////////////////////////////////////////////////
-bool FollowActorPlugin::OnDropOffRosRequest(
-    servicesim_competition::DropOffGuest::Request &_req,
-    servicesim_competition::DropOffGuest::Response &_res)
+void FollowActorPlugin::OnUnfollow(ignition::msgs::Boolean &_res,
+    bool &_result)
 {
-  _res.success = true;
-
-  // Requesting the correct guest?
-  auto actorName = _req.guest_name;
-  if (actorName != this->dataPtr->actor->GetName())
-  {
-    gzwarn << "Wrong guest name: [" << actorName << "]" << std::endl;
-    _res.success = false;
-    return false;
-  }
-
+  gzmsg << "Actor [" << this->dataPtr->actor->GetName()
+        << "] stopped following model [" << this->dataPtr->target->GetName()
+        << "]" << std::endl;
   this->dataPtr->target = nullptr;
-  return true;
-}*/
+  _res.set_data(true);
+  _result = true;
+}
+

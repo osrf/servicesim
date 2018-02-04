@@ -41,6 +41,11 @@ namespace servicesim
     /// \return True if completed.
     public: virtual bool Check() = 0;
 
+    /// \brief Check whether to pause this checkpoint and return to the
+    /// previous one.
+    /// \return True if it should pause.
+    public: virtual bool Paused() {return false;}
+
     /// \brief Call this the first time the checkpoint is checked.
     public: virtual void Start();
 

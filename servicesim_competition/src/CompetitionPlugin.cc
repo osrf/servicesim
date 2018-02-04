@@ -23,6 +23,7 @@
 
 #include "CompetitionPlugin.hh"
 #include "Conversions.hh"
+#include "CP_DropOff.hh"
 #include "CP_GoToPickUp.hh"
 #include "CP_PickUp.hh"
 
@@ -97,6 +98,13 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
 
+  // Checkpoint 3
+  {
+    std::unique_ptr<CP_DropOff> cp(new CP_DropOff(
+        _sdf->GetElement("drop_off"), 3));
+    this->dataPtr->checkpoints.push_back(std::move(cp));
+  }
+
   // ROS transport
   if (!ros::isInitialized())
   {
@@ -151,7 +159,7 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   if (this->dataPtr->current == 0)
     return;
 
-  // Checkpoint
+  // If current checkpoint is complete
   if (this->dataPtr->checkpoints[this->dataPtr->current - 1]->Check())
   {
     gzmsg << "[ServiceSim] Checkpoint ["
@@ -173,8 +181,18 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
     }
   }
 
-  // TODO: Check penalties
+  // If current checkpoint is paused, go back to previous one
+  if (this->dataPtr->current > 0 &&
+      this->dataPtr->checkpoints[this->dataPtr->current - 1]->Paused())
+  {
+    // Previous checkpoint
+    this->dataPtr->current--;
 
+    if (this->dataPtr->current > 0)
+      this->dataPtr->checkpoints[this->dataPtr->current - 1]->Start();
+  }
+
+  // TODO: Check penalties
 
   // Publish ROS score message
   servicesim_competition::Score msg;

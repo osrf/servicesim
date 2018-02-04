@@ -53,14 +53,12 @@ namespace servicesim
     /// \param[out] _result
     private: void OnFollow(const ignition::msgs::StringMsg &_req,
         ignition::msgs::Boolean &_res, bool &_result);
-/*
-    /// \brief Service for dropping off the actor
-    /// \param[in] _req Request
-    /// \param[in] _res Response
-    private: bool OnDropOffRosRequest(
-        servicesim_competition::DropOffGuest::Request &_req,
-        servicesim_competition::DropOffGuest::Response &_res);
-*/
+
+    /// \brief Callback for Ignition unfollow service
+    /// \param[out] _res
+    /// \param[out] _result
+    private: void OnUnfollow(ignition::msgs::Boolean &_res, bool &_result);
+
     /// \internal
     private: FollowActorPluginPrivate *dataPtr;
   };

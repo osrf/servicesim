@@ -181,21 +181,23 @@
       <entity><%= robot_name %></entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
-      <shape type="box">
-        <pose>
-          <%= pickup_pose[0] %>
-          <%= pickup_pose[1] %>
-          <%= pickup_pose[2] %>
-          <%= pickup_pose[3] %>
-          <%= pickup_pose[4] %>
-          <%= pickup_pose[5] %>
-        </pose>
-        <size>
-          <%= pickup_size[0] %>
-          <%= pickup_size[1] %>
-          <%= pickup_size[2] %>
-        </size>
-      </shape>
+      <pose>
+        <%= pickup_pose[0] %>
+        <%= pickup_pose[1] %>
+        <%= pickup_pose[2] %>
+        <%= pickup_pose[3] %>
+        <%= pickup_pose[4] %>
+        <%= pickup_pose[5] %>
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            <%= pickup_size[0] %>
+            <%= pickup_size[1] %>
+            <%= pickup_size[2] %>
+          </size>
+        </box>
+      </geometry>
     </plugin>
 
     <!-- GUI -->
