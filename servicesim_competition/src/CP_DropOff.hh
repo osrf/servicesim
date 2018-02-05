@@ -33,9 +33,7 @@ namespace servicesim
   {
     /// \brief Constructor
     /// \param[in] _sdf SDF element for this checkpoint.
-    /// \param[in] _number Unique number for this checkpoint
-    public: CP_DropOff(const sdf::ElementPtr &_sdf,
-        const unsigned int _number);
+    public: CP_DropOff(const sdf::ElementPtr &_sdf);
 
     // Documentation inherited
     public: virtual void Start();

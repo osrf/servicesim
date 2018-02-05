@@ -87,21 +87,21 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
   // Checkpoint 1
   {
     std::unique_ptr<CP_GoToPickUp> cp(new CP_GoToPickUp(
-        _sdf->GetElement("go_to_pick_up"), 1));
+        _sdf->GetElement("go_to_pick_up")));
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
 
   // Checkpoint 2
   {
     std::unique_ptr<CP_PickUp> cp(new CP_PickUp(
-        _sdf->GetElement("pick_up"), 2));
+        _sdf->GetElement("pick_up")));
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
 
   // Checkpoint 3
   {
     std::unique_ptr<CP_DropOff> cp(new CP_DropOff(
-        _sdf->GetElement("drop_off"), 3));
+        _sdf->GetElement("drop_off")));
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
 

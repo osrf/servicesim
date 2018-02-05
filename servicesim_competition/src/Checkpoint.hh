@@ -30,7 +30,7 @@ namespace servicesim
   {
     /// \brief Constructor
     /// \param[in] _sdf SDF element for this checkpoint.
-    public: Checkpoint(const sdf::ElementPtr &_sdf, const unsigned int _number);
+    public: Checkpoint(const sdf::ElementPtr &_sdf);
 
     /// \brief Default destructor
     public: virtual ~Checkpoint() = default;
@@ -53,6 +53,10 @@ namespace servicesim
     /// \return Score
     public: virtual double Score() const;
 
+    /// \brief Get the checkpoint's name
+    /// \return Checkpoint's name
+    public: std::string Name() const;
+
     /// \brief True when checkpoint is complete.
     protected: bool done{false};
 
@@ -65,8 +69,8 @@ namespace servicesim
     /// \brief The weight for this checkpoint when scoring.
     protected: double weight{0.0};
 
-    /// \brief The checkpoint number
-    private: unsigned int number{0};
+    /// \brief The checkpoint's name
+    protected: std::string name;
   };
 
   /// \brief A checkpoint tied to a gazebo::ContainPlugin.
@@ -74,8 +78,7 @@ namespace servicesim
   {
     /// \brief Constructor
     /// \param[in] _sdf SDF element for this checkpoint.
-    public: ContainCheckpoint(const sdf::ElementPtr &_sdf,
-        const unsigned int _number);
+    public: ContainCheckpoint(const sdf::ElementPtr &_sdf);
 
     /// \brief Check whether the contain checkpoint has been completed.
     /// \return True if completed.

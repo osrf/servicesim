@@ -26,8 +26,8 @@
 using namespace servicesim;
 
 /////////////////////////////////////////////////
-CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf,
-    const unsigned int _number) : Checkpoint(_sdf, _number)
+CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf)
+    : Checkpoint(_sdf)
 {
   // Ignition transport
   std::function<void(const ignition::msgs::Time &)> driftCb =

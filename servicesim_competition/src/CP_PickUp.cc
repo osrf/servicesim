@@ -26,8 +26,8 @@
 using namespace servicesim;
 
 /////////////////////////////////////////////////
-CP_PickUp::CP_PickUp(const sdf::ElementPtr &_sdf,
-    const unsigned int _number) : Checkpoint(_sdf, _number)
+CP_PickUp::CP_PickUp(const sdf::ElementPtr &_sdf)
+    : Checkpoint(_sdf)
 {
   // ROS transport
   if (!ros::isInitialized())

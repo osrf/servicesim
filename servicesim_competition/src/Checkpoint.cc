@@ -24,10 +24,8 @@
 using namespace servicesim;
 
 /////////////////////////////////////////////////
-Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf, const unsigned int _number)
+Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 {
-  this->number = _number;
-
   if (!_sdf)
   {
     gzerr << "Missing <checkpointN> element" << std::endl;
@@ -35,6 +33,7 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf, const unsigned int _number)
   }
 
   this->weight = _sdf->Get<double>("weight");
+  this->name = _sdf->Get<std::string>("name");
 }
 
 /////////////////////////////////////////////////
@@ -59,15 +58,21 @@ void Checkpoint::Start()
 {
   this->startTime = gazebo::physics::get_world()->SimTime();
 
-  gzmsg << "[ServiceSim] Started Checkpoint " << this->number << " at "
+  gzmsg << "[ServiceSim] Started Checkpoint \"" << this->name << "\" at "
     << this->startTime.FormattedString(gazebo::common::Time::HOURS,
                                        gazebo::common::Time::MILLISECONDS)
     << std::endl;
 }
 
 /////////////////////////////////////////////////
-ContainCheckpoint::ContainCheckpoint(const sdf::ElementPtr &_sdf,
-    const unsigned int _number) : Checkpoint(_sdf, _number)
+std::string Checkpoint::Name() const
+{
+  return this->name;
+}
+
+/////////////////////////////////////////////////
+ContainCheckpoint::ContainCheckpoint(const sdf::ElementPtr &_sdf)
+    : Checkpoint(_sdf)
 {
   if (!_sdf || !_sdf->HasElement("namespace"))
     gzwarn << "Missing <namespace> for contain checkpoint" << std::endl;
