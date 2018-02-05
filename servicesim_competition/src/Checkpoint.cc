@@ -40,6 +40,9 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf, const unsigned int _number)
 /////////////////////////////////////////////////
 double Checkpoint::Score() const
 {
+  if (this->startTime == gazebo::common::Time::Zero)
+    return 0.0;
+
   auto end = this->endTime;
 
   // If not finished yet
@@ -97,7 +100,8 @@ bool ContainCheckpoint::Check()
         &ContainCheckpoint::EnableCallback, this);
   }
 
-  if (this->enabled && this->done)
+  if (this->enabled && this->done &&
+      this->endTime == gazebo::common::Time::Zero)
   {
     // Unsubscribe
     for (auto const &sub : this->ignNode.SubscribedTopics())
@@ -108,6 +112,9 @@ bool ContainCheckpoint::Check()
     req.set_data(false);
     this->ignNode.Request(this->ns + "/enable", req,
         &ContainCheckpoint::EnableCallback, this);
+
+    // Set end time
+    this->endTime = gazebo::physics::get_world()->SimTime();
   }
 
   return this->done;

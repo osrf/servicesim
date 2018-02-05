@@ -38,10 +38,16 @@ namespace servicesim
         const unsigned int _number);
 
     // Documentation inherited
+    public: virtual void Start();
+
+    // Documentation inherited
     protected: bool Check() override;
 
     // Documentation inherited
     protected: bool Paused() override;
+
+    // Documentation inherited
+    public: virtual double Score() const;
 
     /// \brief Service for dropping off the guest
     /// \param[in] _req Request
@@ -59,8 +65,14 @@ namespace servicesim
     /// \brief DropOff ROS service
     private: ros::ServiceServer dropOffRosService;
 
-    /// \brief Vector of sim times when the checkpoint was paused
-    private: std::vector<gazebo::common::Time> pauseTimes;
+    /// \brief Vector of sim time intervals when the checkpoint was
+    /// running. The first time is the beginning of the interval, the
+    /// second is the end
+    private: std::vector<std::pair<gazebo::common::Time,
+                                   gazebo::common::Time>> intervals;
+
+    /// \brief True if checkpoint is paused
+    private: bool paused{true};
   };
 }
 #endif

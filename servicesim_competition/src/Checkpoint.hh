@@ -51,22 +51,22 @@ namespace servicesim
 
     /// \brief Get the current score for this checkpoint.
     /// \return Score
-    public: double Score() const;
+    public: virtual double Score() const;
 
     /// \brief True when checkpoint is complete.
     protected: bool done{false};
 
-    /// \brief Sim time when the checkpoint ended
-    private: gazebo::common::Time endTime;
-
     /// \brief Sim time when the checkpoint started
-    private: gazebo::common::Time startTime;
+    protected: gazebo::common::Time startTime;
+
+    /// \brief Sim time when the checkpoint ended
+    protected: gazebo::common::Time endTime;
+
+    /// \brief The weight for this checkpoint when scoring.
+    protected: double weight{0.0};
 
     /// \brief The checkpoint number
     private: unsigned int number{0};
-
-    /// \brief The weight for this checkpoint when scoring.
-    private: double weight{0.0};
   };
 
   /// \brief A checkpoint tied to a gazebo::ContainPlugin.

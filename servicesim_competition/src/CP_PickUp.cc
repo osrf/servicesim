@@ -18,6 +18,8 @@
 #include <ros/ros.h>
 #include <sdf/sdf.hh>
 #include <gazebo/common/Console.hh>
+#include <gazebo/physics/PhysicsIface.hh>
+#include <gazebo/physics/World.hh>
 
 #include "CP_PickUp.hh"
 
@@ -75,6 +77,12 @@ bool CP_PickUp::OnPickUpRosRequest(
   if (!this->done)
   {
     // TODO: apply penalty for bad pickup request
+  }
+
+  // Set end time
+  if (this->done && this->endTime == gazebo::common::Time::Zero)
+  {
+    this->endTime = gazebo::physics::get_world()->SimTime();
   }
 
   _res.success = this->done;

@@ -18,6 +18,8 @@
 #include <ros/ros.h>
 #include <sdf/sdf.hh>
 #include <gazebo/common/Console.hh>
+#include <gazebo/physics/PhysicsIface.hh>
+#include <gazebo/physics/World.hh>
 
 #include "CP_DropOff.hh"
 
@@ -31,9 +33,16 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf,
   std::function<void(const ignition::msgs::Time &)> driftCb =
       [this](const ignition::msgs::Time &_msg)
   {
+    // Drift time
     gazebo::common::Time time;
     time.Set(_msg.sec(), _msg.nsec());
-    this->pauseTimes.push_back(time);
+
+    // End current interval
+    auto interval = this->intervals.back();
+    interval.second = time;
+
+    // Set paused
+    this->paused = true;
   };
 
   this->ignNode.Subscribe("/servicesim/guest/drift", driftCb);
@@ -54,6 +63,17 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf,
 }
 
 /////////////////////////////////////////////////
+void CP_DropOff::Start()
+{
+  Checkpoint::Start();
+
+  // Start new interval
+  std::pair<gazebo::common::Time, gazebo::common::Time> interval(
+      this->startTime, gazebo::common::Time::Zero);
+  this->intervals.push_back(interval);
+}
+
+/////////////////////////////////////////////////
 bool CP_DropOff::Check()
 {
   return this->done;
@@ -66,6 +86,27 @@ bool CP_DropOff::Paused()
     return false;
 
   return false;
+}
+
+/////////////////////////////////////////////////
+double CP_DropOff::Score() const
+{
+  double elapsedSeconds{0.0};
+
+  // Iterate over all intervals
+  for (auto i : this->intervals)
+  {
+    auto start = i.first;
+    auto end = i.second;
+
+    // If not finished yet
+    if (end == gazebo::common::Time::Zero)
+      end = gazebo::physics::get_world()->SimTime();
+
+    elapsedSeconds += (end - start).Double();
+  }
+
+  return elapsedSeconds * this->weight;
 }
 
 /////////////////////////////////////////////////
@@ -93,6 +134,15 @@ bool CP_DropOff::OnDropOffRosRequest(
   if (!this->done)
   {
     // TODO: apply penalty for bad dropoff request
+  }
+
+  // Set end time
+  if (this->done && this->endTime == gazebo::common::Time::Zero)
+  {
+    this->endTime = gazebo::physics::get_world()->SimTime();
+
+    auto interval = this->intervals.back();
+    interval.second = this->endTime;
   }
 
   _res.success = this->done;
