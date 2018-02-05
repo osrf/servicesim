@@ -2,14 +2,14 @@
 <robot name="servicebot">
   <!-- NOte: this doesnt follow REP 120 as this robot, while having a humanoid shape, will behave like a mobile base
 -->
-  <!--link name="base_link">
+  <link name="virtual_base_link">
     <visual>
       <origin rpy="0 0 -1.5707963267948966" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://servicebot_description/meshes/servicebot.obj" scale="0.01 0.01 0.01" />
       </geometry>
     </visual>
-  </link-->
+  </link>
 
   <!-- setting the base_link as the center of mass of the torso -->
   <link name="base_link">
@@ -19,27 +19,15 @@
       </geometry>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 -0.02"/>
+      <origin rpy="0 0 0" xyz="0 0 0.03"/>
       <geometry>
         <box size="0.32 0.3 0.32"/>
       </geometry>
     </collision>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.18"/>
+      <origin rpy="0 0 0" xyz="0 0 0.23"/>
       <geometry>
         <cylinder radius="0.07" length="0.10"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin rpy="1.5707963267948966 0 0" xyz="-0.005 0.2 0.07"/>
-      <geometry>
-        <cylinder radius="0.1" length="0.10"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin rpy="1.5707963267948966 0 0" xyz="-0.005 -0.2 0.07"/>
-      <geometry>
-        <cylinder radius="0.1" length="0.10"/>
       </geometry>
     </collision>
     <inertial>
@@ -48,12 +36,13 @@
     </inertial>
   </link>
 
-  <!--joint name="torso_fixedjoint" type="fixed">
-    <axis xyz="0 0 1"/>
-    <parent link="base_link"/>
-    <child link="torso_link"/>
-    <origin rpy="0 0 0" xyz="0 0.00486918 0.832498"/>
-  </joint-->
+  <joint name="virtual_base_fixedjoint" type="fixed">
+    <parent link="virtual_base_link"/>
+    <child link="base_link"/>
+    <!--origin rpy="0 0 0" xyz="0 0.00486918 0.832498"/-->
+    <!--origin rpy="0 0 0" xyz="0 0.00486918 0.78"/-->
+    <origin rpy="0 0 0" xyz="0 0.0 0.772"/>
+  </joint>
 
   <link name="head_link">
     <visual>
@@ -111,7 +100,8 @@
     <axis xyz="0 0 -1"/>
     <parent link="base_link"/>
     <child link="head_pan_link"/>
-    <origin rpy="0 0 0" xyz="0 0.009 0.250" />
+    <!--origin rpy="0 0 0" xyz="0 0.009 0.250" /-->
+    <origin rpy="0 0 0" xyz="0 0 0.31" />
     <limit effort="30" velocity="1.0" lower="-1.5707963267948966" upper="1.5707963267948966" />
   </joint>
 
@@ -122,21 +112,10 @@
       </geometry>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.05"/>
+      <!--origin rpy="0 0 0" xyz="0 0 0.05"/-->
+      <origin rpy="0 0 0" xyz="0 0 -0.05"/>
       <geometry>
-        <cylinder radius="0.11" length="0.20"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0.12 -0.02"/>
-      <geometry>
-        <cylinder radius="0.12" length="0.26"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 -0.12 -0.02"/>
-      <geometry>
-        <cylinder radius="0.12" length="0.26"/>
+        <cylinder radius="0.1" length="0.18"/>
       </geometry>
     </collision>
     <inertial>
@@ -148,7 +127,60 @@
   <joint name="pelvis_fixedjoint" type="fixed">
     <parent link="base_link"/>
     <child link="pelvis_link"/>
-    <origin rpy="0 0 0" xyz="0 0.00 -0.286"/>
+    <!--origin rpy="0 0 0" xyz="0 0.00 -0.182"/-->
+    <origin rpy="0 0 0" xyz="0 0.00 -0.12"/>
+  </joint>
+
+  <link name="left_thigh_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Thigh_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.01"/>
+      <geometry>
+        <cylinder radius="0.12" length="0.25"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_thigh_joint" type="revolute">
+    <axis xyz="0 1 0"/>
+    <parent link="pelvis_link"/>
+    <child link="left_thigh_link"/>
+    <origin rpy="0 0 0" xyz="0.017285 0.12 -0.11"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+  </joint>
+
+  <link name="right_thigh_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Thigh_Right.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.01"/>
+      <geometry>
+        <cylinder radius="0.12" length="0.25"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_thigh_joint" type="revolute">
+    <axis xyz="0 1 0"/>
+    <parent link="pelvis_link"/>
+    <child link="right_thigh_link"/>
+    <origin rpy="0 0 0" xyz="0.017285 -0.12 -0.11"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
   </joint>
 
   <link name="left_upper_leg_link">
@@ -158,9 +190,9 @@
       </geometry>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.03"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.13"/>
       <geometry>
-        <cylinder radius="0.12" length="0.3"/>
+        <cylinder radius="0.12" length="0.33"/>
       </geometry>
     </collision>
     <inertial>
@@ -169,23 +201,27 @@
     </inertial>
   </link>
 
-  <joint name="left_upper_leg_fixedjoint" type="fixed">
-    <parent link="pelvis_link"/>
+  <joint name="left_upper_leg_joint" type="revolute">
+    <axis xyz="0 1 0"/>
+    <parent link="left_thigh_link"/>
     <child link="left_upper_leg_link"/>
-    <origin rpy="0 0 0" xyz="0.019 0.125 -0.256"/>
+    <!--origin rpy="0 0 0" xyz="0.019 0.125 -0.256"/-->
+    <!--origin rpy="0 0 0" xyz="0.028 0.125 -0.216"/-->
+    <origin rpy="0 0 0" xyz="0.011 0.005 -0.106"/>
+    <limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" />
   </joint>
 
 
   <link name="right_upper_leg_link">
     <visual>
       <geometry>
-        <mesh filename="package://servicebot_description/meshes/Calf_Right.obj" />
+        <mesh filename="package://servicebot_description/meshes/Calf_Left.obj" />
       </geometry>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.03"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.13"/>
       <geometry>
-        <cylinder radius="0.12" length="0.3"/>
+        <cylinder radius="0.12" length="0.33"/>
       </geometry>
     </collision>
     <inertial>
@@ -194,18 +230,29 @@
     </inertial>
   </link>
 
-  <joint name="right_upper_leg_fixedjoint" type="fixed">
+  <joint name="right_upper_leg_joint" type="revolute">
+    <axis xyz="0 1 0"/>
+    <parent link="right_thigh_link"/>
+    <child link="right_upper_leg_link"/>
+    <!--origin rpy="0 0 0" xyz="0.019 0.125 -0.256"/-->
+    <!--origin rpy="0 0 0" xyz="0.028 0.125 -0.216"/-->
+    <origin rpy="0 0 0" xyz="0.011 -0.005 -0.106"/>
+    <limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" />
+  </joint>
+  <!--joint name="right_upper_leg_fixedjoint" type="revolute">
+    <axis xyz="0 1 0"/>
     <parent link="pelvis_link"/>
     <child link="right_upper_leg_link"/>
-    <origin rpy="0 0 0" xyz="0.019 -0.125 -0.256"/>
-  </joint>
+    <origin rpy="0 0 0" xyz="0.028 -0.125 -0.216"/>
+    <limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" />
+  </joint-->
 
 
   <link name="left_foot_link">
     <visual>
-      <origin rpy="0 0 0" xyz="0.015 0 -0.004"/>
+      <!--origin rpy="0 0 0" xyz="0.015 0 -0.004"/-->
       <geometry>
-        <mesh filename="package://servicebot_description/meshes/CasterBracket_Left.obj" />
+        <mesh filename="package://servicebot_description/meshes/Foot_Left.obj" />
       </geometry>
     </visual>
     <collision>
@@ -219,10 +266,12 @@
     </inertial>
   </link>
 
-  <joint name="left_foot_fixedjoint" type="fixed">
+  <joint name="left_foot_joint" type="revolute">
+    <axis xyz="0 1 0"/>
     <parent link="left_upper_leg_link"/>
     <child link="left_foot_link"/>
-    <origin rpy="0 0 0" xyz="0.041 0 -0.19"/>
+    <origin rpy="0 0 0" xyz="0.03 0 -0.335"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
   </joint>
 
   <link name="right_foot_link">
@@ -243,10 +292,13 @@
     </inertial>
   </link>
 
-  <joint name="right_foot_fixedjoint" type="fixed">
+  <joint name="right_foot_joint" type="revolute">
+    <axis xyz="0 1 0"/>
     <parent link="right_upper_leg_link"/>
     <child link="right_foot_link"/>
-    <origin rpy="0 0 0" xyz="0.041 0 -0.19"/>
+    <!--origin rpy="0 0 0" xyz="0.041 0 -0.19"/-->
+    <origin rpy="0 0 0" xyz="0.03 0 -0.335"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
   </joint>
 
 <!-- Wheels -->
@@ -307,7 +359,8 @@
     </visual>
     <collision>
       <geometry>
-        <sphere radius="0.032"/>
+        <!--sphere radius="0.032"/-->
+        <sphere radius="0.033"/>
       </geometry>
     </collision>
     <inertial>
@@ -320,7 +373,7 @@
     <axis xyz="0 1 0"/>
     <parent link="left_foot_link"/>
     <child link="left_caster_wheel_link"/>
-    <origin rpy="0 0 0" xyz="-0.14 0 -0.066"/>
+    <origin rpy="0 0 0" xyz="-0.142 0 -0.07"/>
   </joint>
 
   <link name="right_caster_wheel_link">
@@ -331,7 +384,8 @@
     </visual>
     <collision>
       <geometry>
-        <sphere radius="0.032"/>
+        <!--sphere radius="0.032"/-->
+        <sphere radius="0.033"/>
       </geometry>
     </collision>
     <inertial>
@@ -349,17 +403,16 @@
 
 
 <!-- Arms -->
-
-  <link name="left_upper_arm_link">
+  <link name="left_shoulder_link">
     <visual>
       <geometry>
-        <mesh filename="package://servicebot_description/meshes/UpperArm_Left.obj" />
+        <mesh filename="package://servicebot_description/meshes/Shoulder_Left.obj" />
       </geometry>
     </visual>
     <collision>
-      <origin rpy="1.5707963267948966 0 0" xyz="0 0.02 0.0"/>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.01 0.01"/>
       <geometry>
-        <cylinder radius="0.065" length="0.22"/>
+        <cylinder radius="0.08" length="0.10"/>
       </geometry>
     </collision>
     <inertial>
@@ -368,10 +421,68 @@
     </inertial>
   </link>
 
-  <joint name="left_shoulder_fixedjoint" type="fixed">
+  <joint name="left_shoulder_joint" type="revolute">
+    <axis xyz="0 1 0"/>
     <parent link="base_link"/>
+    <child link="left_shoulder_link"/>
+    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
+    <origin rpy="0 0 0" xyz="0 0.1737 0.115"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+  </joint>
+
+  <link name="right_shoulder_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Shoulder_Right.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 -0.01 0.01"/>
+      <geometry>
+        <cylinder radius="0.08" length="0.10"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_shoulder_joint" type="revolute">
+    <axis xyz="0 1 0"/>
+    <parent link="base_link"/>
+    <child link="right_shoulder_link"/>
+    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
+    <origin rpy="0 0 0" xyz="0 -0.1737 0.115"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+  </joint>
+
+
+  <link name="left_upper_arm_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/UpperArm_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.05 0.0"/>
+      <geometry>
+        <cylinder radius="0.065" length="0.15"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_upper_arm_joint" type="fixed">
+    <parent link="left_shoulder_link"/>
     <child link="left_upper_arm_link"/>
-    <origin rpy="0 0 0" xyz="0 0.236 0.056"/>
+    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
+    <!--origin rpy="0 0 0" xyz="0 0.24 0.115"/-->
+    <!--origin rpy="0 0 0" xyz="0 0.066 0"/ -->
+    <origin rpy="0 0 0" xyz="0 0.015 0.001"/>
   </joint>
 
   <link name="right_upper_arm_link">
@@ -393,10 +504,67 @@
     </inertial>
   </link>
 
-  <joint name="right_shoulder_fixedjoint" type="fixed">
-    <parent link="base_link"/>
+  <joint name="right_upper_arm_joint" type="fixed">
+    <parent link="right_shoulder_link"/>
     <child link="right_upper_arm_link"/>
-    <origin rpy="0 0 0" xyz="0 -0.236 0.056"/>
+    <!--origin rpy="0 0 0" xyz="0 -0.24 0.115"/-->
+    <!--origin rpy="0 0 0" xyz="0 -0.236 0.056"/ -->
+    <origin rpy="0 0 0" xyz="0 -0.015 0.001"/>
+  </joint>
+
+  <link name="left_elbow_attach_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Elbow_Left.obj" />
+      </geometry>
+    </visual>
+    <!--collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.02 0.0"/>
+      <geometry>
+        <cylinder radius="0.065" length="0.22"/>
+      </geometry>
+    </collision-->
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_elbow_attach_joint" type="fixed">
+    <parent link="left_upper_arm_link"/>
+    <child link="left_elbow_attach_link"/>
+    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
+    <!--origin rpy="0 0 0" xyz="0 0.24 0.115"/-->
+    <!--origin rpy="0 0 0" xyz="0 0.066 0"/ -->
+    <origin rpy="0 0 0" xyz="0 0.105 0.001"/>
+  </joint>
+
+  <link name="right_elbow_attach_link">
+    <visual>
+      <origin rpy="0 0 3.14159265" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Elbow_Left.obj" />
+      </geometry>
+    </visual>
+    <!--collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.02 0.0"/>
+      <geometry>
+        <cylinder radius="0.065" length="0.22"/>
+      </geometry>
+    </collision-->
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_elbow_attach_joint" type="fixed">
+    <parent link="right_upper_arm_link"/>
+    <child link="right_elbow_attach_link"/>
+    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
+    <!--origin rpy="0 0 0" xyz="0 0.24 0.115"/-->
+    <!--origin rpy="0 0 0" xyz="0 0.066 0"/ -->
+    <origin rpy="0 0 0" xyz="0 -0.105 0.001"/>
   </joint>
 
 
@@ -407,9 +575,9 @@
       </geometry>
     </visual>
     <collision>
-      <origin rpy="1.5707963267948966 0 0" xyz="0 0.0 0.0"/>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.04 0.0"/>
       <geometry>
-        <cylinder radius="0.06" length="0.3"/>
+        <cylinder radius="0.06" length="0.16"/>
       </geometry>
     </collision>
     <inertial>
@@ -418,10 +586,15 @@
     </inertial>
   </link>
 
-  <joint name="left_elbow_fixedjoint" type="fixed">
-    <parent link="left_upper_arm_link"/>
+  <joint name="left_elbow_joint" type="revolute">
+    <axis xyz="0 0 1"/>
+    <parent link="left_elbow_attach_link"/>
     <child link="left_forearm_link"/>
-    <origin rpy="0 0 0" xyz="0.006 0.179 0"/>
+    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
+    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
+    <!--origin rpy="0 0 0" xyz="-0.006 0.16 0"/-->
+    <origin rpy="0 0 0" xyz="-0.006 0.055 -0.001"/>
+    <limit effort="30" velocity="1.0" lower="-0.5" upper="0" />
   </joint>
 
   <link name="right_forearm_link">
@@ -432,9 +605,9 @@
       </geometry>
     </visual>
     <collision>
-      <origin rpy="1.5707963267948966 0 0" xyz="0 0.0 0.0"/>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 -0.04 0.0"/>
       <geometry>
-        <cylinder radius="0.06" length="0.3"/>
+        <cylinder radius="0.06" length="0.16"/>
       </geometry>
     </collision>
     <inertial>
@@ -443,10 +616,128 @@
     </inertial>
   </link>
 
-  <joint name="right_elbow_fixedjoint" type="fixed">
-    <parent link="right_upper_arm_link"/>
+  <joint name="right_elbow_joint" type="revolute">
+    <axis xyz="0 0 -1"/>
+    <parent link="right_elbow_attach_link"/>
     <child link="right_forearm_link"/>
-    <origin rpy="0 0 0" xyz="0.006 -0.179 0"/>
+    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
+    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
+    <!--origin rpy="0 0 0" xyz="-0.006 0.16 0"/-->
+    <origin rpy="0 0 0" xyz="-0.006 -0.055 -0.001"/>
+    <limit effort="30" velocity="1.0" lower="-0.5" upper="0" />
+  </joint>
+
+  <link name="left_hand_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Hand_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.05 0.0"/>
+      <geometry>
+        <box size="0.07 0.14 0.08"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_hand_fixedjoint" type="fixed">
+    <parent link="left_forearm_link"/>
+    <child link="left_hand_link"/>
+    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
+    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
+    <origin rpy="0 0 0" xyz="0.005 0.095 0.0"/>
+  </joint>
+
+  <link name="right_hand_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/Hand_Right.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 -0.05 0.0"/>
+      <geometry>
+        <box size="0.07 0.14 0.08"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="right_hand_fixedjoint" type="fixed">
+    <parent link="right_forearm_link"/>
+    <child link="right_hand_link"/>
+    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
+    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
+    <origin rpy="0 0 0" xyz="0.005 -0.095 0.0"/>
+  </joint>
+
+  <link name="left_lower_hand_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/LowerHand_Left.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.04 0.0"/>
+      <geometry>
+        <box size="0.07 0.12 0.04"/>
+      </geometry>
+    </collision>
+    <!--collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.06" length="0.3"/>
+      </geometry>
+    </collision-->
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="left_gripper_joint" type="revolute">
+    <axis xyz="1 0 0"/>
+    <parent link="left_hand_link"/>
+    <child link="left_lower_hand_link"/>
+    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
+    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
+    <origin rpy="0 0 0" xyz="0.00 0.02 -0.025"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0" />
+  </joint>
+
+  <link name="right_lower_hand_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://servicebot_description/meshes/LowerHand_Right.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 -0.04 0.0"/>
+      <geometry>
+        <box size="0.07 0.12 0.04"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="right_gripper_joint" type="revolute">
+    <axis xyz="-1 0 0"/>
+    <parent link="right_hand_link"/>
+    <child link="right_lower_hand_link"/>
+    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
+    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
+    <origin rpy="0 0 0" xyz="0.00 -0.02 -0.025"/>
+    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0" />
   </joint>
 
 
