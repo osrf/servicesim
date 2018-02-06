@@ -289,6 +289,8 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   {
     gzwarn << "Robot too far, guest stopped following" << std::endl;
     this->dataPtr->target = nullptr;
+
+    this->PublishDrift(_info.simTime);
     return;
   }
   dir.Normalize();
@@ -296,18 +298,20 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Towards target
   ignition::math::Angle yaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
 
-  // If drift, change direction a bit
+  // Drift
   if (driftTime != gazebo::common::Time::Zero)
   {
+    // Change direction a bit
     yaw += ignition::math::Rand::DblUniform(-1, 1) *
         this->dataPtr->maxDriftAngle;
+
+    // Stop following
     this->dataPtr->target = nullptr;
 
-    // Publish drift notification
-    ignition::msgs::Time msg;
-    msg.set_sec(driftTime.sec);
-    msg.set_nsec(driftTime.nsec);
-    this->dataPtr->driftIgnPub.Publish(msg);
+    // Notify
+    this->PublishDrift(driftTime);
+
+    // Don't return yet, so the actor moves away
   }
   yaw.Normalize();
 
@@ -375,5 +379,15 @@ void FollowActorPlugin::OnUnfollow(ignition::msgs::Boolean &_res,
   this->dataPtr->target = nullptr;
   _res.set_data(true);
   _result = true;
+}
+
+/////////////////////////////////////////////////
+void FollowActorPlugin::PublishDrift(const gazebo::common::Time &_time) const
+{
+  // Publish drift notification
+  ignition::msgs::Time msg;
+  msg.set_sec(_time.sec);
+  msg.set_nsec(_time.nsec);
+  this->dataPtr->driftIgnPub.Publish(msg);
 }
 

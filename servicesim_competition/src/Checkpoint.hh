@@ -44,10 +44,10 @@ namespace servicesim
     /// \brief Check whether to pause this checkpoint and return to the
     /// previous one.
     /// \return True if it should pause.
-    public: virtual bool Paused() {return false;}
+    public: bool Paused() const;
 
     /// \brief Call this the first time the checkpoint is checked.
-    public: virtual void Start();
+    public: void Start();
 
     /// \brief Get the current score for this checkpoint.
     /// \return Score
@@ -57,20 +57,40 @@ namespace servicesim
     /// \return Checkpoint's name
     public: std::string Name() const;
 
-    /// \brief True when checkpoint is complete.
-    protected: bool done{false};
+    /// \brief Pause the checkpoint, ending the current interval. Only works if
+    /// canPause is true.
+    /// \param[in] _time Sim time when paused.
+    protected: void Pause(const gazebo::common::Time &_time);
 
-    /// \brief Sim time when the checkpoint started
-    protected: gazebo::common::Time startTime;
+    /// \brief Set if this checkpoint is done. It also registers the time when
+    /// it was done.
+    /// \param[in] _done True if done
+    protected: void SetDone(const bool _done);
 
-    /// \brief Sim time when the checkpoint ended
-    protected: gazebo::common::Time endTime;
+    /// \brief Get whether this checkpoint is done
+    /// \return True if done.
+    protected: bool Done() const;
 
     /// \brief The weight for this checkpoint when scoring.
     protected: double weight{0.0};
 
     /// \brief The checkpoint's name
     protected: std::string name;
+
+    /// \brief True if it's possible to restart the checkpoint.
+    protected: bool canPause{false};
+
+    /// \brief Vector of sim time intervals when the checkpoint was
+    /// running. The first time is the beginning of the interval, the
+    /// second is the end
+    private: std::vector<std::pair<gazebo::common::Time,
+                                   gazebo::common::Time>> intervals;
+
+    /// \brief True when checkpoint is complete.
+    private: bool done{false};
+
+    /// \brief True when checkpoint is paused.
+    private: bool paused{false};
   };
 
   /// \brief A checkpoint tied to a gazebo::ContainPlugin.

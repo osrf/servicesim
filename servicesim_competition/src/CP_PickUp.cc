@@ -29,6 +29,8 @@ using namespace servicesim;
 CP_PickUp::CP_PickUp(const sdf::ElementPtr &_sdf)
     : Checkpoint(_sdf)
 {
+  this->canPause = true;
+
   // ROS transport
   if (!ros::isInitialized())
   {
@@ -47,7 +49,7 @@ CP_PickUp::CP_PickUp(const sdf::ElementPtr &_sdf)
 /////////////////////////////////////////////////
 bool CP_PickUp::Check()
 {
-  return this->done;
+  return this->Done();
 }
 
 /////////////////////////////////////////////////
@@ -72,20 +74,14 @@ bool CP_PickUp::OnPickUpRosRequest(
   if (!executed)
     gzerr << "Follow request timed out" << std::endl;
 
-  this->done = result && rep.data();
+  this->SetDone(result && rep.data());
 
-  if (!this->done)
+  if (!this->Done())
   {
     // TODO: apply penalty for bad pickup request
   }
 
-  // Set end time
-  if (this->done && this->endTime == gazebo::common::Time::Zero)
-  {
-    this->endTime = gazebo::physics::get_world()->SimTime();
-  }
-
-  _res.success = this->done;
+  _res.success = this->Done();
 
   return true;
 }

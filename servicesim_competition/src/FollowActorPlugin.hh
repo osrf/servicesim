@@ -59,6 +59,10 @@ namespace servicesim
     /// \param[out] _result
     private: void OnUnfollow(ignition::msgs::Boolean &_res, bool &_result);
 
+    /// \brief Publish an Ignition transport message with the drift time.
+    /// \param[in] _time Drift time.
+    private: void PublishDrift(const gazebo::common::Time &_time) const;
+
     /// \internal
     private: FollowActorPluginPrivate *dataPtr;
   };

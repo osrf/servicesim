@@ -39,16 +39,22 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 /////////////////////////////////////////////////
 double Checkpoint::Score() const
 {
-  if (this->startTime == gazebo::common::Time::Zero)
-    return 0.0;
+  double elapsedSeconds{0.0};
 
-  auto end = this->endTime;
+  // Iterate over all intervals
+  for (const auto &i : this->intervals)
+  {
+    auto start = i.first;
+    auto end = i.second;
 
-  // If not finished yet
-  if (end == gazebo::common::Time::Zero)
-    end = gazebo::physics::get_world()->SimTime();
+    // If not finished yet
+    if (end == gazebo::common::Time::Zero)
+    {
+      end = gazebo::physics::get_world()->SimTime();
+    }
 
-  auto elapsedSeconds = (end - this->startTime).Double();
+    elapsedSeconds += (end - start).Double();
+  }
 
   return elapsedSeconds * this->weight;
 }
@@ -56,18 +62,118 @@ double Checkpoint::Score() const
 /////////////////////////////////////////////////
 void Checkpoint::Start()
 {
-  this->startTime = gazebo::physics::get_world()->SimTime();
+  // Check if restarting
+  if (!this->canPause && this->intervals.size() > 0)
+  {
+    gzerr << "It's not possible to restart checkpoint \""
+          << this->name << "\"" << std::endl;
+    return;
+  }
 
-  gzmsg << "[ServiceSim] Started Checkpoint \"" << this->name << "\" at "
-    << this->startTime.FormattedString(gazebo::common::Time::HOURS,
-                                       gazebo::common::Time::MILLISECONDS)
-    << std::endl;
+  // Current time
+  auto time = gazebo::physics::get_world()->SimTime();
+  auto timeStr = time.FormattedString(gazebo::common::Time::HOURS,
+                                      gazebo::common::Time::MILLISECONDS);
+
+  // Message
+  if (this->intervals.empty())
+  {
+    gzmsg << "[ServiceSim] Started Checkpoint \"" << this->name << "\" at "
+          << timeStr << std::endl;
+  }
+  else if (this->done || this->paused)
+  {
+    this->done = false;
+    this->paused = false;
+    gzmsg << "[ServiceSim] Restarted Checkpoint \"" << this->name << "\" at "
+          << timeStr << std::endl;
+  }
+  else
+  {
+    gzerr << "Trying to restart checkpoint \"" << this->name
+          << "\", which was never completed or paused." << std::endl;
+    return;
+  }
+
+  // Start new interval
+  std::pair<gazebo::common::Time, gazebo::common::Time> interval(
+      time, gazebo::common::Time::Zero);
+  this->intervals.push_back(interval);
+}
+
+/////////////////////////////////////////////////
+void Checkpoint::Pause(const gazebo::common::Time &_time)
+{
+  if (this->intervals.empty())
+  {
+    gzerr << "Trying to pause checkpoint which hasn't been started."
+          << std::endl;
+    return;
+  }
+
+  // Get latest checkpoint
+  auto &interval = this->intervals.back();
+  if (interval.second != gazebo::common::Time::Zero)
+  {
+    gzerr << "Trying to pause checkpoint which is not running."
+          << std::endl;
+    return;
+  }
+  interval.second = _time;
+
+  // Set paused
+  this->paused = true;
+}
+
+/////////////////////////////////////////////////
+bool Checkpoint::Paused() const
+{
+  if (this->Done())
+    return false;
+
+  return this->paused;
 }
 
 /////////////////////////////////////////////////
 std::string Checkpoint::Name() const
 {
   return this->name;
+}
+
+/////////////////////////////////////////////////
+void Checkpoint::SetDone(const bool _done)
+{
+  // Sanity check
+  if (this->done && !_done)
+  {
+    gzerr << "Can't undo a done checkpoint!" << std::endl;
+    return;
+  }
+
+  if (this->intervals.empty())
+  {
+    gzerr << "Can't complete a checkpoint which hasn't started!" << std::endl;
+    return;
+  }
+
+  if (!_done)
+    return;
+
+  // Set end time
+  auto &interval = this->intervals.back();
+  if (interval.second == gazebo::common::Time::Zero)
+  {
+    this->done = _done;
+    interval.second = gazebo::physics::get_world()->SimTime();
+    gzmsg << "[ServiceSim] Checkpoint \"" << this->Name() << "\" complete"
+          << std::endl;
+  }
+}
+
+/////////////////////////////////////////////////
+bool Checkpoint::Done() const
+{
+  return this->done;
 }
 
 /////////////////////////////////////////////////
@@ -92,7 +198,7 @@ void ContainCheckpoint::EnableCallback(const ignition::msgs::Boolean &/*_rep*/,
 bool ContainCheckpoint::Check()
 {
   // First time checking
-  if (!this->enabled && !this->done)
+  if (!this->enabled && !this->Done())
   {
     // Setup contain subscriber
     this->ignNode.Subscribe(this->ns + "/contain",
@@ -105,8 +211,8 @@ bool ContainCheckpoint::Check()
         &ContainCheckpoint::EnableCallback, this);
   }
 
-  if (this->enabled && this->done &&
-      this->endTime == gazebo::common::Time::Zero)
+  // Done, now clean up
+  if (this->enabled && this->Done() && !this->ignNode.SubscribedTopics().empty())
   {
     // Unsubscribe
     for (auto const &sub : this->ignNode.SubscribedTopics())
@@ -117,16 +223,13 @@ bool ContainCheckpoint::Check()
     req.set_data(false);
     this->ignNode.Request(this->ns + "/enable", req,
         &ContainCheckpoint::EnableCallback, this);
-
-    // Set end time
-    this->endTime = gazebo::physics::get_world()->SimTime();
   }
 
-  return this->done;
+  return this->Done();
 }
 
 //////////////////////////////////////////////////
 void ContainCheckpoint::OnContain(const ignition::msgs::Boolean &_msg)
 {
-  this->done = _msg.data();
+  this->SetDone(_msg.data());
 }

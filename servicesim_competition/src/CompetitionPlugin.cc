@@ -162,10 +162,6 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   // If current checkpoint is complete
   if (this->dataPtr->checkpoints[this->dataPtr->current - 1]->Check())
   {
-    gzmsg << "[ServiceSim] Checkpoint ["
-          << std::to_string(this->dataPtr->current) << "] complete"
-          << std::endl;
-
     // Next checkpoint
     this->dataPtr->current++;
 
@@ -195,6 +191,14 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   // TODO: Check penalties
 
   // Publish ROS score message
+  static gazebo::common::Time lastScorePubTime = _info.simTime;
+
+  // TODO
+  const double freq = 10;
+
+  if (_info.simTime - lastScorePubTime < 1/freq)
+    return;
+
   servicesim_competition::Score msg;
 
   for (int i = 0; i < this->dataPtr->checkpoints.size(); ++i)
@@ -205,5 +209,6 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   // TODO add penalties
 
   this->dataPtr->scoreRosPub.publish(msg);
+  lastScorePubTime = _info.simTime;
 }
 
