@@ -654,6 +654,7 @@
 
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <robotNamespace>servicebot</robotNamespace>
       <legacyMode>false</legacyMode>
       <publishTf>true</publishTf>
       <publishWheelTF>true</publishWheelTF>
@@ -666,9 +667,9 @@
       <publishWheelJointState>true</publishWheelJointState>
 
       <odometryFrame>odom</odometryFrame>
-      <odometryTopic>/servicebot/odom</odometryTopic>
+      <!--odometryTopic>/servicebot/odom</odometryTopic-->
       <!--commandTopic>/servicebot/cmd_vel</commandTopic-->
-      <commandTopic>/cmd_vel</commandTopic>
+      <!--commandTopic>/cmd_vel</commandTopic-->
     </plugin>
   </gazebo>
 

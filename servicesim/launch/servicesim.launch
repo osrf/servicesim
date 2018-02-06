@@ -1,5 +1,8 @@
 <launch>
 
+  <arg name="dashboard" default="true" />
+  <arg name="controllers" default="true" />
+
   <include file="$(find servicebot_description)/launch/upload_servicebot.launch" />
 
   <include file="$(find servicesim_competition)/launch/competition.launch">
@@ -38,4 +41,13 @@
     -x -9.75 -y -17.9 -z 0.75"
   />
     <!-- -Y 1.57" -->
+<group if="$(arg controllers)">
+  <include file="$(find servicebot_control)/launch/servicebot_control.launch" />
+</group>
+<group if="$(arg dashboard)">
+  <arg name="config_file" value="$(find servicesim)/config/rviz_config.rviz"/>
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />
+  <arg name="perspective_file" value="$(find servicesim)/config/servicesim_perspective.perspective"/>
+  <node name="$(anon rqt)" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(arg perspective_file)" />
+</group>
 </launch>
