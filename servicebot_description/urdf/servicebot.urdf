@@ -2,14 +2,20 @@
 <robot name="servicebot">
   <!-- NOte: this doesnt follow REP 120 as this robot, while having a humanoid shape, will behave like a mobile base
 -->
-  <link name="virtual_base_link">
+  <!--link name="virtual_base_link">
     <visual>
       <origin rpy="0 0 -1.5707963267948966" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://servicebot_description/meshes/servicebot.obj" scale="0.01 0.01 0.01" />
       </geometry>
     </visual>
-  </link>
+  </link-->
+
+  <!--joint name="virtual_base_fixedjoint" type="fixed">
+    <parent link="virtual_base_link"/>
+    <child link="base_link"/>
+    <origin rpy="0 0 0" xyz="0 0.0 0.772"/>
+  </joint-->
 
   <!-- setting the base_link as the center of mass of the torso -->
   <link name="base_link">
@@ -31,18 +37,11 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.00001"/>
-      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+      <origin rpy="0 0 0" xyz="0.0 0 0"/>
+      <mass value="3"/>
+      <inertia ixx="0.04167984" iyy="0.04167984" izz="0.03650587" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
-
-  <joint name="virtual_base_fixedjoint" type="fixed">
-    <parent link="virtual_base_link"/>
-    <child link="base_link"/>
-    <!--origin rpy="0 0 0" xyz="0 0.00486918 0.832498"/-->
-    <!--origin rpy="0 0 0" xyz="0 0.00486918 0.78"/-->
-    <origin rpy="0 0 0" xyz="0 0.0 0.772"/>
-  </joint>
 
   <link name="head_link">
     <visual>
@@ -59,12 +58,6 @@
     <inertial>
       <mass value="0.5"/>
       <inertia ixx="0.00338" iyy="0.00338" izz="0.00338" ixy="0" ixz="0.0" iyz="0"/>
-      <!--
-      <mass value="1.0"/>
-      <inertia ixx="0.00760589" iyy="0.01" izz="0.00760589" ixy="0" ixz="0.00649234" iyz="0"/>
-      -->
-      <!--mass value="0.5"/>
-      <inertia ixx="0.00338" iyy="0.0" izz="0.00338" ixy="0" ixz="0.00338" iyz="0"/-->
     </inertial>
   </link>
 
@@ -77,10 +70,6 @@
   </joint>
 
   <link name="head_pan_link">
-    <!--inertial>
-      <mass value="1.0"/>
-      <inertia ixx="0.00760589" iyy="0.01" izz="0.00760589" ixy="0" ixz="0.00649234" iyz="0"/>
-    </inertial-->
     <inertial>
       <mass value="0.5"/>
       <!-- box model -->
@@ -119,8 +108,12 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
-      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+      <mass value="1"/>
+      <!--inertia ixx="0.00545701" iyy="0.00845138" izz="0.00759291" ixy="0" ixz="0" iyz="0"/-->
+      <!--inertia izz="0.00545701" iyy="0.00845138" ixx="0.00759291" ixy="0" ixz="0" iyz="0"/-->
+      <!--inertia iyy="0.00545701" izz="0.00845138" ixx="0.00759291" ixy="0" ixz="0" iyz="0"/-->
+      <!--inertia izz="0.00545701" ixx="0.00845138" iyy="0.00759291" ixy="0" ixz="0" iyz="0"/-->
+      <inertia ixx="0.00545701" izz="0.00845138" iyy="0.00759291" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
@@ -144,17 +137,21 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
-      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+      <origin xyz="0 0 -0.1" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="0.00886299" iyy="0.00886299" izz="0.00679615" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
-  <joint name="left_thigh_joint" type="revolute">
-    <axis xyz="0 1 0"/>
+  <joint name="left_thigh_joint" type="fixed">
     <parent link="pelvis_link"/>
     <child link="left_thigh_link"/>
-    <origin rpy="0 0 0" xyz="0.017285 0.12 -0.11"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+    <!--axis xyz="0 1 0"/-->
+    <!--origin rpy="0 0 0" xyz="0.017285 0.12 -0.11"/-->
+    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" /-->
+    <!-- fixed transform at -0.64 -->
+    <origin rpy="0.000 -0.640 0.000" xyz="0.017285 0.12 -0.11"/>
+    <!--limit effort="30" velocity="1.0" lower="-0.64" upper="-0.64" /-->
   </joint>
 
   <link name="right_thigh_link">
@@ -170,17 +167,21 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
-      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+      <origin xyz="0 0 -0.1" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="0.00886299" iyy="0.00886299" izz="0.00679615" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
-  <joint name="right_thigh_joint" type="revolute">
-    <axis xyz="0 1 0"/>
+  <joint name="right_thigh_joint" type="fixed">
     <parent link="pelvis_link"/>
     <child link="right_thigh_link"/>
-    <origin rpy="0 0 0" xyz="0.017285 -0.12 -0.11"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+    <!--axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz="0.017285 -0.12 -0.11"/-->
+    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" /-->
+    <!--limit effort="30" velocity="1.0" lower="-0.64" upper="-0.64" /-->
+    <origin rpy="0.000 -0.640 0.000" xyz="0.017285 -0.12 -0.11"/>
+
   </joint>
 
   <link name="left_upper_leg_link">
@@ -196,19 +197,22 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
-      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.00466963" iyy="0.00466963" izz="0.00280397" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
-  <joint name="left_upper_leg_joint" type="revolute">
+  <joint name="left_upper_leg_joint" type="fixed">
     <axis xyz="0 1 0"/>
     <parent link="left_thigh_link"/>
     <child link="left_upper_leg_link"/>
     <!--origin rpy="0 0 0" xyz="0.019 0.125 -0.256"/-->
     <!--origin rpy="0 0 0" xyz="0.028 0.125 -0.216"/-->
-    <origin rpy="0 0 0" xyz="0.011 0.005 -0.106"/>
-    <limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" />
+    <!--origin rpy="0 0 0" xyz="0.011 0.005 -0.106"/-->
+    <!--limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" /-->
+    <!--limit effort="30" velocity="1.0" lower="0.7853981633974483" upper="0.7853981633974483" /-->
+    <!-- fixed transfrom at 0.785 -->
+    <origin rpy="0.000 0.785 0.000" xyz="0.011 0.005 -0.106"/>
   </joint>
 
 
@@ -225,19 +229,22 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
-      <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.00466963" iyy="0.00466963" izz="0.00280397" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
-  <joint name="right_upper_leg_joint" type="revolute">
+  <joint name="right_upper_leg_joint" type="fixed">
     <axis xyz="0 1 0"/>
     <parent link="right_thigh_link"/>
     <child link="right_upper_leg_link"/>
     <!--origin rpy="0 0 0" xyz="0.019 0.125 -0.256"/-->
     <!--origin rpy="0 0 0" xyz="0.028 0.125 -0.216"/-->
-    <origin rpy="0 0 0" xyz="0.011 -0.005 -0.106"/>
-    <limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" />
+    <!-- origin rpy="0 0 0" xyz="0.011 -0.005 -0.106"/ -->
+    <!--limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" /-->
+    <!-- limit effort="30" velocity="1.0" lower="0.7853981633974483" upper="0.7853981633974483" /-->
+    <!-- fixed transform at 0.785 -->
+    <origin rpy="0.000 0.785 0.000" xyz="0.011 -0.005 -0.106"/>
   </joint>
   <!--joint name="right_upper_leg_fixedjoint" type="revolute">
     <axis xyz="0 1 0"/>
@@ -266,19 +273,21 @@
     </inertial>
   </link>
 
-  <joint name="left_foot_joint" type="revolute">
-    <axis xyz="0 1 0"/>
+  <joint name="left_foot_joint" type="fixed">
     <parent link="left_upper_leg_link"/>
     <child link="left_foot_link"/>
-    <origin rpy="0 0 0" xyz="0.03 0 -0.335"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+    <!--origin rpy="0 0 0" xyz="0.03 0 -0.335"/-->
+    <!-- axis xyz="0 1 0"/ -->
+    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" /-->
+    <!-- limit effort="30" velocity="1.0" lower="-0.16" upper="-0.16" /-->
+    <origin rpy="0.000 -0.160 0.000" xyz="0.03 0 -0.335"/>
   </joint>
 
   <link name="right_foot_link">
     <visual>
-      <origin rpy="0 0 0" xyz="0.015 0 -0.004"/>
+      <!--origin rpy="0 0 0" xyz="0.015 0 -0.004"/ -->
       <geometry>
-        <mesh filename="package://servicebot_description/meshes/CasterBracket_Left.obj" />
+        <mesh filename="package://servicebot_description/meshes/Foot_Left.obj" />
       </geometry>
     </visual>
     <collision>
@@ -292,13 +301,16 @@
     </inertial>
   </link>
 
-  <joint name="right_foot_joint" type="revolute">
-    <axis xyz="0 1 0"/>
+  <joint name="right_foot_joint" type="fixed">
+    <!--axis xyz="0 1 0"/-->
     <parent link="right_upper_leg_link"/>
     <child link="right_foot_link"/>
     <!--origin rpy="0 0 0" xyz="0.041 0 -0.19"/-->
-    <origin rpy="0 0 0" xyz="0.03 0 -0.335"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+    <!-- origin rpy="0 0 0" xyz="0.03 0 -0.335"/-->
+    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" /-->
+    <!-- limit effort="30" velocity="1.0" lower="-0.16" upper="-0.16" /-->
+    <!-- fixed transform at -0.16 -->
+    <origin rpy="0.000 -0.160 0.000" xyz="0.03 0 -0.335"/>
   </joint>
 
 <!-- Wheels -->
@@ -316,6 +328,7 @@
     </collision>
     <inertial>
       <mass value="0.3"/>
+      <!--mass value="1"/-->
       <inertia iyy="0.00211023" izz="0.00142144" ixx="0.00142144" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -339,6 +352,7 @@
       </geometry>
     </collision>
     <inertial>
+      <!--mass value="1"/-->
       <mass value="0.3"/>
       <inertia iyy="0.00211023" izz="0.00142144" ixx="0.00142144" ixy="0" ixz="0" iyz="0"/>
     </inertial>
@@ -398,7 +412,8 @@
     <axis xyz="0 1 0"/>
     <parent link="right_foot_link"/>
     <child link="right_caster_wheel_link"/>
-    <origin rpy="0 0 0" xyz="-0.14 0 -0.066"/>
+    <origin rpy="0 0 0" xyz="-0.142 0 -0.07"/>
+    <!--origin rpy="0 0 0" xyz="-0.14 0 -0.066"/-->
   </joint>
 
 
@@ -427,7 +442,8 @@
     <child link="left_shoulder_link"/>
     <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
     <origin rpy="0 0 0" xyz="0 0.1737 0.115"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+    <!--limit effort="30" velocity="1.0" lower="-3.14159265" upper="1.5707963267948966" / -->
+    <limit effort="30" velocity="1.0" lower="-0.55" upper="-00.55" />
   </joint>
 
   <link name="right_shoulder_link">
@@ -454,7 +470,8 @@
     <child link="right_shoulder_link"/>
     <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
     <origin rpy="0 0 0" xyz="0 -0.1737 0.115"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+    <!--limit effort="30" velocity="1.0" lower="-3.14159265" upper="1.5707963267948966" /-->
+    <limit effort="30" velocity="1.0" lower="-0.55" upper="-0.55" />
   </joint>
 
 
@@ -471,18 +488,21 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.2"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
-  <joint name="left_upper_arm_joint" type="fixed">
+  <joint name="left_upper_arm_joint" type="revolute">
+    <axis xyz="-1 0 0"/>
     <parent link="left_shoulder_link"/>
     <child link="left_upper_arm_link"/>
     <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
     <!--origin rpy="0 0 0" xyz="0 0.24 0.115"/-->
     <!--origin rpy="0 0 0" xyz="0 0.066 0"/ -->
     <origin rpy="0 0 0" xyz="0 0.015 0.001"/>
+    <!--limit effort="30" velocity="1.0" lower="0" upper="1.5707963267948966" / -->
+    <limit effort="30" velocity="1.0" lower="1.35" upper="1.35" />
   </joint>
 
   <link name="right_upper_arm_link">
@@ -499,17 +519,20 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.2"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
 
-  <joint name="right_upper_arm_joint" type="fixed">
+  <joint name="right_upper_arm_joint" type="revolute">
+    <axis xyz="1 0 0"/>
     <parent link="right_shoulder_link"/>
     <child link="right_upper_arm_link"/>
     <!--origin rpy="0 0 0" xyz="0 -0.24 0.115"/-->
     <!--origin rpy="0 0 0" xyz="0 -0.236 0.056"/ -->
     <origin rpy="0 0 0" xyz="0 -0.015 0.001"/>
+    <!--limit effort="30" velocity="1.0" lower="0" upper="1.5707963267948966" /-->
+    <limit effort="30" velocity="1.0" lower="1.35" upper="1.35" />
   </joint>
 
   <link name="left_elbow_attach_link">
@@ -525,7 +548,7 @@
       </geometry>
     </collision-->
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.15"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -553,7 +576,7 @@
       </geometry>
     </collision-->
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.15"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -581,7 +604,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.2"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -594,7 +617,8 @@
     <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
     <!--origin rpy="0 0 0" xyz="-0.006 0.16 0"/-->
     <origin rpy="0 0 0" xyz="-0.006 0.055 -0.001"/>
-    <limit effort="30" velocity="1.0" lower="-0.5" upper="0" />
+    <!--limit effort="30" velocity="1.0" lower="-0.5" upper="0" /-->
+    <limit effort="30" velocity="1.0" lower="-0.5" upper="-0.5" />
   </joint>
 
   <link name="right_forearm_link">
@@ -611,7 +635,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.2"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -624,7 +648,8 @@
     <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
     <!--origin rpy="0 0 0" xyz="-0.006 0.16 0"/-->
     <origin rpy="0 0 0" xyz="-0.006 -0.055 -0.001"/>
-    <limit effort="30" velocity="1.0" lower="-0.5" upper="0" />
+    <!--limit effort="30" velocity="1.0" lower="-0.5" upper="0" /-->
+    <limit effort="30" velocity="1.0" lower="-0.5" upper="-0.5" />
   </joint>
 
   <link name="left_hand_link">
@@ -640,7 +665,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.1"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -666,7 +691,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.1"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -698,7 +723,7 @@
       </geometry>
     </collision-->
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.1"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -726,7 +751,7 @@
       </geometry>
     </collision>
     <inertial>
-      <mass value="0.001"/>
+      <mass value="0.1"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>

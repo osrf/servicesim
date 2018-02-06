@@ -7,5 +7,36 @@
   </include>
 
   <!--node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x -9.75 -y -17.9 -z 0.83 -Y 1.57  -model servicebot" /-->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x 0 -y 0 -z 0.837 -Y 1.57  -model servicebot" />
+  <!-- -x 0 -y 0 -z 0.837 -Y 1.57 -->
+  <!--node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
+    -urdf
+    -param robot_description
+    -model servicebot
+    -J left_shoulder_joint -0.55
+    -J left_upper_arm_joint 1.35
+    -J left_elbow_joint -0.5
+    -J right_shoulder_joint -0.55
+    -J right_upper_arm_joint 1.35
+    -J right_elbow_joint -0.5
+    -J left_thigh_joint -0.64
+    -J left_upper_leg_joint 0.79
+    -J left_foot_joint -0.16
+    -J right_thigh_joint -0.64
+    -J right_upper_leg_joint 0.79
+    -J right_foot_joint -0.16
+    -x 0 -y 0 -z 0.75"
+  /-->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
+    -urdf
+    -param robot_description
+    -model servicebot
+    -J left_shoulder_joint -0.55
+    -J left_upper_arm_joint 1.35
+    -J left_elbow_joint -0.5
+    -J right_shoulder_joint -0.55
+    -J right_upper_arm_joint 1.35
+    -J right_elbow_joint -0.5
+    -x 0 -y 0 -z 0.75"
+  />
+    <!-- -Y 1.57" -->
 </launch>
