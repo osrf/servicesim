@@ -2,20 +2,6 @@
 <robot name="servicebot">
   <!-- NOte: this doesnt follow REP 120 as this robot, while having a humanoid shape, will behave like a mobile base
 -->
-  <!--link name="virtual_base_link">
-    <visual>
-      <origin rpy="0 0 -1.5707963267948966" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://servicebot_description/meshes/servicebot.obj" scale="0.01 0.01 0.01" />
-      </geometry>
-    </visual>
-  </link-->
-
-  <!--joint name="virtual_base_fixedjoint" type="fixed">
-    <parent link="virtual_base_link"/>
-    <child link="base_link"/>
-    <origin rpy="0 0 0" xyz="0 0.0 0.772"/>
-  </joint-->
 
   <!-- setting the base_link as the center of mass of the torso -->
   <link name="base_link">
@@ -72,24 +58,14 @@
   <link name="head_pan_link">
     <inertial>
       <mass value="0.5"/>
-      <!-- box model -->
-      <!--inertia ixx="0.0046" iyy="0.0" izz="0.0046" ixy="0" ixz="0.0046" iyz="0"/-->
-      <!-- sphere model -->
       <inertia ixx="0.00338" iyy="0.00338" izz="0.00338" ixy="0" ixz="0.0" iyz="0"/>
-      <!--mass value="1.0"/>
-      <inertia ixx="0.00760589" iyy="0.01" izz="0.00760589" ixy="0" ixz="0.00649234" iyz="0"/-->
     </inertial>
-    <!--inertial>
-      <mass value="0.0001"/>
-      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
-    </inertial-->
   </link>
 
   <joint name="head_pan_joint" type="revolute">
     <axis xyz="0 0 -1"/>
     <parent link="base_link"/>
     <child link="head_pan_link"/>
-    <!--origin rpy="0 0 0" xyz="0 0.009 0.250" /-->
     <origin rpy="0 0 0" xyz="0 0 0.31" />
     <limit effort="30" velocity="1.0" lower="-1.5707963267948966" upper="1.5707963267948966" />
   </joint>
@@ -101,7 +77,6 @@
       </geometry>
     </visual>
     <collision>
-      <!--origin rpy="0 0 0" xyz="0 0 0.05"/-->
       <origin rpy="0 0 0" xyz="0 0 -0.05"/>
       <geometry>
         <cylinder radius="0.1" length="0.18"/>
@@ -109,10 +84,6 @@
     </collision>
     <inertial>
       <mass value="1"/>
-      <!--inertia ixx="0.00545701" iyy="0.00845138" izz="0.00759291" ixy="0" ixz="0" iyz="0"/-->
-      <!--inertia izz="0.00545701" iyy="0.00845138" ixx="0.00759291" ixy="0" ixz="0" iyz="0"/-->
-      <!--inertia iyy="0.00545701" izz="0.00845138" ixx="0.00759291" ixy="0" ixz="0" iyz="0"/-->
-      <!--inertia izz="0.00545701" ixx="0.00845138" iyy="0.00759291" ixy="0" ixz="0" iyz="0"/-->
       <inertia ixx="0.00545701" izz="0.00845138" iyy="0.00759291" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -120,7 +91,6 @@
   <joint name="pelvis_fixedjoint" type="fixed">
     <parent link="base_link"/>
     <child link="pelvis_link"/>
-    <!--origin rpy="0 0 0" xyz="0 0.00 -0.182"/-->
     <origin rpy="0 0 0" xyz="0 0.00 -0.12"/>
   </joint>
 
@@ -146,12 +116,7 @@
   <joint name="left_thigh_joint" type="fixed">
     <parent link="pelvis_link"/>
     <child link="left_thigh_link"/>
-    <!--axis xyz="0 1 0"/-->
-    <!--origin rpy="0 0 0" xyz="0.017285 0.12 -0.11"/-->
-    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" /-->
-    <!-- fixed transform at -0.64 -->
     <origin rpy="0.000 -0.640 0.000" xyz="0.017285 0.12 -0.11"/>
-    <!--limit effort="30" velocity="1.0" lower="-0.64" upper="-0.64" /-->
   </joint>
 
   <link name="right_thigh_link">
@@ -176,10 +141,6 @@
   <joint name="right_thigh_joint" type="fixed">
     <parent link="pelvis_link"/>
     <child link="right_thigh_link"/>
-    <!--axis xyz="0 1 0"/>
-    <origin rpy="0 0 0" xyz="0.017285 -0.12 -0.11"/-->
-    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" /-->
-    <!--limit effort="30" velocity="1.0" lower="-0.64" upper="-0.64" /-->
     <origin rpy="0.000 -0.640 0.000" xyz="0.017285 -0.12 -0.11"/>
 
   </joint>
@@ -206,12 +167,6 @@
     <axis xyz="0 1 0"/>
     <parent link="left_thigh_link"/>
     <child link="left_upper_leg_link"/>
-    <!--origin rpy="0 0 0" xyz="0.019 0.125 -0.256"/-->
-    <!--origin rpy="0 0 0" xyz="0.028 0.125 -0.216"/-->
-    <!--origin rpy="0 0 0" xyz="0.011 0.005 -0.106"/-->
-    <!--limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" /-->
-    <!--limit effort="30" velocity="1.0" lower="0.7853981633974483" upper="0.7853981633974483" /-->
-    <!-- fixed transfrom at 0.785 -->
     <origin rpy="0.000 0.785 0.000" xyz="0.011 0.005 -0.106"/>
   </joint>
 
@@ -238,26 +193,11 @@
     <axis xyz="0 1 0"/>
     <parent link="right_thigh_link"/>
     <child link="right_upper_leg_link"/>
-    <!--origin rpy="0 0 0" xyz="0.019 0.125 -0.256"/-->
-    <!--origin rpy="0 0 0" xyz="0.028 0.125 -0.216"/-->
-    <!-- origin rpy="0 0 0" xyz="0.011 -0.005 -0.106"/ -->
-    <!--limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" /-->
-    <!-- limit effort="30" velocity="1.0" lower="0.7853981633974483" upper="0.7853981633974483" /-->
-    <!-- fixed transform at 0.785 -->
     <origin rpy="0.000 0.785 0.000" xyz="0.011 -0.005 -0.106"/>
   </joint>
-  <!--joint name="right_upper_leg_fixedjoint" type="revolute">
-    <axis xyz="0 1 0"/>
-    <parent link="pelvis_link"/>
-    <child link="right_upper_leg_link"/>
-    <origin rpy="0 0 0" xyz="0.028 -0.125 -0.216"/>
-    <limit effort="30" velocity="1.0" lower="-0.15" upper="0.7853981633974483" />
-  </joint-->
-
 
   <link name="left_foot_link">
     <visual>
-      <!--origin rpy="0 0 0" xyz="0.015 0 -0.004"/-->
       <geometry>
         <mesh filename="package://servicebot_description/meshes/Foot_Left.obj" />
       </geometry>
@@ -276,16 +216,11 @@
   <joint name="left_foot_joint" type="fixed">
     <parent link="left_upper_leg_link"/>
     <child link="left_foot_link"/>
-    <!--origin rpy="0 0 0" xyz="0.03 0 -0.335"/-->
-    <!-- axis xyz="0 1 0"/ -->
-    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" /-->
-    <!-- limit effort="30" velocity="1.0" lower="-0.16" upper="-0.16" /-->
     <origin rpy="0.000 -0.160 0.000" xyz="0.03 0 -0.335"/>
   </joint>
 
   <link name="right_foot_link">
     <visual>
-      <!--origin rpy="0 0 0" xyz="0.015 0 -0.004"/ -->
       <geometry>
         <mesh filename="package://servicebot_description/meshes/Foot_Left.obj" />
       </geometry>
@@ -302,14 +237,8 @@
   </link>
 
   <joint name="right_foot_joint" type="fixed">
-    <!--axis xyz="0 1 0"/-->
     <parent link="right_upper_leg_link"/>
     <child link="right_foot_link"/>
-    <!--origin rpy="0 0 0" xyz="0.041 0 -0.19"/-->
-    <!-- origin rpy="0 0 0" xyz="0.03 0 -0.335"/-->
-    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" /-->
-    <!-- limit effort="30" velocity="1.0" lower="-0.16" upper="-0.16" /-->
-    <!-- fixed transform at -0.16 -->
     <origin rpy="0.000 -0.160 0.000" xyz="0.03 0 -0.335"/>
   </joint>
 
@@ -328,7 +257,6 @@
     </collision>
     <inertial>
       <mass value="0.3"/>
-      <!--mass value="1"/-->
       <inertia iyy="0.00211023" izz="0.00142144" ixx="0.00142144" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
@@ -352,7 +280,6 @@
       </geometry>
     </collision>
     <inertial>
-      <!--mass value="1"/-->
       <mass value="0.3"/>
       <inertia iyy="0.00211023" izz="0.00142144" ixx="0.00142144" ixy="0" ixz="0" iyz="0"/>
     </inertial>
@@ -373,7 +300,6 @@
     </visual>
     <collision>
       <geometry>
-        <!--sphere radius="0.032"/-->
         <sphere radius="0.033"/>
       </geometry>
     </collision>
@@ -398,7 +324,6 @@
     </visual>
     <collision>
       <geometry>
-        <!--sphere radius="0.032"/-->
         <sphere radius="0.033"/>
       </geometry>
     </collision>
@@ -413,7 +338,6 @@
     <parent link="right_foot_link"/>
     <child link="right_caster_wheel_link"/>
     <origin rpy="0 0 0" xyz="-0.142 0 -0.07"/>
-    <!--origin rpy="0 0 0" xyz="-0.14 0 -0.066"/-->
   </joint>
 
 
@@ -440,9 +364,7 @@
     <axis xyz="0 1 0"/>
     <parent link="base_link"/>
     <child link="left_shoulder_link"/>
-    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
     <origin rpy="0 0 0" xyz="0 0.1737 0.115"/>
-    <!--limit effort="30" velocity="1.0" lower="-3.14159265" upper="1.5707963267948966" / -->
     <limit effort="30" velocity="1.0" lower="-0.55" upper="-00.55" />
   </joint>
 
@@ -468,9 +390,7 @@
     <axis xyz="0 1 0"/>
     <parent link="base_link"/>
     <child link="right_shoulder_link"/>
-    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
     <origin rpy="0 0 0" xyz="0 -0.1737 0.115"/>
-    <!--limit effort="30" velocity="1.0" lower="-3.14159265" upper="1.5707963267948966" /-->
     <limit effort="30" velocity="1.0" lower="-0.55" upper="-0.55" />
   </joint>
 
@@ -497,11 +417,7 @@
     <axis xyz="-1 0 0"/>
     <parent link="left_shoulder_link"/>
     <child link="left_upper_arm_link"/>
-    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
-    <!--origin rpy="0 0 0" xyz="0 0.24 0.115"/-->
-    <!--origin rpy="0 0 0" xyz="0 0.066 0"/ -->
     <origin rpy="0 0 0" xyz="0 0.015 0.001"/>
-    <!--limit effort="30" velocity="1.0" lower="0" upper="1.5707963267948966" / -->
     <limit effort="30" velocity="1.0" lower="1.35" upper="1.35" />
   </joint>
 
@@ -528,10 +444,7 @@
     <axis xyz="1 0 0"/>
     <parent link="right_shoulder_link"/>
     <child link="right_upper_arm_link"/>
-    <!--origin rpy="0 0 0" xyz="0 -0.24 0.115"/-->
-    <!--origin rpy="0 0 0" xyz="0 -0.236 0.056"/ -->
     <origin rpy="0 0 0" xyz="0 -0.015 0.001"/>
-    <!--limit effort="30" velocity="1.0" lower="0" upper="1.5707963267948966" /-->
     <limit effort="30" velocity="1.0" lower="1.35" upper="1.35" />
   </joint>
 
@@ -541,12 +454,6 @@
         <mesh filename="package://servicebot_description/meshes/Elbow_Left.obj" />
       </geometry>
     </visual>
-    <!--collision>
-      <origin rpy="1.5707963267948966 0 0" xyz="0 0.02 0.0"/>
-      <geometry>
-        <cylinder radius="0.065" length="0.22"/>
-      </geometry>
-    </collision-->
     <inertial>
       <mass value="0.15"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
@@ -556,9 +463,6 @@
   <joint name="left_elbow_attach_joint" type="fixed">
     <parent link="left_upper_arm_link"/>
     <child link="left_elbow_attach_link"/>
-    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
-    <!--origin rpy="0 0 0" xyz="0 0.24 0.115"/-->
-    <!--origin rpy="0 0 0" xyz="0 0.066 0"/ -->
     <origin rpy="0 0 0" xyz="0 0.105 0.001"/>
   </joint>
 
@@ -569,12 +473,6 @@
         <mesh filename="package://servicebot_description/meshes/Elbow_Left.obj" />
       </geometry>
     </visual>
-    <!--collision>
-      <origin rpy="1.5707963267948966 0 0" xyz="0 0.02 0.0"/>
-      <geometry>
-        <cylinder radius="0.065" length="0.22"/>
-      </geometry>
-    </collision-->
     <inertial>
       <mass value="0.15"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
@@ -584,9 +482,6 @@
   <joint name="right_elbow_attach_joint" type="fixed">
     <parent link="right_upper_arm_link"/>
     <child link="right_elbow_attach_link"/>
-    <!--origin rpy="0 0 0" xyz="0 0.236 0.056"/-->
-    <!--origin rpy="0 0 0" xyz="0 0.24 0.115"/-->
-    <!--origin rpy="0 0 0" xyz="0 0.066 0"/ -->
     <origin rpy="0 0 0" xyz="0 -0.105 0.001"/>
   </joint>
 
@@ -613,11 +508,7 @@
     <axis xyz="0 0 1"/>
     <parent link="left_elbow_attach_link"/>
     <child link="left_forearm_link"/>
-    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
-    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
-    <!--origin rpy="0 0 0" xyz="-0.006 0.16 0"/-->
     <origin rpy="0 0 0" xyz="-0.006 0.055 -0.001"/>
-    <!--limit effort="30" velocity="1.0" lower="-0.5" upper="0" /-->
     <limit effort="30" velocity="1.0" lower="-0.5" upper="-0.5" />
   </joint>
 
@@ -644,11 +535,7 @@
     <axis xyz="0 0 -1"/>
     <parent link="right_elbow_attach_link"/>
     <child link="right_forearm_link"/>
-    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
-    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
-    <!--origin rpy="0 0 0" xyz="-0.006 0.16 0"/-->
     <origin rpy="0 0 0" xyz="-0.006 -0.055 -0.001"/>
-    <!--limit effort="30" velocity="1.0" lower="-0.5" upper="0" /-->
     <limit effort="30" velocity="1.0" lower="-0.5" upper="-0.5" />
   </joint>
 
@@ -673,8 +560,6 @@
   <joint name="left_hand_fixedjoint" type="fixed">
     <parent link="left_forearm_link"/>
     <child link="left_hand_link"/>
-    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
-    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
     <origin rpy="0 0 0" xyz="0.005 0.095 0.0"/>
   </joint>
 
@@ -699,8 +584,6 @@
   <joint name="right_hand_fixedjoint" type="fixed">
     <parent link="right_forearm_link"/>
     <child link="right_hand_link"/>
-    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
-    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
     <origin rpy="0 0 0" xyz="0.005 -0.095 0.0"/>
   </joint>
 
@@ -716,12 +599,6 @@
         <box size="0.07 0.12 0.04"/>
       </geometry>
     </collision>
-    <!--collision>
-      <origin rpy="1.5707963267948966 0 0" xyz="0 0.0 0.0"/>
-      <geometry>
-        <cylinder radius="0.06" length="0.3"/>
-      </geometry>
-    </collision-->
     <inertial>
       <mass value="0.1"/>
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
@@ -732,8 +609,6 @@
     <axis xyz="1 0 0"/>
     <parent link="left_hand_link"/>
     <child link="left_lower_hand_link"/>
-    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
-    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
     <origin rpy="0 0 0" xyz="0.00 0.02 -0.025"/>
     <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0" />
   </joint>
@@ -759,8 +634,6 @@
     <axis xyz="-1 0 0"/>
     <parent link="right_hand_link"/>
     <child link="right_lower_hand_link"/>
-    <!--origin rpy="0 0 0" xyz="0.006 0.179 0"/-->
-    <!--origin rpy="0 0 0" xyz="-0.006 0.182 0"/-->
     <origin rpy="0 0 0" xyz="0.00 -0.02 -0.025"/>
     <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0" />
   </joint>
@@ -907,19 +780,6 @@
          <robotNamespace></robotNamespace>
          <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
      </plugin>
-  </gazebo>
--->
-<!-- Tortoisebot model -->
-<!--
-  <gazebo>
-    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-      <leftJoint>left_wheel_joint</leftJoint>
-      <rightJoint>right_wheel_joint</rightJoint>
-      <robotBaseFrame>base_link</robotBaseFrame>
-      <wheelSeparation>0.25</wheelSeparation>
-      <wheelDiameter>0.07</wheelDiameter>
-      <publishWheelJointState>true</publishWheelJointState>
-    </plugin>
   </gazebo>
 -->
 </robot>
