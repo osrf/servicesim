@@ -52,7 +52,7 @@
     <parent link="head_pan_link"/>
     <child link="head_link"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
+    <limit effort="200" velocity="1.0" lower="-0.7853981633974483" upper="0.7853981633974483" />
   </joint>
 
   <link name="head_pan_link">
@@ -67,7 +67,7 @@
     <parent link="base_link"/>
     <child link="head_pan_link"/>
     <origin rpy="0 0 0" xyz="0 0 0.31" />
-    <limit effort="30" velocity="1.0" lower="-1.5707963267948966" upper="1.5707963267948966" />
+    <limit effort="200" velocity="1.0" lower="-1.5707963267948966" upper="1.5707963267948966" />
   </joint>
 
   <link name="pelvis_link">
@@ -639,6 +639,19 @@
   </joint>
 
 
+  <link name="front_camera_frame">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="front_camera_fixedjoint" type="fixed">
+    <parent link="head_link"/>
+    <child link="front_camera_frame"/>
+    <!--origin rpy="-1.57079632679 0 -1.57079632679" xyz="0.1 0 0"/-->
+    <origin rpy="0 0 0" xyz="0.1 0 0"/>
+  </joint>
+
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
       <legacyMode>false</legacyMode>
@@ -649,10 +662,53 @@
       <robotBaseFrame>base_link</robotBaseFrame>
       <wheelSeparation>0.25</wheelSeparation>
       <wheelDiameter>0.206</wheelDiameter>
+      <wheelAcceleration>0.3</wheelAcceleration>
       <publishWheelJointState>true</publishWheelJointState>
+
+      <odometryFrame>odom</odometryFrame>
+      <odometryTopic>/servicebot/odom</odometryTopic>
+      <!--commandTopic>/servicebot/cmd_vel</commandTopic-->
+      <commandTopic>/cmd_vel</commandTopic>
     </plugin>
   </gazebo>
 
+  <gazebo reference="front_camera_frame">
+    <sensor type="camera" name="FrontCamera">
+        <update_rate>24.0</update_rate>
+        <camera name="fron_camera">
+            <horizontal_fov>1.06290551</horizontal_fov>
+            <image>
+                <width>640</width>
+                <height>480</height>
+                <format>R8G8B8</format>
+            </image>
+            <clip>
+                <near>0.3</near>
+                <far>500</far>
+            </clip>
+            <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.007</stddev>
+            </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+            <robotNamespace>servicebot</robotNamespace>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>24.0</updateRate>
+            <cameraName>camera/front</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>front_camera_frame</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>-0.0545211</distortionK1>
+            <distortionK2>0.06919734</distortionK2>
+            <distortionK3>-0.0241095</distortionK3>
+            <distortionT1>-0.0112245</distortionT1>
+            <distortionT2>0.0</distortionT2>
+        </plugin>
+    </sensor>
+  </gazebo>
   <gazebo reference="base_link">
     <mu1>0.5</mu1>
     <mu2>0.5</mu2>
@@ -752,34 +808,34 @@
 
 
 <!-- Transmissions -->
-<!--
 	<transmission name="head_tilt_Transmission">
 		<type>transmission_interface/SimpleTransmission</type>
 		<joint name="head_tilt_joint">
-        	<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+       	<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
+			  <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 		</joint>
         <actuator name="head_tilt_Motor">
-			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
+			  <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			<mechanicalReduction>1</mechanicalReduction>
 		</actuator>
 	</transmission>
 	<transmission name="head_pan_Transmission">
 		<type>transmission_interface/SimpleTransmission</type>
 		<joint name="head_pan_joint">
-        	<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        	<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
+			    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 		</joint>
         <actuator name="head_pan_Motor">
+			<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
 			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			<mechanicalReduction>1</mechanicalReduction>
 		</actuator>
 	</transmission>
--->
-<!--
   <gazebo>
      <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
-         <robotNamespace></robotNamespace>
+         <robotNamespace>servicebot</robotNamespace>
          <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
      </plugin>
   </gazebo>
--->
 </robot>
