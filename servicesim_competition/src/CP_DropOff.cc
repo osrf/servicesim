@@ -35,7 +35,6 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf)
   std::function<void(const ignition::msgs::Time &)> driftCb =
       [this](const ignition::msgs::Time &_msg)
   {
-    gzdbg << "DRIFT!" << std::endl;
     // Drift time
     gazebo::common::Time time;
     time.Set(_msg.sec(), _msg.nsec());

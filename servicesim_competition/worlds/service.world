@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 7785195
+  Seed: 4281222
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
@@ -11,15 +11,22 @@
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
       <pick_up_location>
+        -12.7
+        -18.78
+        1.19
+        1.54
         0
-        0
-        0
-        0
-        0
-        0
+        1.9
       </pick_up_location>
 
-      <drop_off_location>0 0 0 0 0 0</drop_off_location>
+      <drop_off_location>
+        -12.65
+        -13.38
+        0
+        0
+        0
+        0
+      </drop_off_location>
 
       <guest_name>guest</guest_name>
 
@@ -53,19 +60,19 @@
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
+        -12.7
+        -18.78
+        1.19
+        1.54
         0
-        0
-        0
-        0
-        0
-        0
+        1.9
       </pose>
       <geometry>
         <box>
           <size>
-            1
-            1
-            1
+            4
+            4
+            10
           </size>
         </box>
       </geometry>
@@ -134,7 +141,7 @@
       </pose>
 
       <skin>
-        <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
       </skin>
 
       <animation name="animation">
@@ -161,67 +168,69 @@
       <plugin name="trajectory" filename="libFollowActorPlugin.so">
         <ignore_obstacle>willowgarage</ignore_obstacle>
         <ignore_obstacle>ground_collision</ignore_obstacle>
+        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
+        <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>21</drift_time>
+          <drift_time>88</drift_time>
         
-          <drift_time>204</drift_time>
+          <drift_time>233</drift_time>
         
-          <drift_time>470</drift_time>
+          <drift_time>490</drift_time>
         
-          <drift_time>749</drift_time>
+          <drift_time>714</drift_time>
         
-          <drift_time>911</drift_time>
+          <drift_time>758</drift_time>
         
-          <drift_time>1152</drift_time>
+          <drift_time>874</drift_time>
         
-          <drift_time>1400</drift_time>
+          <drift_time>1085</drift_time>
         
-          <drift_time>1507</drift_time>
+          <drift_time>1239</drift_time>
         
-          <drift_time>1552</drift_time>
+          <drift_time>1416</drift_time>
         
-          <drift_time>1655</drift_time>
+          <drift_time>1486</drift_time>
         
-          <drift_time>1777</drift_time>
+          <drift_time>1509</drift_time>
         
-          <drift_time>1872</drift_time>
+          <drift_time>1790</drift_time>
         
-          <drift_time>1921</drift_time>
+          <drift_time>1809</drift_time>
         
-          <drift_time>1928</drift_time>
+          <drift_time>1884</drift_time>
         
-          <drift_time>2057</drift_time>
+          <drift_time>1961</drift_time>
         
-          <drift_time>2234</drift_time>
+          <drift_time>2140</drift_time>
         
-          <drift_time>2530</drift_time>
+          <drift_time>2192</drift_time>
         
-          <drift_time>2773</drift_time>
+          <drift_time>2215</drift_time>
         
-          <drift_time>2912</drift_time>
+          <drift_time>2280</drift_time>
         
-          <drift_time>3088</drift_time>
+          <drift_time>2307</drift_time>
         
-          <drift_time>3133</drift_time>
+          <drift_time>2587</drift_time>
         
-          <drift_time>3182</drift_time>
+          <drift_time>2764</drift_time>
         
-          <drift_time>3400</drift_time>
+          <drift_time>2961</drift_time>
         
-          <drift_time>3415</drift_time>
+          <drift_time>3218</drift_time>
         
-          <drift_time>3555</drift_time>
+          <drift_time>3298</drift_time>
         
-          <drift_time>3738</drift_time>
+          <drift_time>3447</drift_time>
         
-          <drift_time>3968</drift_time>
+          <drift_time>3611</drift_time>
         
-          <drift_time>4151</drift_time>
+          <drift_time>3660</drift_time>
         
-          <drift_time>4379</drift_time>
+          <drift_time>3856</drift_time>
         
-          <drift_time>4572</drift_time>
+          <drift_time>4061</drift_time>
         
 
       </plugin>
@@ -236,8 +245,8 @@
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
-    -9.32582
-    -15.9673
+    -9.201666
+    -7.601102
     1.2138
     1.57
     0.0
@@ -245,7 +254,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -254,15 +263,6 @@
   </animation>
 
   <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
-    
-      <target>
-        -9.32582
-        -15.9673
-        1.2138
-        1.57
-        0.0
-        -0.22373
-      </target>
     
       <target>
         -9.201666
@@ -318,10 +318,21 @@
         -0.22373
       </target>
     
+      <target>
+        -9.201666
+        -7.601102
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
 
     <velocity>1.5</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
+    <!-- FIXME: servicebot's bounding box is huge and always colliding -->
+    <ignore_obstacle>servicebot</ignore_obstacle>
 
   </plugin>
 
@@ -408,9 +419,11 @@
       </target>
     
 
-    <velocity>1.1915077474338918</velocity>
+    <velocity>1.0558721736123509</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
+    <!-- FIXME: servicebot's bounding box is huge and always colliding -->
+    <ignore_obstacle>servicebot</ignore_obstacle>
 
   </plugin>
 
@@ -439,7 +452,7 @@
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->

@@ -118,8 +118,11 @@
 
   # Pickup location
   # TODO: Use room name once we have rooms
-  pickup_pose = [0, 0, 0, 0, 0, 0]
-  pickup_size = [1, 1, 1]
+  pickup_pose = guest_pose
+  pickup_size = [4, 4, 10]
+
+  dropoff_pose = [-12.65, -13.38, 0, 0, 0, 0]
+  dropoff_size = [3.5, 2, 10]
 
   ###############################################
   #                                             #
@@ -153,7 +156,14 @@
         <%= pickup_pose[5] %>
       </pick_up_location>
 
-      <drop_off_location>0 0 0 0 0 0</drop_off_location>
+      <drop_off_location>
+        <%= dropoff_pose[0] %>
+        <%= dropoff_pose[1] %>
+        <%= dropoff_pose[2] %>
+        <%= dropoff_pose[3] %>
+        <%= dropoff_pose[4] %>
+        <%= dropoff_pose[5] %>
+      </drop_off_location>
 
       <guest_name><%= guest_name %></guest_name>
 
@@ -295,6 +305,8 @@
       <plugin name="trajectory" filename="libFollowActorPlugin.so">
         <ignore_obstacle>willowgarage</ignore_obstacle>
         <ignore_obstacle>ground_collision</ignore_obstacle>
+        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
+        <ignore_obstacle>servicebot</ignore_obstacle>
 
         <% for time in drift_times %>
           <drift_time><%= time.to_s %></drift_time>

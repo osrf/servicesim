@@ -150,14 +150,14 @@ void Checkpoint::SetDone(const bool _done)
     return;
   }
 
+  if (!_done)
+    return;
+
   if (this->intervals.empty())
   {
     gzerr << "Can't complete a checkpoint which hasn't started!" << std::endl;
     return;
   }
-
-  if (!_done)
-    return;
 
   // Set end time
   auto &interval = this->intervals.back();

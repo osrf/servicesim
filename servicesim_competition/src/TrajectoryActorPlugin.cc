@@ -120,7 +120,8 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
     auto ignoreElem = _sdf->GetElement("ignore_obstacle");
     while (ignoreElem)
     {
-      this->dataPtr->ignoreModels.push_back(ignoreElem->Get<std::string>());
+      auto name = ignoreElem->Get<std::string>();
+      this->dataPtr->ignoreModels.push_back(name);
       ignoreElem = ignoreElem->GetNextElement("ignore_obstacle");
     }
   }
