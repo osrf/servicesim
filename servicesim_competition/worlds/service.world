@@ -1,7 +1,9 @@
+
+<!--
+  Generated from service.world.erb
+  Seed: 1958619
+-->
 <?xml version="1.0" ?>
-
-
-<!-- Seed: 7630238 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -54,6 +56,116 @@
       <uri>model://willowgarage</uri>
     </include>
 
+    <!-- Guest -->
+    <actor name="guest">
+
+      <!-- Starting pose, nice for when the world is reset -->
+      <pose>
+        -12.7
+        -18.78
+        1.19
+        1.54
+        0
+        1.9
+      </pose>
+
+      <skin>
+        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+      </skin>
+
+      <animation name="animation">
+        <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+      </animation>
+
+      <!-- Need one waypoint to idle at -->
+      <script>
+        <trajectory id='0' type='animation'>
+          <waypoint>
+            <time>100</time>
+              <pose>
+                -12.7
+                -18.78
+                1.19
+                1.54
+                0
+                1.9
+              </pose>
+          </waypoint>
+        </trajectory>
+      </script>
+
+      <plugin name="trajectory" filename="libFollowActorPlugin.so">
+        <ignore_obstacle>willowgarage</ignore_obstacle>
+        <ignore_obstacle>ground_collision</ignore_obstacle>
+        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
+        <ignore_obstacle>servicebot</ignore_obstacle>
+
+        
+          <drift_time>223</drift_time>
+        
+          <drift_time>477</drift_time>
+        
+          <drift_time>556</drift_time>
+        
+          <drift_time>664</drift_time>
+        
+          <drift_time>871</drift_time>
+        
+          <drift_time>880</drift_time>
+        
+          <drift_time>1048</drift_time>
+        
+          <drift_time>1266</drift_time>
+        
+          <drift_time>1548</drift_time>
+        
+          <drift_time>1603</drift_time>
+        
+          <drift_time>1730</drift_time>
+        
+          <drift_time>1839</drift_time>
+        
+          <drift_time>1945</drift_time>
+        
+          <drift_time>2124</drift_time>
+        
+          <drift_time>2311</drift_time>
+        
+          <drift_time>2554</drift_time>
+        
+          <drift_time>2787</drift_time>
+        
+          <drift_time>3075</drift_time>
+        
+          <drift_time>3288</drift_time>
+        
+          <drift_time>3429</drift_time>
+        
+          <drift_time>3499</drift_time>
+        
+          <drift_time>3759</drift_time>
+        
+          <drift_time>4020</drift_time>
+        
+          <drift_time>4185</drift_time>
+        
+          <drift_time>4347</drift_time>
+        
+          <drift_time>4620</drift_time>
+        
+          <drift_time>4740</drift_time>
+        
+          <drift_time>4948</drift_time>
+        
+          <drift_time>5238</drift_time>
+        
+          <drift_time>5256</drift_time>
+        
+
+      </plugin>
+
+    </actor>
+
     <!-- Trajectory actors -->
     
       
@@ -71,7 +183,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -234,7 +346,7 @@
       </target>
     
 
-    <velocity>1.1947813060411603</velocity>
+    <velocity>1.089215301820019</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
 
@@ -265,7 +377,7 @@
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->
