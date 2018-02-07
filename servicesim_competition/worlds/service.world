@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 
-<!-- Seed: 7630238 -->
+<!-- Seed: 4825069 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -50,9 +50,27 @@
     </model>
 
     <!-- Office -->
-    <include>
-      <uri>model://willowgarage</uri>
-    </include>
+    <model name="office">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/meeting_room_small.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/meeting_room_small.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
 
     <!-- Trajectory actors -->
     
@@ -71,7 +89,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -234,7 +252,7 @@
       </target>
     
 
-    <velocity>1.1947813060411603</velocity>
+    <velocity>0.9788527863762095</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
 

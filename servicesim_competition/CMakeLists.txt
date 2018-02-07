@@ -70,6 +70,12 @@ install(TARGETS ${trajectory_actor_plugin_name}
 ## Install ##
 #############
 
-install(DIRECTORY launch models worlds
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/
+install(
+  DIRECTORY
+    launch
+    media
+    models
+    worlds
+  DESTINATION
+    ${CATKIN_PACKAGE_SHARE_DESTINATION}/
 )

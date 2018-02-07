@@ -144,9 +144,27 @@
     </model>
 
     <!-- Office -->
-    <include>
-      <uri>model://willowgarage</uri>
-    </include>
+    <model name="office">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/meeting_room_small.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/meeting_room_small.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
 
     <!-- Trajectory actors -->
     <%
