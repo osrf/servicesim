@@ -236,10 +236,8 @@ bool FollowActorPlugin::ObstacleOnTheWay() const
     auto bb = model->BoundingBox();
 
     // Models without collision have invalid boxes
-    if (!bb.Min().IsFinite() || bb.Max().IsFinite())
+    if (!bb.Min().IsFinite() || !bb.Max().IsFinite())
       continue;
-
-gzdbg << model->GetName() << "   " << bb << std::endl;
 
     // Increase box by margin
     bb.Min() -= ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
