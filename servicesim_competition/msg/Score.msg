@@ -1,5 +1,8 @@
-# Array with the score for each checkpoint
+# Array with the current score for each checkpoint
 float64[] checkpoints
 
-# Array with the total penalty count
-uint8 penalties
+# Array with all the current penalties
+float64[] penalties
+
+# Current total score
+float64 score

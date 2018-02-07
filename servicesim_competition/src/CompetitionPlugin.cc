@@ -193,20 +193,24 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   // Publish ROS score message
   static gazebo::common::Time lastScorePubTime = _info.simTime;
 
-  // TODO
+  // TODO configure freq through SDF
   const double freq = 10;
 
   if (_info.simTime - lastScorePubTime < 1/freq)
     return;
 
   servicesim_competition::Score msg;
-
+  double total{0.0};
   for (int i = 0; i < this->dataPtr->checkpoints.size(); ++i)
   {
-    msg.checkpoints.push_back(this->dataPtr->checkpoints[i]->Score());
+    auto score = this->dataPtr->checkpoints[i]->Score();
+    msg.checkpoints.push_back(score);
+    total += score;
   }
 
   // TODO add penalties
+
+  msg.score = total;
 
   this->dataPtr->scoreRosPub.publish(msg);
   lastScorePubTime = _info.simTime;

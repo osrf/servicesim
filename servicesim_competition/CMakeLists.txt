@@ -12,15 +12,15 @@ find_package(gazebo 8.2.0 REQUIRED)
 
 add_message_files(
   FILES
-  Score.msg
+    Score.msg
 )
 
 # Generate services in the 'srv' folder
 add_service_files(
   FILES
-  DropOffGuest.srv
-  PickUpGuest.srv
-  NewTask.srv
+    DropOffGuest.srv
+    NewTask.srv
+    PickUpGuest.srv
 )
 
 # Generate added messages and services with any dependencies listed here
