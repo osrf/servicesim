@@ -59,8 +59,7 @@ namespace servicesim
 
     /// \brief Pause the checkpoint, ending the current interval. Only works if
     /// canPause is true.
-    /// \param[in] _time Sim time when paused.
-    protected: void Pause(const gazebo::common::Time &_time);
+    protected: void Pause();
 
     /// \brief Set if this checkpoint is done. It also registers the time when
     /// it was done.

@@ -31,23 +31,22 @@
 
 #include "FollowActorPlugin.hh"
 
-using namespace gazebo;
 using namespace servicesim;
 GZ_REGISTER_MODEL_PLUGIN(servicesim::FollowActorPlugin)
 
 class servicesim::FollowActorPluginPrivate
 {
   /// \brief Pointer to the actor.
-  public: physics::ActorPtr actor{nullptr};
+  public: gazebo::physics::ActorPtr actor{nullptr};
 
   /// \brief Velocity of the actor
   public: double velocity{0.8};
 
   /// \brief List of connections such as WorldUpdateBegin
-  public: std::vector<event::ConnectionPtr> connections;
+  public: std::vector<gazebo::event::ConnectionPtr> connections;
 
   /// \brief Current target model to follow
-  public: physics::ModelPtr target{nullptr};
+  public: gazebo::physics::ModelPtr target{nullptr};
 
   /// \brief Minimum distance in meters to keep away from target.
   public: double minDistance{1.2};
@@ -69,14 +68,14 @@ class servicesim::FollowActorPluginPrivate
   /// \brief Maximum angle when drifting
   public: double maxDriftAngle{IGN_PI * 0.2};
 
-  /// \brief List of times when guest should drift away
-  public: std::vector<common::Time> driftTimes;
+  /// \brief List of times when actor should drift away
+  public: std::vector<gazebo::common::Time> driftTimes;
 
   /// \brief Time of the last update.
-  public: common::Time lastUpdate;
+  public: gazebo::common::Time lastUpdate;
 
   /// \brief Time tolerance when checking drift time
-  public: common::Time timeTolerance{0.5};
+  public: gazebo::common::Time timeTolerance{0.5};
 
   /// \brief List of models to ignore when checking collisions.
   public: std::vector<std::string> ignoreModels;
@@ -86,6 +85,12 @@ class servicesim::FollowActorPluginPrivate
 
   /// \brief Publishes drift notifications
   public: ignition::transport::Node::Publisher driftIgnPub;
+
+  /// \brief Namespace for Ignition transport communication:
+  /// * /<namespace>/<actor_name>/follow
+  /// * /<namespace>/<actor_name>/unfollow
+  /// * /<namespace>/<actor_name>/drift
+  public: std::string ns;
 };
 
 /////////////////////////////////////////////////
@@ -95,9 +100,15 @@ FollowActorPlugin::FollowActorPlugin()
 }
 
 /////////////////////////////////////////////////
-void FollowActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
+void FollowActorPlugin::Load(gazebo::physics::ModelPtr _model,
+    sdf::ElementPtr _sdf)
 {
-  this->dataPtr->actor = boost::dynamic_pointer_cast<physics::Actor>(_model);
+  this->dataPtr->actor =
+      boost::dynamic_pointer_cast<gazebo::physics::Actor>(_model);
+
+  // Read in the namespace
+  if (_sdf->HasElement("namespace"))
+    this->dataPtr->ns = "/" + _sdf->Get<std::string>("namespace");
 
   // Read in the velocity
   if (_sdf->HasElement("velocity"))
@@ -162,7 +173,8 @@ void FollowActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   else
   {
     // Set custom trajectory
-    physics::TrajectoryInfoPtr trajectoryInfo(new physics::TrajectoryInfo());
+    gazebo::physics::TrajectoryInfoPtr
+        trajectoryInfo(new gazebo::physics::TrajectoryInfo());
     trajectoryInfo->type = animation;
     trajectoryInfo->duration = 1.0;
 
@@ -170,29 +182,36 @@ void FollowActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   }
 
   // Update loop
-  this->dataPtr->connections.push_back(event::Events::ConnectWorldUpdateBegin(
+  this->dataPtr->connections.push_back(
+      gazebo::event::Events::ConnectWorldUpdateBegin(
       std::bind(&FollowActorPlugin::OnUpdate, this, std::placeholders::_1)));
 
   // Pickup service
   this->dataPtr->ignNode.Advertise(
-      "/servicesim/" + this->dataPtr->actor->GetName() + "/follow",
+      this->dataPtr->ns + "/" + this->dataPtr->actor->GetName() + "/follow",
       &FollowActorPlugin::OnFollow, this);
 
   this->dataPtr->ignNode.Advertise(
-      "/servicesim/" + this->dataPtr->actor->GetName() + "/unfollow",
+      this->dataPtr->ns + "/" + this->dataPtr->actor->GetName() + "/unfollow",
       &FollowActorPlugin::OnUnfollow, this);
 
   // Drift publisher
   this->dataPtr->driftIgnPub =
-      this->dataPtr->ignNode.Advertise<ignition::msgs::Time>(
-      "/servicesim/" + this->dataPtr->actor->GetName() + "/drift");
+      this->dataPtr->ignNode.Advertise<ignition::msgs::UInt32>(
+      this->dataPtr->ns + "/" + this->dataPtr->actor->GetName() + "/drift");
 }
 
 /////////////////////////////////////////////////
 void FollowActorPlugin::Reset()
 {
+  if (this->dataPtr->actor && this->dataPtr->target)
+  {
+    gzmsg << "Actor [" << this->dataPtr->actor->GetName()
+          << "] stopped following target [" << this->dataPtr->target->GetName()
+          << "]" << std::endl;
+  }
   this->dataPtr->target = nullptr;
-  this->dataPtr->lastUpdate = common::Time::Zero;
+  this->dataPtr->lastUpdate = gazebo::common::Time::Zero;
 }
 
 /////////////////////////////////////////////////
@@ -216,6 +235,10 @@ bool FollowActorPlugin::ObstacleOnTheWay() const
     // Obstacle's bounding box
     auto bb = model->BoundingBox();
 
+    // Models without collision have invalid boxes
+    if (!bb.Min().IsFinite() || !bb.Max().IsFinite())
+      continue;
+
     // Increase box by margin
     bb.Min() -= ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
     bb.Max() += ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
@@ -237,7 +260,7 @@ bool FollowActorPlugin::ObstacleOnTheWay() const
 }
 
 /////////////////////////////////////////////////
-void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
+void FollowActorPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
 {
   // Time delta
   double dt = (_info.simTime - this->dataPtr->lastUpdate).Double();
@@ -287,10 +310,17 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Stop following if too far from target
   if (dir.Length() > this->dataPtr->maxDistance)
   {
-    gzwarn << "Robot too far, guest stopped following" << std::endl;
+    gzwarn << "Target [" << this->dataPtr->target->GetName()
+           <<  "] too far, actor [" << this->dataPtr->actor->GetName()
+           <<"] stopped following" << std::endl;
     this->dataPtr->target = nullptr;
 
-    this->PublishDrift(_info.simTime);
+    // Publish drift notification
+    // 1: target too far
+    ignition::msgs::UInt32 msg;
+    msg.set_data(1);
+    this->dataPtr->driftIgnPub.Publish(msg);
+
     return;
   }
   dir.Normalize();
@@ -309,8 +339,13 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
     this->dataPtr->target = nullptr;
 
     // Notify
-    this->PublishDrift(driftTime);
+    // 2: drift time
+    ignition::msgs::UInt32 msg;
+    msg.set_data(2);
+    this->dataPtr->driftIgnPub.Publish(msg);
 
+    gzwarn << "Actor [" << this->dataPtr->actor->GetName()
+           <<  "] drifting due to scheduled time: " << driftTime << std::endl;
     // Don't return yet, so the actor moves away
   }
   yaw.Normalize();
@@ -358,12 +393,14 @@ void FollowActorPlugin::OnFollow(const ignition::msgs::StringMsg &_req,
 
   if (posDiff.Length() > this->dataPtr->pickUpRadius)
   {
-    gzwarn << "Robot too far from guest" << std::endl;
+    gzwarn << "Target [" << model->GetName() <<  "] too far from actor ["
+           << this->dataPtr->actor->GetName() <<"]" << std::endl;
     return;
   }
 
   gzmsg << "Actor [" << this->dataPtr->actor->GetName()
-        << "] is following model [" << targetName << "]" << std::endl;
+        << "] is following target [" << targetName << "]" << std::endl;
+
   this->dataPtr->target = model;
   _res.set_data(true);
   _result = true;
@@ -373,21 +410,26 @@ void FollowActorPlugin::OnFollow(const ignition::msgs::StringMsg &_req,
 void FollowActorPlugin::OnUnfollow(ignition::msgs::Boolean &_res,
     bool &_result)
 {
+  if (!this->dataPtr->target)
+  {
+    _res.set_data(false);
+    _result = false;
+    return;
+  }
+
   gzmsg << "Actor [" << this->dataPtr->actor->GetName()
-        << "] stopped following model [" << this->dataPtr->target->GetName()
+        << "] stopped following target [" << this->dataPtr->target->GetName()
         << "]" << std::endl;
+
   this->dataPtr->target = nullptr;
+
+  // Publish drift notification
+  // 3: user requested
+  ignition::msgs::UInt32 msg;
+  msg.set_data(3);
+  this->dataPtr->driftIgnPub.Publish(msg);
+
   _res.set_data(true);
   _result = true;
-}
-
-/////////////////////////////////////////////////
-void FollowActorPlugin::PublishDrift(const gazebo::common::Time &_time) const
-{
-  // Publish drift notification
-  ignition::msgs::Time msg;
-  msg.set_sec(_time.sec);
-  msg.set_nsec(_time.nsec);
-  this->dataPtr->driftIgnPub.Publish(msg);
 }
 

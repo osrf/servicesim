@@ -102,7 +102,7 @@ void Checkpoint::Start()
 }
 
 /////////////////////////////////////////////////
-void Checkpoint::Pause(const gazebo::common::Time &_time)
+void Checkpoint::Pause()
 {
   if (this->intervals.empty())
   {
@@ -119,7 +119,7 @@ void Checkpoint::Pause(const gazebo::common::Time &_time)
           << std::endl;
     return;
   }
-  interval.second = _time;
+  interval.second = gazebo::physics::get_world()->SimTime();
 
   // Set paused
   this->paused = true;

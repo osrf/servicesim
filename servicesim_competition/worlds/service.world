@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 4281222
+  Seed: 9880787
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
@@ -166,71 +166,75 @@
       </script>
 
       <plugin name="trajectory" filename="libFollowActorPlugin.so">
+
+        <namespace>servicesim</namespace>
+
         <ignore_obstacle>willowgarage</ignore_obstacle>
         <ignore_obstacle>ground_collision</ignore_obstacle>
+
         <!-- FIXME: servicebot's bounding box is huge and always colliding -->
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>88</drift_time>
+          <drift_time>120</drift_time>
         
-          <drift_time>233</drift_time>
+          <drift_time>325</drift_time>
         
-          <drift_time>490</drift_time>
+          <drift_time>500</drift_time>
         
-          <drift_time>714</drift_time>
+          <drift_time>588</drift_time>
         
-          <drift_time>758</drift_time>
+          <drift_time>734</drift_time>
         
-          <drift_time>874</drift_time>
+          <drift_time>1008</drift_time>
         
-          <drift_time>1085</drift_time>
+          <drift_time>1271</drift_time>
         
-          <drift_time>1239</drift_time>
+          <drift_time>1413</drift_time>
         
-          <drift_time>1416</drift_time>
+          <drift_time>1676</drift_time>
         
-          <drift_time>1486</drift_time>
+          <drift_time>1803</drift_time>
         
-          <drift_time>1509</drift_time>
+          <drift_time>1906</drift_time>
         
-          <drift_time>1790</drift_time>
+          <drift_time>1977</drift_time>
         
-          <drift_time>1809</drift_time>
+          <drift_time>2027</drift_time>
         
-          <drift_time>1884</drift_time>
+          <drift_time>2059</drift_time>
         
-          <drift_time>1961</drift_time>
+          <drift_time>2344</drift_time>
         
-          <drift_time>2140</drift_time>
+          <drift_time>2354</drift_time>
         
-          <drift_time>2192</drift_time>
+          <drift_time>2413</drift_time>
         
-          <drift_time>2215</drift_time>
+          <drift_time>2435</drift_time>
         
-          <drift_time>2280</drift_time>
+          <drift_time>2460</drift_time>
         
-          <drift_time>2307</drift_time>
+          <drift_time>2548</drift_time>
         
-          <drift_time>2587</drift_time>
+          <drift_time>2718</drift_time>
         
-          <drift_time>2764</drift_time>
+          <drift_time>2871</drift_time>
         
-          <drift_time>2961</drift_time>
+          <drift_time>2895</drift_time>
         
-          <drift_time>3218</drift_time>
+          <drift_time>3075</drift_time>
         
-          <drift_time>3298</drift_time>
+          <drift_time>3110</drift_time>
         
-          <drift_time>3447</drift_time>
+          <drift_time>3307</drift_time>
         
-          <drift_time>3611</drift_time>
+          <drift_time>3330</drift_time>
         
-          <drift_time>3660</drift_time>
+          <drift_time>3527</drift_time>
         
-          <drift_time>3856</drift_time>
+          <drift_time>3551</drift_time>
         
-          <drift_time>4061</drift_time>
+          <drift_time>3774</drift_time>
         
 
       </plugin>
@@ -419,7 +423,7 @@
       </target>
     
 
-    <velocity>1.0558721736123509</velocity>
+    <velocity>1.026077296347458</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
     <!-- FIXME: servicebot's bounding box is huge and always colliding -->
@@ -448,11 +452,11 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->

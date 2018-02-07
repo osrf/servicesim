@@ -32,18 +32,42 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf)
   this->canPause = true;
 
   // Ignition transport
-  std::function<void(const ignition::msgs::Time &)> driftCb =
-      [this](const ignition::msgs::Time &_msg)
+  std::function<void(const ignition::msgs::UInt32 &)> driftCb =
+      [this](const ignition::msgs::UInt32 &_msg)
   {
-    // Drift time
-    gazebo::common::Time time;
-    time.Set(_msg.sec(), _msg.nsec());
+    // Drift reason
+    auto reason = _msg.data();
+
+    // 1: Robot moved too fast and actor couldn't follow
+    if (reason == 1u)
+    {
+      // TODO: apply penalty
+    }
+    // 2: Scheduled drift time
+    else if (reason == 2u)
+    {
+      // Do nothing
+    }
+    // 3: User requested unfollow - we assume it came from this checkpoint
+    else if (reason == 3u)
+    {
+      // No pausing, we're finishing the checkpoint
+      return;
+    }
+    else
+    {
+      gzerr << "Drift reason not supported [" << reason << "], not pausing."
+            << std::endl;
+      return;
+    }
 
     // End current interval
-    this->Pause(time);
+    this->Pause();
   };
 
   this->ignNode.Subscribe("/servicesim/guest/drift", driftCb);
+
+  // TODO: also start FollowActorPlugin disabled and enable it here on demand.
 
   // ROS transport
   if (!ros::isInitialized())
@@ -91,6 +115,10 @@ bool CP_DropOff::OnDropOffRosRequest(
   if (!this->Done())
   {
     // TODO: apply penalty for bad dropoff request
+  }
+  else
+  {
+    // TODO: Terminate transport
   }
 
   _res.success = this->Done();

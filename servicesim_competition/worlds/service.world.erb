@@ -303,8 +303,12 @@
       </script>
 
       <plugin name="trajectory" filename="libFollowActorPlugin.so">
+
+        <namespace>servicesim</namespace>
+
         <ignore_obstacle>willowgarage</ignore_obstacle>
         <ignore_obstacle>ground_collision</ignore_obstacle>
+
         <!-- FIXME: servicebot's bounding box is huge and always colliding -->
         <ignore_obstacle>servicebot</ignore_obstacle>
 

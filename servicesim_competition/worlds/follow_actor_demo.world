@@ -1,0 +1,181 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="default">
+
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Models for the actor to follow -->
+    <include>
+      <pose>-4 -10 1 0 0 0</pose>
+      <uri>model://number1</uri>
+    </include>
+    <include>
+      <pose>-1.5 -10 1 0 0 0</pose>
+      <uri>model://number2</uri>
+    </include>
+    <include>
+      <pose>1 -10 1 0 0 0.2</pose>
+      <uri>model://number3</uri>
+    </include>
+    <include>
+      <pose>4 -10 1 0 0 0</pose>
+      <uri>model://number4</uri>
+    </include>
+    <actor name="number5">
+      <include>
+        <uri>model://number5</uri>
+      </include>
+      <script>
+        <loop>true</loop>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="square">
+           <waypoint>
+              <time>0.0</time>
+              <pose>-3 -3 1 0 0 0</pose>
+           </waypoint>
+           <waypoint>
+              <time>10.0</time>
+              <pose>-3 3 1 0 0 0</pose>
+           </waypoint>
+           <waypoint>
+              <time>20.0</time>
+              <pose>3 3 1 0 0 0</pose>
+           </waypoint>
+           <waypoint>
+              <time>30.0</time>
+              <pose>3 -3 1 0 0 0</pose>
+           </waypoint>
+           <waypoint>
+              <time>40.0</time>
+              <pose>-3 -3 1 0 0 0</pose>
+           </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <!-- Fast follower -->
+    <actor name="fast_follower">
+
+      <!-- Starting pose, nice for when the world is reset -->
+      <pose>-6 -4 1.0 1.57 0 0</pose>
+
+      <skin>
+        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+      </skin>
+
+      <animation name="animation">
+        <filename>model://actor/meshes/ANIMATION_running.dae</filename>
+      </animation>
+
+      <!-- Need one waypoint to idle at -->
+      <script>
+        <trajectory id='0' type='animation'>
+          <waypoint>
+            <time>100</time>
+            <pose>0 0 1.19 0 0 0</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+
+      <plugin name="follow" filename="libFollowActorPlugin.so">
+
+        <!-- namespace for transport -->
+        <namespace>demo</namespace>
+
+        <!-- distance in meters to keep from target's origin -->
+        <min_distance>2</min_distance>
+
+        <!-- distance in meters from target's origin when to stop following -->
+        <max_distance>10</max_distance>
+
+        <!-- distance in meters from the target's origin from which the /follow service will succeed -->
+        <pickup_radius>5</pickup_radius>
+
+        <!--
+          Amount in meters by which obstacles' bounding boxes are expanded in all directions.
+           The robot will stop before that to avoid collision
+        -->
+        <obstacle_margin>1</obstacle_margin>
+
+        <!-- in m/s -->
+        <velocity>1.5</velocity>
+
+        <!-- Objects in the world which can be ignored for bounding-box collision checking -->
+        <ignore_obstacle>ground_plane</ignore_obstacle>
+
+      </plugin>
+
+    </actor>
+
+    <!-- Slow follower -->
+    <actor name="slow_follower">
+
+      <!-- Starting pose, nice for when the world is reset -->
+      <pose>-6 1 1.0 1.57 0 0</pose>
+
+      <skin>
+        <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+      </skin>
+
+      <animation name="animation">
+        <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+      </animation>
+
+      <!-- Need one waypoint to idle at -->
+      <script>
+        <trajectory id='0' type='animation'>
+          <waypoint>
+            <time>100</time>
+            <pose>0 0 1.19 0 0 0</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+
+      <plugin name="follow" filename="libFollowActorPlugin.so">
+
+        <!-- namespace for transport -->
+        <namespace>demo</namespace>
+
+        <!-- distance in meters to keep from target's origin -->
+        <min_distance>1</min_distance>
+
+        <!-- distance in meters from target's origin when to stop following -->
+        <max_distance>5</max_distance>
+
+        <!-- distance in meters from the target's origin from which the /follow service will succeed -->
+        <pickup_radius>2</pickup_radius>
+
+        <!--
+          Amount in meters by which obstacles' bounding boxes are expanded in all directions.
+           The robot will stop before that to avoid collision
+        -->
+        <obstacle_margin>0.1</obstacle_margin>
+
+        <!-- in m/s -->
+        <velocity>0.8</velocity>
+
+        <!-- Objects in the world which can be ignored for bounding-box collision checking -->
+        <ignore_obstacle>ground_plane</ignore_obstacle>
+
+        <!-- Absolute sim time in seconds when actor will automatically drift away -->
+        <drift_time>10</drift_time>
+        <drift_time>20</drift_time>
+        <drift_time>30</drift_time>
+        <drift_time>40</drift_time>
+        <drift_time>50</drift_time>
+        <drift_time>60</drift_time>
+
+      </plugin>
+
+    </actor>
+
+  </world>
+</sdf>
