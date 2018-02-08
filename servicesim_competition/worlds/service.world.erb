@@ -102,7 +102,8 @@
     <!-- GUI -->
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-14.41 -19.9 4.14 0 0.5 0.76</pose>
+        <!--pose>-14.41 -19.9 4.14 0 0.5 0.76</pose-->
+        <pose>25.9 -21.8 73.6 0 1.05 1.57</pose>
       </camera>
     </gui>
 
@@ -110,8 +111,8 @@
     <scene>
       <ambient>0.8 0.8 0.8 1.0</ambient>
       <background>0.66 0.77 0.84 1.0</background>
-      <grid>0</grid>
-      <origin_visual>0</origin_visual>
+      <grid>1</grid>
+      <origin_visual>1</origin_visual>
     </scene>
 
     <!-- A global light source -->
@@ -147,8 +148,120 @@
     </model>
 
     <!-- Office -->
+    <%
+      gap = 0.1
+      panel = 1.5
+
+      $room_name = 'reception'
+      $room_type = 'reception'
+      $room_pose =
+      [
+        3 * panel,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $room_name = 'meeting_room_large'
+      $room_type = 'meeting_room_large'
+      $room_pose =
+      [
+        4 * panel,
+        9 * panel + gap,
+        0.0,
+        0.0,
+        0.0,
+        -Math::PI * 0.5
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $room_name = 'meeting_room_small'
+      $room_type = 'meeting_room_small'
+      $room_pose =
+      [
+        4 * panel,
+        13 * panel + 2 * gap,
+        0.0,
+        0.0,
+        0.0,
+        -Math::PI * 0.5
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $room_name = 'refreshment_area'
+      $room_type = 'refreshment_area'
+      $room_pose =
+      [
+        11 * panel + gap,
+        5 * panel,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $room_name = 'office_large'
+      $room_type = 'office_large'
+      $room_pose =
+      [
+        17 * panel,
+        2 * panel,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+<!--
     <model name="office">
       <static>true</static>
+
+      <%
+        xPos = 2 * panel
+        yPos = 30 * panel + gap
+
+        yaw = -Math::PI * 0.5
+      %>
+      <link name="office_small">
+        <pose>
+          <%= xPos %>
+          <%= yPos %>
+          0
+          0
+          0
+          <%= yaw %>
+        </pose>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/office_small.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/office_small.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
 
       <link name="bathroom">
         <pose>10 0 0 0 0 0</pose>
@@ -330,26 +443,6 @@
         </visual>
       </link>
 
-      <link name="office_small">
-        <pose>30 10 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/office_small.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/office_small.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
-
       <link name="office_large">
         <pose>30 20 0 0 0 0</pose>
         <collision name="collision">
@@ -364,26 +457,6 @@
           <geometry>
             <mesh>
               <uri>file://media/meshes/office_large.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
-
-      <link name="reception">
-        <pose>30 30 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/reception.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/reception.obj</uri>
               <scale>0.01 0.01 0.01</scale>
             </mesh>
           </geometry>
@@ -471,7 +544,7 @@
       </link>
 
     </model>
-
+-->
     <!-- Trajectory actors -->
     <%
       count = 0

@@ -1,0 +1,43 @@
+<%
+  # Room template
+  #
+  # Required variables
+  # * $room_type (string)
+  # * $room_name (string)
+  # * $room_pose (array[6])
+  # * $room_size (array[3])
+%>
+
+<model name="<%= $room_name %>">
+
+  <static>true</static>
+
+  <pose>
+    <%= $room_pose[0] %>
+    <%= $room_pose[1] %>
+    <%= $room_pose[2] %>
+    <%= $room_pose[3] %>
+    <%= $room_pose[4] %>
+    <%= $room_pose[5] %>
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+
+</model>
