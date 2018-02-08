@@ -10,18 +10,24 @@ find_package(catkin REQUIRED COMPONENTS
 # Gazebo
 find_package(gazebo 8.2.0 REQUIRED)
 
+add_message_files(
+  FILES
+    Score.msg
+)
+
 # Generate services in the 'srv' folder
 add_service_files(
   FILES
-  DropOffGuest.srv
-  GetGuestIdentity.srv
-  PickUpGuest.srv
+    DropOffGuest.srv
+    NewTask.srv
+    PickUpGuest.srv
 )
 
 # Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  geometry_msgs std_msgs
+    geometry_msgs
+    std_msgs
 )
 
 set(trajectory_actor_plugin_name TrajectoryActorPlugin)
