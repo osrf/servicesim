@@ -10,18 +10,24 @@ find_package(catkin REQUIRED COMPONENTS
 # Gazebo
 find_package(gazebo 8.2.0 REQUIRED)
 
+add_message_files(
+  FILES
+    Score.msg
+)
+
 # Generate services in the 'srv' folder
 add_service_files(
   FILES
-  DropOffGuest.srv
-  GetGuestIdentity.srv
-  PickUpGuest.srv
+    DropOffGuest.srv
+    NewTask.srv
+    PickUpGuest.srv
 )
 
 # Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  geometry_msgs std_msgs
+    geometry_msgs
+    std_msgs
 )
 
 set(trajectory_actor_plugin_name TrajectoryActorPlugin)
@@ -61,6 +67,28 @@ target_link_libraries(${trajectory_actor_plugin_name}
   ${catkin_LIBRARIES}
 )
 install(TARGETS ${trajectory_actor_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
+#############################
+## Follow Actor plugin ##
+#############################
+
+# Create the libFollowActorPlugin.so library.
+set(follow_actor_plugin_name FollowActorPlugin)
+add_library(${follow_actor_plugin_name} SHARED
+  src/FollowActorPlugin.cc
+)
+target_link_libraries(${follow_actor_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+add_dependencies(${follow_actor_plugin_name}
+  servicesim_competition_generate_messages_cpp
+)
+install(TARGETS ${follow_actor_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}

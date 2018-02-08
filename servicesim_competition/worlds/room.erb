@@ -2,12 +2,12 @@
   # Room template
   #
   # Required variables
-  # * $panel (number)
+  # * $office_u (number) length of an office unit
   # * $room_type (string)
   # * $room_name (string)
   # * $room_floor (string)
   # * $room_pose (array[6])
-  # * $room_size (array[4]) in numbers of panels, [min_x, max_x, min_y, max_y]
+  # * $room_size (array[4]) in office units, [min_x, max_x, min_y, max_y]
 %>
 
 <model name="<%= $room_name %>">
@@ -49,8 +49,8 @@
       <visual name="floor_<%= x %>_<%= y %>">
 
         <pose>
-          <%= x * $panel %>
-          <%= y * $panel %>
+          <%= x * $office_u %>
+          <%= y * $office_u %>
           0
           0
           0
