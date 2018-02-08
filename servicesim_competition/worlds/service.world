@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 
-<!-- Seed: 8531557 -->
+<!-- Seed: 1521453 -->
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -14,12 +14,14 @@
 
     <!-- Scene -->
     <scene>
+      <ambient>0.8 0.8 0.8 1.0</ambient>
       <background>0.66 0.77 0.84 1.0</background>
       <grid>0</grid>
       <origin_visual>0</origin_visual>
     </scene>
 
     <!-- A global light source -->
+<!--
     <light type="directional" name="sun">
       <cast_shadows>true</cast_shadows>
       <pose>0 0 1000 0 0 0</pose>
@@ -33,6 +35,7 @@
       </attenuation>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
+-->
 
     <!-- Ground collision -->
     <model name="ground_collision">
@@ -233,6 +236,146 @@
         </visual>
       </link>
 
+      <link name="office_small">
+        <pose>30 10 0 0 0 0</pose>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/office_small.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/office_small.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
+      <link name="office_large">
+        <pose>30 20 0 0 0 0</pose>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/office_large.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/office_large.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
+      <link name="reception">
+        <pose>30 30 0 0 0 0</pose>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/reception.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/reception.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
+      <link name="wall_door">
+        <pose>40 10 0 0 0 0</pose>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/wall_door.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/wall_door.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
+      <link name="wall_elevator">
+        <pose>40 20 0 0 0 0</pose>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/wall_elevator.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/wall_elevator.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
+      <link name="wall_plain">
+        <pose>40 30 0 0 0 0</pose>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/wall_plain.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/wall_plain.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
+      <link name="wall_window">
+        <pose>40 40 0 0 0 0</pose>
+        <collision name="collision">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/wall_window.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <mesh>
+              <uri>file://media/meshes/wall_window.obj</uri>
+              <scale>0.01 0.01 0.01</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+
     </model>
 
     <!-- Trajectory actors -->
@@ -252,7 +395,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -415,7 +558,7 @@
       </target>
     
 
-    <velocity>1.1168313406314894</velocity>
+    <velocity>0.9990742574385131</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
 
@@ -446,7 +589,7 @@
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->
