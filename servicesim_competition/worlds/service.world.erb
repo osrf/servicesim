@@ -119,6 +119,9 @@
   $office_u = 1.5
   $cubicle_u = 0.6
 
+  total_x = $office_u * 24
+  total_y = $office_u * 18
+
   $count = 0
 %>
 <!--
@@ -145,23 +148,6 @@
       <origin_visual>1</origin_visual>
     </scene>
 
-    <!-- A global light source -->
-<!--
-    <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 0 0 0</pose>
-      <diffuse>0.8 0.8 0.8 1</diffuse>
-      <specular>0.2 0.2 0.2 1</specular>
-      <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <direction>-0.5 0.1 -0.9</direction>
-    </light>
--->
-
     <!-- Ground collision -->
     <model name="ground_collision">
       <static>true</static>
@@ -179,6 +165,75 @@
     </model>
 
     <!-- Office -->
+
+    <!-- Ceiling -->
+    <%
+      x_width = total_x + $cubicle_u
+      y_width = total_y + $cubicle_u
+    %>
+    <model name="ceiling">
+      <pose>
+        <%= x_width * 0.5 %>
+        <%= y_width * 0.5 %>
+        <%= 2 * $office_u %>
+        0
+        <%= Math::PI %>
+        0
+      </pose>
+
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size><%= x_width %> <%= y_width %></size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/</uri>
+              <uri>file://media/materials/textures/</uri>
+              <name>ServiceSim/Ceiling</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+    </model>
+
+    <!-- Floor -->
+    <model name="floor">
+      <pose>
+        <%= x_width * 0.5 %>
+        <%= y_width * 0.5 %>
+        <%= -0.001 %>
+        0
+        0
+        0
+      </pose>
+
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size><%= x_width %> <%= y_width %></size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/</uri>
+              <uri>file://media/materials/textures/</uri>
+              <name>ServiceSim/Hallway</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+    </model>
+
     <%
       $count += 1
       $room_name = 'reception' + '_' + $count.to_s()
@@ -224,7 +279,7 @@
       $room_pose =
       [
         3 * $office_u,
-        16 * $office_u,
+        16 * $office_u + 5 * gap,
         0.0,
         0.0,
         0.0,

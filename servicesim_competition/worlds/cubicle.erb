@@ -1,0 +1,67 @@
+<%
+  # Cubicle template
+  #
+  # Required variables
+  # * $count (number)
+  # * $cubicle_type (string) open, closed or corner
+
+  $count += 1
+
+  if $cubicle_type == 'open'
+    offset = 0.3
+  elsif $cubicle_type == 'closed'
+    offset = -0.3
+  end
+%>
+
+<model name="cubicle_wall_<%= $count.to_s() %>">
+
+  <static>true</static>
+
+  <pose>
+    <%= $cubicle_pose[0] %>
+    <%= $cubicle_pose[1] %>
+    <%= $cubicle_pose[2] %>
+    <%= $cubicle_pose[3] %>
+    <%= $cubicle_pose[4] %>
+    <%= $cubicle_pose[5] %>
+  </pose>
+
+  <link name="link">
+
+    <pose>
+      <%= offset %>
+      0
+      0
+      0
+      0
+      0
+    </pose>
+
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/cubicle_wall.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+          <submesh>
+            <name><%= $cubicle_type %></name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/cubicle_wall.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+          <submesh>
+            <name><%= $cubicle_type %></name>
+          </submesh>
+        </mesh>
+      </geometry>
+    </collision>
+
+  </link>
+
+</model>

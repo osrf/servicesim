@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 136582
+  Seed: 3274438
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
@@ -23,23 +23,6 @@
       <origin_visual>1</origin_visual>
     </scene>
 
-    <!-- A global light source -->
-<!--
-    <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 0 0 0</pose>
-      <diffuse>0.8 0.8 0.8 1</diffuse>
-      <specular>0.2 0.2 0.2 1</specular>
-      <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <direction>-0.5 0.1 -0.9</direction>
-    </light>
--->
-
     <!-- Ground collision -->
     <model name="ground_collision">
       <static>true</static>
@@ -57,6 +40,72 @@
     </model>
 
     <!-- Office -->
+
+    <!-- Ceiling -->
+    
+    <model name="ceiling">
+      <pose>
+        18.3
+        13.8
+        3.0
+        0
+        3.141592653589793
+        0
+      </pose>
+
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>36.6 27.6</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/</uri>
+              <uri>file://media/materials/textures/</uri>
+              <name>ServiceSim/Ceiling</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+    </model>
+
+    <!-- Floor -->
+    <model name="floor">
+      <pose>
+        18.3
+        13.8
+        -0.001
+        0
+        0
+        0
+      </pose>
+
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>36.6 27.6</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/</uri>
+              <uri>file://media/materials/textures/</uri>
+              <name>ServiceSim/Hallway</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+    </model>
+
     
     
 
@@ -1271,7 +1320,7 @@
 
   <pose>
     4.5
-    24.0
+    24.5
     0.0
     0.0
     0.0
@@ -10294,7 +10343,7 @@
       </pose>
 
       <skin>
-        <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
       </skin>
 
       <animation name="animation">
@@ -10329,65 +10378,65 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>51</drift_time>
+          <drift_time>126</drift_time>
         
-          <drift_time>305</drift_time>
+          <drift_time>231</drift_time>
         
-          <drift_time>450</drift_time>
+          <drift_time>460</drift_time>
         
-          <drift_time>678</drift_time>
+          <drift_time>620</drift_time>
         
-          <drift_time>870</drift_time>
+          <drift_time>672</drift_time>
         
-          <drift_time>917</drift_time>
+          <drift_time>913</drift_time>
         
-          <drift_time>1120</drift_time>
+          <drift_time>1099</drift_time>
         
-          <drift_time>1405</drift_time>
+          <drift_time>1294</drift_time>
         
-          <drift_time>1575</drift_time>
+          <drift_time>1554</drift_time>
         
-          <drift_time>1731</drift_time>
+          <drift_time>1729</drift_time>
         
-          <drift_time>1829</drift_time>
+          <drift_time>1948</drift_time>
         
-          <drift_time>1846</drift_time>
+          <drift_time>1960</drift_time>
         
-          <drift_time>2095</drift_time>
+          <drift_time>2106</drift_time>
         
-          <drift_time>2256</drift_time>
+          <drift_time>2150</drift_time>
         
-          <drift_time>2280</drift_time>
+          <drift_time>2293</drift_time>
         
-          <drift_time>2415</drift_time>
+          <drift_time>2555</drift_time>
         
-          <drift_time>2442</drift_time>
+          <drift_time>2768</drift_time>
         
-          <drift_time>2469</drift_time>
+          <drift_time>3000</drift_time>
         
-          <drift_time>2581</drift_time>
+          <drift_time>3050</drift_time>
         
-          <drift_time>2823</drift_time>
+          <drift_time>3323</drift_time>
         
-          <drift_time>2984</drift_time>
+          <drift_time>3538</drift_time>
         
-          <drift_time>3217</drift_time>
+          <drift_time>3743</drift_time>
         
-          <drift_time>3377</drift_time>
+          <drift_time>3819</drift_time>
         
-          <drift_time>3531</drift_time>
+          <drift_time>4102</drift_time>
         
-          <drift_time>3715</drift_time>
+          <drift_time>4216</drift_time>
         
-          <drift_time>3830</drift_time>
+          <drift_time>4301</drift_time>
         
-          <drift_time>4049</drift_time>
+          <drift_time>4327</drift_time>
         
-          <drift_time>4247</drift_time>
+          <drift_time>4502</drift_time>
         
-          <drift_time>4270</drift_time>
+          <drift_time>4728</drift_time>
         
-          <drift_time>4453</drift_time>
+          <drift_time>4828</drift_time>
         
 
       </plugin>
@@ -10411,7 +10460,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -10576,7 +10625,7 @@
       </target>
     
 
-    <velocity>0.9053726030115559</velocity>
+    <velocity>1.1191141367597464</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
     <!-- FIXME: servicebot's bounding box is huge and always colliding -->
@@ -10609,7 +10658,7 @@
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->
