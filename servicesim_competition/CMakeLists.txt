@@ -111,7 +111,7 @@ target_link_libraries(${competition_plugin_name}
   ${GAZEBO_LIBRARIES}
 )
 add_dependencies(${competition_plugin_name}
-  servicesim_generate_messages_cpp
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
 )
 install(TARGETS ${competition_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
