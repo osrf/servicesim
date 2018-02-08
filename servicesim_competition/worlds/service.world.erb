@@ -93,6 +93,8 @@
 
   # Actor's Z position
   actor_pos_z = 1.25
+
+  count = 0
 %>
 
 <!-- Seed: <%= seed %> -->
@@ -135,12 +137,13 @@
     <!-- Ground collision -->
     <model name="ground_collision">
       <static>true</static>
+      <pose>100 100 0 0 0 0</pose>
       <link name="link">
         <collision name="collision">
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <size>80 80</size>
+              <size>200 200</size>
             </plane>
           </geometry>
         </collision>
@@ -150,404 +153,339 @@
     <!-- Office -->
     <%
       gap = 0.1
-      panel = 1.5
+      $panel = 1.5
 
-      $room_name = 'reception'
+      $room_name = 'reception' + '_' + count.to_s()
       $room_type = 'reception'
+      $room_floor = 'carpet'
+      $room_size = [-3, 3, -4, 0]
       $room_pose =
       [
-        3 * panel,
+        3 * $panel,
         0.0,
         0.0,
         0.0,
         0.0,
         Math::PI
       ]
+      count += 1
     %>
     <%= fromFile(DIR + "/" + "room.erb") %>
 
     <%
-      $room_name = 'meeting_room_large'
+      $room_name = 'meeting_room_large' + '_' + count.to_s()
       $room_type = 'meeting_room_large'
+      $room_floor = 'carpet'
+      $room_size = [-1, 4, -3, 0]
       $room_pose =
       [
-        4 * panel,
-        9 * panel + gap,
+        4 * $panel,
+        9 * $panel + gap,
         0.0,
         0.0,
         0.0,
         -Math::PI * 0.5
       ]
+      count += 1
     %>
     <%= fromFile(DIR + "/" + "room.erb") %>
 
     <%
-      $room_name = 'meeting_room_small'
-      $room_type = 'meeting_room_small'
+      $room_name = 'office_large' + '_' + count.to_s()
+      $room_type = 'office_large'
+      $room_floor = 'carpet'
+      $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        4 * panel,
-        13 * panel + 2 * gap,
+        4 * $panel,
+        13 * $panel + 2 * gap,
         0.0,
         0.0,
         0.0,
         -Math::PI * 0.5
       ]
+      count += 1
     %>
     <%= fromFile(DIR + "/" + "room.erb") %>
 
     <%
-      $room_name = 'refreshment_area'
+      $room_name = 'refreshment_area' + '_' + count.to_s()
       $room_type = 'refreshment_area'
+      $room_floor = 'tile'
+      $room_size = [-3, 3, -4, 0]
       $room_pose =
       [
-        11 * panel + gap,
-        5 * panel,
+        11 * $panel + gap,
+        5 * $panel,
         0.0,
         0.0,
         0.0,
         0.0
       ]
+      count += 1
     %>
     <%= fromFile(DIR + "/" + "room.erb") %>
 
     <%
-      $room_name = 'office_large'
-      $room_type = 'office_large'
+      $room_name = 'meeting_room_small' + '_' + count.to_s()
+      $room_type = 'meeting_room_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        17 * panel,
-        2 * panel,
+        17 * $panel,
+        2 * $panel,
         0.0,
         0.0,
         0.0,
         Math::PI * 0.5
       ]
+      count += 1
     %>
     <%= fromFile(DIR + "/" + "room.erb") %>
 
-<!--
-    <model name="office">
-      <static>true</static>
+    <%
+      $room_name = 'meeting_room_small' + '_' + count.to_s()
+      $room_type = 'meeting_room_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 2, -2, 0]
+      $room_pose =
+      [
+        17 * $panel,
+        7 * $panel,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+      count += 1
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
 
-      <%
-        xPos = 2 * panel
-        yPos = 30 * panel + gap
+    <%
+      $room_name = 'office_small' + '_' + count.to_s()
+      $room_type = 'office_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 1, -1, 0]
+      $room_pose =
+      [
+        22 * $panel,
+        2 * $panel,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+      count += 1
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
 
-        yaw = -Math::PI * 0.5
-      %>
-      <link name="office_small">
-        <pose>
-          <%= xPos %>
-          <%= yPos %>
-          0
-          0
-          0
-          <%= yaw %>
-        </pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/office_small.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/office_small.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <%
+      $room_name = 'office_small' + '_' + count.to_s()
+      $room_type = 'office_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 1, -1, 0]
+      $room_pose =
+      [
+        22 * $panel,
+        5 * $panel + gap,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+      count += 1
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
 
-      <link name="bathroom">
-        <pose>10 0 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/bathroom.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/bathroom.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <%
+      $room_name = 'office_small' + '_' + count.to_s()
+      $room_type = 'office_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 1, -1, 0]
+      $room_pose =
+      [
+        22 * $panel,
+        8 * $panel + 2 * gap,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+      count += 1
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
 
-      <link name="carpet">
-        <pose>20 0 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/carpet.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/carpet.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <%
+      $room_name = 'office_small' + '_' + count.to_s()
+      $room_type = 'office_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 1, -1, 0]
+      $room_pose =
+      [
+        22 * $panel,
+        11 * $panel + 3 * gap,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+      count += 1
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
 
-      <link name="ceiling">
-        <pose>30 0 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/ceiling.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/ceiling.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <%
+      $room_name = 'office_small' + '_' + count.to_s()
+      $room_type = 'office_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 1, -1, 0]
+      $room_pose =
+      [
+        22 * $panel,
+        14 * $panel + 3 * gap,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+      count += 1
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
 
-      <link name="hallway">
-        <pose>10 10 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/hallway.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/hallway.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <%
+      $room_name = 'bathroom' + '_' + count.to_s()
+      $room_type = 'bathroom'
+      $room_floor = 'tile'
+      $room_size = [0, 1, -1, 0]
+      $room_pose =
+      [
+        17 * $panel,
+        10 * $panel + gap,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+      count += 1
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
 
-      <link name="meeting_room_large">
-        <pose>10 20 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/meeting_room_large.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/meeting_room_large.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <%
+      $room_name = 'bathroom' + '_' + count.to_s()
+      $room_type = 'bathroom'
+      $room_floor = 'tile'
+      $room_size = [0, 1, -1, 0]
+      $room_pose =
+      [
+        17 * $panel,
+        12 * $panel + 2 * gap,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+      count += 1
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
 
-      <link name="meeting_room_small">
-        <pose>10 30 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/meeting_room_small.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/meeting_room_small.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <include>
+      <name>island_<%= count %></name>
+      <pose>
+        <%= 8 * $panel %>
+        <%= 8 * $panel %>
+        0
+        0
+        0
+        <%= Math::PI * 0.25 %>
+      </pose>
+      <uri>model://cubicle_island</uri>
+    </include>
+    <% count += 1 %>
 
-      <link name="refreshment_area">
-        <pose>10 40 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/refreshment_area.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/refreshment_area.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <include>
+      <name>island_<%= count %></name>
+      <pose>
+        <%= 8 * $panel %>
+        <%= 12 * $panel %>
+        0
+        0
+        0
+        <%= Math::PI * 0.25 %>
+      </pose>
+      <uri>model://cubicle_island</uri>
+    </include>
+    <% count += 1 %>
 
-      <link name="sink">
-        <pose>20 10 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/sink.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/sink.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <include>
+      <name>island_<%= count %></name>
+      <pose>
+        <%= 8 * $panel %>
+        <%= 16 * $panel %>
+        0
+        0
+        0
+        <%= Math::PI * 0.25 %>
+      </pose>
+      <uri>model://cubicle_island</uri>
+    </include>
+    <% count += 1 %>
 
-      <link name="tile">
-        <pose>20 30 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/tile.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/tile.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <include>
+      <name>island_<%= count %></name>
+      <pose>
+        <%= 13 * $panel %>
+        <%= 8 * $panel %>
+        0
+        0
+        0
+        <%= Math::PI * 0.25 %>
+      </pose>
+      <uri>model://cubicle_island</uri>
+    </include>
+    <% count += 1 %>
 
-      <link name="office_large">
-        <pose>30 20 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/office_large.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/office_large.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <include>
+      <name>island_<%= count %></name>
+      <pose>
+        <%= 13 * $panel %>
+        <%= 12 * $panel %>
+        0
+        0
+        0
+        <%= Math::PI * 0.25 %>
+      </pose>
+      <uri>model://cubicle_island</uri>
+    </include>
+    <% count += 1 %>
 
-      <link name="wall_door">
-        <pose>40 10 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/wall_door.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/wall_door.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <include>
+      <name>island_<%= count %></name>
+      <pose>
+        <%= 13 * $panel %>
+        <%= 16 * $panel %>
+        0
+        0
+        0
+        <%= Math::PI * 0.25 %>
+      </pose>
+      <uri>model://cubicle_island</uri>
+    </include>
+    <% count += 1 %>
 
-      <link name="wall_elevator">
-        <pose>40 20 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/wall_elevator.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/wall_elevator.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
+    <include>
+      <pose>
+        <%= 5 * $panel %>
+        <%= 20 * $panel %>
+        0
+        0
+        0
+        <%= Math::PI %>
+      </pose>
+      <uri>model://cubicle_wall</uri>
+    </include>
 
-      <link name="wall_plain">
-        <pose>40 30 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/wall_plain.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/wall_plain.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
-
-      <link name="wall_window">
-        <pose>40 40 0 0 0 0</pose>
-        <collision name="collision">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/wall_window.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <geometry>
-            <mesh>
-              <uri>file://media/meshes/wall_window.obj</uri>
-              <scale>0.01 0.01 0.01</scale>
-            </mesh>
-          </geometry>
-        </visual>
-      </link>
-
-    </model>
--->
     <!-- Trajectory actors -->
     <%
-      count = 0
       for actor in actors_trajectory
 
         # unique name

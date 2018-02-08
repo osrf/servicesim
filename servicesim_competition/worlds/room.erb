@@ -2,10 +2,12 @@
   # Room template
   #
   # Required variables
+  # * $panel (number)
   # * $room_type (string)
   # * $room_name (string)
+  # * $room_floor (string)
   # * $room_pose (array[6])
-  # * $room_size (array[3])
+  # * $room_size (array[4]) in numbers of panels, [min_x, max_x, min_y, max_y]
 %>
 
 <model name="<%= $room_name %>">
@@ -38,6 +40,35 @@
         </mesh>
       </geometry>
     </visual>
+
+    <!-- floor -->
+    <%
+      for x in ($room_size[0]..$room_size[1])
+        for y in ($room_size[2]..$room_size[3])
+    %>
+      <visual name="floor_<%= x %>_<%= y %>">
+
+        <pose>
+          <%= x * $panel %>
+          <%= y * $panel %>
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/<%= $room_floor %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    <%
+        end
+      end
+    %>
+
   </link>
 
 </model>
