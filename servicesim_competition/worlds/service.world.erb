@@ -1,4 +1,3 @@
-<?xml version="1.0" ?>
 <%
   # ServiceSim world generator
   #
@@ -38,7 +37,7 @@
 
   ###############################################
   #                                             #
-  #                   ACTORS                    #
+  #                NON-GUEST HUMANS             #
   #                                             #
   ###############################################
 
@@ -84,6 +83,27 @@
 
   ###############################################
   #                                             #
+  #                   GUEST                     #
+  #                                             #
+  ###############################################
+
+  guest_name = 'guest'
+  guest_pose = [-12.7, -18.78, 1.19, 1.54, 0, 1.9]
+  guest_skin = skins.sample
+  guest_anim = animations_trajectory[0]
+  drift_times = []
+
+  # Generate random drift times
+  minInterval = 5
+  maxInterval = 300
+  time = 0
+  (1..30).each do
+    time += rand(minInterval..maxInterval)
+    drift_times.push(time)
+  end
+
+  ###############################################
+  #                                             #
   #               INITIALIZATION                #
   #                                             #
   ###############################################
@@ -94,8 +114,11 @@
   # Actor's Z position
   actor_pos_z = 1.25
 %>
-
-<!-- Seed: <%= seed %> -->
+<!--
+  Generated from service.world.erb
+  Seed: <%= seed %>
+-->
+<?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="ServiceSim">
 
@@ -147,6 +170,62 @@
     <include>
       <uri>model://willowgarage</uri>
     </include>
+
+    <!-- Guest -->
+    <actor name="<%= guest_name %>">
+
+      <!-- Starting pose, nice for when the world is reset -->
+      <pose>
+        <%= guest_pose[0] %>
+        <%= guest_pose[1] %>
+        <%= guest_pose[2] %>
+        <%= guest_pose[3] %>
+        <%= guest_pose[4] %>
+        <%= guest_pose[5] %>
+      </pose>
+
+      <skin>
+        <filename>model://actor/meshes/<%= guest_skin %></filename>
+      </skin>
+
+      <animation name="animation">
+        <filename>model://actor/meshes/<%= guest_anim %></filename>
+      </animation>
+
+      <!-- Need one waypoint to idle at -->
+      <script>
+        <trajectory id='0' type='animation'>
+          <waypoint>
+            <time>100</time>
+              <pose>
+                <%= guest_pose[0] %>
+                <%= guest_pose[1] %>
+                <%= guest_pose[2] %>
+                <%= guest_pose[3] %>
+                <%= guest_pose[4] %>
+                <%= guest_pose[5] %>
+              </pose>
+          </waypoint>
+        </trajectory>
+      </script>
+
+      <plugin name="trajectory" filename="libFollowActorPlugin.so">
+
+        <namespace>servicesim</namespace>
+
+        <ignore_obstacle>willowgarage</ignore_obstacle>
+        <ignore_obstacle>ground_collision</ignore_obstacle>
+
+        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
+        <ignore_obstacle>servicebot</ignore_obstacle>
+
+        <% for time in drift_times %>
+          <drift_time><%= time.to_s %></drift_time>
+        <% end %>
+
+      </plugin>
+
+    </actor>
 
     <!-- Trajectory actors -->
     <%
