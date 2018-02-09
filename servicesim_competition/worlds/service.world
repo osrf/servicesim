@@ -1,11 +1,51 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 616860
+  Seed: 3905123
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="ServiceSim">
+
+    <!-- Competition plugin -->
+    <plugin name="competition" filename="libCompetitionPlugin.so">
+
+      <pick_up_location>
+        reception
+      </pick_up_location>
+
+      <go_to_pick_up>
+        <name>Go to pick-up location</name>
+        <weight>1.0</weight>
+        <!-- for contain checkpoint -->
+        <namespace>/servicesim/go_to_pick_up</namespace>
+      </go_to_pick_up>
+
+    </plugin>
+
+    <!-- Checkpoint: reach pick-up area -->
+    <plugin name="go_to_pick_up" filename="libContainPlugin.so">
+      <entity>servicebot</entity>
+      <namespace>servicesim/go_to_pick_up</namespace>
+      <enabled>false</enabled>
+      <pose>
+        -12.7
+        -18.78
+        1.19
+        1.54
+        0
+        1.9
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            4
+            4
+            10
+          </size>
+        </box>
+      </geometry>
+    </plugin>
 
     <!-- GUI -->
     <gui fullscreen='0'>
@@ -70,7 +110,7 @@
       </pose>
 
       <skin>
-        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+        <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
       </skin>
 
       <animation name="animation">
@@ -105,65 +145,65 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>180</drift_time>
+          <drift_time>151</drift_time>
         
-          <drift_time>442</drift_time>
+          <drift_time>406</drift_time>
         
-          <drift_time>740</drift_time>
+          <drift_time>419</drift_time>
         
-          <drift_time>999</drift_time>
+          <drift_time>693</drift_time>
         
-          <drift_time>1236</drift_time>
+          <drift_time>967</drift_time>
         
-          <drift_time>1498</drift_time>
+          <drift_time>1247</drift_time>
         
-          <drift_time>1797</drift_time>
+          <drift_time>1506</drift_time>
         
-          <drift_time>1866</drift_time>
+          <drift_time>1694</drift_time>
         
-          <drift_time>2129</drift_time>
+          <drift_time>1976</drift_time>
         
-          <drift_time>2216</drift_time>
+          <drift_time>2118</drift_time>
         
-          <drift_time>2263</drift_time>
+          <drift_time>2264</drift_time>
         
-          <drift_time>2375</drift_time>
+          <drift_time>2561</drift_time>
         
-          <drift_time>2661</drift_time>
+          <drift_time>2627</drift_time>
         
-          <drift_time>2961</drift_time>
+          <drift_time>2710</drift_time>
         
-          <drift_time>3243</drift_time>
+          <drift_time>3001</drift_time>
         
-          <drift_time>3327</drift_time>
+          <drift_time>3244</drift_time>
         
-          <drift_time>3621</drift_time>
+          <drift_time>3499</drift_time>
         
-          <drift_time>3779</drift_time>
+          <drift_time>3626</drift_time>
         
-          <drift_time>3835</drift_time>
+          <drift_time>3669</drift_time>
         
-          <drift_time>4089</drift_time>
+          <drift_time>3730</drift_time>
         
-          <drift_time>4318</drift_time>
+          <drift_time>3753</drift_time>
+        
+          <drift_time>3794</drift_time>
+        
+          <drift_time>3826</drift_time>
+        
+          <drift_time>3980</drift_time>
+        
+          <drift_time>4033</drift_time>
+        
+          <drift_time>4303</drift_time>
+        
+          <drift_time>4461</drift_time>
         
           <drift_time>4590</drift_time>
         
-          <drift_time>4684</drift_time>
+          <drift_time>4733</drift_time>
         
-          <drift_time>4952</drift_time>
-        
-          <drift_time>5160</drift_time>
-        
-          <drift_time>5450</drift_time>
-        
-          <drift_time>5472</drift_time>
-        
-          <drift_time>5707</drift_time>
-        
-          <drift_time>5777</drift_time>
-        
-          <drift_time>6071</drift_time>
+          <drift_time>4852</drift_time>
         
 
       </plugin>
@@ -187,7 +227,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -352,7 +392,7 @@
       </target>
     
 
-    <velocity>1.0277371424966824</velocity>
+    <velocity>0.9143786863526832</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
     <!-- FIXME: servicebot's bounding box is huge and always colliding -->
@@ -385,7 +425,7 @@
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->
