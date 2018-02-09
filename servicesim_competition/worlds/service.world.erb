@@ -446,12 +446,13 @@
     <%= fromFile(DIR + "/" + "cubicle.erb") %>
     <% end %>
 
-    <!-- cubicles on the back -->
+    <!-- Cubicles -->
     <%
       center_y = 16
       x_min = 18
-      x_max = 45
-      openings = (30..33)
+      x_max = 44
+      x_size = 3
+      openings = (30..32)
 
       for x in (x_min..x_max)
 
@@ -475,7 +476,7 @@
     <% end %>
 
     <%
-      for x in (x_min..(x_max+1)).step(4)
+      for x in (x_min..(x_max+1)).step(x_size)
         for y in (-3..2)
 
           $count += 1
@@ -496,8 +497,8 @@
       end
     %>
     <%
-      range = (x_min..x_max).step(4).to_a
-      range.concat(((x_min+3)..(x_max+3)).step(4).to_a)
+      range = (x_min..x_max).step(x_size).to_a
+      range.concat(((x_min+1)..(x_max+1)).step(x_size).to_a)
       for x in range
         for y in [-3, 3]
 
