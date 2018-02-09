@@ -94,6 +94,28 @@ install(TARGETS ${follow_actor_plugin_name}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
+##########################
+##      Competition     ##
+##########################
+
+# Create the libCompetitionPlugin.so library.
+set(competition_plugin_name CompetitionPlugin)
+add_library(${competition_plugin_name} SHARED
+  src/CompetitionPlugin.cc
+  src/Checkpoint.cc
+)
+target_link_libraries(${competition_plugin_name}
+  ${GAZEBO_LIBRARIES}
+)
+add_dependencies(${competition_plugin_name}
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+)
+install(TARGETS ${competition_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
 #############
 ## Install ##
 #############
