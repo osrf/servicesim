@@ -22,13 +22,23 @@
 #include <servicesim_competition/Score.h>
 
 #include "CompetitionPlugin.hh"
+#include "Conversions.hh"
+#include "CP_DropOff.hh"
 #include "CP_GoToPickUp.hh"
+#include "CP_PickUp.hh"
+#include "CP_ReturnToStart.hh"
 
 /////////////////////////////////////////////////
 class servicesim::CompetitionPluginPrivate
 {
   /// \brief Pick-up location name
   public: std::string pickUpLocation;
+
+  /// \brief Drop-off location name
+  public: std::string dropOffLocation;
+
+  /// \brief Guest name
+  public: std::string guestName;
 
   /// \brief Connection to world update
   public: gazebo::event::ConnectionPtr updateConnection{nullptr};
@@ -79,10 +89,38 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
   }
   this->dataPtr->pickUpLocation = _sdf->Get<std::string>("pick_up_location");
 
+  if (!_sdf->HasElement("drop_off_location"))
+  {
+    gzerr << "Missing <drop_off_location>, competition not initialized"
+          << std::endl;
+    return;
+  }
+  this->dataPtr->dropOffLocation = _sdf->Get<std::string>("drop_off_location");
+
+  this->dataPtr->guestName = _sdf->Get<std::string>("guest_name");
+
   // Create checkpoints
   {
     std::unique_ptr<CP_GoToPickUp> cp(new CP_GoToPickUp(
         _sdf->GetElement("go_to_pick_up")));
+    this->dataPtr->checkpoints.push_back(std::move(cp));
+  }
+
+  {
+    std::unique_ptr<CP_PickUp> cp(new CP_PickUp(
+        _sdf->GetElement("pick_up")));
+    this->dataPtr->checkpoints.push_back(std::move(cp));
+  }
+
+  {
+    std::unique_ptr<CP_DropOff> cp(new CP_DropOff(
+        _sdf->GetElement("drop_off")));
+    this->dataPtr->checkpoints.push_back(std::move(cp));
+  }
+
+  {
+    std::unique_ptr<CP_ReturnToStart> cp(new CP_ReturnToStart(
+        _sdf->GetElement("return_to_start")));
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
 
@@ -102,7 +140,7 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
   this->dataPtr->newTaskRosService = this->dataPtr->rosNode->advertiseService(
       "/servicesim/new_task", &CompetitionPlugin::OnNewTaskRosService, this);
 
-  // Asvertise score messages
+  // Advertise score messages
   this->dataPtr->scoreRosPub =
       this->dataPtr->rosNode->advertise<servicesim_competition::Score>(
       "/servicesim/score", 1000);
@@ -132,6 +170,8 @@ bool CompetitionPlugin::OnNewTaskRosService(
 
   // Respond
   _res.pick_up_location = this->dataPtr->pickUpLocation;
+  _res.drop_off_location = this->dataPtr->dropOffLocation;
+  _res.guest_name = this->dataPtr->guestName;
 
   return true;
 }
@@ -160,7 +200,16 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
     }
   }
 
-  // TODO: Check if current checkpoint is paused
+  // If current checkpoint is paused, go back to previous one
+  if (this->dataPtr->current > 0 &&
+      this->dataPtr->checkpoints[this->dataPtr->current - 1]->Paused())
+  {
+    // Previous checkpoint
+    this->dataPtr->current--;
+
+    if (this->dataPtr->current > 0)
+      this->dataPtr->checkpoints[this->dataPtr->current - 1]->Start();
+  }
 
   // TODO: Check penalties
 

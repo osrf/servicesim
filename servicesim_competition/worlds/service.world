@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 1702832
+  Seed: 1370468
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
@@ -14,17 +14,43 @@
         reception
       </pick_up_location>
 
+      <drop_off_location>
+        office_1
+      </drop_off_location>
+
+      <guest_name>guest</guest_name>
+
       <go_to_pick_up>
         <name>Go to pick-up location</name>
         <weight>1.0</weight>
-        <!-- for contain checkpoint -->
+        <!-- for contain plugin -->
         <namespace>/servicesim/go_to_pick_up</namespace>
       </go_to_pick_up>
 
+      <pick_up>
+        <name>Pick-up guest</name>
+        <weight>1.0</weight>
+      </pick_up>
+
+      <drop_off>
+        <name>Drop-off guest</name>
+        <weight>1.0</weight>
+        <guest_name>guest</guest_name>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/drop_off</namespace>
+      </drop_off>
+
+      <return_to_start>
+        <name>Return to start</name>
+        <weight>1.0</weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/return_to_start</namespace>
+      </return_to_start>
+
     </plugin>
 
-    <!-- Checkpoint: reach pick-up area -->
-    <plugin name="go_to_pick_up" filename="libContainPlugin.so">
+    <!-- Pick-up area contain plugin -->
+    <plugin name="pick_up" filename="libContainPlugin.so">
       <entity>servicebot</entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
@@ -41,6 +67,54 @@
           <size>
             4
             4
+            10
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Drop-off area contain plugin -->
+    <plugin name="drop_off" filename="libContainPlugin.so">
+      <entity>guest</entity>
+      <namespace>servicesim/drop_off</namespace>
+      <enabled>false</enabled>
+      <pose>
+        -12.4
+        -13.5
+        0
+        0
+        0
+        0
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            4
+            4
+            10
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Start area contain plugin -->
+    <plugin name="start" filename="libContainPlugin.so">
+      <entity>servicebot</entity>
+      <namespace>servicesim/return_to_start</namespace>
+      <enabled>false</enabled>
+      <pose>
+        -6.5
+        -18.2
+        0
+        0
+        0
+        0
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            2
+            2
             10
           </size>
         </box>
@@ -16051,65 +16125,65 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>177</drift_time>
+          <drift_time>148</drift_time>
         
-          <drift_time>248</drift_time>
+          <drift_time>276</drift_time>
         
-          <drift_time>389</drift_time>
+          <drift_time>289</drift_time>
         
-          <drift_time>592</drift_time>
+          <drift_time>451</drift_time>
         
-          <drift_time>805</drift_time>
+          <drift_time>617</drift_time>
         
-          <drift_time>842</drift_time>
+          <drift_time>904</drift_time>
         
-          <drift_time>1053</drift_time>
+          <drift_time>1018</drift_time>
         
-          <drift_time>1231</drift_time>
+          <drift_time>1208</drift_time>
         
-          <drift_time>1337</drift_time>
+          <drift_time>1239</drift_time>
         
-          <drift_time>1467</drift_time>
+          <drift_time>1522</drift_time>
         
-          <drift_time>1531</drift_time>
+          <drift_time>1698</drift_time>
         
-          <drift_time>1711</drift_time>
+          <drift_time>1946</drift_time>
         
-          <drift_time>1844</drift_time>
+          <drift_time>1975</drift_time>
         
-          <drift_time>1960</drift_time>
+          <drift_time>2017</drift_time>
         
-          <drift_time>2242</drift_time>
+          <drift_time>2053</drift_time>
         
-          <drift_time>2521</drift_time>
+          <drift_time>2167</drift_time>
         
-          <drift_time>2660</drift_time>
+          <drift_time>2237</drift_time>
         
-          <drift_time>2740</drift_time>
+          <drift_time>2255</drift_time>
         
-          <drift_time>2967</drift_time>
+          <drift_time>2395</drift_time>
         
-          <drift_time>3171</drift_time>
+          <drift_time>2407</drift_time>
         
-          <drift_time>3287</drift_time>
+          <drift_time>2665</drift_time>
         
-          <drift_time>3477</drift_time>
+          <drift_time>2791</drift_time>
         
-          <drift_time>3729</drift_time>
+          <drift_time>2987</drift_time>
         
-          <drift_time>4024</drift_time>
+          <drift_time>3188</drift_time>
         
-          <drift_time>4212</drift_time>
+          <drift_time>3332</drift_time>
         
-          <drift_time>4499</drift_time>
+          <drift_time>3485</drift_time>
         
-          <drift_time>4561</drift_time>
+          <drift_time>3748</drift_time>
         
-          <drift_time>4623</drift_time>
+          <drift_time>3844</drift_time>
         
-          <drift_time>4746</drift_time>
+          <drift_time>3853</drift_time>
         
-          <drift_time>4909</drift_time>
+          <drift_time>3980</drift_time>
         
 
       </plugin>
@@ -16124,8 +16198,8 @@
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
-    -9.32582
-    -15.9673
+    -9.201666
+    -7.601102
     1.2138
     1.57
     0.0
@@ -16142,15 +16216,6 @@
   </animation>
 
   <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
-    
-      <target>
-        -9.32582
-        -15.9673
-        1.2138
-        1.57
-        0.0
-        -0.22373
-      </target>
     
       <target>
         -9.201666
@@ -16200,6 +16265,15 @@
       <target>
         -9.32582
         -15.9673
+        1.2138
+        1.57
+        0.0
+        -0.22373
+      </target>
+    
+      <target>
+        -9.201666
+        -7.601102
         1.2138
         1.57
         0.0
@@ -16298,7 +16372,7 @@
       </target>
     
 
-    <velocity>1.0497511490275526</velocity>
+    <velocity>1.0039856468688568</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
     <!-- FIXME: servicebot's bounding box is huge and always colliding -->
@@ -16327,7 +16401,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
   </skin>
 
   <animation name="animation">

@@ -116,12 +116,27 @@
   #                                             #
   ###############################################
 
-  # Pickup location
-  pickup_location =
+  # TODO: randomize locations
+  pick_up_location =
   {
     :name => 'reception',
     :pose => guest_pose,
     :size => [4, 4, 10]
+  }
+
+  drop_off_location =
+  {
+    :name => 'office_1',
+    :pose => [-12.4, -13.5, 0, 0, 0, 0],
+    :size => [4, 4, 10]
+  }
+
+  # TODO: must sync this with USRF spawn location
+  start_location =
+  {
+    :name => 'cafeteria_1',
+    :pose => [-6.5, -18.2, 0, 0, 0, 0],
+    :size => [2, 2, 10]
   }
 
   ###############################################
@@ -159,37 +174,111 @@
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
       <pick_up_location>
-        <%= pickup_location[:name] %>
+        <%= pick_up_location[:name] %>
       </pick_up_location>
+
+      <drop_off_location>
+        <%= drop_off_location[:name] %>
+      </drop_off_location>
+
+      <guest_name><%= guest_name %></guest_name>
 
       <go_to_pick_up>
         <name>Go to pick-up location</name>
         <weight>1.0</weight>
-        <!-- for contain checkpoint -->
+        <!-- for contain plugin -->
         <namespace>/servicesim/go_to_pick_up</namespace>
       </go_to_pick_up>
 
+      <pick_up>
+        <name>Pick-up guest</name>
+        <weight>1.0</weight>
+      </pick_up>
+
+      <drop_off>
+        <name>Drop-off guest</name>
+        <weight>1.0</weight>
+        <guest_name><%= guest_name %></guest_name>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/drop_off</namespace>
+      </drop_off>
+
+      <return_to_start>
+        <name>Return to start</name>
+        <weight>1.0</weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/return_to_start</namespace>
+      </return_to_start>
+
     </plugin>
 
-    <!-- Checkpoint: reach pick-up area -->
-    <plugin name="go_to_pick_up" filename="libContainPlugin.so">
+    <!-- Pick-up area contain plugin -->
+    <plugin name="pick_up" filename="libContainPlugin.so">
       <entity><%= robot_name %></entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
-        <%= pickup_location[:pose][0] %>
-        <%= pickup_location[:pose][1] %>
-        <%= pickup_location[:pose][2] %>
-        <%= pickup_location[:pose][3] %>
-        <%= pickup_location[:pose][4] %>
-        <%= pickup_location[:pose][5] %>
+        <%= pick_up_location[:pose][0] %>
+        <%= pick_up_location[:pose][1] %>
+        <%= pick_up_location[:pose][2] %>
+        <%= pick_up_location[:pose][3] %>
+        <%= pick_up_location[:pose][4] %>
+        <%= pick_up_location[:pose][5] %>
       </pose>
       <geometry>
         <box>
           <size>
-            <%= pickup_location[:size][0] %>
-            <%= pickup_location[:size][1] %>
-            <%= pickup_location[:size][2] %>
+            <%= pick_up_location[:size][0] %>
+            <%= pick_up_location[:size][1] %>
+            <%= pick_up_location[:size][2] %>
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Drop-off area contain plugin -->
+    <plugin name="drop_off" filename="libContainPlugin.so">
+      <entity><%= guest_name %></entity>
+      <namespace>servicesim/drop_off</namespace>
+      <enabled>false</enabled>
+      <pose>
+        <%= drop_off_location[:pose][0] %>
+        <%= drop_off_location[:pose][1] %>
+        <%= drop_off_location[:pose][2] %>
+        <%= drop_off_location[:pose][3] %>
+        <%= drop_off_location[:pose][4] %>
+        <%= drop_off_location[:pose][5] %>
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            <%= drop_off_location[:size][0] %>
+            <%= drop_off_location[:size][1] %>
+            <%= drop_off_location[:size][2] %>
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Start area contain plugin -->
+    <plugin name="start" filename="libContainPlugin.so">
+      <entity><%= robot_name %></entity>
+      <namespace>servicesim/return_to_start</namespace>
+      <enabled>false</enabled>
+      <pose>
+        <%= start_location[:pose][0] %>
+        <%= start_location[:pose][1] %>
+        <%= start_location[:pose][2] %>
+        <%= start_location[:pose][3] %>
+        <%= start_location[:pose][4] %>
+        <%= start_location[:pose][5] %>
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            <%= start_location[:size][0] %>
+            <%= start_location[:size][1] %>
+            <%= start_location[:size][2] %>
           </size>
         </box>
       </geometry>
