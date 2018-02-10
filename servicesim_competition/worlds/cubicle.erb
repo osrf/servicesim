@@ -3,7 +3,7 @@
   #
   # Required variables
   # * $count (number)
-  # * $cubicle_type (string) open, closed or corner
+  # * $cubicle_type (string) open, closed, corner or full
 
   $count += 1
 
@@ -11,6 +11,8 @@
     offset = 0.3
   elsif $cubicle_type == 'closed'
     offset = -0.3
+  elsif $cubicle_type == 'full'
+    offset = -0.9
   end
 %>
 
@@ -43,24 +45,30 @@
         <mesh>
           <uri>file://media/meshes/cubicle_wall.obj</uri>
           <scale>0.01 0.01 0.01</scale>
+          <% if $cubicle_type != 'full' %>
           <submesh>
             <name><%= $cubicle_type %></name>
           </submesh>
+          <% end %>
         </mesh>
       </geometry>
     </visual>
 
+<!-- TODO: simple shape collisions
     <collision name="collision">
       <geometry>
         <mesh>
           <uri>file://media/meshes/cubicle_wall.obj</uri>
           <scale>0.01 0.01 0.01</scale>
+          <% if $cubicle_type != 'full' %>
           <submesh>
             <name><%= $cubicle_type %></name>
           </submesh>
+          <% end %>
         </mesh>
       </geometry>
     </collision>
+-->
 
   </link>
 

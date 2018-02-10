@@ -118,9 +118,10 @@
   gap = 0.1
   $office_u = 1.5
   $cubicle_u = 0.6
+  $cubicle_corner = 0.025
 
-  total_x = $office_u * 24
-  total_y = $office_u * 18
+  total_x = $office_u * 39
+  total_y = $office_u * 15
 
   $count = 0
 %>
@@ -136,7 +137,7 @@
     <gui fullscreen='0'>
       <camera name='user_camera'>
         <!--pose>-14.41 -19.9 4.14 0 0.5 0.76</pose-->
-        <pose>25.9 -21.8 73.6 0 1.05 1.57</pose>
+        <pose>-4.45 -12.04 49.8 0 1.09 1.57</pose>
       </camera>
     </gui>
 
@@ -164,17 +165,17 @@
       </link>
     </model>
 
-    <!-- Office -->
-
     <!-- Ceiling -->
     <%
       x_width = total_x + $cubicle_u
       y_width = total_y + $cubicle_u
+      x_offset = x_width * -0.1
+      y_offset = y_width * 0.5
     %>
     <model name="ceiling">
       <pose>
-        <%= x_width * 0.5 %>
-        <%= y_width * 0.5 %>
+        <%= x_offset %>
+        <%= y_offset %>
         <%= 2 * $office_u %>
         0
         <%= Math::PI %>
@@ -205,8 +206,8 @@
     <!-- Floor -->
     <model name="floor">
       <pose>
-        <%= x_width * 0.5 %>
-        <%= y_width * 0.5 %>
+        <%= x_offset %>
+        <%= y_offset %>
         <%= -0.001 %>
         0
         0
@@ -234,20 +235,57 @@
 
     </model>
 
+    <!-- Public area -->
     <%
       $count += 1
-      $room_name = 'reception' + '_' + $count.to_s()
-      $room_type = 'reception'
-      $room_floor = 'carpet'
+      $room_name = 'bathroom' + '_' + $count.to_s()
+      $room_type = 'bathroom'
+      $room_floor = 'tile'
+      $room_size = [0, 1, -1, 0]
+      $room_pose =
+      [
+        6 * $office_u,
+        2 * $office_u,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $count += 1
+      $room_name = 'bathroom' + '_' + $count.to_s()
+      $room_type = 'bathroom'
+      $room_floor = 'tile'
+      $room_size = [0, 1, -1, 0]
+      $room_pose =
+      [
+        8 * $office_u + gap,
+        2 * $office_u,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $count += 1
+      $room_name = 'refreshment_area' + '_' + $count.to_s()
+      $room_type = 'refreshment_area'
+      $room_floor = 'tile'
       $room_size = [-3, 3, -4, 0]
       $room_pose =
       [
-        3 * $office_u,
+        9 * $office_u + 2 * gap,
+        4 * $office_u,
         0.0,
         0.0,
         0.0,
-        0.0,
-        Math::PI
+        Math::PI * 0.5
       ]
     %>
     <%= fromFile(DIR + "/" + "room.erb") %>
@@ -260,8 +298,26 @@
       $room_size = [-1, 4, -3, 0]
       $room_pose =
       [
-        4 * $office_u,
-        9 * $office_u + gap,
+        12 * $office_u,
+        11 * $office_u,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $count += 1
+      $room_name = 'meeting_room_small' + '_' + $count.to_s()
+      $room_type = 'meeting_room_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 2, -2, 0]
+      $room_pose =
+      [
+        3 * $office_u,
+        5 * $office_u,
         0.0,
         0.0,
         0.0,
@@ -272,14 +328,191 @@
 
     <%
       $count += 1
+      $room_name = 'meeting_room_small' + '_' + $count.to_s()
+      $room_type = 'meeting_room_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 2, -2, 0]
+      $room_pose =
+      [
+        3 * $office_u,
+        9 * $office_u + gap,
+        0.0,
+        0.0,
+        0.0,
+        -Math::PI * 0.5
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      g = 0
+      for x in [6, 3]
+        g += 1
+        $count += 1
+        $room_name = 'office_small' + '_' + $count.to_s()
+        $room_type = 'office_small'
+        $room_floor = 'carpet'
+        $room_size = [-1, 1, -1, 0]
+        $room_pose =
+        [
+          x * $office_u - g * gap,
+          13 * $office_u,
+          0.0,
+          0.0,
+          0.0,
+          Math::PI
+        ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+    <% end %>
+
+    <%
+      for y in [5, 9]
+        $count += 1
+    %>
+    <include>
+      <name>island_<%= $count %></name>
+      <pose>
+        <%= 6 * $office_u %>
+        <%= y * $office_u %>
+        0
+        0
+        0
+        0
+      </pose>
+      <uri>model://cubicle_island</uri>
+    </include>
+    <%
+      end
+    %>
+
+    <%
+      s = 9.0 * $office_u + 2.0 * gap
+      e = 13.0 * $office_u
+      for x in (s..e).step(1.9)
+        $count += 1
+    %>
+    <include>
+      <name>island_<%= $count %></name>
+      <pose>
+        <%= x - gap %>
+        <%= 7 * $office_u + gap %>
+        0
+        0
+        0
+        <%= Math::PI %>
+      </pose>
+      <uri>model://cubicle_corner</uri>
+    </include>
+    <%
+      end
+    %>
+
+    <!-- Employee-only area -->
+    <%
+      $count += 1
+      $room_name = 'meeting_room_small' + '_' + $count.to_s()
+      $room_type = 'meeting_room_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 2, -2, 0]
+      $room_pose =
+      [
+        -3 * $office_u - gap,
+        5 * $office_u,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $count += 1
+      $room_name = 'meeting_room_small' + '_' + $count.to_s()
+      $room_type = 'meeting_room_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 2, -2, 0]
+      $room_pose =
+      [
+        -3 * $office_u,
+        9 * $office_u + gap,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI * 0.5
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $count += 1
+      $room_name = 'bathroom' + '_' + $count.to_s()
+      $room_type = 'bathroom'
+      $room_floor = 'tile'
+      $room_size = [0, 1, -1, 0]
+      $room_pose =
+      [
+        -3 * $office_u,
+        13 * $office_u,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $count += 1
+      $room_name = 'bathroom' + '_' + $count.to_s()
+      $room_type = 'bathroom'
+      $room_floor = 'tile'
+      $room_size = [0, 1, -1, 0]
+      $room_pose =
+      [
+        -5 * $office_u - gap,
+        13 * $office_u,
+        0.0,
+        0.0,
+        0.0,
+        Math::PI
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      g = 1
+      for x in [-8, -11, -14, -17]
+        g += 1
+        $count += 1
+        $room_name = 'office_small' + '_' + $count.to_s()
+        $room_type = 'office_small'
+        $room_floor = 'carpet'
+        $room_size = [-1, 1, -1, 0]
+        $room_pose =
+        [
+          x * $office_u - g * gap,
+          13 * $office_u,
+          0.0,
+          0.0,
+          0.0,
+          Math::PI
+        ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+    <% end %>
+
+    <%
+      $count += 1
       $room_name = 'office_large' + '_' + $count.to_s()
       $room_type = 'office_large'
       $room_floor = 'carpet'
       $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        3 * $office_u,
-        16 * $office_u + 5 * gap,
+        -18 * $office_u - 6 * gap,
+        12 * $office_u,
         0.0,
         0.0,
         0.0,
@@ -296,8 +529,26 @@
       $room_size = [-3, 3, -4, 0]
       $room_pose =
       [
-        11 * $office_u + gap,
-        5 * $office_u,
+        -18 * $office_u - 6 * gap,
+        3 * $office_u,
+        0.0,
+        0.0,
+        0.0,
+        -Math::PI * 0.5
+      ]
+    %>
+    <%= fromFile(DIR + "/" + "room.erb") %>
+
+    <%
+      $count += 1
+      $room_name = 'meeting_room_small' + '_' + $count.to_s()
+      $room_type = 'meeting_room_small'
+      $room_floor = 'carpet'
+      $room_size = [-1, 2, -2, 0]
+      $room_pose =
+      [
+        -8 * $office_u,
+        3 * $office_u,
         0.0,
         0.0,
         0.0,
@@ -314,12 +565,12 @@
       $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        17 * $office_u,
-        2 * $office_u,
+        -12 * $office_u - gap,
+        3 * $office_u,
         0.0,
         0.0,
         0.0,
-        Math::PI * 0.5
+        0.0
       ]
     %>
     <%= fromFile(DIR + "/" + "room.erb") %>
@@ -332,136 +583,54 @@
       $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        17 * $office_u,
-        7 * $office_u,
+        -16 * $office_u - 2 * gap,
+        3 * $office_u,
         0.0,
         0.0,
         0.0,
-        Math::PI * 0.5
+        0.0
       ]
     %>
     <%= fromFile(DIR + "/" + "room.erb") %>
-
-    <%
-      g = -1
-      for y in (2..17).step(3)
-        g += 1
-        $count += 1
-        $room_name = 'office_small' + '_' + $count.to_s()
-        $room_type = 'office_small'
-        $room_floor = 'carpet'
-        $room_size = [-1, 1, -1, 0]
-        $room_pose =
-        [
-          22 * $office_u,
-          y * $office_u + g * gap,
-          0.0,
-          0.0,
-          0.0,
-          Math::PI * 0.5
-        ]
-    %>
-    <%= fromFile(DIR + "/" + "room.erb") %>
-    <% end %>
-
-    <%
-      $count += 1
-      $room_name = 'bathroom' + '_' + $count.to_s()
-      $room_type = 'bathroom'
-      $room_floor = 'tile'
-      $room_size = [0, 1, -1, 0]
-      $room_pose =
-      [
-        17 * $office_u,
-        10 * $office_u + gap,
-        0.0,
-        0.0,
-        0.0,
-        Math::PI * 0.5
-      ]
-    %>
-    <%= fromFile(DIR + "/" + "room.erb") %>
-
-    <%
-      $count += 1
-      $room_name = 'bathroom' + '_' + $count.to_s()
-      $room_type = 'bathroom'
-      $room_floor = 'tile'
-      $room_size = [0, 1, -1, 0]
-      $room_pose =
-      [
-        17 * $office_u,
-        12 * $office_u + 2 * gap,
-        0.0,
-        0.0,
-        0.0,
-        Math::PI * 0.5
-      ]
-    %>
-    <%= fromFile(DIR + "/" + "room.erb") %>
-
-    <%
-      for x in [10, 14]
-        for y in [8, 12]
-          $count += 1
-    %>
-    <include>
-      <name>island_<%= $count %></name>
-      <pose>
-        <%= x * $office_u %>
-        <%= y * $office_u %>
-        0
-        0
-        0
-        <%= Math::PI * 0.25 %>
-      </pose>
-      <uri>model://cubicle_island</uri>
-    </include>
-    <%
-        end
-      end
-    %>
-
-    <!-- wall -->
-    <%
-      openings = [11, 12, 13]
-      for c in (0..20)
-
-        if openings.include?(c)
-          next
-        end
-
-        $count += 1
-        $cubicle_type = 'open'
-        $cubicle_pose =
-        [
-          7 * $office_u + 0.5 * gap,
-          5 * $office_u + c * $cubicle_u,
-          0.0,
-          0.0,
-          0.0,
-          Math::PI * 0.5
-        ]
-    %>
-    <%= fromFile(DIR + "/" + "cubicle.erb") %>
-    <% end %>
 
     <!-- Cubicles -->
     <%
-      center_y = 16
-      x_min = 18
-      x_max = 44
-      x_size = 3
-      openings = (30..32)
+      rows = [5, 8, 11]
 
-      for x in (x_min..x_max)
+      # Center walls
+      for row in rows
+        center_y = row
+        x_min = -44
+        x_max = -12
+        x_size = 3
+        openings = [-45, -35, -34, -33, -23, -22, -21]
 
-        if openings.include?(x)
-          next
-        end
+        for x in (x_min..x_max)
+
+          if openings.include?(x)
+            next
+          end
+
+          $count += 1
+          $cubicle_type = 'closed'
+          $cubicle_pose =
+          [
+            x * $cubicle_u,
+            center_y * $office_u,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+    %>
+      <%= fromFile(DIR + "/" + "cubicle.erb") %>
+      <% end %>
+
+    <%
+      for x in (x_min..(x_max+1)).step(x_size)
 
         $count += 1
-        $cubicle_type = 'closed'
+        $cubicle_type = 'full'
         $cubicle_pose =
         [
           x * $cubicle_u,
@@ -469,60 +638,62 @@
           0.0,
           0.0,
           0.0,
-          0.0
+          Math::PI * 0.5
         ]
     %>
-    <%= fromFile(DIR + "/" + "cubicle.erb") %>
-    <% end %>
-
+      <%= fromFile(DIR + "/" + "cubicle.erb") %>
     <%
-      for x in (x_min..(x_max+1)).step(x_size)
-        for y in (-3..2)
+        $count += 1
+        $cubicle_type = 'full'
+        $cubicle_pose =
+        [
+          x * $cubicle_u,
+          center_y * $office_u,
+          0.0,
+          0.0,
+          0.0,
+          -Math::PI * 0.5
+        ]
+    %>
+      <%= fromFile(DIR + "/" + "cubicle.erb") %>
+    <%
+        if !openings.include?(x-1)
 
           $count += 1
-          $cubicle_type = (y == -3 or y == 2) ? 'open' : 'closed'
+          $cubicle_type = 'full'
           $cubicle_pose =
           [
             x * $cubicle_u,
-            center_y * $office_u + y * $cubicle_u,
-            0.0,
-            0.0,
-            0.0,
-            Math::PI * 0.5
-          ]
-    %>
-    <%= fromFile(DIR + "/" + "cubicle.erb") %>
-    <%
-        end
-      end
-    %>
-    <%
-      range = (x_min..x_max).step(x_size).to_a
-      range.concat(((x_min+1)..(x_max+1)).step(x_size).to_a)
-      for x in range
-        for y in [-3, 3]
-
-          if openings.include?(x)
-            next
-          end
-
-          $count += 1
-          $cubicle_type = 'open'
-          $cubicle_pose =
-          [
-            x * $cubicle_u,
-            center_y * $office_u + y * $cubicle_u,
+            center_y * $office_u + 2 * $cubicle_u + $cubicle_corner,
             0.0,
             0.0,
             0.0,
             0.0
           ]
     %>
-    <%= fromFile(DIR + "/" + "cubicle.erb") %>
+        <%= fromFile(DIR + "/" + "cubicle.erb") %>
     <%
         end
-      end
+        if !openings.include?(x+1)
+
+          $count += 1
+          $cubicle_type = 'full'
+          $cubicle_pose =
+          [
+            x * $cubicle_u,
+            center_y * $office_u - 2 * $cubicle_u - $cubicle_corner,
+            0.0,
+            0.0,
+            0.0,
+            Math::PI
+          ]
+        # TODO: Ogre is having a hard time accessing so many submeshes, try breaking the mesh apart
     %>
+        <%= #fromFile(DIR + "/" + "cubicle.erb")
+        %>
+        <% end %>
+      <% end %>
+    <% end %>
 
     <!-- Guest -->
     <actor name="<%= guest_name %>">
