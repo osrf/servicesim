@@ -49,17 +49,24 @@ namespace servicesim
     /// \param[in] _msg True if contains.
     private: void OnContain(const ignition::msgs::Boolean &_msg);
 
+    /// \brief Callback when drift messages are received from FollowActorPlugin.
+    /// \param[in] _msg Message with a code for the drift reason
+    private: void OnDrift(const ignition::msgs::UInt32 &_msg);
+
     /// \brief Callabck for enable service
     /// \param[in] _rep Response
     /// \param[in] _result Result
     private: void EnableCallback(const ignition::msgs::Boolean &_rep,
         const bool _result);
 
+    /// \brief Namespace for transport
+    private: std::string ns;
+
     /// \brief Ignition transport node for communication.
     private: ignition::transport::Node ignNode;
 
     /// \brief ROS node handle
-    public: std::unique_ptr<ros::NodeHandle> rosNode;
+    private: std::unique_ptr<ros::NodeHandle> rosNode;
 
     /// \brief DropOff ROS service
     private: ros::ServiceServer dropOffRosService;
@@ -67,8 +74,8 @@ namespace servicesim
     /// \brief True if checkpoint is paused
     private: bool paused{true};
 
-    /// \brief Namespace for transport
-    protected: std::string ns;
+    /// \brief Guest name
+    private: std::string guestName;
 
     /// \brief True if enabled
     private: bool enabled{false};

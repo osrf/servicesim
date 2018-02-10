@@ -31,47 +31,16 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf)
 {
   this->canPause = true;
 
+  if (!_sdf->HasElement("guest_name"))
+    gzerr << "Missing <guest_name> to monitor follow plugin" << std::endl;
+  else
+    this->guestName = _sdf->Get<std::string>("guest_name");
+
   // From ContainCheckpoint
-  if (!_sdf || !_sdf->HasElement("namespace"))
+  if (!_sdf->HasElement("namespace"))
     gzwarn << "Missing <namespace> for contain plugin" << std::endl;
   else
     this->ns = _sdf->Get<std::string>("namespace");
-
-  // Ignition transport
-  std::function<void(const ignition::msgs::UInt32 &)> driftCb =
-      [this](const ignition::msgs::UInt32 &_msg)
-  {
-    // Drift reason
-    auto reason = _msg.data();
-
-    // 1: Robot moved too fast and actor couldn't follow
-    if (reason == 1u)
-    {
-      // TODO: apply penalty
-    }
-    // 2: Scheduled drift time
-    else if (reason == 2u)
-    {
-      // Do nothing
-    }
-    // 3: User requested unfollow - we assume it came from this checkpoint
-    else if (reason == 3u)
-    {
-      // No pausing, we're finishing the checkpoint
-      return;
-    }
-    else
-    {
-      gzerr << "Drift reason not supported [" << reason << "], not pausing."
-            << std::endl;
-      return;
-    }
-
-    // End current interval
-    this->Pause();
-  };
-
-  this->ignNode.Subscribe("/servicesim/guest/drift", driftCb);
 
   // ROS transport
   if (!ros::isInitialized())
@@ -97,6 +66,39 @@ void CP_DropOff::EnableCallback(const ignition::msgs::Boolean &/*_rep*/,
 }
 
 /////////////////////////////////////////////////
+void CP_DropOff::OnDrift(const ignition::msgs::UInt32 &_msg)
+{
+  // Drift reason
+  auto reason = _msg.data();
+
+  // 1: Robot moved too fast and actor couldn't follow
+  if (reason == 1u)
+  {
+    // TODO: apply penalty
+  }
+  // 2: Scheduled drift time
+  else if (reason == 2u)
+  {
+    // Do nothing
+  }
+  // 3: User requested unfollow - we assume it came from this checkpoint
+  else if (reason == 3u)
+  {
+    // No pausing, we're finishing the checkpoint
+    return;
+  }
+  else
+  {
+    gzerr << "Drift reason not supported [" << reason << "], not pausing."
+          << std::endl;
+    return;
+  }
+
+  // End current interval
+  this->Pause();
+}
+
+/////////////////////////////////////////////////
 bool CP_DropOff::Check()
 {
   // Enable contain checkpoint once
@@ -105,6 +107,10 @@ bool CP_DropOff::Check()
     // Setup contain subscriber
     this->ignNode.Subscribe(this->ns + "/contain",
         &CP_DropOff::OnContain, this);
+
+    // Setup drift subscriber
+    this->ignNode.Subscribe("/servicesim/" + this->guestName + "/drift",
+        &CP_DropOff::OnDrift, this);
 
     // Enable contain plugin
     ignition::msgs::Boolean req;
