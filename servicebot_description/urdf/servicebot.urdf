@@ -66,7 +66,7 @@
     <axis xyz="0 0 -1"/>
     <parent link="base_link"/>
     <child link="head_pan_link"/>
-    <origin rpy="0 0 0" xyz="0 0 0.31" />
+    <origin rpy="0 0 0" xyz="0 0 0.32" />
     <limit effort="200" velocity="1.0" lower="-1.5707963267948966" upper="1.5707963267948966" />
   </joint>
 
@@ -138,7 +138,7 @@
     </inertial>
   </link>
 
-  <joint name="right_thigh_joint" type="fixed">
+  <joint name="right_thigh_joint/" type="fixed">
     <parent link="pelvis_link"/>
     <child link="right_thigh_link"/>
     <origin rpy="0.000 -0.640 0.000" xyz="0.017285 -0.12 -0.11"/>
@@ -360,12 +360,12 @@
     </inertial>
   </link>
 
-  <joint name="left_shoulder_joint" type="revolute">
-    <axis xyz="0 1 0"/>
+  <joint name="left_shoulder_joint" type="fixed">
+    <!--axis xyz="0 1 0"/-->
     <parent link="base_link"/>
     <child link="left_shoulder_link"/>
-    <origin rpy="0 0 0" xyz="0 0.1737 0.115"/>
-    <limit effort="30" velocity="1.0" lower="-0.55" upper="-00.55" />
+    <origin rpy="0 -0.55 0" xyz="0 0.1737 0.115"/>
+    <!--limit effort="30" velocity="1.0" lower="-0.55" upper="-0.55" /-->
   </joint>
 
   <link name="right_shoulder_link">
@@ -386,12 +386,12 @@
     </inertial>
   </link>
 
-  <joint name="right_shoulder_joint" type="revolute">
-    <axis xyz="0 1 0"/>
+  <joint name="right_shoulder_joint" type="fixed">
+    <!--axis xyz="0 1 0"/-->
     <parent link="base_link"/>
     <child link="right_shoulder_link"/>
-    <origin rpy="0 0 0" xyz="0 -0.1737 0.115"/>
-    <limit effort="30" velocity="1.0" lower="-0.55" upper="-0.55" />
+    <origin rpy="0 -0.55 0" xyz="0 -0.1737 0.115"/>
+    <!--limit effort="30" velocity="1.0" lower="-0.55" upper="-0.55" /-->
   </joint>
 
 
@@ -413,12 +413,12 @@
     </inertial>
   </link>
 
-  <joint name="left_upper_arm_joint" type="revolute">
-    <axis xyz="-1 0 0"/>
+  <joint name="left_upper_arm_joint" type="fixed">
+    <!--axis xyz="-1 0 0"/-->
     <parent link="left_shoulder_link"/>
     <child link="left_upper_arm_link"/>
-    <origin rpy="0 0 0" xyz="0 0.015 0.001"/>
-    <limit effort="30" velocity="1.0" lower="1.35" upper="1.35" />
+    <origin rpy="-1.35 0 0" xyz="0 0.015 0.001"/>
+    <!--limit effort="30" velocity="1.0" lower="1.35" upper="1.35" /-->
   </joint>
 
   <link name="right_upper_arm_link">
@@ -440,12 +440,12 @@
     </inertial>
   </link>
 
-  <joint name="right_upper_arm_joint" type="revolute">
-    <axis xyz="1 0 0"/>
+  <joint name="right_upper_arm_joint" type="fixed">
+    <!--axis xyz="1 0 0"/-->
     <parent link="right_shoulder_link"/>
     <child link="right_upper_arm_link"/>
-    <origin rpy="0 0 0" xyz="0 -0.015 0.001"/>
-    <limit effort="30" velocity="1.0" lower="1.35" upper="1.35" />
+    <origin rpy="1.35 0 0" xyz="0 -0.015 0.001"/>
+    <!--limit effort="30" velocity="1.0" lower="1.35" upper="1.35" /-->
   </joint>
 
   <link name="left_elbow_attach_link">
@@ -504,12 +504,12 @@
     </inertial>
   </link>
 
-  <joint name="left_elbow_joint" type="revolute">
-    <axis xyz="0 0 1"/>
+  <joint name="left_elbow_joint" type="fixed">
+    <!--axis xyz="0 0 1"/-->
     <parent link="left_elbow_attach_link"/>
     <child link="left_forearm_link"/>
-    <origin rpy="0 0 0" xyz="-0.006 0.055 -0.001"/>
-    <limit effort="30" velocity="1.0" lower="-0.5" upper="-0.5" />
+    <origin rpy="0 0 -0.50" xyz="-0.006 0.055 -0.001"/>
+    <!--limit effort="30" velocity="1.0" lower="-0.5" upper="-0.5" /-->
   </joint>
 
   <link name="right_forearm_link">
@@ -531,12 +531,12 @@
     </inertial>
   </link>
 
-  <joint name="right_elbow_joint" type="revolute">
-    <axis xyz="0 0 -1"/>
+  <joint name="right_elbow_joint" type="fixed">
+    <!--axis xyz="0 0 -1"/-->
     <parent link="right_elbow_attach_link"/>
     <child link="right_forearm_link"/>
-    <origin rpy="0 0 0" xyz="-0.006 -0.055 -0.001"/>
-    <limit effort="30" velocity="1.0" lower="-0.5" upper="-0.5" />
+    <origin rpy="0 0 0.5" xyz="-0.006 -0.055 -0.001"/>
+    <!--limit effort="30" velocity="1.0" lower="-0.5" upper="-0.5" /-->
   </joint>
 
   <link name="left_hand_link">
@@ -605,12 +605,12 @@
     </inertial>
   </link>
 
-  <joint name="left_gripper_joint" type="revolute">
-    <axis xyz="1 0 0"/>
+  <joint name="left_gripper_joint" type="fixed">
+    <!--axis xyz="1 0 0"/-->
     <parent link="left_hand_link"/>
     <child link="left_lower_hand_link"/>
     <origin rpy="0 0 0" xyz="0.00 0.02 -0.025"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0" />
+    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0" /-->
   </joint>
 
   <link name="right_lower_hand_link">
@@ -630,12 +630,12 @@
       <inertia ixx="1.0e-02" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
-  <joint name="right_gripper_joint" type="revolute">
-    <axis xyz="-1 0 0"/>
+  <joint name="right_gripper_joint" type="fixed">
+    <!--axis xyz="-1 0 0"/-->
     <parent link="right_hand_link"/>
     <child link="right_lower_hand_link"/>
     <origin rpy="0 0 0" xyz="0.00 -0.02 -0.025"/>
-    <limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0" />
+    <!--limit effort="30" velocity="1.0" lower="-0.7853981633974483" upper="0" /-->
   </joint>
 
 
@@ -649,12 +649,58 @@
     <parent link="head_link"/>
     <child link="front_camera_frame"/>
     <!--origin rpy="-1.57079632679 0 -1.57079632679" xyz="0.1 0 0"/-->
-    <origin rpy="0 0 0" xyz="0.1 0 0"/>
+    <origin xyz="0.1 0 0" rpy="0 0 0"/>
+  </joint>
+  <link name="front_camera_optical_frame">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="front_camera_optical_fixedjoint" type="fixed">
+    <parent link="front_camera_frame"/>
+    <child link="front_camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679"/>
+    <!--origin rpy="0 0 0" xyz="0.1 0 0"/-->
+  </joint>
+  <link name="rear_camera_frame">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="rear_camera_fixedjoint" type="fixed">
+    <parent link="head_link"/>
+    <child link="rear_camera_frame"/>
+    <origin xyz="-0.1 0 0" rpy="0 0 3.14159265"/>
+  </joint>
+  <link name="rear_camera_optical_frame">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="rear_camera_optical_fixedjoint" type="fixed">
+    <parent link="rear_camera_frame"/>
+    <child link="rear_camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679"/>
+  </joint>
+  <link name="lidar_frame">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+  <joint name="neck_lidar_fixedjoint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_frame"/>
+    <origin rpy="0 0 0" xyz="0.05 0 0.22" />
+    <!--origin xyz="0 0 0" rpy="0 0 0"/-->
   </joint>
 
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-      <robotNamespace>servicebot</robotNamespace>
+      <!--robotNamespace>servicebot</robotNamespace-->
       <legacyMode>false</legacyMode>
       <publishTf>true</publishTf>
       <publishWheelTF>true</publishWheelTF>
@@ -666,9 +712,8 @@
       <wheelAcceleration>0.3</wheelAcceleration>
       <publishWheelJointState>true</publishWheelJointState>
 
-      <odometryFrame>odom</odometryFrame>
-      <!--odometryTopic>/servicebot/odom</odometryTopic-->
-      <!--commandTopic>/servicebot/cmd_vel</commandTopic-->
+      <odometryTopic>/servicebot/odom</odometryTopic>
+      <commandTopic>/servicebot/cmd_vel</commandTopic>
       <!--commandTopic>/cmd_vel</commandTopic-->
     </plugin>
   </gazebo>
@@ -676,7 +721,7 @@
   <gazebo reference="front_camera_frame">
     <sensor type="camera" name="FrontCamera">
         <update_rate>24.0</update_rate>
-        <camera name="fron_camera">
+        <camera name="front_camera">
             <horizontal_fov>1.06290551</horizontal_fov>
             <image>
                 <width>640</width>
@@ -697,10 +742,10 @@
             <robotNamespace>servicebot</robotNamespace>
             <alwaysOn>true</alwaysOn>
             <updateRate>24.0</updateRate>
-            <cameraName>camera/front</cameraName>
+            <cameraName>camera_front</cameraName>
             <imageTopicName>image_raw</imageTopicName>
             <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-            <frameName>front_camera_frame</frameName>
+            <frameName>front_camera_optical_frame</frameName>
             <hackBaseline>0.07</hackBaseline>
             <distortionK1>-0.0545211</distortionK1>
             <distortionK2>0.06919734</distortionK2>
@@ -708,6 +753,96 @@
             <distortionT1>-0.0112245</distortionT1>
             <distortionT2>0.0</distortionT2>
         </plugin>
+    </sensor>
+  </gazebo>
+  <gazebo reference="rear_camera_frame">
+    <sensor type="camera" name="RearCamera">
+        <update_rate>24.0</update_rate>
+        <camera name="rear_camera">
+            <horizontal_fov>1.06290551</horizontal_fov>
+            <image>
+                <width>640</width>
+                <height>480</height>
+                <format>R8G8B8</format>
+            </image>
+            <clip>
+                <near>0.3</near>
+                <far>500</far>
+            </clip>
+            <noise>
+                <type>gaussian</type>
+                <mean>0.0</mean>
+                <stddev>0.007</stddev>
+            </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+            <robotNamespace>servicebot</robotNamespace>
+            <alwaysOn>true</alwaysOn>
+            <updateRate>24.0</updateRate>
+            <cameraName>camera_rear</cameraName>
+            <imageTopicName>image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>rear_camera_optical_frame</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>-0.0545211</distortionK1>
+            <distortionK2>0.06919734</distortionK2>
+            <distortionK3>-0.0241095</distortionK3>
+            <distortionT1>-0.0112245</distortionT1>
+            <distortionT2>0.0</distortionT2>
+        </plugin>
+    </sensor>
+  </gazebo>
+  <gazebo reference="lidar_frame">
+    <sensor type="gpu_ray" name="lidar">
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>1875</samples>
+            <resolution>1</resolution>
+            <min_angle>-2.0943951023931953</min_angle>
+            <max_angle>2.0943951023931953</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.1</min>
+          <max>30.0</max>
+          <resolution>0.001</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.008</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_gpu_laser.so">
+        <robotNamespace>servicebot</robotNamespace>
+        <topicName>scan</topicName>
+        <frameName>/lidar_frame</frameName>
+        <min_range>0.1</min_range>
+        <max_range>30.0</max_range>
+        <gaussianNoise>0.008</gaussianNoise>
+      </plugin>
+    </sensor>
+  </gazebo>
+  <gazebo reference="base_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>imu</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <!--robotNamespace>servicebot</robotNamespace-->
+        <topicName>servicebot/imu</topicName>
+        <bodyName>base_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>base_link</frameName>
+      </plugin>
     </sensor>
   </gazebo>
   <gazebo reference="base_link">
@@ -815,7 +950,7 @@
        	<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
 			  <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 		</joint>
-        <actuator name="head_tilt_Motor">
+    <actuator name="head_tilt_Motor">
 			<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
 			  <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			<mechanicalReduction>1</mechanicalReduction>
@@ -827,7 +962,31 @@
         	<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
 			    <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 		</joint>
-        <actuator name="head_pan_Motor">
+    <actuator name="head_pan_Motor">
+			<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+	<transmission name="left_caster_wheel_Transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="left_caster_wheel_joint">
+       	<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
+			  <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+    <actuator name="left_caster_wheel_Motor">
+			<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+	<transmission name="right_caster_wheel_Transmission">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="right_caster_wheel_joint">
+       	<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+    <actuator name="right_caster_wheel_Motor">
 			<!--hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface-->
 			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			<mechanicalReduction>1</mechanicalReduction>
