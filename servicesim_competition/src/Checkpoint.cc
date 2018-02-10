@@ -181,7 +181,7 @@ ContainCheckpoint::ContainCheckpoint(const sdf::ElementPtr &_sdf)
     : Checkpoint(_sdf)
 {
   if (!_sdf || !_sdf->HasElement("namespace"))
-    gzwarn << "Missing <namespace> for contain checkpoint" << std::endl;
+    gzwarn << "Missing <namespace> for contain plugin" << std::endl;
   else
     this->ns = _sdf->Get<std::string>("namespace");
 }

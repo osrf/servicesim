@@ -26,6 +26,7 @@
 #include "CP_DropOff.hh"
 #include "CP_GoToPickUp.hh"
 #include "CP_PickUp.hh"
+#include "CP_ReturnToStart.hh"
 
 /////////////////////////////////////////////////
 class servicesim::CompetitionPluginPrivate
@@ -114,6 +115,12 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
   {
     std::unique_ptr<CP_DropOff> cp(new CP_DropOff(
         _sdf->GetElement("drop_off")));
+    this->dataPtr->checkpoints.push_back(std::move(cp));
+  }
+
+  {
+    std::unique_ptr<CP_ReturnToStart> cp(new CP_ReturnToStart(
+        _sdf->GetElement("return_to_start")));
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
 

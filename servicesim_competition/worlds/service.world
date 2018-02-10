@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 5964551
+  Seed: 1112192
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
@@ -42,6 +42,8 @@
       <return_to_start>
         <name>Return to start</name>
         <weight>1.0</weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/return_to_start</namespace>
       </return_to_start>
 
     </plugin>
@@ -88,6 +90,30 @@
           <size>
             4
             4
+            10
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Start area contain plugin -->
+    <plugin name="start" filename="libContainPlugin.so">
+      <entity>servicebot</entity>
+      <namespace>servicesim/return_to_start</namespace>
+      <enabled>false</enabled>
+      <pose>
+        -6.5
+        -18.2
+        0
+        0
+        0
+        0
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            2
+            2
             10
           </size>
         </box>
@@ -157,7 +183,7 @@
       </pose>
 
       <skin>
-        <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+        <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
       </skin>
 
       <animation name="animation">
@@ -192,65 +218,65 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>169</drift_time>
+          <drift_time>34</drift_time>
         
-          <drift_time>255</drift_time>
+          <drift_time>328</drift_time>
         
-          <drift_time>349</drift_time>
+          <drift_time>507</drift_time>
         
-          <drift_time>475</drift_time>
+          <drift_time>708</drift_time>
         
-          <drift_time>713</drift_time>
+          <drift_time>950</drift_time>
         
-          <drift_time>996</drift_time>
+          <drift_time>1019</drift_time>
         
-          <drift_time>1192</drift_time>
+          <drift_time>1116</drift_time>
         
-          <drift_time>1308</drift_time>
+          <drift_time>1194</drift_time>
         
-          <drift_time>1522</drift_time>
+          <drift_time>1337</drift_time>
         
-          <drift_time>1774</drift_time>
+          <drift_time>1391</drift_time>
         
-          <drift_time>1845</drift_time>
+          <drift_time>1536</drift_time>
         
-          <drift_time>2007</drift_time>
+          <drift_time>1548</drift_time>
         
-          <drift_time>2208</drift_time>
+          <drift_time>1766</drift_time>
         
-          <drift_time>2462</drift_time>
+          <drift_time>1936</drift_time>
         
-          <drift_time>2504</drift_time>
+          <drift_time>2126</drift_time>
         
-          <drift_time>2741</drift_time>
+          <drift_time>2166</drift_time>
         
-          <drift_time>2931</drift_time>
+          <drift_time>2245</drift_time>
         
-          <drift_time>2964</drift_time>
+          <drift_time>2332</drift_time>
         
-          <drift_time>3027</drift_time>
+          <drift_time>2349</drift_time>
         
-          <drift_time>3122</drift_time>
+          <drift_time>2363</drift_time>
         
-          <drift_time>3130</drift_time>
+          <drift_time>2401</drift_time>
         
-          <drift_time>3268</drift_time>
+          <drift_time>2453</drift_time>
         
-          <drift_time>3467</drift_time>
+          <drift_time>2599</drift_time>
         
-          <drift_time>3750</drift_time>
+          <drift_time>2608</drift_time>
         
-          <drift_time>3831</drift_time>
+          <drift_time>2638</drift_time>
         
-          <drift_time>3924</drift_time>
+          <drift_time>2800</drift_time>
         
-          <drift_time>4069</drift_time>
+          <drift_time>2840</drift_time>
         
-          <drift_time>4346</drift_time>
+          <drift_time>3121</drift_time>
         
-          <drift_time>4555</drift_time>
+          <drift_time>3169</drift_time>
         
-          <drift_time>4617</drift_time>
+          <drift_time>3347</drift_time>
         
 
       </plugin>
@@ -439,7 +465,7 @@
       </target>
     
 
-    <velocity>1.1509115884411663</velocity>
+    <velocity>0.9854163881739144</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
     <!-- FIXME: servicebot's bounding box is huge and always colliding -->

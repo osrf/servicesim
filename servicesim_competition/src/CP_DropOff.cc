@@ -31,6 +31,12 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf)
 {
   this->canPause = true;
 
+  // From ContainCheckpoint
+  if (!_sdf || !_sdf->HasElement("namespace"))
+    gzwarn << "Missing <namespace> for contain plugin" << std::endl;
+  else
+    this->ns = _sdf->Get<std::string>("namespace");
+
   // Ignition transport
   std::function<void(const ignition::msgs::UInt32 &)> driftCb =
       [this](const ignition::msgs::UInt32 &_msg)
@@ -67,8 +73,6 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf)
 
   this->ignNode.Subscribe("/servicesim/guest/drift", driftCb);
 
-  // TODO: also start FollowActorPlugin disabled and enable it here on demand.
-
   // ROS transport
   if (!ros::isInitialized())
   {
@@ -85,8 +89,45 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf)
 }
 
 /////////////////////////////////////////////////
+void CP_DropOff::EnableCallback(const ignition::msgs::Boolean &/*_rep*/,
+    const bool _result)
+{
+  if (_result)
+    this->enabled = !this->enabled;
+}
+
+/////////////////////////////////////////////////
 bool CP_DropOff::Check()
 {
+  // Enable contain checkpoint once
+  if (!this->enabled && !this->Done())
+  {
+    // Setup contain subscriber
+    this->ignNode.Subscribe(this->ns + "/contain",
+        &CP_DropOff::OnContain, this);
+
+    // Enable contain plugin
+    ignition::msgs::Boolean req;
+    req.set_data(true);
+    this->ignNode.Request(this->ns + "/enable", req,
+        &CP_DropOff::EnableCallback, this);
+  }
+
+  // Done, now clean up
+  if (this->enabled && this->Done() &&
+      !this->ignNode.SubscribedTopics().empty())
+  {
+    // Unsubscribe
+    for (auto const &sub : this->ignNode.SubscribedTopics())
+      this->ignNode.Unsubscribe(sub);
+
+    // Disable contain plugin
+    ignition::msgs::Boolean req;
+    req.set_data(false);
+    this->ignNode.Request(this->ns + "/enable", req,
+        &CP_DropOff::EnableCallback, this);
+  }
+
   return this->Done();
 }
 
@@ -98,7 +139,14 @@ bool CP_DropOff::OnDropOffRosRequest(
   // Get info from ROS request
   auto guestName = _req.guest_name;
 
-  // TODO: Check if robot and guest are in drop-off location
+  // Check if guest is in drop-off location
+  if (!this->containGuest)
+  {
+    // TODO: apply penalty for bad dropoff request
+    gzwarn << "Failed to drop-off, guest not in drop-off area" << std::endl;
+    _res.success = false;
+    return true;
+  }
 
   // Send Ignition request to actor
   auto ignService = "/servicesim/" + guestName + "/unfollow";
@@ -116,13 +164,15 @@ bool CP_DropOff::OnDropOffRosRequest(
   {
     // TODO: apply penalty for bad dropoff request
   }
-  else
-  {
-    // TODO: Terminate transport
-  }
 
   _res.success = this->Done();
 
   return true;
+}
+
+//////////////////////////////////////////////////
+void CP_DropOff::OnContain(const ignition::msgs::Boolean &_msg)
+{
+  this->containGuest = _msg.data();
 }
 

@@ -45,6 +45,16 @@ namespace servicesim
         servicesim_competition::DropOffGuest::Request &_req,
         servicesim_competition::DropOffGuest::Response &_res);
 
+    /// \brief Callback when messages are received from the ContainPlugin.
+    /// \param[in] _msg True if contains.
+    private: void OnContain(const ignition::msgs::Boolean &_msg);
+
+    /// \brief Callabck for enable service
+    /// \param[in] _rep Response
+    /// \param[in] _result Result
+    private: void EnableCallback(const ignition::msgs::Boolean &_rep,
+        const bool _result);
+
     /// \brief Ignition transport node for communication.
     private: ignition::transport::Node ignNode;
 
@@ -56,6 +66,15 @@ namespace servicesim
 
     /// \brief True if checkpoint is paused
     private: bool paused{true};
+
+    /// \brief Namespace for transport
+    protected: std::string ns;
+
+    /// \brief True if enabled
+    private: bool enabled{false};
+
+    /// \brief True if guest is currently in the drop-off area
+    private: bool containGuest{false};
   };
 }
 #endif
