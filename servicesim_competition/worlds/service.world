@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 6930256
+  Seed: 5964551
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
@@ -15,12 +15,7 @@
       </pick_up_location>
 
       <drop_off_location>
-        -12.65
-        -13.38
-        0
-        0
-        0
-        0
+        office_1
       </drop_off_location>
 
       <guest_name>guest</guest_name>
@@ -40,6 +35,8 @@
       <drop_off>
         <name>Drop-off guest</name>
         <weight>1.0</weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/drop_off</namespace>
       </drop_off>
 
       <return_to_start>
@@ -49,8 +46,8 @@
 
     </plugin>
 
-    <!-- Checkpoint: reach pick-up area -->
-    <plugin name="go_to_pick_up" filename="libContainPlugin.so">
+    <!-- Pick-up area contain plugin -->
+    <plugin name="pick_up" filename="libContainPlugin.so">
       <entity>servicebot</entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
@@ -61,6 +58,30 @@
         1.54
         0
         1.9
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            4
+            4
+            10
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Drop-off area contain plugin -->
+    <plugin name="drop_off" filename="libContainPlugin.so">
+      <entity>guest</entity>
+      <namespace>servicesim/drop_off</namespace>
+      <enabled>false</enabled>
+      <pose>
+        -12.4
+        -13.5
+        0
+        0
+        0
+        0
       </pose>
       <geometry>
         <box>
@@ -171,65 +192,65 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>170</drift_time>
+          <drift_time>169</drift_time>
         
-          <drift_time>197</drift_time>
+          <drift_time>255</drift_time>
         
-          <drift_time>487</drift_time>
+          <drift_time>349</drift_time>
         
-          <drift_time>772</drift_time>
+          <drift_time>475</drift_time>
         
-          <drift_time>992</drift_time>
+          <drift_time>713</drift_time>
         
-          <drift_time>1053</drift_time>
+          <drift_time>996</drift_time>
         
-          <drift_time>1110</drift_time>
+          <drift_time>1192</drift_time>
         
-          <drift_time>1269</drift_time>
+          <drift_time>1308</drift_time>
         
-          <drift_time>1286</drift_time>
+          <drift_time>1522</drift_time>
         
-          <drift_time>1314</drift_time>
+          <drift_time>1774</drift_time>
         
-          <drift_time>1356</drift_time>
+          <drift_time>1845</drift_time>
         
-          <drift_time>1495</drift_time>
+          <drift_time>2007</drift_time>
         
-          <drift_time>1794</drift_time>
+          <drift_time>2208</drift_time>
         
-          <drift_time>1968</drift_time>
+          <drift_time>2462</drift_time>
         
-          <drift_time>2071</drift_time>
+          <drift_time>2504</drift_time>
         
-          <drift_time>2221</drift_time>
+          <drift_time>2741</drift_time>
         
-          <drift_time>2241</drift_time>
+          <drift_time>2931</drift_time>
         
-          <drift_time>2271</drift_time>
+          <drift_time>2964</drift_time>
         
-          <drift_time>2552</drift_time>
+          <drift_time>3027</drift_time>
         
-          <drift_time>2641</drift_time>
+          <drift_time>3122</drift_time>
         
-          <drift_time>2666</drift_time>
+          <drift_time>3130</drift_time>
         
-          <drift_time>2698</drift_time>
+          <drift_time>3268</drift_time>
         
-          <drift_time>2727</drift_time>
+          <drift_time>3467</drift_time>
         
-          <drift_time>2900</drift_time>
+          <drift_time>3750</drift_time>
         
-          <drift_time>3094</drift_time>
+          <drift_time>3831</drift_time>
         
-          <drift_time>3155</drift_time>
+          <drift_time>3924</drift_time>
         
-          <drift_time>3226</drift_time>
+          <drift_time>4069</drift_time>
         
-          <drift_time>3317</drift_time>
+          <drift_time>4346</drift_time>
         
-          <drift_time>3366</drift_time>
+          <drift_time>4555</drift_time>
         
-          <drift_time>3408</drift_time>
+          <drift_time>4617</drift_time>
         
 
       </plugin>
@@ -418,7 +439,7 @@
       </target>
     
 
-    <velocity>1.026700728560009</velocity>
+    <velocity>1.1509115884411663</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
     <!-- FIXME: servicebot's bounding box is huge and always colliding -->

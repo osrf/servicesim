@@ -33,8 +33,8 @@ class servicesim::CompetitionPluginPrivate
   /// \brief Pick-up location name
   public: std::string pickUpLocation;
 
-  /// \brief Drop-off location
-  public: ignition::math::Pose3d dropOffLocation;
+  /// \brief Drop-off location name
+  public: std::string dropOffLocation;
 
   /// \brief Guest name
   public: std::string guestName;
@@ -88,8 +88,14 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
   }
   this->dataPtr->pickUpLocation = _sdf->Get<std::string>("pick_up_location");
 
-  this->dataPtr->dropOffLocation =
-      _sdf->Get<ignition::math::Pose3d>("drop_off_location");
+  if (!_sdf->HasElement("drop_off_location"))
+  {
+    gzerr << "Missing <drop_off_location>, competition not initialized"
+          << std::endl;
+    return;
+  }
+  this->dataPtr->dropOffLocation = _sdf->Get<std::string>("drop_off_location");
+
   this->dataPtr->guestName = _sdf->Get<std::string>("guest_name");
 
   // Create checkpoints
@@ -99,14 +105,12 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
 
-  // Checkpoint 2
   {
     std::unique_ptr<CP_PickUp> cp(new CP_PickUp(
         _sdf->GetElement("pick_up")));
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
 
-  // Checkpoint 3
   {
     std::unique_ptr<CP_DropOff> cp(new CP_DropOff(
         _sdf->GetElement("drop_off")));
@@ -159,7 +163,7 @@ bool CompetitionPlugin::OnNewTaskRosService(
 
   // Respond
   _res.pick_up_location = this->dataPtr->pickUpLocation;
-  _res.drop_off_location = servicesim::convert(this->dataPtr->dropOffLocation);
+  _res.drop_off_location = this->dataPtr->dropOffLocation;
   _res.guest_name = this->dataPtr->guestName;
 
   return true;

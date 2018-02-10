@@ -117,15 +117,19 @@
   ###############################################
 
   # Pickup location
-  pickup_location =
+  pick_up_location =
   {
     :name => 'reception',
     :pose => guest_pose,
     :size => [4, 4, 10]
   }
 
-  dropoff_pose = [-12.65, -13.38, 0, 0, 0, 0]
-  dropoff_size = [3.5, 2, 10]
+  drop_off_location =
+  {
+    :name => 'office_1',
+    :pose => [-12.4, -13.5, 0, 0, 0, 0],
+    :size => [4, 4, 10]
+  }
 
   ###############################################
   #                                             #
@@ -151,16 +155,11 @@
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
       <pick_up_location>
-        <%= pickup_location[:name] %>
+        <%= pick_up_location[:name] %>
       </pick_up_location>
 
       <drop_off_location>
-        <%= dropoff_pose[0] %>
-        <%= dropoff_pose[1] %>
-        <%= dropoff_pose[2] %>
-        <%= dropoff_pose[3] %>
-        <%= dropoff_pose[4] %>
-        <%= dropoff_pose[5] %>
+        <%= drop_off_location[:name] %>
       </drop_off_location>
 
       <guest_name><%= guest_name %></guest_name>
@@ -180,6 +179,8 @@
       <drop_off>
         <name>Drop-off guest</name>
         <weight>1.0</weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/drop_off</namespace>
       </drop_off>
 
       <return_to_start>
@@ -189,25 +190,49 @@
 
     </plugin>
 
-    <!-- Checkpoint: reach pick-up area -->
-    <plugin name="go_to_pick_up" filename="libContainPlugin.so">
+    <!-- Pick-up area contain plugin -->
+    <plugin name="pick_up" filename="libContainPlugin.so">
       <entity><%= robot_name %></entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
-        <%= pickup_location[:pose][0] %>
-        <%= pickup_location[:pose][1] %>
-        <%= pickup_location[:pose][2] %>
-        <%= pickup_location[:pose][3] %>
-        <%= pickup_location[:pose][4] %>
-        <%= pickup_location[:pose][5] %>
+        <%= pick_up_location[:pose][0] %>
+        <%= pick_up_location[:pose][1] %>
+        <%= pick_up_location[:pose][2] %>
+        <%= pick_up_location[:pose][3] %>
+        <%= pick_up_location[:pose][4] %>
+        <%= pick_up_location[:pose][5] %>
       </pose>
       <geometry>
         <box>
           <size>
-            <%= pickup_location[:size][0] %>
-            <%= pickup_location[:size][1] %>
-            <%= pickup_location[:size][2] %>
+            <%= pick_up_location[:size][0] %>
+            <%= pick_up_location[:size][1] %>
+            <%= pick_up_location[:size][2] %>
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Drop-off area contain plugin -->
+    <plugin name="drop_off" filename="libContainPlugin.so">
+      <entity><%= guest_name %></entity>
+      <namespace>servicesim/drop_off</namespace>
+      <enabled>false</enabled>
+      <pose>
+        <%= drop_off_location[:pose][0] %>
+        <%= drop_off_location[:pose][1] %>
+        <%= drop_off_location[:pose][2] %>
+        <%= drop_off_location[:pose][3] %>
+        <%= drop_off_location[:pose][4] %>
+        <%= drop_off_location[:pose][5] %>
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            <%= drop_off_location[:size][0] %>
+            <%= drop_off_location[:size][1] %>
+            <%= drop_off_location[:size][2] %>
           </size>
         </box>
       </geometry>
