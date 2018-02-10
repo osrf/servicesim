@@ -117,9 +117,12 @@
   ###############################################
 
   # Pickup location
-  # TODO: Use room name once we have rooms
-  pickup_pose = guest_pose
-  pickup_size = [4, 4, 10]
+  pickup_location =
+  {
+    :name => 'reception',
+    :pose => guest_pose,
+    :size => [4, 4, 10]
+  }
 
   dropoff_pose = [-12.65, -13.38, 0, 0, 0, 0]
   dropoff_size = [3.5, 2, 10]
@@ -148,12 +151,7 @@
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
       <pick_up_location>
-        <%= pickup_pose[0] %>
-        <%= pickup_pose[1] %>
-        <%= pickup_pose[2] %>
-        <%= pickup_pose[3] %>
-        <%= pickup_pose[4] %>
-        <%= pickup_pose[5] %>
+        <%= pickup_location[:name] %>
       </pick_up_location>
 
       <drop_off_location>
@@ -170,7 +168,7 @@
       <go_to_pick_up>
         <name>Go to pick-up location</name>
         <weight>1.0</weight>
-        <!-- contain checkpoint -->
+        <!-- for contain plugin -->
         <namespace>/servicesim/go_to_pick_up</namespace>
       </go_to_pick_up>
 
@@ -191,25 +189,25 @@
 
     </plugin>
 
-    <!-- Checkpoint 1: reach pick-up area -->
+    <!-- Checkpoint: reach pick-up area -->
     <plugin name="go_to_pick_up" filename="libContainPlugin.so">
       <entity><%= robot_name %></entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
-        <%= pickup_pose[0] %>
-        <%= pickup_pose[1] %>
-        <%= pickup_pose[2] %>
-        <%= pickup_pose[3] %>
-        <%= pickup_pose[4] %>
-        <%= pickup_pose[5] %>
+        <%= pickup_location[:pose][0] %>
+        <%= pickup_location[:pose][1] %>
+        <%= pickup_location[:pose][2] %>
+        <%= pickup_location[:pose][3] %>
+        <%= pickup_location[:pose][4] %>
+        <%= pickup_location[:pose][5] %>
       </pose>
       <geometry>
         <box>
           <size>
-            <%= pickup_size[0] %>
-            <%= pickup_size[1] %>
-            <%= pickup_size[2] %>
+            <%= pickup_location[:size][0] %>
+            <%= pickup_location[:size][1] %>
+            <%= pickup_location[:size][2] %>
           </size>
         </box>
       </geometry>

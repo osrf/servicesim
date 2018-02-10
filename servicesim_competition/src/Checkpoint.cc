@@ -28,7 +28,7 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
 {
   if (!_sdf)
   {
-    gzerr << "Missing <checkpointN> element" << std::endl;
+    gzerr << "Missing checkpoint's SDF element" << std::endl;
     return;
   }
 

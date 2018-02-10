@@ -24,7 +24,6 @@
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/common/UpdateInfo.hh>
 
-#include <ros/ros.h>
 #include <servicesim_competition/NewTask.h>
 
 namespace servicesim
@@ -41,8 +40,9 @@ namespace servicesim
         override;
 
     /// \brief Service when competitor asks to start competition.
-    /// \param[in] _req Request
-    /// \param[out] _res Response
+    /// \param[in] _req Competitor's request.
+    /// \param[out] _res Response containing information about the task.
+    /// \return False if failed.
     private: bool OnNewTaskRosService(
         servicesim_competition::NewTask::Request &_req,
         servicesim_competition::NewTask::Response &_res);

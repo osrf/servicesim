@@ -30,8 +30,8 @@
 /////////////////////////////////////////////////
 class servicesim::CompetitionPluginPrivate
 {
-  /// \brief Pick-up location
-  public: ignition::math::Pose3d pickUpLocation;
+  /// \brief Pick-up location name
+  public: std::string pickUpLocation;
 
   /// \brief Drop-off location
   public: ignition::math::Pose3d dropOffLocation;
@@ -40,27 +40,26 @@ class servicesim::CompetitionPluginPrivate
   public: std::string guestName;
 
   /// \brief Connection to world update
-  public: gazebo::event::ConnectionPtr updateConnection;
+  public: gazebo::event::ConnectionPtr updateConnection{nullptr};
 
   /// \brief Vector of checkpoints
-  /// checkpoints[0]: Checkpoint 1
-  /// checkpoints[1]: Checkpoint 2
-  /// checkpoints[2]: Checkpoint 3
-  /// checkpoints[3]: Checkpoint 4
   public: std::vector<std::unique_ptr<Checkpoint>> checkpoints;
 
   /// \brief Current checkpoint number, starting from 1.
   /// Zero means no checkpoint.
-  public: uint8_t current = 0;
+  public: uint8_t current{0};
 
   /// \brief ROS node handle
-  public: std::unique_ptr<ros::NodeHandle> rosNode;
+  public: std::unique_ptr<ros::NodeHandle> rosNode{nullptr};
 
   /// \brief ROS new task service server
   public: ros::ServiceServer newTaskRosService;
 
-  /// \brief ROS publisher which publishes the score.
+  /// \brief ROS publisher for the score.
   public: ros::Publisher scoreRosPub;
+
+  /// \brief Frequency in Hz to publish score message
+  public: double scoreFreq{50};
 };
 
 using namespace servicesim;
@@ -77,14 +76,23 @@ CompetitionPlugin::CompetitionPlugin() : WorldPlugin(),
 void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
     sdf::ElementPtr _sdf)
 {
-  // Load parameters
-  this->dataPtr->pickUpLocation =
-      _sdf->Get<ignition::math::Pose3d>("pick_up_location");
+  // Load general competition parameters
+  if (_sdf->HasElement("score_frequency"))
+    this->dataPtr->scoreFreq = _sdf->Get<double>("score_frequency");
+
+  if (!_sdf->HasElement("pick_up_location"))
+  {
+    gzerr << "Missing <pick_up_location>, competition not initialized"
+          << std::endl;
+    return;
+  }
+  this->dataPtr->pickUpLocation = _sdf->Get<std::string>("pick_up_location");
+
   this->dataPtr->dropOffLocation =
       _sdf->Get<ignition::math::Pose3d>("drop_off_location");
   this->dataPtr->guestName = _sdf->Get<std::string>("guest_name");
 
-  // Checkpoint 1
+  // Create checkpoints
   {
     std::unique_ptr<CP_GoToPickUp> cp(new CP_GoToPickUp(
         _sdf->GetElement("go_to_pick_up")));
@@ -116,15 +124,19 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
 
   this->dataPtr->rosNode.reset(new ros::NodeHandle());
 
+
+  // Advertise new task service
   this->dataPtr->newTaskRosService = this->dataPtr->rosNode->advertiseService(
       "/servicesim/new_task", &CompetitionPlugin::OnNewTaskRosService, this);
 
+  // Advertise score messages
   this->dataPtr->scoreRosPub =
       this->dataPtr->rosNode->advertise<servicesim_competition::Score>(
       "/servicesim/score", 1000);
 
   // Trigger update at every world iteration
-  this->dataPtr->updateConnection = gazebo::event::Events::ConnectWorldUpdateBegin(
+  this->dataPtr->updateConnection =
+      gazebo::event::Events::ConnectWorldUpdateBegin(
       std::bind(&CompetitionPlugin::OnUpdate, this, std::placeholders::_1));
 
   gzmsg << "[ServiceSim] Competition plugin loaded" << std::endl;
@@ -146,7 +158,7 @@ bool CompetitionPlugin::OnNewTaskRosService(
   this->dataPtr->checkpoints[this->dataPtr->current - 1]->Start();
 
   // Respond
-  _res.pick_up_location = servicesim::convert(this->dataPtr->pickUpLocation);
+  _res.pick_up_location = this->dataPtr->pickUpLocation;
   _res.drop_off_location = servicesim::convert(this->dataPtr->dropOffLocation);
   _res.guest_name = this->dataPtr->guestName;
 
@@ -193,10 +205,7 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   // Publish ROS score message
   static gazebo::common::Time lastScorePubTime = _info.simTime;
 
-  // TODO configure freq through SDF
-  const double freq = 10;
-
-  if (_info.simTime - lastScorePubTime < 1/freq)
+  if (_info.simTime - lastScorePubTime < 1/this->dataPtr->scoreFreq)
     return;
 
   servicesim_competition::Score msg;

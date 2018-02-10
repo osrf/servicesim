@@ -29,7 +29,7 @@ namespace servicesim
   class Checkpoint
   {
     /// \brief Constructor
-    /// \param[in] _sdf SDF element for this checkpoint.
+    /// \param[in] _sdf SDF element with configuration for this checkpoint.
     public: Checkpoint(const sdf::ElementPtr &_sdf);
 
     /// \brief Default destructor
