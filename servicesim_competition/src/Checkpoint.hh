@@ -19,6 +19,7 @@
 #define SERVICESIM_CHECKPOINT_HH_
 
 #include <sdf/sdf.hh>
+#include <ignition/math/Pose3.hh>
 #include <ignition/msgs/boolean.pb.h>
 #include <ignition/transport/Node.hh>
 #include <gazebo/common/Time.hh>
@@ -35,8 +36,15 @@ namespace servicesim
     public: virtual ~Checkpoint() = default;
 
     /// \brief Check whether checkpoint has been completed.
+    /// Any publishers or subscribers should be created the first time this is
+    /// called, and cleaned up once it returns true.
     /// \return True if completed.
     public: virtual bool Check() = 0;
+
+    /// \brief Check whether to pause this checkpoint and return to the
+    /// previous one.
+    /// \return True if it should pause.
+    public: bool Paused() const;
 
     /// \brief Call this the first time the checkpoint is checked.
     public: void Start();
@@ -48,6 +56,10 @@ namespace servicesim
     /// \brief Get the checkpoint's name
     /// \return Checkpoint's name
     public: std::string Name() const;
+
+    /// \brief Pause the checkpoint, ending the current interval. Only works if
+    /// canPause is true.
+    protected: void Pause();
 
     /// \brief Set if this checkpoint is done. It also registers the time when
     /// it was done.
@@ -64,6 +76,9 @@ namespace servicesim
     /// \brief The checkpoint's name
     protected: std::string name;
 
+    /// \brief True if it's possible to restart the checkpoint.
+    protected: bool canPause{false};
+
     /// \brief Vector of sim time intervals when the checkpoint was
     /// running. The first time is the beginning of the interval, the
     /// second is the end
@@ -72,6 +87,9 @@ namespace servicesim
 
     /// \brief True when checkpoint is complete.
     private: bool done{false};
+
+    /// \brief True when checkpoint is paused.
+    private: bool paused{false};
   };
 
   /// \brief A checkpoint tied to a gazebo::ContainPlugin.

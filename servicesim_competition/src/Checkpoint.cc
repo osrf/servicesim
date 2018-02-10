@@ -63,7 +63,7 @@ double Checkpoint::Score() const
 void Checkpoint::Start()
 {
   // Check if restarting
-  if (this->intervals.size() > 0)
+  if (!this->canPause && this->intervals.size() > 0)
   {
     gzerr << "It's not possible to restart checkpoint \""
           << this->name << "\"" << std::endl;
@@ -81,10 +81,17 @@ void Checkpoint::Start()
     gzmsg << "[ServiceSim] Started Checkpoint \"" << this->name << "\" at "
           << timeStr << std::endl;
   }
+  else if (this->done || this->paused)
+  {
+    this->done = false;
+    this->paused = false;
+    gzmsg << "[ServiceSim] Restarted Checkpoint \"" << this->name << "\" at "
+          << timeStr << std::endl;
+  }
   else
   {
     gzerr << "Trying to restart checkpoint \"" << this->name
-          << "\", which was never completed." << std::endl;
+          << "\", which was never completed or paused." << std::endl;
     return;
   }
 
@@ -92,6 +99,39 @@ void Checkpoint::Start()
   std::pair<gazebo::common::Time, gazebo::common::Time> interval(
       time, gazebo::common::Time::Zero);
   this->intervals.push_back(interval);
+}
+
+/////////////////////////////////////////////////
+void Checkpoint::Pause()
+{
+  if (this->intervals.empty())
+  {
+    gzerr << "Trying to pause checkpoint which hasn't been started."
+          << std::endl;
+    return;
+  }
+
+  // Get latest checkpoint
+  auto &interval = this->intervals.back();
+  if (interval.second != gazebo::common::Time::Zero)
+  {
+    gzerr << "Trying to pause checkpoint which is not running."
+          << std::endl;
+    return;
+  }
+  interval.second = gazebo::physics::get_world()->SimTime();
+
+  // Set paused
+  this->paused = true;
+}
+
+/////////////////////////////////////////////////
+bool Checkpoint::Paused() const
+{
+  if (this->Done())
+    return false;
+
+  return this->paused;
 }
 
 /////////////////////////////////////////////////
@@ -141,7 +181,7 @@ ContainCheckpoint::ContainCheckpoint(const sdf::ElementPtr &_sdf)
     : Checkpoint(_sdf)
 {
   if (!_sdf || !_sdf->HasElement("namespace"))
-    gzwarn << "Missing <namespace> for contain checkpoint" << std::endl;
+    gzwarn << "Missing <namespace> for contain plugin" << std::endl;
   else
     this->ns = _sdf->Get<std::string>("namespace");
 }
