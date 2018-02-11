@@ -1,0 +1,115 @@
+<%
+  # Walls template
+  #
+  # Required variables
+  # * $office_u (number)
+  # * $gap (number)
+
+  thickness = 0.01
+  width = $office_u
+  height = 2 * $office_u
+
+  t = 0.001
+
+  pos_z = height * 0.5
+
+  count = 0
+
+  # for short
+  o = $office_u
+  g = $gap
+
+  walls =
+  [
+   # entrance
+   {:x => 0*o,            :y => 0*o,        :yaw => 0, :type => 'Elevator'},
+   {:x => 1*o,            :y => 0*o,        :yaw => 0, :type => 'Elevator'},
+   {:x => 2*o,            :y => 0*o,        :yaw => 0, :type => 'PlainWall'},
+   {:x => 3*o,            :y => 0*o,        :yaw => 0, :type => 'PlainWall'},
+   {:x => 4*o - t,      :y => 0*o,        :yaw => 0, :type => 'PlainWall'},
+   # bathrooms
+   {:x => 5*o - g,     :y => 0*o,        :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   {:x => 5*o - g,     :y => 1*o,        :yaw => Math::PI*0.5,  :type => 'PlainWall'},
+   {:x => 6*o,            :y => 2*o + g, :yaw => 0, :type => 'PlainWall'},
+   {:x => 8*o + g,     :y => 2*o + g, :yaw => 0, :type => 'PlainWall'},
+   # cafe
+   {:x => 9*o + g,     :y => 2*o + g, :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   {:x => 9*o + g, :y => 4*o, :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   {:x => 9*o + g, :y => 5*o, :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   {:x => 9*o + g, :y => 6*o, :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   {:x => 9*o + g,    :y => 7*o + g, :yaw => 0, :type => 'PlainWall'},
+   {:x => 10*o + g,    :y => 7*o + g, :yaw => 0, :type => 'PlainWall'},
+   {:x => 11*o + g,    :y => 7*o + g, :yaw => 0, :type => 'PlainWall'},
+   {:x => 12*o + g,    :y => 7*o + g, :yaw => 0, :type => 'PlainWall'},
+   {:x => 13*o + g,    :y => 7*o + g, :yaw => 0, :type => 'PlainWall'},
+   # east wall
+   {:x => 14*o + 2*g, :y => 7*o + g, :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   {:x => 14*o + 2*g, :y => 8*o + g, :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   {:x => 14*o + 2*g, :y => 9*o + g, :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   {:x => 14*o + 2*g, :y => 10*o + g, :yaw => Math::PI*0.5, :type => 'PlainWall'},
+   # meeting room large
+  ]
+%>
+<model name="walls">
+
+  <static>true</static>
+
+  <link name="link">
+
+    <%
+      for wall in walls
+
+        x_offset = $office_u * 0.5
+        y_offset = 0.0
+
+        if wall[:yaw] == Math::PI * 0.5
+          x_offset = 0.0
+          y_offset = $office_u * 0.5
+        end
+
+        count += 1
+        pose =
+        [
+          wall[:x] + x_offset,
+          wall[:y] + y_offset,
+          pos_z,
+          0.0,
+          0.0,
+          wall[:yaw]
+        ]
+    %>
+
+      <visual name="visual_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              <%= width %>
+              <%= thickness %>
+              <%= height %>
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/<%= wall[:type] %></name>
+          </script>
+        </material>
+      </visual>
+    <% end %>
+
+  </link>
+
+</model>

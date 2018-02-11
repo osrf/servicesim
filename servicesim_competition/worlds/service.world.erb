@@ -152,7 +152,7 @@
   actor_pos_z = 1.25
 
   # Units
-  gap = 0.1
+  $gap = 0.1
   $office_u = 1.5
   $cubicle_u = 0.6
   $cubicle_corner = 0.025
@@ -287,8 +287,7 @@
     <!-- GUI -->
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <!--pose>-14.41 -19.9 4.14 0 0.5 0.76</pose-->
-        <pose>-4.45 -12.04 49.8 0 1.09 1.57</pose>
+        <pose>-3.664 1 1.94 0 0.31 0.177</pose>
       </camera>
     </gui>
 
@@ -386,6 +385,9 @@
 
     </model>
 
+    <!-- walls -->
+    <%= fromFile(DIR + "/walls.erb") %>
+
     <!-- Public area -->
     <%
       $count += 1
@@ -413,7 +415,7 @@
       $room_size = [0, 1, -1, 0]
       $room_pose =
       [
-        8 * $office_u + gap,
+        8 * $office_u + $gap,
         2 * $office_u,
         0.0,
         0.0,
@@ -431,7 +433,7 @@
       $room_size = [-3, 3, -4, 0]
       $room_pose =
       [
-        9 * $office_u + 2 * gap,
+        9 * $office_u + 2 * $gap,
         4 * $office_u,
         0.0,
         0.0,
@@ -486,7 +488,7 @@
       $room_pose =
       [
         3 * $office_u,
-        9 * $office_u + gap,
+        9 * $office_u + $gap,
         0.0,
         0.0,
         0.0,
@@ -506,7 +508,7 @@
         $room_size = [-1, 1, -1, 0]
         $room_pose =
         [
-          x * $office_u - g * gap,
+          x * $office_u - g * $gap,
           13 * $office_u,
           0.0,
           0.0,
@@ -538,7 +540,7 @@
     %>
 
     <%
-      s = 9.0 * $office_u + 2.0 * gap
+      s = 9.0 * $office_u + 2.0 * $gap
       e = 13.0 * $office_u
       for x in (s..e).step(1.9)
         $count += 1
@@ -546,8 +548,8 @@
     <include>
       <name>island_<%= $count %></name>
       <pose>
-        <%= x - gap %>
-        <%= 7 * $office_u + gap %>
+        <%= x - $gap %>
+        <%= 7 * $office_u + $gap %>
         0
         0
         0
@@ -568,7 +570,7 @@
       $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        -3 * $office_u - gap,
+        -3 * $office_u - $gap,
         5 * $office_u,
         0.0,
         0.0,
@@ -587,7 +589,7 @@
       $room_pose =
       [
         -3 * $office_u,
-        9 * $office_u + gap,
+        9 * $office_u + $gap,
         0.0,
         0.0,
         0.0,
@@ -622,7 +624,7 @@
       $room_size = [0, 1, -1, 0]
       $room_pose =
       [
-        -5 * $office_u - gap,
+        -5 * $office_u - $gap,
         13 * $office_u,
         0.0,
         0.0,
@@ -643,7 +645,7 @@
         $room_size = [-1, 1, -1, 0]
         $room_pose =
         [
-          x * $office_u - g * gap,
+          x * $office_u - g * $gap,
           13 * $office_u,
           0.0,
           0.0,
@@ -662,7 +664,7 @@
       $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        -15 * $office_u - 5 * gap,
+        -15 * $office_u - 5 * $gap,
         12 * $office_u,
         0.0,
         0.0,
@@ -698,7 +700,7 @@
       $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        -12 * $office_u - gap,
+        -12 * $office_u - $gap,
         3 * $office_u,
         0.0,
         0.0,
@@ -716,7 +718,7 @@
       $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        -16 * $office_u - 2 * gap,
+        -16 * $office_u - 2 * $gap,
         3 * $office_u,
         0.0,
         0.0,
@@ -738,7 +740,8 @@
             0.0
           ]
     %>
-    <%= fromFile(DIR + "/cubicles.erb") %>
+    <%= #fromFile(DIR + "/cubicles.erb")
+    %>
       <% end %>
     <% end %>
 
