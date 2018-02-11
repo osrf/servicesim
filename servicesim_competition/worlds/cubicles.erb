@@ -1,0 +1,157 @@
+<%
+  # Cubicles template
+  #
+  # Required variables
+  # * $count (number)
+  # * $cubicle_size (number) row count
+  # * $cubicle_pos (number[]) start position
+
+  x_size = 3
+
+  center_y = $cubicle_pos[1]
+  x_min = 0
+  x_max = x_size * $cubicle_size - 1
+
+  count = 0
+%>
+<model name="cubicles_<%= $count.to_s() %>">
+
+  <static>true</static>
+
+  <pose>
+    <%= $cubicle_pos[0] %>
+    <%= $cubicle_pos[1] %>
+    <%= $cubicle_pos[2] %>
+    0.0
+    0.0
+    0.0
+  </pose>
+
+  <link name="link">
+
+    <!-- center wall -->
+    <%
+      for x in (x_min..x_max)
+        count += 1
+        type = 'closed'
+        offset = -0.3
+        pose =
+        [
+          x * $cubicle_u + offset,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+    %>
+      <visual name="visual_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    <% end %>
+
+    <!-- row divisions -->
+    <%
+      for x in (x_min..(x_max+1)).step(x_size)
+
+        for side in [-1, 1]
+
+          count += 1
+          type = 'wall'
+          offset = -0.9 * side
+          pose =
+          [
+            x * $cubicle_u,
+            offset,
+            0.0,
+            0.0,
+            0.0,
+            Math::PI * 0.5 * side
+          ]
+    %>
+      <visual name="visual_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <% end %>
+    <% end %>
+
+    <!-- openings -->
+    <%
+      for x in (x_min..(x_max+1)).step(x_size)
+
+        for side in [-1, 1]
+
+          if side == 1 and x == x_min
+            next
+          elsif side == -1 and x == x_max + 1
+            next
+          end
+
+          count += 1
+          type = 'wall'
+          offset = -0.9 * side
+          yaw = side == -1 ? 0.0 : Math::PI
+          pose =
+          [
+            x * $cubicle_u + offset,
+           - (2 * $cubicle_u + $cubicle_corner) * side,
+            0.0,
+            0.0,
+            0.0,
+            yaw
+          ]
+    %>
+      <visual name="visual_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <% end %>
+    <% end %>
+
+  </link>
+
+</model>
