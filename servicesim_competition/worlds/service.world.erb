@@ -588,7 +588,7 @@
       $room_size = [-1, 2, -2, 0]
       $room_pose =
       [
-        -3 * $office_u,
+        -3 * $office_u - $gap,
         9 * $office_u + $gap,
         0.0,
         0.0,
@@ -740,8 +740,7 @@
             0.0
           ]
     %>
-    <%= #fromFile(DIR + "/cubicles.erb")
-    %>
+    <%= fromFile(DIR + "/cubicles.erb") %>
       <% end %>
     <% end %>
 
