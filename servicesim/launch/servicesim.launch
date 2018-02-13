@@ -1,52 +1,43 @@
 <launch>
 
-  <arg name="dashboard" default="true" />
   <arg name="controllers" default="true" />
+  <arg name="dashboard" default="true" />
+  <arg name="rviz" default="true" />
+  <arg name="teleop" default="true" />
 
   <include file="$(find servicebot_description)/launch/upload_servicebot.launch" />
 
   <include file="$(find servicesim_competition)/launch/competition.launch">
   </include>
 
-  <!--node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x -9.75 -y -17.9 -z 0.83 -Y 1.57  -model servicebot" /-->
-  <!-- -x 0 -y 0 -z 0.837 -Y 1.57 -->
-  <!--node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
-    -urdf
-    -param robot_description
-    -model servicebot
-    -J left_shoulder_joint -0.55
-    -J left_upper_arm_joint 1.35
-    -J left_elbow_joint -0.5
-    -J right_shoulder_joint -0.55
-    -J right_upper_arm_joint 1.35
-    -J right_elbow_joint -0.5
-    -J left_thigh_joint -0.64
-    -J left_upper_leg_joint 0.79
-    -J left_foot_joint -0.16
-    -J right_thigh_joint -0.64
-    -J right_upper_leg_joint 0.79
-    -J right_foot_joint -0.16
-    -x 0 -y 0 -z 0.75"
-  /-->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
     -urdf
     -param robot_description
     -model servicebot
+    -x -6.5 -y -18.2 -z 0.75"
+  />
+    <!--
     -J left_shoulder_joint -0.55
     -J left_upper_arm_joint 1.35
     -J left_elbow_joint -0.5
     -J right_shoulder_joint -0.55
     -J right_upper_arm_joint 1.35
     -J right_elbow_joint -0.5
-    -x -6.5 -y -18.2 -z 0.75"
-  />
-    <!-- -Y 1.57" -->
+    -Y 1.57"
+     -->
+  <group if="$(arg teleop)">
+    <node ns="servicebot" name="servicebot_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" respawn="false" output="screen">
+      <param name="speed" type="double" value="2.2" />
+    </node>
+  </group>
+  <group if="$(arg rviz)">
+    <arg name="config_file" value="$(find servicesim)/config/rviz_config.rviz"/>
+    <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />
+  </group>
   <group if="$(arg controllers)">
     <include file="$(find servicebot_control)/launch/servicebot_control.launch" />
   </group>
   <group if="$(arg dashboard)">
-    <arg name="config_file" value="$(find servicesim)/config/rviz_config.rviz"/>
-    <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />
     <arg name="perspective_file" value="$(find servicesim)/config/servicesim_perspective.perspective"/>
     <node name="$(anon rqt)" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(arg perspective_file)" />
   </group>
