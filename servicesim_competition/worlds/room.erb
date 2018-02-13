@@ -8,6 +8,9 @@
   # * $room_floor (string)
   # * $room_pose (array[6])
   # * $room_size (array[4]) in office units, [min_x, max_x, min_y, max_y]
+  # * $door_angle (number)
+
+  off_x = -$o * 0.5
 %>
 
 <model name="<%= $room_name %>">
@@ -70,5 +73,77 @@
     %>
 
   </link>
+
+  <%
+    if $door_angle == 0.0
+  %>
+    <link name="closed_door">
+      <pose><%= -$o * 0.5 %> 0 0 0 0 0</pose>
+  <!-- TODO
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+  -->
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  <% else %>
+
+    <link name="door_frame">
+      <pose><%= off_x %> 0 0 0 0 0</pose>
+  <!-- TODO
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+  -->
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_frame.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name="door">
+      <pose>-1.22 0.15 0 0 0 <%= $door_angle %></pose>
+  <!-- TODO
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+  -->
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  <% end %>
 
 </model>
