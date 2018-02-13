@@ -272,8 +272,9 @@ void FollowActorPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
     return;
 
   // Don't move if there's an obstacle on the way
-  if (this->ObstacleOnTheWay())
-    return;
+  // TODO: Find another way to handle obstacles
+//  if (this->ObstacleOnTheWay())
+  //  return;
 
   // Is it drift time?
   gazebo::common::Time driftTime;

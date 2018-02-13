@@ -27,7 +27,11 @@
    {:x => 1*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'Elevator', :gap => false},
    {:x => 2*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    {:x => 3*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
-   {:x => 4*$o - t, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => 4*$o -    t, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -6*$o + 0*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -5*$o + 0*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => 3*$o + 0*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => 4*$o + 0*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    # bathrooms
    {:x => 5*$o - 1*$g, :y => 0*$o + 0*$g, :yaw => Math::PI*0.5, :type => 'PlainWall', :gap => false},
    {:x => 5*$o - 1*$g, :y => 1*$o + 0*$g, :yaw => Math::PI*0.5,  :type => 'PlainWall', :gap => false},
@@ -234,6 +238,29 @@
           </script>
         </material>
       </visual>
+
+      <collision name="collision_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              <%= width %>
+              <%= thickness %>
+              <%= height %>
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
     <% end %>
 
   </link>

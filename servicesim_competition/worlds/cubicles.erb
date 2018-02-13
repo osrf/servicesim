@@ -64,6 +64,24 @@
           </mesh>
         </geometry>
       </visual>
+      <collision name="collision_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
     <% end %>
 
     <!-- row divisions -->
@@ -103,6 +121,24 @@
           </mesh>
         </geometry>
       </visual>
+      <collision name="collision_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
       <% end %>
     <% end %>
 
@@ -150,6 +186,24 @@
           </mesh>
         </geometry>
       </visual>
+      <collision name="collision_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
       <% end %>
     <% end %>
 

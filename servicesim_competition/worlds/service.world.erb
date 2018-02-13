@@ -1,8 +1,9 @@
 <%
   # ServiceSim world generator
   #
-  # Command line options:
-  # -s seed for random
+  # Command line options (usage erb [opt]=[arg]):
+  # s: seed for randomization
+  # f: true to generate unpopulated world
 
   ###############################################
   #                                             #
@@ -10,7 +11,6 @@
   #                                             #
   ###############################################
 
-  # Read task number from command line
   vars = ARGV.take_while {|arg| arg[/^\w+=/]}
   ARGV.slice!(0, vars.size)
   vars.each do |var|
@@ -18,11 +18,18 @@
     TOPLEVEL_BINDING.eval %Q(#{k} = "#{v}")
   end
 
+  # Seed
   seed = rand(0..10000000)
   if (defined? s)
     seed = s.to_i
   end
   srand(seed)
+
+  # Floorplan only?
+  $floorplan = false
+  if (defined? f)
+    $floorplan = f.to_s == "true"
+  end
 
   ###############################################
   #                                             #
@@ -83,7 +90,7 @@
     {:name => 'PublicMeetingRoomD',  :type => room_types[:office_small],       :pose => [  6*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PublicMeetingRoomE',  :type => room_types[:office_small],       :pose => [  3*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     # Employee-only area
-    {:name => 'PrivateMeetingRoomA', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   5*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomA', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   5*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => $pi * 0.7},
     {:name => 'PrivateMeetingRoomB', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   9*$o + 1*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
     {:name => 'PrivateBathroomA',    :type => room_types[:bathroom],           :pose => [ -3*$o + 0*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PrivateBathroomB',    :type => room_types[:bathroom],           :pose => [ -5*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
@@ -92,9 +99,8 @@
     {:name => 'PrivateOfficeC',      :type => room_types[:office_small],       :pose => [-14*$o - 4*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PrivateOfficeD',      :type => room_types[:office_large],       :pose => [-15*$o - 5*$g,  12*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => 0.0},
     {:name => 'PrivateMeetingRoomC', :type => room_types[:meeting_room_small], :pose => [ -8*$o + 0*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
-    {:name => 'PrivateMeetingRoomD', :type => room_types[:meeting_room_small], :pose => [ -8*$o + 0*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
-    {:name => 'PrivateMeetingRoomE', :type => room_types[:meeting_room_small], :pose => [-12*$o - 1*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
-    {:name => 'PrivateMeetingRoomF', :type => room_types[:meeting_room_small], :pose => [-16*$o - 2*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomD', :type => room_types[:meeting_room_small], :pose => [-12*$o - 1*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomE', :type => room_types[:meeting_room_small], :pose => [-16*$o - 2*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
   ]
 
   ###############################################
@@ -135,12 +141,13 @@
   ]
 
   # List of trajectory actors to be inserted
+  # TODO: Recalculate trajectories for new world and investigate obstacle detection
   actors_trajectory =
   [
     # Example randomizing skin
-    {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
+    # {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
     # Example setting velocity
-    {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
+    # {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
   ]
 
   ###############################################
@@ -150,7 +157,7 @@
   ###############################################
 
   guest_name = 'guest'
-  guest_pose = [-12.7, -18.78, 1.19, 1.54, 0, 1.9]
+  guest_pose = [-6.9, 1.33, 1.00, 1.54, 0, 1.9]
   guest_skin = skins.sample
   guest_anim = animations_trajectory[0]
   drift_times = []
@@ -189,7 +196,7 @@
   drop_off_location =
   {
     :name => 'office_1',
-    :pose => [-12.4, -13.5, 0, 0, 0, 0],
+    :pose => [-2.61, -7.24, 0, 0, 0, 0],
     :size => [4, 4, 10]
   }
 
@@ -197,7 +204,7 @@
   start_location =
   {
     :name => 'cafeteria_1',
-    :pose => [-6.5, -18.2, 0, 0, 0, 0],
+    :pose => [3.76, 1.23, 0, 0, 0, 0],
     :size => [2, 2, 10]
   }
 
@@ -216,10 +223,15 @@
 <!--
   Generated from service.world.erb
   Seed: <%= seed %>
+  Floorplan: <%= $floorplan %>
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
+
+<%
+  if not $floorplan
+%>
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
@@ -354,6 +366,9 @@
         </box>
       </geometry>
     </plugin>
+<%
+  end # if not $floorplan
+%>
 
     <!-- GUI -->
     <gui fullscreen='0'>
@@ -369,26 +384,6 @@
       <grid>0</grid>
       <origin_visual>0</origin_visual>
     </scene>
-
-    <!-- Ground collision -->
-    <model name="ground_collision">
-      <static>true</static>
-      <pose>100 100 0 0 0 0</pose>
-      <link name="link">
-        <collision name="collision">
-          <geometry>
-            <plane>
-              <normal>0 0 1</normal>
-              <size>200 200</size>
-            </plane>
-          </geometry>
-          <surface>
-            <mu>1</mu>
-            <mu2>1</mu2>
-          </surface>
-        </collision>
-      </link>
-    </model>
 
     <!-- Ceiling -->
     <%
@@ -456,6 +451,24 @@
             </script>
           </material>
         </visual>
+
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size><%= x_width %> <%= y_width %></size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+
       </link>
 
     </model>
@@ -536,6 +549,9 @@
       <% end %>
     <% end %>
 
+<%
+  if not $floorplan
+%>
     <!-- Guest -->
     <actor name="<%= guest_name %>">
 
@@ -577,9 +593,10 @@
       <plugin name="trajectory" filename="libFollowActorPlugin.so">
 
         <namespace>servicesim</namespace>
+        <obstacle_margin>0.2</obstacle_margin>
 
-        <ignore_obstacle>willowgarage</ignore_obstacle>
-        <ignore_obstacle>ground_collision</ignore_obstacle>
+        <ignore_obstacle>walls</ignore_obstacle>
+        <ignore_obstacle>floor</ignore_obstacle>
 
         <!-- FIXME: servicebot's bounding box is huge and always colliding -->
         <ignore_obstacle>servicebot</ignore_obstacle>
@@ -665,6 +682,9 @@
     %>
       <%= fromFile(DIR + "/" + "actor_idle.erb") %>
     <% end %>
+<%
+  end # if not $floorplan
+%>
 
   </world>
 </sdf>

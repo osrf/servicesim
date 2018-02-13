@@ -9,6 +9,7 @@
   # * $room_pose (array[6])
   # * $room_size (array[4]) in office units, [min_x, max_x, min_y, max_y]
   # * $door_angle (number)
+  # * $floorplan (boolean)
 
   off_x = -$o * 0.5
 %>
@@ -74,6 +75,9 @@
 
   </link>
 
+<%
+  if not $floorplan
+%>
   <%
     if $door_angle == 0.0
   %>
@@ -145,5 +149,8 @@
       </visual>
     </link>
   <% end %>
+<%
+  end # if not $floorplan
+%>
 
 </model>
