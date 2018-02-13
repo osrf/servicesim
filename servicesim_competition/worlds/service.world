@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 566556
+  Seed: 1701656
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
@@ -217,7 +217,7 @@
 
     </model>
 
-    <!-- walls -->
+    <!-- Extra walls -->
     
 <model name="walls">
 
@@ -3425,21 +3425,21 @@
 </model>
 
 
-    <!-- Public area -->
+    <!-- Rooms -->
     
-    
+      
 
-<model name="bathroom_1">
+<model name="PublicBathroomA">
 
   <static>true</static>
 
   <pose>
     9.0
     3.0
-    0.0
-    0.0
-    0.0
-    0.0
+    0
+    0
+    0
+    0
   </pose>
 
   <link name="link">
@@ -3543,21 +3543,20 @@
 
 </model>
 
-
     
-    
+      
 
-<model name="bathroom_2">
+<model name="PublicBathroomB">
 
   <static>true</static>
 
   <pose>
     12.1
     3.0
-    0.0
-    0.0
-    0.0
-    0.0
+    0
+    0
+    0
+    0
   </pose>
 
   <link name="link">
@@ -3661,20 +3660,19 @@
 
 </model>
 
-
     
-    
+      
 
-<model name="refreshment_area_3">
+<model name="PublicCafe">
 
   <static>true</static>
 
   <pose>
     13.7
     6.0
-    0.0
-    0.0
-    0.0
+    0
+    0
+    0
     1.5707963267948966
   </pose>
 
@@ -4368,20 +4366,19 @@
 
 </model>
 
-
     
-    
+      
 
-<model name="meeting_room_large_4">
+<model name="PublicMeetingRoomA">
 
   <static>true</static>
 
   <pose>
     18.0
     16.5
-    0.0
-    0.0
-    0.0
+    0
+    0
+    0
     3.141592653589793
   </pose>
 
@@ -4866,20 +4863,19 @@
 
 </model>
 
-
     
-    
+      
 
-<model name="meeting_room_small_5">
+<model name="PublicMeetingRoomB">
 
   <static>true</static>
 
   <pose>
     4.5
     7.5
-    0.0
-    0.0
-    0.0
+    0
+    0
+    0
     -1.5707963267948966
   </pose>
 
@@ -5136,20 +5132,19 @@
 
 </model>
 
-
     
-    
+      
 
-<model name="meeting_room_small_6">
+<model name="PublicMeetingRoomC">
 
   <static>true</static>
 
   <pose>
     4.5
     13.6
-    0.0
-    0.0
-    0.0
+    0
+    0
+    0
     -1.5707963267948966
   </pose>
 
@@ -5406,20 +5401,19 @@
 
 </model>
 
-
     
-    
+      
 
-<model name="office_small_7">
+<model name="PublicMeetingRoomD">
 
   <static>true</static>
 
   <pose>
     8.9
     19.5
-    0.0
-    0.0
-    0.0
+    0
+    0
+    0
     3.141592653589793
   </pose>
 
@@ -5563,18 +5557,18 @@
 </model>
 
     
-    
+      
 
-<model name="office_small_8">
+<model name="PublicMeetingRoomE">
 
   <static>true</static>
 
   <pose>
     4.3
     19.5
-    0.0
-    0.0
-    0.0
+    0
+    0
+    0
     3.141592653589793
   </pose>
 
@@ -5718,10 +5712,2593 @@
 </model>
 
     
+      
+
+<model name="PrivateMeetingRoomA">
+
+  <static>true</static>
+
+  <pose>
+    -4.6
+    7.5
+    0
+    0
+    0
+    1.5707963267948966
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-2">
+
+        <pose>
+          -1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-2">
+
+        <pose>
+          0.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-2">
+
+        <pose>
+          1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-2">
+
+        <pose>
+          3.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-1">
+
+        <pose>
+          3.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_0">
+
+        <pose>
+          3.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
 
     
+      
+
+<model name="PrivateMeetingRoomB">
+
+  <static>true</static>
+
+  <pose>
+    -4.6
+    13.6
+    0
+    0
+    0
+    1.5707963267948966
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-2">
+
+        <pose>
+          -1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-2">
+
+        <pose>
+          0.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-2">
+
+        <pose>
+          1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-2">
+
+        <pose>
+          3.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-1">
+
+        <pose>
+          3.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_0">
+
+        <pose>
+          3.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateBathroomA">
+
+  <static>true</static>
+
+  <pose>
+    -4.5
+    19.5
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/bathroom.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/bathroom.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/tile.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/tile.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/tile.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/tile.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateBathroomB">
+
+  <static>true</static>
+
+  <pose>
+    -7.6
+    19.5
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/bathroom.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/bathroom.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/tile.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/tile.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/tile.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/tile.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateOfficeA">
+
+  <static>true</static>
+
+  <pose>
+    -12.2
+    19.5
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/office_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/office_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateOfficeB">
+
+  <static>true</static>
+
+  <pose>
+    -16.8
+    19.5
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/office_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/office_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateOfficeC">
+
+  <static>true</static>
+
+  <pose>
+    -21.4
+    19.5
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/office_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/office_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateOfficeD">
+
+  <static>true</static>
+
+  <pose>
+    -23.0
+    18.0
+    0
+    0
+    0
+    -1.5707963267948966
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/office_large.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/office_large.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-2">
+
+        <pose>
+          -1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-2">
+
+        <pose>
+          0.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-2">
+
+        <pose>
+          1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-2">
+
+        <pose>
+          3.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-1">
+
+        <pose>
+          3.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_0">
+
+        <pose>
+          3.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateMeetingRoomA">
+
+  <static>true</static>
+
+  <pose>
+    -12.0
+    4.5
+    0
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-2">
+
+        <pose>
+          -1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-2">
+
+        <pose>
+          0.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-2">
+
+        <pose>
+          1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-2">
+
+        <pose>
+          3.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-1">
+
+        <pose>
+          3.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_0">
+
+        <pose>
+          3.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateMeetingRoomB">
+
+  <static>true</static>
+
+  <pose>
+    -12.0
+    4.5
+    0
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-2">
+
+        <pose>
+          -1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-2">
+
+        <pose>
+          0.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-2">
+
+        <pose>
+          1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-2">
+
+        <pose>
+          3.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-1">
+
+        <pose>
+          3.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_0">
+
+        <pose>
+          3.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateMeetingRoomC">
+
+  <static>true</static>
+
+  <pose>
+    -18.1
+    4.5
+    0
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-2">
+
+        <pose>
+          -1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-2">
+
+        <pose>
+          0.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-2">
+
+        <pose>
+          1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-2">
+
+        <pose>
+          3.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-1">
+
+        <pose>
+          3.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_0">
+
+        <pose>
+          3.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+      
+
+<model name="PrivateMeetingRoomD">
+
+  <static>true</static>
+
+  <pose>
+    -24.2
+    4.5
+    0
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>file://media/meshes/meeting_room_small.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+
+    <!-- floor -->
+    
+      <visual name="floor_-1_-2">
+
+        <pose>
+          -1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_-1">
+
+        <pose>
+          -1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_-1_0">
+
+        <pose>
+          -1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-2">
+
+        <pose>
+          0.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_-1">
+
+        <pose>
+          0.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_0_0">
+
+        <pose>
+          0.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-2">
+
+        <pose>
+          1.5
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_-1">
+
+        <pose>
+          1.5
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_1_0">
+
+        <pose>
+          1.5
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-2">
+
+        <pose>
+          3.0
+          -3.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_-1">
+
+        <pose>
+          3.0
+          -1.5
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+      <visual name="floor_2_0">
+
+        <pose>
+          3.0
+          0.0
+          0
+          0
+          0
+          0
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>file://media/meshes/carpet.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    
+
+  </link>
+
+</model>
+
+    
+
+    <!-- Public cubicles -->
+    
     <include>
-      <name>island_9</name>
+      <name>island_1</name>
       <pose>
         9.0
         7.5
@@ -5734,7 +8311,7 @@
     </include>
     
     <include>
-      <name>island_10</name>
+      <name>island_2</name>
       <pose>
         9.0
         13.5
@@ -5749,7 +8326,7 @@
 
     
     <include>
-      <name>island_11</name>
+      <name>island_3</name>
       <pose>
         13.6
         10.6
@@ -5762,7 +8339,7 @@
     </include>
     
     <include>
-      <name>island_12</name>
+      <name>island_4</name>
       <pose>
         15.5
         10.6
@@ -5775,7 +8352,7 @@
     </include>
     
     <include>
-      <name>island_13</name>
+      <name>island_5</name>
       <pose>
         17.4
         10.6
@@ -5788,7 +8365,7 @@
     </include>
     
     <include>
-      <name>island_14</name>
+      <name>island_6</name>
       <pose>
         19.299999999999997
         10.6
@@ -5801,2333 +8378,10 @@
     </include>
     
 
-    <!-- Employee-only area -->
+    <!-- Private cubicles -->
     
     
-
-<model name="meeting_room_small_15">
-
-  <static>true</static>
-
-  <pose>
-    -4.6
-    7.5
-    0.0
-    0.0
-    0.0
-    1.5707963267948966
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-2">
-
-        <pose>
-          -1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-2">
-
-        <pose>
-          0.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-2">
-
-        <pose>
-          1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-2">
-
-        <pose>
-          3.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-1">
-
-        <pose>
-          3.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_0">
-
-        <pose>
-          3.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-
-    
-    
-
-<model name="meeting_room_small_16">
-
-  <static>true</static>
-
-  <pose>
-    -4.6
-    13.6
-    0.0
-    0.0
-    0.0
-    1.5707963267948966
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-2">
-
-        <pose>
-          -1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-2">
-
-        <pose>
-          0.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-2">
-
-        <pose>
-          1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-2">
-
-        <pose>
-          3.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-1">
-
-        <pose>
-          3.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_0">
-
-        <pose>
-          3.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-
-    
-    
-
-<model name="bathroom_17">
-
-  <static>true</static>
-
-  <pose>
-    -4.5
-    19.5
-    0.0
-    0.0
-    0.0
-    3.141592653589793
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/bathroom.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/bathroom.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/tile.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/tile.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/tile.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/tile.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-
-    
-    
-
-<model name="bathroom_18">
-
-  <static>true</static>
-
-  <pose>
-    -7.6
-    19.5
-    0.0
-    0.0
-    0.0
-    3.141592653589793
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/bathroom.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/bathroom.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/tile.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/tile.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/tile.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/tile.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-
-    
-    
-
-<model name="office_small_19">
-
-  <static>true</static>
-
-  <pose>
-    -12.2
-    19.5
-    0.0
-    0.0
-    0.0
-    3.141592653589793
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/office_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/office_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-    
-    
-
-<model name="office_small_20">
-
-  <static>true</static>
-
-  <pose>
-    -16.8
-    19.5
-    0.0
-    0.0
-    0.0
-    3.141592653589793
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/office_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/office_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-    
-    
-
-<model name="office_small_21">
-
-  <static>true</static>
-
-  <pose>
-    -21.4
-    19.5
-    0.0
-    0.0
-    0.0
-    3.141592653589793
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/office_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/office_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-    
-
-    
-    
-
-<model name="office_large_22">
-
-  <static>true</static>
-
-  <pose>
-    -23.0
-    18.0
-    0.0
-    0.0
-    0.0
-    -1.5707963267948966
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/office_large.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/office_large.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-2">
-
-        <pose>
-          -1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-2">
-
-        <pose>
-          0.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-2">
-
-        <pose>
-          1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-2">
-
-        <pose>
-          3.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-1">
-
-        <pose>
-          3.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_0">
-
-        <pose>
-          3.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-
-    
-    
-
-<model name="meeting_room_small_23">
-
-  <static>true</static>
-
-  <pose>
-    -12.0
-    4.5
-    0.0
-    0.0
-    0.0
-    0.0
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-2">
-
-        <pose>
-          -1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-2">
-
-        <pose>
-          0.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-2">
-
-        <pose>
-          1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-2">
-
-        <pose>
-          3.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-1">
-
-        <pose>
-          3.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_0">
-
-        <pose>
-          3.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-
-    
-    
-
-<model name="meeting_room_small_24">
-
-  <static>true</static>
-
-  <pose>
-    -18.1
-    4.5
-    0.0
-    0.0
-    0.0
-    0.0
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-2">
-
-        <pose>
-          -1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-2">
-
-        <pose>
-          0.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-2">
-
-        <pose>
-          1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-2">
-
-        <pose>
-          3.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-1">
-
-        <pose>
-          3.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_0">
-
-        <pose>
-          3.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-
-    
-    
-
-<model name="meeting_room_small_25">
-
-  <static>true</static>
-
-  <pose>
-    -24.2
-    4.5
-    0.0
-    0.0
-    0.0
-    0.0
-  </pose>
-
-  <link name="link">
-    <collision name="collision">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </collision>
-    <visual name="visual">
-      <geometry>
-        <mesh>
-          <uri>file://media/meshes/meeting_room_small.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
-      </geometry>
-    </visual>
-
-    <!-- floor -->
-    
-      <visual name="floor_-1_-2">
-
-        <pose>
-          -1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_-1">
-
-        <pose>
-          -1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_-1_0">
-
-        <pose>
-          -1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-2">
-
-        <pose>
-          0.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_-1">
-
-        <pose>
-          0.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_0_0">
-
-        <pose>
-          0.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-2">
-
-        <pose>
-          1.5
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_-1">
-
-        <pose>
-          1.5
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_1_0">
-
-        <pose>
-          1.5
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-2">
-
-        <pose>
-          3.0
-          -3.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_-1">
-
-        <pose>
-          3.0
-          -1.5
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-      <visual name="floor_2_0">
-
-        <pose>
-          3.0
-          0.0
-          0
-          0
-          0
-          0
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/carpet.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    
-
-  </link>
-
-</model>
-
-
-    
-    
-<model name="cubicles_26">
+<model name="cubicles_7">
 
   <static>true</static>
 
@@ -8737,7 +8991,7 @@
 
       
     
-<model name="cubicles_27">
+<model name="cubicles_8">
 
   <static>true</static>
 
@@ -9347,7 +9601,7 @@
 
       
     
-<model name="cubicles_28">
+<model name="cubicles_9">
 
   <static>true</static>
 
@@ -9958,7 +10212,7 @@
       
     
     
-<model name="cubicles_29">
+<model name="cubicles_10">
 
   <static>true</static>
 
@@ -10433,7 +10687,7 @@
 
       
     
-<model name="cubicles_30">
+<model name="cubicles_11">
 
   <static>true</static>
 
@@ -10908,7 +11162,7 @@
 
       
     
-<model name="cubicles_31">
+<model name="cubicles_12">
 
   <static>true</static>
 
@@ -11433,65 +11687,65 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>260</drift_time>
+          <drift_time>193</drift_time>
         
-          <drift_time>468</drift_time>
+          <drift_time>199</drift_time>
         
-          <drift_time>648</drift_time>
+          <drift_time>285</drift_time>
         
-          <drift_time>679</drift_time>
+          <drift_time>324</drift_time>
         
-          <drift_time>707</drift_time>
+          <drift_time>332</drift_time>
         
-          <drift_time>859</drift_time>
+          <drift_time>365</drift_time>
         
-          <drift_time>904</drift_time>
+          <drift_time>638</drift_time>
         
-          <drift_time>953</drift_time>
+          <drift_time>917</drift_time>
         
-          <drift_time>1037</drift_time>
+          <drift_time>1103</drift_time>
         
-          <drift_time>1277</drift_time>
+          <drift_time>1122</drift_time>
         
-          <drift_time>1367</drift_time>
+          <drift_time>1227</drift_time>
         
-          <drift_time>1425</drift_time>
+          <drift_time>1317</drift_time>
         
-          <drift_time>1692</drift_time>
+          <drift_time>1589</drift_time>
         
-          <drift_time>1835</drift_time>
+          <drift_time>1660</drift_time>
         
-          <drift_time>2076</drift_time>
+          <drift_time>1741</drift_time>
         
-          <drift_time>2277</drift_time>
+          <drift_time>1800</drift_time>
         
-          <drift_time>2327</drift_time>
+          <drift_time>1928</drift_time>
         
-          <drift_time>2593</drift_time>
+          <drift_time>1973</drift_time>
         
-          <drift_time>2689</drift_time>
+          <drift_time>2185</drift_time>
         
-          <drift_time>2979</drift_time>
+          <drift_time>2269</drift_time>
         
-          <drift_time>3052</drift_time>
+          <drift_time>2494</drift_time>
         
-          <drift_time>3112</drift_time>
+          <drift_time>2750</drift_time>
         
-          <drift_time>3206</drift_time>
+          <drift_time>3000</drift_time>
         
-          <drift_time>3225</drift_time>
+          <drift_time>3124</drift_time>
         
-          <drift_time>3351</drift_time>
+          <drift_time>3353</drift_time>
         
-          <drift_time>3460</drift_time>
+          <drift_time>3441</drift_time>
         
-          <drift_time>3620</drift_time>
+          <drift_time>3582</drift_time>
         
-          <drift_time>3661</drift_time>
+          <drift_time>3671</drift_time>
         
-          <drift_time>3943</drift_time>
+          <drift_time>3858</drift_time>
         
-          <drift_time>4210</drift_time>
+          <drift_time>3970</drift_time>
         
 
       </plugin>
@@ -11502,7 +11756,7 @@
     
       
 
-<actor name="actor_32">
+<actor name="actor_13">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -11515,7 +11769,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
@@ -11602,7 +11856,7 @@
     
       
 
-<actor name="actor_33">
+<actor name="actor_14">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -11680,7 +11934,7 @@
       </target>
     
 
-    <velocity>0.9957047325670354</velocity>
+    <velocity>1.0181404907952039</velocity>
     <ignore_obstacle>willowgarage</ignore_obstacle>
     <ignore_obstacle>ground_collision</ignore_obstacle>
     <!-- FIXME: servicebot's bounding box is huge and always colliding -->
@@ -11696,7 +11950,7 @@
     
       
 
-<actor name="actor_34">
+<actor name="actor_15">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -11738,7 +11992,7 @@
     
       
 
-<actor name="actor_35">
+<actor name="actor_16">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>

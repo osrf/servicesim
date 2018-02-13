@@ -2,7 +2,7 @@
   # Room template
   #
   # Required variables
-  # * $office_u (number) length of an office unit
+  # * $o (number) length of an office unit
   # * $room_type (string)
   # * $room_name (string)
   # * $room_floor (string)
@@ -49,8 +49,8 @@
       <visual name="floor_<%= x %>_<%= y %>">
 
         <pose>
-          <%= x * $office_u %>
-          <%= y * $office_u %>
+          <%= x * $o %>
+          <%= y * $o %>
           0
           0
           0
