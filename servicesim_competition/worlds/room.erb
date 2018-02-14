@@ -7,8 +7,8 @@
   # * $room_type (string) must correspond to an obj mesh
   # * $room_name (string) unique name for room
   # * $room_floor (string) must correspond to an obj mesh
-  # * $room_pose (array[6])
-  # * $room_size (array[4]) in office units, [min_x, max_x, min_y, max_y]
+  # * $room_pose (number[6])
+  # * $room_size (number[4]) in office units, [min_x, max_x, min_y, max_y]
   # * $door_angle (number)
   # * $floorplan (boolean) true if only showing floorplan
 
@@ -305,8 +305,173 @@
       </visual>
     </link>
   <% end %>
+
+  <!-- Furniture -->
+
+  <% if $room_type == 'meeting_room_large' %>
+  <include>
+    <pose>
+      <%= 1.15*$o %>
+      <%= -2*$o %>
+      0
+      0
+      0
+      0
+    </pose>
+    <uri>model://conference_table_large</uri>
+  </include>
+  <include>
+    <pose>
+      <%= -$o %>
+      <%= -3*$o %>
+      0
+      0
+      0
+      <%= $pi*0.75 + rand(-0.2..0.2) %>
+    </pose>
+    <uri>model://whiteboard</uri>
+  </include>
+  <%
+    for x in (0..4)
+      for y in [-1.6*$o, -1*$o]
+        yaw = y == -1 * $o ? 0.0 : $pi
+        yaw += rand(-0.15..0.15)
+        y += rand(-0.05..0.05)
+  %>
+      <include>
+        <name>chair_<%= x %>_<%= y %></name>
+        <pose>
+          <%= x * $o * 0.6 %>
+          <%= y * $o %>
+          0
+          0
+          0
+          <%= yaw %>
+        </pose>
+        <uri>model://desk_chair</uri>
+      </include>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if $room_type == 'meeting_room_small' %>
+  <include>
+    <pose>
+      <%= 0.3*$o %>
+      <%= -1.4*$o %>
+      0
+      0
+      0
+      0
+    </pose>
+    <uri>model://conference_table_small</uri>
+  </include>
+  <include>
+    <pose>
+      <%= -1.5*$o %>
+      <%= -1.4*$o %>
+      0
+      0
+      0
+      <%= $pi*0.5 %>
+    </pose>
+    <uri>model://whiteboard</uri>
+  </include>
+  <%
+    for x in (0..2)
+      for y in [-1.2*$o, -0.6*$o]
+        yaw = y == -0.7 * $o ? 0.0 : $pi
+        yaw += rand(-0.15..0.15)
+        y += rand(-0.05..0.05)
+  %>
+      <include>
+        <name>chair_<%= x %>_<%= y %></name>
+        <pose>
+          <%= x * $o * 0.6 - 0.15 %>
+          <%= y * $o %>
+          0
+          0
+          0
+          <%= yaw %>
+        </pose>
+        <uri>model://desk_chair</uri>
+      </include>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if $room_type == 'bathroom' %>
+  <include>
+    <pose>
+      -0.6
+      -2.1
+      0
+      0
+      0
+      <%= $pi %>
+    </pose>
+    <uri>model://toilet</uri>
+  </include>
+  <% end %>
+
+  <% if $room_type == 'office_large' %>
+
+  <include>
+    <pose>
+      <%= -1.6*$o %>
+      -0.4
+      0
+      0
+      0
+      0
+    </pose>
+    <uri>model://mini_fridge</uri>
+  </include>
+
+  <%
+    $pose =
+    [
+      2 * $o,
+      -3 * $o,
+      0,
+      0,
+      0,
+      -$pi * 0.5,
+    ]
+  %>
+  <%= fromFile(DIR + "/cubicle_corner.erb") %>
+
+  <%
+    $pose =
+    [
+      -2 * $o,
+      -3 * $o,
+      0,
+      0,
+      0,
+      $pi,
+    ]
+  %>
+  <%= fromFile(DIR + "/cubicle_corner.erb") %>
+
+  <%
+    $pose =
+    [
+      2 * $o,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ]
+  %>
+  <%= fromFile(DIR + "/cubicle_corner.erb") %>
+
+  <% end %>
+
 <%
   end # if not $floorplan
 %>
 
 </model>
+

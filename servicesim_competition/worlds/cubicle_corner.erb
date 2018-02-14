@@ -1,7 +1,24 @@
-<?xml version="1.0" ?>
-<sdf version="1.5">
-  <model name="cubicle_corner">
+<%
+  # Template for a cubicle corner
+  #
+  # Required variables
+  # * $o (number) length of an office unit
+  # * $pi (number)
+  # * $count (number)
+  # * $pose (number[6])
+
+  $count += 1
+%>
+  <model name="cubicle_corner_<%= $count %>">
     <static>true</static>
+    <pose>
+      <%= $pose[0] %>
+      <%= $pose[1] %>
+      <%= $pose[2] %>
+      <%= $pose[3] %>
+      <%= $pose[4] %>
+      <%= $pose[5] %>
+    </pose>
     <link name="link">
       <collision name="collision">
         <geometry>
@@ -25,8 +42,7 @@
       <uri>model://computer</uri>
     </include>
     <include>
-      <pose>-1.15 -1.20 0 0 0 2.35</pose>
+      <pose>-1.15 -1.20 0 0 0 <%= 2.35 + rand(-0.4..0.4) %></pose>
       <uri>model://office_chair</uri>
     </include>
   </model>
-</sdf>
