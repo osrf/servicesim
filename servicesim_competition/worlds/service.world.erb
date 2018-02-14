@@ -48,6 +48,10 @@
   #                                             #
   ###############################################
 
+  # PI for short
+  $pi = Math::PI
+
+  # Get an angle for the door, it's 0.0 for a closed door
   def doorAngle()
     open = [true, false].sample()
     if not open
@@ -57,17 +61,17 @@
     end
   end
 
-  # Units
-  $count = 0
-  $g = 0.1
+  # "office unit" - the width of wall panels
   $o = 1.5
-  $cubicle_u = 0.6
-  $cubicle_corner = 0.025
-  $pi = Math::PI
 
+  # "gap unit" - the width of gaps between rooms
+  $g = 0.1
+
+  # Total office size
   total_x = $o * 33
   total_y = $o * 15
 
+  # Dictionary with all room types
   room_types =
   {
     :bathroom => {:type => 'bathroom', :floor => 'tile', :size => [0, 1, -1, 0]},
@@ -78,6 +82,7 @@
     :office_large => {:type => 'office_large', :floor => 'carpet', :size => [-1, 2, -2, 0]},
   }
 
+  # Dictionary with all rooms to be inserted
   rooms =
   [
     # Public area
@@ -219,6 +224,9 @@
 
   # Actor's Z position
   actor_pos_z = 1.25
+
+  # Count to ensure unique names
+  $count = 0
 %>
 <!--
   Generated from service.world.erb
@@ -387,10 +395,8 @@
 
     <!-- Ceiling -->
     <%
-      x_width = total_x + $cubicle_u
-      y_width = total_y + $cubicle_u
-      x_offset = x_width * -0.05
-      y_offset = y_width * 0.5
+      x_offset = total_x * -0.06
+      y_offset = total_y * 0.5
     %>
     <model name="ceiling">
       <pose>
@@ -408,7 +414,7 @@
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <size><%= x_width %> <%= y_width %></size>
+              <size><%= total_x %> <%= total_y %></size>
             </plane>
           </geometry>
           <material>
@@ -440,7 +446,7 @@
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <size><%= x_width %> <%= y_width %></size>
+              <size><%= total_x %> <%= total_y %></size>
             </plane>
           </geometry>
           <material>
@@ -456,7 +462,7 @@
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <size><%= x_width %> <%= y_width %></size>
+              <size><%= total_x %> <%= total_y %></size>
             </plane>
           </geometry>
           <surface>

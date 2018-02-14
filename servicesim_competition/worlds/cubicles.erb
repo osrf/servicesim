@@ -6,6 +6,12 @@
   # * $cubicle_size (number) row count
   # * $cubicle_pos (number[]) start position
 
+  # Unit size of a cubicle element
+  cubicle_u = 0.6
+
+  # Size of corner elements
+  cubicle_corner = 0.025
+
   x_size = 3
 
   center_y = $cubicle_pos[1]
@@ -38,7 +44,7 @@
         offset = -0.3
         pose =
         [
-          x * $cubicle_u + offset,
+          x * cubicle_u + offset,
           0.0,
           0.0,
           0.0,
@@ -95,7 +101,7 @@
           offset = -0.9 * side
           pose =
           [
-            x * $cubicle_u,
+            x * cubicle_u,
             offset,
             0.0,
             0.0,
@@ -160,8 +166,8 @@
           yaw = side == -1 ? 0.0 : Math::PI
           pose =
           [
-            x * $cubicle_u + offset,
-           - (2 * $cubicle_u + $cubicle_corner) * side,
+            x * cubicle_u + offset,
+           - (2 * cubicle_u + cubicle_corner) * side,
             0.0,
             0.0,
             0.0,
