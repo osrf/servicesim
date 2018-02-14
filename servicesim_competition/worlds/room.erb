@@ -3,6 +3,7 @@
   #
   # Required variables
   # * $o (number) length of an office unit
+  # * $pi (number)
   # * $room_type (string) must correspond to an obj mesh
   # * $room_name (string) unique name for room
   # * $room_floor (string) must correspond to an obj mesh
@@ -12,6 +13,15 @@
   # * $floorplan (boolean) true if only showing floorplan
 
   off_x = -$o * 0.5
+  height = 2 * $o
+  thickness = $g
+
+  door_side = 0.24
+
+  min_x = $room_size[0]
+  max_x = $room_size[1]
+  min_y = $room_size[2]
+  max_y = $room_size[3]
 %>
 
 <model name="<%= $room_name %>">
@@ -28,14 +38,160 @@
   </pose>
 
   <link name="link">
-    <collision name="collision">
+
+    <%
+      width = max_x * $o + door_side
+      if width != 0.0
+    %>
+    <collision name="right_of_door">
+
+      <pose>
+        <%= width * 0.5 - door_side %>
+        <%= thickness * 0.5 %>
+        <%= height * 0.5 %>
+        0
+        0
+        0
+      </pose>
+
       <geometry>
-        <mesh>
-          <uri>file://media/meshes/<%= $room_type %>.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
+        <box>
+          <size>
+            <%= width %>
+            <%= thickness %>
+            <%= height %>
+          </size>
+        </box>
       </geometry>
     </collision>
+    <% end %>
+
+    <%
+      width = -min_x * $o + door_side
+      if width != 0.0
+    %>
+    <collision name="left_of_door">
+
+      <pose>
+        <%= -$o - width * 0.5 + door_side %>
+        <%= thickness * 0.5 %>
+        <%= height * 0.5 %>
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            <%= width %>
+            <%= thickness %>
+            <%= height %>
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    <% end %>
+
+    <%
+      width = $o
+      h = 0.9
+      if width != 0.0
+    %>
+    <collision name="top_of_door">
+
+      <pose>
+        <%= -width * 0.5 %>
+        <%= thickness * 0.5 %>
+        2.55
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            <%= width %>
+            <%= thickness %>
+            <%= h %>
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    <% end %>
+
+    <%
+      width = (max_y - min_y + 1) * $o
+    %>
+    <collision name="right">
+
+      <pose>
+        <%= max_x * $o + thickness * 0.5 %>
+        <%= -width * 0.5 %>
+        <%= height * 0.5 %>
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            <%= thickness %>
+            <%= width %>
+            <%= height %>
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    <collision name="left">
+
+      <pose>
+        <%= (min_x - 1) * $o - thickness * 0.5 %>
+        <%= -width * 0.5 %>
+        <%= height * 0.5 %>
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            <%= thickness %>
+            <%= width %>
+            <%= height %>
+          </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <%
+      width = (max_x - min_x + 1) * $o
+    %>
+    <collision name="back">
+
+      <pose>
+        <%= width * 0.5 + (min_x - 1) * $o %>
+        <%= (min_y - 1) * $o - thickness * 0.5 %>
+        <%= height * 0.5 %>
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            <%= width %>
+            <%= thickness %>
+            <%= height %>
+          </size>
+        </box>
+      </geometry>
+    </collision>
+
     <visual name="visual">
       <geometry>
         <mesh>
@@ -47,8 +203,8 @@
 
     <!-- floor -->
     <%
-      for x in ($room_size[0]..$room_size[1])
-        for y in ($room_size[2]..$room_size[3])
+      for x in (min_x..max_x)
+        for y in (min_y..max_y)
     %>
       <visual name="floor_<%= x %>_<%= y %>">
 
