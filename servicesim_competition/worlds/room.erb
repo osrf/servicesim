@@ -96,7 +96,8 @@
     <%
       width = $o
       h = 0.9
-      if width != 0.0
+      # leave the door hole on floorplan
+      if not $floorplan
     %>
     <collision name="top_of_door">
 
