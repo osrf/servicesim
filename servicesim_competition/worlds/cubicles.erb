@@ -5,6 +5,7 @@
   # * $count (number)
   # * $cubicle_size (number) row count
   # * $cubicle_pos (number[]) start position
+  # * $floorplan (bool)
 
   # Unit size of a cubicle element
   cubicle_u = 0.6
@@ -214,6 +215,9 @@
 
   </link>
 
+<%
+  if not $floorplan
+%>
   <!-- furniture -->
   <%
     for x in (x_min..x_max).step(x_size)
@@ -266,5 +270,8 @@
     </include>
     <% end %>
   <% end %>
+<%
+  end # if not $floorplan
+%>
 
 </model>

@@ -1,0 +1,86 @@
+<%
+  # Back entrance template
+  #
+  # Required variables
+  # * $pi (number)
+%>
+
+<model name="BackEntrance">
+  <static>true</static>
+
+  <include>
+    <name>chair_1</name>
+    <pose>
+      <%= 1.43 + rand(-0.1..0.1) %>
+      <%= 21.6 + rand(-0.1..0.1) %>
+      0
+      0
+      0
+      <%= -1.81 + rand(-0.3..0.3) %>
+    </pose>
+    <uri>model://hangout_chair</uri>
+  </include>
+
+  <include>
+    <name>chair_2</name>
+    <pose>
+      <%= 1.94 + rand(-0.1..0.1) %>
+      <%= 20.0 + rand(-0.1..0.1) %>
+      0
+      0
+      0
+      <%= 2.6 + rand(-0.3..0.3) %>
+    </pose>
+    <uri>model://hangout_chair</uri>
+  </include>
+
+  <include>
+    <name>chair_3</name>
+    <pose>
+      <%= 0.51 + rand(-0.1..0.1) %>
+      <%= 20.38 + rand(-0.1..0.1) %>
+      0
+      0
+      0
+      <%= 0.31 + rand(-0.3..0.3) %>
+    </pose>
+    <uri>model://hangout_chair</uri>
+  </include>
+
+  <include>
+    <pose>
+      -0.18
+      22.0
+      0
+      0
+      0
+      <%= -$pi * 0.5 %>
+    </pose>
+    <uri>model://mini_fridge</uri>
+  </include>
+
+  <include>
+    <pose>
+      -0.97
+      22.03
+      0
+      0
+      0
+      <%= -$pi * 0.5 %>
+    </pose>
+    <uri>model://wastebasket</uri>
+  </include>
+
+  <include>
+    <pose>
+      0.0
+      16.9
+      0
+      0
+      0
+      <%= $pi %>
+    </pose>
+    <uri>model://reception_desk</uri>
+  </include>
+
+</model>
