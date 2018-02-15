@@ -19,7 +19,6 @@
   x_max = x_size * $cubicle_size - 1
 
   count = 0
-  # TODO: collisions
 %>
 <model name="cubicles_<%= $count.to_s() %>">
 
@@ -34,7 +33,7 @@
     0.0
   </pose>
 
-  <link name="link">
+  <link name="walls">
 
     <!-- center wall -->
     <%
@@ -214,5 +213,58 @@
     <% end %>
 
   </link>
+
+  <!-- furniture -->
+  <%
+    for x in (x_min..x_max).step(x_size)
+
+      for side in [-1, 1]
+
+        count += 1
+        x_off = 0.8
+        x_off_chair = x_off + rand(-0.1..0.1)
+        y_off = -0.4 * side
+        y_off_chair = -0.7 * side
+        yaw = side == -1 ? 0.0 : Math::PI
+        yaw_comp = side == -1 ? Math::PI : 0.0
+  %>
+    <include>
+      <name>desk_<%= count %></name>
+      <pose>
+        <%= x * cubicle_u + x_off %>
+        <%= y_off %>
+        0.1
+        0
+        0
+        <%= yaw %>
+      </pose>
+      <uri>model://desk</uri>
+    </include>
+    <include>
+      <name>computer_<%= count %></name>
+      <pose>
+        <%= x * cubicle_u + x_off %>
+        <%= y_off %>
+        0.78
+        0
+        0
+        <%= yaw_comp %>
+      </pose>
+      <uri>model://computer</uri>
+    </include>
+    <include>
+      <name>chair_<%= count %></name>
+      <pose>
+        <%= x * cubicle_u + x_off_chair %>
+        <%= y_off_chair %>
+        0
+        0
+        0
+        <%= yaw + rand(-0.4..0.4) %>
+      </pose>
+      <uri>model://office_chair</uri>
+    </include>
+    <% end %>
+  <% end %>
 
 </model>

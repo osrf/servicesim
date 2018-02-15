@@ -130,13 +130,16 @@
   start_y = -4.5
   space_x = 2.5
   space_y = 2.2
+  n = 0
   for x in (0..2)
     for y in (0..1)
+      n += 1
       x += rand(-0.1..0.1)
       y += rand(-0.1..0.1)
 %>
 
   <include>
+    <name>chair_<%= n %></name>
     <pose>
       <%= start_x + x * space_x %>
       <%= start_y + y * space_y %>
@@ -149,8 +152,11 @@
   </include>
 
   <%
+    nn = 0
     for c_x in [-0.5, 0.5]
       for c_y in [-0.5, 0.5]
+
+        nn += 1
 
         if c_x == -0.5 and c_y == -0.5
           yaw = -$pi * 0.75
@@ -166,6 +172,7 @@
   %>
 
     <include>
+      <name>chair_<%= n %>_<%= nn %></name>
       <pose>
         <%= start_x + x * space_x + c_x%>
         <%= start_y + y * space_y + c_y %>
