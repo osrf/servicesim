@@ -88,7 +88,7 @@
     'hangout_chair',
     'mini_fridge',
     'wastebasket',
-    'cardboard_box',
+    'office_box',
   ]
 
   # Dictionary with all rooms to be inserted
@@ -507,20 +507,17 @@
     <!-- Public cubicles -->
     <%
       for y in [5, 9]
-        $count += 1
+        $pose =
+        [
+          6 * $o,
+          y * $o,
+          0,
+          0,
+          0,
+          0,
+        ]
     %>
-    <include>
-      <name>island_<%= $count %></name>
-      <pose>
-        <%= 6 * $o %>
-        <%= y * $o %>
-        0
-        0
-        0
-        0
-      </pose>
-      <uri>model://cubicle_island</uri>
-    </include>
+      <%= fromFile(DIR + "/cubicle_island.erb") %>
     <%
       end
     %>
@@ -573,6 +570,34 @@
 
     <!-- Front entrance -->
     <%= fromFile(DIR + "/front_entrance.erb") %>
+
+    <!-- loose objects -->
+    <include>
+      <name>couch_public</name>
+      <pose>
+        <%= 15.5 + rand(-1.0..1.0) %>
+        15.35
+        0
+        0
+        0
+        0
+      </pose>
+      <uri>model://office_couch</uri>
+    </include>
+
+    <include>
+      <name>whiteboard_public</name>
+      <pose>
+        <%= 13.3 + rand(-0.2..0.2) %>
+        <%= 13.1 + rand(-0.1..0.1) %>
+        0
+        0
+        0
+        <%= 0.5 + rand(-0.2..0.2) %>
+      </pose>
+      <uri>model://whiteboard</uri>
+    </include>
+
 
     <!-- Guest -->
     <actor name="<%= guest_name %>">

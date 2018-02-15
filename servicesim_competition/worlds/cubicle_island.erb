@@ -1,0 +1,100 @@
+<%
+  # Template for a cubicle island
+  #
+  # Required variables
+  # * $o (number) length of an office unit
+  # * $pi (number)
+  # * $count (number)
+  # * $pose (number[6])
+
+  $count += 1
+
+  top = 0.76
+%>
+  <model name="cubicle_island_<%= $count %>">
+    <static>true</static>
+    <pose>
+      <%= $pose[0] %>
+      <%= $pose[1] %>
+      <%= $pose[2] %>
+      <%= $pose[3] %>
+      <%= $pose[4] %>
+      <%= $pose[5] %>
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_island/meshes/cubicle_island.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_island/meshes/cubicle_island.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <%
+      far_off = 1.22
+      near_off = 0.45
+      for x in [-1, 1]
+        for y in [-1, 1]
+
+          # placement axis
+          p = ['X', 'Y'].sample
+
+          if p == 'X'
+            comp_x = far_off * x
+            comp_y = near_off * y
+            comp_yaw = y > 0 ? $pi : 0.0
+          else
+            comp_x = near_off * x
+            comp_y = far_off * y
+            comp_yaw = x > 0 ? $pi * 0.5 : -$pi * 0.5
+          end
+    %>
+      <include>
+        <pose>
+          <%= comp_x %>
+          <%= comp_y %>
+          <%= top %>
+          0
+          0
+          <%= comp_yaw %>
+        </pose>
+        <uri>model://computer</uri>
+      </include>
+
+      <%
+         chair_x = (rand(1.13..1.5)) * x
+         chair_y = (rand(1.13..1.5)) * y
+
+          if x < 0 and y < 0
+            chair_yaw = $pi * 0.75 + rand(-0.4..0.4)
+          elsif x < 0 and y > 0
+            chair_yaw = $pi * 0.25 + rand(-0.4..0.4)
+          elsif x > 0 and y < 0
+            chair_yaw = -$pi * 0.75 + rand(-0.4..0.4)
+          elsif x > 0 and y > 0
+            chair_yaw = -$pi * 0.25 + rand(-0.4..0.4)
+          end
+      %>
+      <include>
+        <pose>
+          <%= chair_x %>
+          <%= chair_y %>
+          0
+          0
+          0
+          <%= chair_yaw %>
+        </pose>
+        <uri>model://office_chair</uri>
+      </include>
+      <% end %>
+    <% end %>
+  </model>
