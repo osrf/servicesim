@@ -562,15 +562,18 @@
       <% end %>
     <% end %>
 
+<%
+  if not $floorplan
+%>
     <!-- Private cafe -->
     <%= fromFile(DIR + "/private_cafe.erb") %>
 
     <!-- Back entrance -->
     <%= fromFile(DIR + "/back_entrance.erb") %>
 
-<%
-  if not $floorplan
-%>
+    <!-- Front entrance -->
+    <%= fromFile(DIR + "/front_entrance.erb") %>
+
     <!-- Guest -->
     <actor name="<%= guest_name %>">
 
