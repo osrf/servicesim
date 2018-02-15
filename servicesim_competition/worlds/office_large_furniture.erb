@@ -6,6 +6,9 @@
   # * $pi (number)
 %>
 
+<%
+  obj = $corner_objs.sample()
+%>
 <include>
   <pose>
     <%= -1.6*$o %>
@@ -15,7 +18,7 @@
     0
     0
   </pose>
-  <uri>model://mini_fridge</uri>
+  <uri>model://<%= obj %></uri>
 </include>
 
 <%

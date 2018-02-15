@@ -82,6 +82,14 @@
     :office_large => {:type => 'office_large', :floor => 'carpet', :size => [-1, 2, -2, 0]},
   }
 
+  # Array with objects that fit well on corners
+  $corner_objs =
+  [
+    'hangout_chair',
+    'mini_fridge',
+    'wastebasket',
+  ]
+
   # Dictionary with all rooms to be inserted
   rooms =
   [
@@ -102,7 +110,7 @@
     {:name => 'PrivateOfficeA',      :type => room_types[:office_small],       :pose => [ -8*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PrivateOfficeB',      :type => room_types[:office_small],       :pose => [-11*$o - 3*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PrivateOfficeC',      :type => room_types[:office_small],       :pose => [-14*$o - 4*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
-    {:name => 'PrivateOfficeD',      :type => room_types[:office_large],       :pose => [-15*$o - 5*$g,  12*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => 0.0},
+    {:name => 'PrivateOfficeD',      :type => room_types[:office_large],       :pose => [-15*$o - 5*$g,  12*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => $pi * 0.5},
     {:name => 'PrivateMeetingRoomC', :type => room_types[:meeting_room_small], :pose => [ -8*$o + 0*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
     {:name => 'PrivateMeetingRoomD', :type => room_types[:meeting_room_small], :pose => [-12*$o - 1*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
     {:name => 'PrivateMeetingRoomE', :type => room_types[:meeting_room_small], :pose => [-16*$o - 2*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
@@ -521,19 +529,17 @@
       e = 13.0 * $o
       for x in (s..e).step(1.9)
         $count += 1
+        $pose =
+        [
+          x - 1 * $g,
+          7 * $o + $g,
+          0,
+          0,
+          0,
+          $pi,
+        ]
     %>
-    <include>
-      <name>island_<%= $count %></name>
-      <pose>
-        <%= x - $g %>
-        <%= 7 * $o + $g %>
-        0
-        0
-        0
-        <%= Math::PI %>
-      </pose>
-      <uri>model://cubicle_corner</uri>
-    </include>
+      <%= fromFile(DIR + "/cubicle_corner.erb") %>
     <%
       end
     %>
