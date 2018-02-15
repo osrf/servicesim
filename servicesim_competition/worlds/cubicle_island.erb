@@ -39,6 +39,10 @@
         </geometry>
       </visual>
     </link>
+
+<%
+  if not $floorplan
+%>
     <%
       far_off = 1.22
       near_off = 0.45
@@ -97,4 +101,8 @@
       </include>
       <% end %>
     <% end %>
-  </model>
+<%
+  end # if not $floorplan
+%>
+
+</model>

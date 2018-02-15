@@ -37,6 +37,9 @@
         </geometry>
       </visual>
     </link>
+<%
+  if not $floorplan
+%>
     <include>
       <pose>-1.27 -0.45 0.76 0 0 0</pose>
       <uri>model://computer</uri>
@@ -45,4 +48,7 @@
       <pose>-1.15 -1.20 0 0 0 <%= 2.35 + rand(-0.4..0.4) %></pose>
       <uri>model://office_chair</uri>
     </include>
+<%
+  end # if not $floorplan
+%>
   </model>
