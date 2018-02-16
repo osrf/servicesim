@@ -1,20 +1,35 @@
 <%
   # Generate all the extra walls which go around the rooms
   #
+  # It consists of one single model with one single link and hundreds of box
+  # visuals and box collisions
+  #
   # Required variables
-  # * $o (number)
-  # * $g (number)
-  # * $pi (number)
+  # * $o (number) Office units
+  # * $g (number) Gap units
+  # * $pi (number) Math::PI
 
+  # Wall thickness
   thickness = 0.01
+
+  # Wall height
   height = 2 * $o
 
-  t = 0.001
-
+  # Wall Z position
   pos_z = height * 0.5
 
+  # Tolerance to move some walls and avoid z fighting
+  t = 0.001
+
+  # Wall count (for uniqueness)
   count = 0
 
+  # Array with wall segment properties:
+  # :x - X position in the model frame (coincides with world)
+  # :y - Y position in the model frame (coincides with world)
+  # :yaw - Yaw in the model frame (coincides with world)
+  # :type - Used to choose a texture material from media/materials/scripts/servicesim.material
+  # :gap - True if this wall segment is a gap, false if it is a normal panel
   walls =
   [
    # entrance
@@ -23,9 +38,9 @@
    {:x => -4*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    {:x => -3*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    {:x => -2*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
-   {:x => -1*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -1*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'Elevator', :gap => false},
    {:x =>  0*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'Elevator', :gap => false},
-   {:x =>  1*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'Elevator', :gap => false},
+   {:x =>  1*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    {:x =>  2*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    {:x =>  3*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    {:x =>  4*$o -    t, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
@@ -86,7 +101,7 @@
    {:x =>   1*$o - 3*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    {:x =>   0*$o + 0*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
    {:x =>  -1*$o + 0*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
-   {:x =>  -2*$o + 0*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  -2*$o + 0*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'Door', :gap => false},
    # bathrooms
    {:x =>  -2*$o + 1*$g, :y => 14*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
    {:x =>  -2*$o + 1*$g, :y => 13*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},

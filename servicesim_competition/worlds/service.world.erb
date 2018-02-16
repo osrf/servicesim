@@ -33,6 +33,31 @@
 
   ###############################################
   #                                             #
+  #               INITIALIZATION                #
+  #                                             #
+  ###############################################
+
+  # Relative path from where the script is being run to the script's directory
+  DIR = File.dirname(__FILE__)
+
+  # Count to ensure unique names
+  $count = 0
+
+  # PI for short
+  $pi = Math::PI
+
+  # "office unit" - the width of wall panels
+  $o = 1.5
+
+  # "gap unit" - the width of gaps between rooms
+  $g = 0.1
+
+  # Total office size
+  total_x = $o * 33
+  total_y = $o * 15
+
+  ###############################################
+  #                                             #
   #           IMPORT OTHER ERB FILES            #
   #                                             #
   ###############################################
@@ -48,8 +73,6 @@
   #                                             #
   ###############################################
 
-  # PI for short
-  $pi = Math::PI
 
   # Get an angle for the door, it's 0.0 for a closed door
   def doorAngle()
@@ -60,16 +83,6 @@
       return rand($pi*0.5..$pi*0.8)
     end
   end
-
-  # "office unit" - the width of wall panels
-  $o = 1.5
-
-  # "gap unit" - the width of gaps between rooms
-  $g = 0.1
-
-  # Total office size
-  total_x = $o * 33
-  total_y = $o * 15
 
   # Dictionary with all room types
   room_types =
@@ -212,21 +225,6 @@
     :pose => [3.76, 1.23, 0, 0, 0, 0],
     :size => [2, 2, 10]
   }
-
-  ###############################################
-  #                                             #
-  #               INITIALIZATION                #
-  #                                             #
-  ###############################################
-
-  # Relative path from where the script is being run to the script's directory
-  DIR = File.dirname(__FILE__)
-
-  # Actor's Z position
-  actor_pos_z = 1.25
-
-  # Count to ensure unique names
-  $count = 0
 %>
 <!--
   Generated from service.world.erb
@@ -599,8 +597,8 @@
       <plugin name="trajectory" filename="libFollowActorPlugin.so">
 
         <namespace>servicesim</namespace>
-        <obstacle_margin>0.2</obstacle_margin>
 
+        <!-- FIXME: currently not avoiding obstacles -->
         <ignore_obstacle>walls</ignore_obstacle>
         <ignore_obstacle>floor</ignore_obstacle>
 
