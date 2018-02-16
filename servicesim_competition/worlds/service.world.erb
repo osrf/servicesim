@@ -3,7 +3,7 @@
   #
   # Command line options (usage erb [opt]=[arg]):
   # s: seed for randomization
-  # f: true to generate unpopulated world
+  # f: true to generate unpopulated world (floorplan only)
 
   ###############################################
   #                                             #
@@ -542,11 +542,14 @@
         for y in [5, 8, 11]
           $count += 1
           $cubicle_size = x == -14 ? 4 : 3
-          $cubicle_pos =
+          $cubicle_pose =
           [
             x * $o,
             y * $o,
-            0.0
+            0.0,
+            0.0,
+            0.0,
+            0.0,
           ]
     %>
     <%= fromFile(DIR + "/cubicles.erb") %>
