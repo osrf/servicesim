@@ -310,7 +310,11 @@
         </geometry>
       </visual>
     </link>
+
+    <!-- Furniture if door is open -->
+    <%= fromFile(DIR + "/" + $room_type +  "_furniture.erb") %>
   <% end %>
+
 <%
   end # if not $floorplan
 %>
