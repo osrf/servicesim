@@ -1,8 +1,8 @@
 <%
   # ServiceSim world generator
   #
-  # Command line options:
-  # -s seed for random
+  # Command line options (usage erb [opt]=[arg]):
+  # s: seed for randomization
 
   ###############################################
   #                                             #
@@ -10,7 +10,6 @@
   #                                             #
   ###############################################
 
-  # Read task number from command line
   vars = ARGV.take_while {|arg| arg[/^\w+=/]}
   ARGV.slice!(0, vars.size)
   vars.each do |var|
@@ -18,6 +17,7 @@
     TOPLEVEL_BINDING.eval %Q(#{k} = "#{v}")
   end
 
+  # Seed
   seed = rand(0..10000000)
   if (defined? s)
     seed = s.to_i
@@ -73,12 +73,13 @@
   ]
 
   # List of trajectory actors to be inserted
+  # TODO: Recalculate trajectories for new world and investigate obstacle detection
   actors_trajectory =
   [
     # Example randomizing skin
-    {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
+    # {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
     # Example setting velocity
-    {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
+    # {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
   ]
 
   ###############################################
@@ -150,6 +151,9 @@
 
   # Actor's Z position
   actor_pos_z = 1.25
+
+  # Count to ensure unique names
+  $count = 0
 %>
 <!--
   Generated from service.world.erb
@@ -157,7 +161,8 @@
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="ServiceSim">
+  <world name="default">
+
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
@@ -296,31 +301,17 @@
     <!-- GUI -->
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-14.41 -19.9 4.14 0 0.5 0.76</pose>
+        <pose>-3.664 1 1.94 0 0.31 0.177</pose>
       </camera>
     </gui>
 
     <!-- Scene -->
     <scene>
+      <ambient>0.8 0.8 0.8 1.0</ambient>
       <background>0.66 0.77 0.84 1.0</background>
       <grid>0</grid>
       <origin_visual>0</origin_visual>
     </scene>
-
-    <!-- A global light source -->
-    <light type="directional" name="sun">
-      <cast_shadows>true</cast_shadows>
-      <pose>0 0 1000 0 0 0</pose>
-      <diffuse>0.8 0.8 0.8 1</diffuse>
-      <specular>0.2 0.2 0.2 1</specular>
-      <attenuation>
-        <range>1000</range>
-        <constant>0.9</constant>
-        <linear>0.01</linear>
-        <quadratic>0.001</quadratic>
-      </attenuation>
-      <direction>-0.5 0.1 -0.9</direction>
-    </light>
 
     <!-- Ground collision -->
     <model name="ground_collision">
@@ -404,12 +395,11 @@
 
     <!-- Trajectory actors -->
     <%
-      count = 0
       for actor in actors_trajectory
 
         # unique name
-        count = count + 1
-        $actor_name = 'actor_' + count.to_s;
+        $count = $count + 1
+        $actor_name = 'actor_' + $count.to_s;
 
         # skin
         $actor_skin = nil
@@ -448,8 +438,8 @@
       for actor in actors_idle
 
         # unique name
-        count = count + 1
-        $actor_name = 'actor_' + count.to_s;
+        $count = $count + 1
+        $actor_name = 'actor_' + $count.to_s;
 
         # skin
         $actor_skin = nil
