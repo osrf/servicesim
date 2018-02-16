@@ -1,0 +1,285 @@
+<%
+  # Generate all the extra walls which go around the rooms
+  #
+  # It consists of one single model with one single link and hundreds of box
+  # visuals and box collisions
+  #
+  # Required variables
+  # * $o (number) Office units
+  # * $g (number) Gap units
+  # * $pi (number) Math::PI
+
+  # Wall thickness
+  thickness = 0.01
+
+  # Wall height
+  height = 2 * $o
+
+  # Wall Z position
+  pos_z = height * 0.5
+
+  # Tolerance to move some walls and avoid z fighting
+  t = 0.001
+
+  # Wall count (for uniqueness)
+  count = 0
+
+  # Array with wall segment properties:
+  # :x - X position in the model frame (coincides with world)
+  # :y - Y position in the model frame (coincides with world)
+  # :yaw - Yaw in the model frame (coincides with world)
+  # :type - Used to choose a texture material from media/materials/scripts/servicesim.material
+  # :gap - True if this wall segment is a gap, false if it is a normal panel
+  walls =
+  [
+   # entrance
+   {:x => -6*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -5*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -4*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -3*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -2*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -1*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'Elevator', :gap => false},
+   {:x =>  0*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'Elevator', :gap => false},
+   {:x =>  1*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  2*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 0*$g, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  4*$o -    t, :y => 0*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -6*$o + 0*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -5*$o + 0*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 0*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  4*$o + 0*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   # bathrooms
+   {:x =>  5*$o - 1*$g, :y => 0*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  5*$o - 1*$g, :y => 1*$o + 0*$g, :yaw => $pi*0.5,  :type => 'PlainWall', :gap => false},
+   {:x =>  5*$o - 1*$g, :y => 2*$o + 0*$g, :yaw => $pi*0.5,  :type => 'PlainWall', :gap => true},
+   {:x =>  5*$o - 1*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  5*$o + 0*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  6*$o + 0*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  7*$o + 0*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  7*$o + 1*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  8*$o + 1*$g, :y => 2*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   # cafe
+   {:x =>   9*$o + 1*$g, :y => 2*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>   9*$o + 1*$g, :y => 4*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>   9*$o + 1*$g, :y => 5*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>   9*$o + 1*$g, :y => 6*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>   9*$o + 1*$g, :y => 7*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x =>   9*$o + 1*$g, :y => 7*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  10*$o + 1*$g, :y => 7*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  11*$o + 1*$g, :y => 7*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  12*$o + 1*$g, :y => 7*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  13*$o + 1*$g, :y => 7*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  14*$o + 1*$g, :y => 7*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   # east wall
+   {:x =>  14*$o + 2*$g, :y => 7*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  14*$o + 2*$g, :y => 8*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  14*$o + 2*$g, :y => 9*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  14*$o + 2*$g, :y => 10*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   # meeting room large
+   {:x =>  14*$o - 1*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  14*$o + 0*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  14*$o + 1*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  13*$o + 0*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  11*$o + 0*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  10*$o + 0*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>   9*$o + 0*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>   8*$o + 0*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>   8*$o - 1*$g, :y => 11*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>   8*$o - 1*$g, :y => 11*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>   8*$o - 1*$g, :y => 12*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   # office small
+   {:x =>   7*$o - 1*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>   5*$o - 1*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>   5*$o - 2*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>   4*$o - 2*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>   2*$o - 2*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>   2*$o - 3*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>   2*$o - 3*$g, :y => 13*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x =>   2*$o - 3*$g, :y => 13*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>   2*$o - 3*$g, :y => 14*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   # north wall
+   {:x =>   1*$o - 3*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>   0*$o + 0*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  -1*$o + 0*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  -2*$o + 0*$g, :y => 15*$o + 0*$g, :yaw => 0, :type => 'Door', :gap => false},
+   # bathrooms
+   {:x =>  -2*$o + 1*$g, :y => 14*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  -2*$o + 1*$g, :y => 13*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  -2*$o + 1*$g, :y => 13*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x =>  -2*$o + 0*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  -2*$o - 1*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  -4*$o + 0*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  -4*$o - 1*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  -6*$o - 1*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  -6*$o - 2*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   # office smalls
+   {:x =>  -7*$o - 2*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  -9*$o - 2*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  -9*$o - 3*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -10*$o - 3*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -12*$o - 4*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -12*$o - 3*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -13*$o - 4*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -15*$o - 4*$g, :y => 13*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   # office large
+   {:x => -15*$o - 4*$g, :y => 11*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => -15*$o - 4*$g, :y => 10*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => -15*$o - 4*$g, :y => 10*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x => -15*$o - 5*$g, :y => 10*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -16*$o - 5*$g, :y => 10*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -17*$o - 5*$g, :y => 10*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -18*$o - 5*$g, :y => 10*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   # west wall
+   {:x => -18*$o - 5*$g, :y => 9*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => -18*$o - 5*$g, :y => 8*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => -18*$o - 5*$g, :y => 7*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => -18*$o - 5*$g, :y => 6*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => -18*$o - 5*$g, :y => 5*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => -18*$o - 5*$g, :y => 4*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => -18*$o - 5*$g, :y => 3*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   # meeting room smalls
+   {:x => -18*$o - 5*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -18*$o - 4*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -18*$o - 3*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -18*$o - 2*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -16*$o - 2*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -15*$o - 2*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -14*$o - 2*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -14*$o - 1*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -12*$o - 1*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -11*$o - 1*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -10*$o - 1*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -10*$o - 0*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => - 8*$o - 0*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => - 7*$o - 0*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => - 6*$o - 0*$g, :y => 3*$o + 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => - 6*$o + 1*$g, :y => 3*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x => - 6*$o + 1*$g, :y => 2*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => - 6*$o + 1*$g, :y => 1*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x => - 6*$o + 1*$g, :y => 0*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   # center meeting room smalls
+   {:x => -3*$o - 2*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -3*$o - 1*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -2*$o - 1*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -1*$o - 1*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  0*$o - 1*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  0*$o + 0*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  1*$o + 0*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  2*$o + 0*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 0*$g, :y =>   3*$o - 1*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  3*$o + 1*$g, :y =>   3*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x =>  3*$o + 1*$g, :y =>   3*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 1*$g, :y =>   4*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 1*$g, :y =>   6*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 1*$g, :y =>   7*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x =>  3*$o + 1*$g, :y =>   7*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 1*$g, :y =>   8*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 1*$g, :y =>  10*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 1*$g, :y =>  11*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x => -3*$o - 2*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x => -3*$o - 1*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -2*$o - 1*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x => -1*$o - 1*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  0*$o - 1*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  0*$o + 0*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  1*$o + 0*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  2*$o + 0*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => false},
+   {:x =>  3*$o + 0*$g, :y =>  11*$o + 2*$g, :yaw => 0, :type => 'PlainWall', :gap => true},
+   {:x =>  -3*$o - 2*$g, :y =>   3*$o - 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x =>  -3*$o - 2*$g, :y =>   3*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  -3*$o - 2*$g, :y =>   5*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  -3*$o - 2*$g, :y =>   6*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  -3*$o - 2*$g, :y =>   7*$o + 0*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+   {:x =>  -3*$o - 2*$g, :y =>   7*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  -3*$o - 2*$g, :y =>   9*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  -3*$o - 2*$g, :y =>  10*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => false},
+   {:x =>  -3*$o - 2*$g, :y =>  11*$o + 1*$g, :yaw => $pi*0.5, :type => 'PlainWall', :gap => true},
+  ]
+%>
+<model name="walls">
+
+  <static>true</static>
+
+  <link name="link">
+
+    <%
+      for wall in walls
+
+        x_offset = wall[:gap] ? $g * 0.5 : $o * 0.5
+        y_offset = 0.0
+
+        if wall[:yaw] == $pi * 0.5
+          x_offset = 0.0
+          y_offset = wall[:gap] ? $g * 0.5 : $o * 0.5
+        end
+
+        count += 1
+        pose =
+        [
+          wall[:x] + x_offset,
+          wall[:y] + y_offset,
+          pos_z,
+          0.0,
+          0.0,
+          wall[:yaw]
+        ]
+        width = wall[:gap] ? $g : $o
+    %>
+
+      <visual name="visual_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              <%= width %>
+              <%= thickness %>
+              <%= height %>
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/<%= wall[:type] %></name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              <%= width %>
+              <%= thickness %>
+              <%= height %>
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    <% end %>
+
+  </link>
+
+</model>

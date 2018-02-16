@@ -1,12 +1,11 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 87199
+  Seed: 7413613
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
-
 
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
@@ -77,9 +76,9 @@
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
-        -12.7
-        -18.78
-        1.19
+        -6.9
+        1.33
+        1.0
         1.54
         0
         1.9
@@ -101,8 +100,8 @@
       <namespace>servicesim/drop_off</namespace>
       <enabled>false</enabled>
       <pose>
-        -12.4
-        -13.5
+        -2.61
+        7.24
         0
         0
         0
@@ -125,8 +124,8 @@
       <namespace>servicesim/return_to_start</namespace>
       <enabled>false</enabled>
       <pose>
-        -6.5
-        -18.2
+        3.76
+        1.23
         0
         0
         0
@@ -143,7 +142,6 @@
       </geometry>
     </plugin>
 
-
     <!-- GUI -->
     <gui fullscreen='0'>
       <camera name='user_camera'>
@@ -159,45 +157,8165 @@
       <origin_visual>0</origin_visual>
     </scene>
 
-    <!-- Ground collision -->
-    <model name="ground_collision">
+    <!-- Ceiling -->
+    
+    <model name="ceiling">
+      <pose>
+        -2.9699999999999998
+        11.25
+        3.0
+        0
+        3.141592653589793
+        0
+      </pose>
+
       <static>true</static>
       <link name="link">
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>49.5 22.5</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/</uri>
+              <uri>file://media/materials/textures/</uri>
+              <name>ServiceSim/Ceiling</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+    </model>
+
+    <!-- Floor -->
+    <model name="floor">
+      <pose>
+        -2.9699999999999998
+        11.25
+        -0.001
+        0
+        0
+        0
+      </pose>
+
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>49.5 22.5</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/</uri>
+              <uri>file://media/materials/textures/</uri>
+              <name>ServiceSim/Hallway</name>
+            </script>
+          </material>
+        </visual>
+
         <collision name="collision">
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <size>80 80</size>
+              <size>49.5 22.5</size>
             </plane>
           </geometry>
           <surface>
-            <mu>1</mu>
-            <mu2>1</mu2>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
           </surface>
         </collision>
+
       </link>
+
     </model>
 
-    <!-- Office -->
-    <include>
-      <uri>model://willowgarage</uri>
-    </include>
+    <!-- Extra walls -->
+    
+<model name="walls">
+
+  <static>true</static>
+
+  <link name="link">
+
+    
+
+      <visual name="visual_1">
+
+        <pose>
+          -8.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_1">
+
+        <pose>
+          -8.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_2">
+
+        <pose>
+          -6.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_2">
+
+        <pose>
+          -6.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_3">
+
+        <pose>
+          -5.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_3">
+
+        <pose>
+          -5.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_4">
+
+        <pose>
+          -3.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_4">
+
+        <pose>
+          -3.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_5">
+
+        <pose>
+          -2.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_5">
+
+        <pose>
+          -2.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_6">
+
+        <pose>
+          -0.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/Elevator</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_6">
+
+        <pose>
+          -0.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_7">
+
+        <pose>
+          0.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/Elevator</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_7">
+
+        <pose>
+          0.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_8">
+
+        <pose>
+          2.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_8">
+
+        <pose>
+          2.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_9">
+
+        <pose>
+          3.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_9">
+
+        <pose>
+          3.75
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_10">
+
+        <pose>
+          5.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_10">
+
+        <pose>
+          5.25
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_11">
+
+        <pose>
+          6.749
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_11">
+
+        <pose>
+          6.749
+          0.0
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_12">
+
+        <pose>
+          -8.25
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_12">
+
+        <pose>
+          -8.25
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_13">
+
+        <pose>
+          -6.75
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_13">
+
+        <pose>
+          -6.75
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_14">
+
+        <pose>
+          5.25
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_14">
+
+        <pose>
+          5.25
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_15">
+
+        <pose>
+          6.75
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_15">
+
+        <pose>
+          6.75
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_16">
+
+        <pose>
+          7.4
+          0.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_16">
+
+        <pose>
+          7.4
+          0.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_17">
+
+        <pose>
+          7.4
+          2.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_17">
+
+        <pose>
+          7.4
+          2.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_18">
+
+        <pose>
+          7.4
+          3.05
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_18">
+
+        <pose>
+          7.4
+          3.05
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_19">
+
+        <pose>
+          7.45
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_19">
+
+        <pose>
+          7.45
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_20">
+
+        <pose>
+          7.55
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_20">
+
+        <pose>
+          7.55
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_21">
+
+        <pose>
+          9.75
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_21">
+
+        <pose>
+          9.75
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_22">
+
+        <pose>
+          10.55
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_22">
+
+        <pose>
+          10.55
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_23">
+
+        <pose>
+          10.65
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_23">
+
+        <pose>
+          10.65
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_24">
+
+        <pose>
+          12.85
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_24">
+
+        <pose>
+          12.85
+          3.1
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_25">
+
+        <pose>
+          13.6
+          3.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_25">
+
+        <pose>
+          13.6
+          3.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_26">
+
+        <pose>
+          13.6
+          6.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_26">
+
+        <pose>
+          13.6
+          6.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_27">
+
+        <pose>
+          13.6
+          8.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_27">
+
+        <pose>
+          13.6
+          8.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_28">
+
+        <pose>
+          13.6
+          9.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_28">
+
+        <pose>
+          13.6
+          9.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_29">
+
+        <pose>
+          13.6
+          10.55
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_29">
+
+        <pose>
+          13.6
+          10.55
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_30">
+
+        <pose>
+          14.35
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_30">
+
+        <pose>
+          14.35
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_31">
+
+        <pose>
+          15.85
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_31">
+
+        <pose>
+          15.85
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_32">
+
+        <pose>
+          17.35
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_32">
+
+        <pose>
+          17.35
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_33">
+
+        <pose>
+          18.85
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_33">
+
+        <pose>
+          18.85
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_34">
+
+        <pose>
+          20.35
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_34">
+
+        <pose>
+          20.35
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_35">
+
+        <pose>
+          21.150000000000002
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_35">
+
+        <pose>
+          21.150000000000002
+          10.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_36">
+
+        <pose>
+          21.2
+          11.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_36">
+
+        <pose>
+          21.2
+          11.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_37">
+
+        <pose>
+          21.2
+          12.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_37">
+
+        <pose>
+          21.2
+          12.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_38">
+
+        <pose>
+          21.2
+          14.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_38">
+
+        <pose>
+          21.2
+          14.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_39">
+
+        <pose>
+          21.2
+          15.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_39">
+
+        <pose>
+          21.2
+          15.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_40">
+
+        <pose>
+          20.95
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_40">
+
+        <pose>
+          20.95
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_41">
+
+        <pose>
+          21.05
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_41">
+
+        <pose>
+          21.05
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_42">
+
+        <pose>
+          21.150000000000002
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_42">
+
+        <pose>
+          21.150000000000002
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_43">
+
+        <pose>
+          20.25
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_43">
+
+        <pose>
+          20.25
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_44">
+
+        <pose>
+          17.25
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_44">
+
+        <pose>
+          17.25
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_45">
+
+        <pose>
+          15.75
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_45">
+
+        <pose>
+          15.75
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_46">
+
+        <pose>
+          14.25
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_46">
+
+        <pose>
+          14.25
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_47">
+
+        <pose>
+          12.75
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_47">
+
+        <pose>
+          12.75
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_48">
+
+        <pose>
+          11.950000000000001
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_48">
+
+        <pose>
+          11.950000000000001
+          16.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_49">
+
+        <pose>
+          11.9
+          17.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_49">
+
+        <pose>
+          11.9
+          17.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_50">
+
+        <pose>
+          11.9
+          18.65
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_50">
+
+        <pose>
+          11.9
+          18.65
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_51">
+
+        <pose>
+          11.15
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_51">
+
+        <pose>
+          11.15
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_52">
+
+        <pose>
+          8.15
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_52">
+
+        <pose>
+          8.15
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_53">
+
+        <pose>
+          7.35
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_53">
+
+        <pose>
+          7.35
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_54">
+
+        <pose>
+          6.55
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_54">
+
+        <pose>
+          6.55
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_55">
+
+        <pose>
+          3.55
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_55">
+
+        <pose>
+          3.55
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_56">
+
+        <pose>
+          2.75
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_56">
+
+        <pose>
+          2.75
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_57">
+
+        <pose>
+          2.7
+          19.45
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_57">
+
+        <pose>
+          2.7
+          19.45
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_58">
+
+        <pose>
+          2.7
+          20.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_58">
+
+        <pose>
+          2.7
+          20.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_59">
+
+        <pose>
+          2.7
+          21.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_59">
+
+        <pose>
+          2.7
+          21.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_60">
+
+        <pose>
+          1.95
+          22.5
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_60">
+
+        <pose>
+          1.95
+          22.5
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_61">
+
+        <pose>
+          0.75
+          22.5
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_61">
+
+        <pose>
+          0.75
+          22.5
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_62">
+
+        <pose>
+          -0.75
+          22.5
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_62">
+
+        <pose>
+          -0.75
+          22.5
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_63">
+
+        <pose>
+          -2.25
+          22.5
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/Door</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_63">
+
+        <pose>
+          -2.25
+          22.5
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_64">
+
+        <pose>
+          -2.9
+          21.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_64">
+
+        <pose>
+          -2.9
+          21.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_65">
+
+        <pose>
+          -2.9
+          20.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_65">
+
+        <pose>
+          -2.9
+          20.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_66">
+
+        <pose>
+          -2.9
+          19.45
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_66">
+
+        <pose>
+          -2.9
+          19.45
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_67">
+
+        <pose>
+          -2.95
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_67">
+
+        <pose>
+          -2.95
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_68">
+
+        <pose>
+          -3.0500000000000003
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_68">
+
+        <pose>
+          -3.0500000000000003
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_69">
+
+        <pose>
+          -5.25
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_69">
+
+        <pose>
+          -5.25
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_70">
+
+        <pose>
+          -6.05
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_70">
+
+        <pose>
+          -6.05
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_71">
+
+        <pose>
+          -8.35
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_71">
+
+        <pose>
+          -8.35
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_72">
+
+        <pose>
+          -9.149999999999999
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_72">
+
+        <pose>
+          -9.149999999999999
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_73">
+
+        <pose>
+          -9.95
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_73">
+
+        <pose>
+          -9.95
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_74">
+
+        <pose>
+          -12.95
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_74">
+
+        <pose>
+          -12.95
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_75">
+
+        <pose>
+          -13.75
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_75">
+
+        <pose>
+          -13.75
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_76">
+
+        <pose>
+          -14.55
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_76">
+
+        <pose>
+          -14.55
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_77">
+
+        <pose>
+          -18.349999999999998
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_77">
+
+        <pose>
+          -18.349999999999998
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_78">
+
+        <pose>
+          -17.55
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_78">
+
+        <pose>
+          -17.55
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_79">
+
+        <pose>
+          -19.15
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_79">
+
+        <pose>
+          -19.15
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_80">
+
+        <pose>
+          -22.15
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_80">
+
+        <pose>
+          -22.15
+          19.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_81">
+
+        <pose>
+          -22.9
+          17.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_81">
+
+        <pose>
+          -22.9
+          17.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_82">
+
+        <pose>
+          -22.9
+          15.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_82">
+
+        <pose>
+          -22.9
+          15.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_83">
+
+        <pose>
+          -22.9
+          14.950000000000001
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_83">
+
+        <pose>
+          -22.9
+          14.950000000000001
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_84">
+
+        <pose>
+          -22.95
+          14.9
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_84">
+
+        <pose>
+          -22.95
+          14.9
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_85">
+
+        <pose>
+          -23.75
+          14.9
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_85">
+
+        <pose>
+          -23.75
+          14.9
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_86">
+
+        <pose>
+          -25.25
+          14.9
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_86">
+
+        <pose>
+          -25.25
+          14.9
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_87">
+
+        <pose>
+          -26.75
+          14.9
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_87">
+
+        <pose>
+          -26.75
+          14.9
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_88">
+
+        <pose>
+          -27.5
+          14.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_88">
+
+        <pose>
+          -27.5
+          14.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_89">
+
+        <pose>
+          -27.5
+          12.65
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_89">
+
+        <pose>
+          -27.5
+          12.65
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_90">
+
+        <pose>
+          -27.5
+          11.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_90">
+
+        <pose>
+          -27.5
+          11.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_91">
+
+        <pose>
+          -27.5
+          9.65
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_91">
+
+        <pose>
+          -27.5
+          9.65
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_92">
+
+        <pose>
+          -27.5
+          8.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_92">
+
+        <pose>
+          -27.5
+          8.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_93">
+
+        <pose>
+          -27.5
+          6.65
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_93">
+
+        <pose>
+          -27.5
+          6.65
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_94">
+
+        <pose>
+          -27.5
+          5.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_94">
+
+        <pose>
+          -27.5
+          5.15
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_95">
+
+        <pose>
+          -27.45
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_95">
+
+        <pose>
+          -27.45
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_96">
+
+        <pose>
+          -27.349999999999998
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_96">
+
+        <pose>
+          -27.349999999999998
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_97">
+
+        <pose>
+          -27.25
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_97">
+
+        <pose>
+          -27.25
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_98">
+
+        <pose>
+          -26.45
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_98">
+
+        <pose>
+          -26.45
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_99">
+
+        <pose>
+          -23.45
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_99">
+
+        <pose>
+          -23.45
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_100">
+
+        <pose>
+          -21.95
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_100">
+
+        <pose>
+          -21.95
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_101">
+
+        <pose>
+          -21.15
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_101">
+
+        <pose>
+          -21.15
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_102">
+
+        <pose>
+          -20.35
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_102">
+
+        <pose>
+          -20.35
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_103">
+
+        <pose>
+          -17.35
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_103">
+
+        <pose>
+          -17.35
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_104">
+
+        <pose>
+          -15.850000000000001
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_104">
+
+        <pose>
+          -15.850000000000001
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_105">
+
+        <pose>
+          -15.049999999999999
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_105">
+
+        <pose>
+          -15.049999999999999
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_106">
+
+        <pose>
+          -14.25
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_106">
+
+        <pose>
+          -14.25
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_107">
+
+        <pose>
+          -11.25
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_107">
+
+        <pose>
+          -11.25
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_108">
+
+        <pose>
+          -9.75
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_108">
+
+        <pose>
+          -9.75
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_109">
+
+        <pose>
+          -8.95
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_109">
+
+        <pose>
+          -8.95
+          4.6
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_110">
+
+        <pose>
+          -8.9
+          4.55
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_110">
+
+        <pose>
+          -8.9
+          4.55
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_111">
+
+        <pose>
+          -8.9
+          3.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_111">
+
+        <pose>
+          -8.9
+          3.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_112">
+
+        <pose>
+          -8.9
+          2.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_112">
+
+        <pose>
+          -8.9
+          2.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_113">
+
+        <pose>
+          -8.9
+          0.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_113">
+
+        <pose>
+          -8.9
+          0.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_114">
+
+        <pose>
+          -4.65
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_114">
+
+        <pose>
+          -4.65
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_115">
+
+        <pose>
+          -3.8499999999999996
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_115">
+
+        <pose>
+          -3.8499999999999996
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_116">
+
+        <pose>
+          -2.35
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_116">
+
+        <pose>
+          -2.35
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_117">
+
+        <pose>
+          -0.8500000000000001
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_117">
+
+        <pose>
+          -0.8500000000000001
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_118">
+
+        <pose>
+          -0.05
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_118">
+
+        <pose>
+          -0.05
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_119">
+
+        <pose>
+          0.75
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_119">
+
+        <pose>
+          0.75
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_120">
+
+        <pose>
+          2.25
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_120">
+
+        <pose>
+          2.25
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_121">
+
+        <pose>
+          3.75
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_121">
+
+        <pose>
+          3.75
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_122">
+
+        <pose>
+          4.55
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_122">
+
+        <pose>
+          4.55
+          4.4
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_123">
+
+        <pose>
+          4.6
+          4.45
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_123">
+
+        <pose>
+          4.6
+          4.45
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_124">
+
+        <pose>
+          4.6
+          5.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_124">
+
+        <pose>
+          4.6
+          5.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_125">
+
+        <pose>
+          4.6
+          6.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_125">
+
+        <pose>
+          4.6
+          6.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_126">
+
+        <pose>
+          4.6
+          9.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_126">
+
+        <pose>
+          4.6
+          9.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_127">
+
+        <pose>
+          4.6
+          10.55
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_127">
+
+        <pose>
+          4.6
+          10.55
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_128">
+
+        <pose>
+          4.6
+          11.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_128">
+
+        <pose>
+          4.6
+          11.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_129">
+
+        <pose>
+          4.6
+          12.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_129">
+
+        <pose>
+          4.6
+          12.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_130">
+
+        <pose>
+          4.6
+          15.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_130">
+
+        <pose>
+          4.6
+          15.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_131">
+
+        <pose>
+          4.6
+          16.650000000000002
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_131">
+
+        <pose>
+          4.6
+          16.650000000000002
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_132">
+
+        <pose>
+          -4.65
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_132">
+
+        <pose>
+          -4.65
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_133">
+
+        <pose>
+          -3.8499999999999996
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_133">
+
+        <pose>
+          -3.8499999999999996
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_134">
+
+        <pose>
+          -2.35
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_134">
+
+        <pose>
+          -2.35
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_135">
+
+        <pose>
+          -0.8500000000000001
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_135">
+
+        <pose>
+          -0.8500000000000001
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_136">
+
+        <pose>
+          -0.05
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_136">
+
+        <pose>
+          -0.05
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_137">
+
+        <pose>
+          0.75
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_137">
+
+        <pose>
+          0.75
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_138">
+
+        <pose>
+          2.25
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_138">
+
+        <pose>
+          2.25
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_139">
+
+        <pose>
+          3.75
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_139">
+
+        <pose>
+          3.75
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_140">
+
+        <pose>
+          4.55
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_140">
+
+        <pose>
+          4.55
+          16.7
+          1.5
+          0.0
+          0.0
+          0
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_141">
+
+        <pose>
+          -4.7
+          4.45
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_141">
+
+        <pose>
+          -4.7
+          4.45
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_142">
+
+        <pose>
+          -4.7
+          5.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_142">
+
+        <pose>
+          -4.7
+          5.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_143">
+
+        <pose>
+          -4.7
+          8.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_143">
+
+        <pose>
+          -4.7
+          8.25
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_144">
+
+        <pose>
+          -4.7
+          9.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_144">
+
+        <pose>
+          -4.7
+          9.75
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_145">
+
+        <pose>
+          -4.7
+          10.55
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_145">
+
+        <pose>
+          -4.7
+          10.55
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_146">
+
+        <pose>
+          -4.7
+          11.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_146">
+
+        <pose>
+          -4.7
+          11.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_147">
+
+        <pose>
+          -4.7
+          14.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_147">
+
+        <pose>
+          -4.7
+          14.35
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_148">
+
+        <pose>
+          -4.7
+          15.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_148">
+
+        <pose>
+          -4.7
+          15.85
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              1.5
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+      <visual name="visual_149">
+
+        <pose>
+          -4.7
+          16.650000000000002
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/</uri>
+            <uri>file://media/materials/textures/</uri>
+            <name>ServiceSim/PlainWall</name>
+          </script>
+        </material>
+      </visual>
+
+      <collision name="collision_149">
+
+        <pose>
+          -4.7
+          16.650000000000002
+          1.5
+          0.0
+          0.0
+          1.5707963267948966
+        </pose>
+
+        <geometry>
+          <box>
+            <size>
+              0.1
+              0.01
+              3.0
+            </size>
+          </box>
+        </geometry>
+
+      </collision>
+    
+
+  </link>
+
+</model>
+
 
     <!-- Guest -->
     <actor name="guest">
 
       <!-- Starting pose, nice for when the world is reset -->
       <pose>
-        -12.7
-        -18.78
-        1.19
+        -6.9
+        1.33
+        1.0
         1.54
         0
         1.9
       </pose>
 
       <skin>
-        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+        <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
       </skin>
 
       <animation name="animation">
@@ -210,9 +8328,9 @@
           <waypoint>
             <time>100</time>
               <pose>
-                -12.7
-                -18.78
-                1.19
+                -6.9
+                1.33
+                1.0
                 1.54
                 0
                 1.9
@@ -225,72 +8343,73 @@
 
         <namespace>servicesim</namespace>
 
-        <ignore_obstacle>willowgarage</ignore_obstacle>
-        <ignore_obstacle>ground_collision</ignore_obstacle>
+        <!-- FIXME: currently not avoiding obstacles -->
+        <ignore_obstacle>walls</ignore_obstacle>
+        <ignore_obstacle>floor</ignore_obstacle>
 
         <!-- FIXME: servicebot's bounding box is huge and always colliding -->
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>291</drift_time>
+          <drift_time>167</drift_time>
         
-          <drift_time>373</drift_time>
+          <drift_time>272</drift_time>
         
-          <drift_time>554</drift_time>
+          <drift_time>471</drift_time>
         
-          <drift_time>657</drift_time>
+          <drift_time>581</drift_time>
         
-          <drift_time>757</drift_time>
+          <drift_time>805</drift_time>
         
-          <drift_time>1006</drift_time>
+          <drift_time>1010</drift_time>
         
-          <drift_time>1275</drift_time>
+          <drift_time>1171</drift_time>
         
-          <drift_time>1485</drift_time>
+          <drift_time>1440</drift_time>
         
-          <drift_time>1780</drift_time>
+          <drift_time>1574</drift_time>
         
-          <drift_time>1840</drift_time>
+          <drift_time>1604</drift_time>
         
-          <drift_time>1878</drift_time>
+          <drift_time>1609</drift_time>
         
-          <drift_time>1993</drift_time>
+          <drift_time>1849</drift_time>
         
-          <drift_time>2203</drift_time>
+          <drift_time>1953</drift_time>
         
-          <drift_time>2246</drift_time>
+          <drift_time>2106</drift_time>
         
-          <drift_time>2504</drift_time>
+          <drift_time>2351</drift_time>
         
-          <drift_time>2623</drift_time>
+          <drift_time>2635</drift_time>
         
-          <drift_time>2785</drift_time>
+          <drift_time>2863</drift_time>
         
-          <drift_time>3073</drift_time>
+          <drift_time>3155</drift_time>
         
-          <drift_time>3091</drift_time>
+          <drift_time>3389</drift_time>
         
-          <drift_time>3180</drift_time>
+          <drift_time>3605</drift_time>
         
-          <drift_time>3201</drift_time>
+          <drift_time>3748</drift_time>
         
-          <drift_time>3361</drift_time>
+          <drift_time>3901</drift_time>
         
-          <drift_time>3652</drift_time>
+          <drift_time>4129</drift_time>
         
-          <drift_time>3841</drift_time>
+          <drift_time>4229</drift_time>
         
-          <drift_time>3952</drift_time>
+          <drift_time>4335</drift_time>
         
-          <drift_time>4057</drift_time>
+          <drift_time>4344</drift_time>
         
-          <drift_time>4264</drift_time>
+          <drift_time>4568</drift_time>
         
-          <drift_time>4512</drift_time>
+          <drift_time>4816</drift_time>
         
-          <drift_time>4664</drift_time>
+          <drift_time>4922</drift_time>
         
-          <drift_time>4963</drift_time>
+          <drift_time>5221</drift_time>
         
 
       </plugin>
@@ -308,12 +8427,12 @@
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
-    -11.969092
-    -17.137756
-    0.15
+    -2.459
+    1.1477
+    0.0
     0.0
     -0.0
-    0.719669
+    -1.59
   </pose>
 
   <skin>
@@ -321,7 +8440,7 @@
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->
@@ -330,12 +8449,12 @@
       <waypoint>
         <time>100</time>
           <pose>
-            -11.969092
-            -17.137756
-            0.15
+            -2.459
+            1.1477
+            0.0
             0.0
             -0.0
-            0.719669
+            -1.59
           </pose>
       </waypoint>
     </trajectory>
@@ -350,9 +8469,9 @@
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
-    6.323622
-    -6.638186
-    0.15
+    17.09
+    1.97
+    0.0
     0.0
     0.0
     -0.22373
@@ -372,9 +8491,9 @@
       <waypoint>
         <time>100</time>
           <pose>
-            6.323622
-            -6.638186
-            0.15
+            17.09
+            1.97
+            0.0
             0.0
             0.0
             -0.22373
