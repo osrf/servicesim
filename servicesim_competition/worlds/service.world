@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 9806543
+  Seed: 5275627
   Floorplan: false
 -->
 <?xml version="1.0" ?>
@@ -8554,28 +8554,48 @@
 
 
   
-    <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+
+    <link name="door_frame">
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/bathroom.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
 
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 5.13402336485598</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
   
 
 
@@ -8831,17 +8851,15 @@
 
   
     <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/bathroom.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -9695,28 +9713,48 @@
 
 
   
-    <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+
+    <link name="door_frame">
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/refreshment_area.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
 
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 5.493157513184018</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
   
 
 
@@ -10351,28 +10389,48 @@
 
 
   
-    <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+
+    <link name="door_frame">
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_large.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
 
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 4.867179901812365</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
   
 
 
@@ -10781,17 +10839,15 @@
   
 
     <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -10801,18 +10857,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 1.8001442748878675</pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 5.282155343254317</pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -11231,17 +11287,15 @@
   
 
     <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -11251,18 +11305,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 2.136896493922885</pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 5.134578345702618</pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -11567,17 +11621,15 @@
   
 
     <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -11587,18 +11639,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 2.512266446287395</pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 5.519629719550147</pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_small.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -11903,17 +11955,15 @@
   
 
     <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -11923,18 +11973,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 2.0228727368650303</pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 5.6533775642774655</pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_small.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -12353,17 +12403,15 @@
   
 
     <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -12373,18 +12421,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 2.199114857512855</pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 5.340707511102648</pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -12802,17 +12850,15 @@
 
   
     <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -13077,50 +13123,26 @@
 
 
   
+    <link name="closed_door">
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
 
-    <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/bathroom.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-  -->
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-    <link name="door">
-      <pose>-1.22 0.15 0 0 0 1.763419513919787</pose>
-  <!-- TODO
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/bathroom.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-  -->
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
   
 
 
@@ -13375,28 +13397,48 @@
 
 
   
-    <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+
+    <link name="door_frame">
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/bathroom.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
 
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 4.9966132692293606</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
   
 
 
@@ -13690,17 +13732,15 @@
 
   
     <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_small.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -14005,17 +14045,15 @@
   
 
     <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -14025,18 +14063,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 2.001672453327359</pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 5.339535512151841</pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_small.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -14339,28 +14377,48 @@
 
 
   
-    <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+
+    <link name="door_frame">
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
 
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 5.430000872812841</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
   
 
 
@@ -14768,17 +14826,15 @@
 
   
     <link name="closed_door">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/office_large.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -15197,17 +15253,15 @@
   
 
     <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -15217,18 +15271,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 2.194489489319501</pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 5.557133734077441</pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -15647,17 +15701,15 @@
   
 
     <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -15667,18 +15719,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 1.8302995762872407</pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 5.485483486968747</pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -16095,50 +16147,26 @@
 
 
   
+    <link name="closed_door">
+      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
 
-    <link name="door_frame">
-      <pose>-0.75 0 0 0 0 0</pose>
-  <!-- TODO
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-  -->
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-    <link name="door">
-      <pose>-1.22 0.15 0 0 0 1.7411103691815342</pose>
-  <!-- TODO
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>file://media/meshes/meeting_room_small.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-  -->
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
   
 
 
@@ -22366,7 +22394,7 @@
       </pose>
 
       <skin>
-        <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
       </skin>
 
       <animation name="animation">
@@ -22402,65 +22430,65 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>16</drift_time>
+          <drift_time>223</drift_time>
         
-          <drift_time>139</drift_time>
+          <drift_time>320</drift_time>
         
-          <drift_time>170</drift_time>
+          <drift_time>516</drift_time>
         
-          <drift_time>439</drift_time>
+          <drift_time>578</drift_time>
         
-          <drift_time>666</drift_time>
+          <drift_time>730</drift_time>
         
-          <drift_time>684</drift_time>
+          <drift_time>1018</drift_time>
         
-          <drift_time>739</drift_time>
+          <drift_time>1234</drift_time>
         
-          <drift_time>901</drift_time>
+          <drift_time>1263</drift_time>
         
-          <drift_time>1156</drift_time>
+          <drift_time>1286</drift_time>
         
-          <drift_time>1280</drift_time>
+          <drift_time>1402</drift_time>
         
-          <drift_time>1557</drift_time>
+          <drift_time>1652</drift_time>
         
-          <drift_time>1582</drift_time>
+          <drift_time>1873</drift_time>
         
-          <drift_time>1863</drift_time>
+          <drift_time>1987</drift_time>
         
-          <drift_time>2139</drift_time>
+          <drift_time>2001</drift_time>
+        
+          <drift_time>2156</drift_time>
+        
+          <drift_time>2246</drift_time>
         
           <drift_time>2433</drift_time>
         
-          <drift_time>2601</drift_time>
+          <drift_time>2485</drift_time>
         
-          <drift_time>2875</drift_time>
+          <drift_time>2509</drift_time>
         
-          <drift_time>2982</drift_time>
+          <drift_time>2524</drift_time>
         
-          <drift_time>3249</drift_time>
+          <drift_time>2680</drift_time>
         
-          <drift_time>3453</drift_time>
+          <drift_time>2893</drift_time>
         
-          <drift_time>3735</drift_time>
+          <drift_time>3118</drift_time>
         
-          <drift_time>3961</drift_time>
+          <drift_time>3138</drift_time>
         
-          <drift_time>4157</drift_time>
+          <drift_time>3154</drift_time>
         
-          <drift_time>4309</drift_time>
+          <drift_time>3245</drift_time>
         
-          <drift_time>4609</drift_time>
+          <drift_time>3447</drift_time>
         
-          <drift_time>4891</drift_time>
+          <drift_time>3665</drift_time>
         
-          <drift_time>4975</drift_time>
+          <drift_time>3741</drift_time>
         
-          <drift_time>5116</drift_time>
-        
-          <drift_time>5399</drift_time>
-        
-          <drift_time>5544</drift_time>
+          <drift_time>3909</drift_time>
         
 
       </plugin>
@@ -22487,7 +22515,7 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
   </skin>
 
   <animation name="animation">

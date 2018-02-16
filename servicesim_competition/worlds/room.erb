@@ -239,17 +239,15 @@
     if $door_angle == 0.0
   %>
     <link name="closed_door">
-      <pose><%= -$o * 0.5 %> 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose><%= -$o * 0.5 %> <%= $g %> 0 0 0 <%= $pi %></pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -263,17 +261,15 @@
   <% else %>
 
     <link name="door_frame">
-      <pose><%= off_x %> 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose><%= off_x %> <%= $g %> 0 0 0 <%= $pi %></pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -283,18 +279,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 <%= $door_angle %></pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 <%= $pi + $door_angle %></pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
