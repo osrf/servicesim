@@ -32,7 +32,7 @@
     </node>
   </group>
   <group if="$(arg rviz)">
-    <arg name="config_file" value="$(find servicesim)/config/rviz_config2.rviz"/>
+    <arg name="config_file" value="$(find servicesim)/config/rviz_config.rviz"/>
     <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />
   </group>
   <group if="$(arg controllers)">
