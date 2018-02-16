@@ -1,23 +1,31 @@
 <%
   # Room template
   #
+  # Generates a room and furnishes it
+  #
   # Required variables
-  # * $o (number) length of an office unit
-  # * $pi (number)
-  # * $room_type (string) must correspond to an obj mesh
+  # * $o (number) Length of an office unit
+  # * $pi (number) Math::PI
+  # * $room_type (string) Must correspond to an obj mesh
   # * $room_name (string) unique name for room
-  # * $room_floor (string) must correspond to an obj mesh
-  # * $room_pose (number[6])
-  # * $room_size (number[4]) in office units, [min_x, max_x, min_y, max_y]
-  # * $door_angle (number)
-  # * $floorplan (boolean) true if only showing floorplan
+  # * $room_floor (string) Must correspond to an obj mesh
+  # * $room_pose (array[6]) Pose of door's corner
+  # * $room_size (array[4]) In office units, [min_x, max_x, min_y, max_y]
+  # * $door_angle (number) Zero means the door is closed, ranges from 0 to pi.
+  #                        If the door is closed, the room is not furnished.
+  # * $floorplan (boolean) True if only showing floorplan, so doors, furniture and
+  #                        the collision above the door are hidden.
 
-  off_x = -$o * 0.5
+  # Wall height
   height = 2 * $o
+
+  # Thickness for wall collisions
   thickness = $g
 
+  # Length of space on each side of door, within its tile
   door_side = 0.24
 
+  # Room corners in office units
   min_x = $room_size[0]
   max_x = $room_size[1]
   min_y = $room_size[2]
@@ -146,6 +154,7 @@
         </box>
       </geometry>
     </collision>
+
     <collision name="left">
 
       <pose>
@@ -239,17 +248,15 @@
     if $door_angle == 0.0
   %>
     <link name="closed_door">
-      <pose><%= -$o * 0.5 %> 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose><%= -$o * 0.5 %> <%= $g %> 0 0 0 <%= $pi %></pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -263,17 +270,15 @@
   <% else %>
 
     <link name="door_frame">
-      <pose><%= off_x %> 0 0 0 0 0</pose>
-  <!-- TODO
+      <pose><%= -$o * 0.5 %> <%= $g %> 0 0 0 <%= $pi %></pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <geometry>
           <mesh>
@@ -283,18 +288,18 @@
         </geometry>
       </visual>
     </link>
+
     <link name="door">
-      <pose>-1.22 0.15 0 0 0 <%= $door_angle %></pose>
-  <!-- TODO
+      <pose>-0.3 -0.05 0 0 0 <%= $pi + $door_angle %></pose>
       <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
           <mesh>
-            <uri>file://media/meshes/<%= $room_type %>.obj</uri>
+            <uri>model://door/meshes/door_door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </collision>
-  -->
       <visual name="visual">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -315,4 +320,3 @@
 %>
 
 </model>
-

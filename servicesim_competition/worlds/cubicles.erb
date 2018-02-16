@@ -1,10 +1,12 @@
 <%
   # Cubicles template
   #
+  # Generates a group of cubicles, given the row count and the start pose
+  #
   # Required variables
-  # * $count (number)
+  # * $count (number) For unique names
   # * $cubicle_size (number) row count
-  # * $cubicle_pos (number[]) start position
+  # * $cubicle_pose (number[6]) Pose of starting edge
   # * $floorplan (bool)
 
   # Unit size of a cubicle element
@@ -13,12 +15,19 @@
   # Size of corner elements
   cubicle_corner = 0.025
 
+  # Number of cubicle units along the X axis
   x_size = 3
 
-  center_y = $cubicle_pos[1]
+  # Y position of center line (which extends along X)
+  center_y = $cubicle_pose[1]
+
+  # Minimum X
   x_min = 0
+
+  # Maximum X, in cubicle units
   x_max = x_size * $cubicle_size - 1
 
+  # Count for unique visual and collision names
   count = 0
 %>
 <model name="cubicles_<%= $count.to_s() %>">
@@ -26,12 +35,12 @@
   <static>true</static>
 
   <pose>
-    <%= $cubicle_pos[0] %>
-    <%= $cubicle_pos[1] %>
-    <%= $cubicle_pos[2] %>
-    0.0
-    0.0
-    0.0
+    <%= $cubicle_pose[0] %>
+    <%= $cubicle_pose[1] %>
+    <%= $cubicle_pose[2] %>
+    <%= $cubicle_pose[3] %>
+    <%= $cubicle_pose[4] %>
+    <%= $cubicle_pose[5] %>
   </pose>
 
   <link name="walls">
