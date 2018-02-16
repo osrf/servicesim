@@ -1,0 +1,226 @@
+<%
+  # Cubicles template
+  #
+  # Generates a group of cubicles, given the row count and the start pose
+  #
+  # Required variables
+  # * $count (number) For unique names
+  # * $cubicle_size (number) row count
+  # * $cubicle_pose (number[6]) Pose of starting edge
+
+  # Unit size of a cubicle element
+  cubicle_u = 0.6
+
+  # Size of corner elements
+  cubicle_corner = 0.025
+
+  # Number of cubicle units along the X axis
+  x_size = 3
+
+  # Y position of center line (which extends along X)
+  center_y = $cubicle_pose[1]
+
+  # Minimum X
+  x_min = 0
+
+  # Maximum X, in cubicle units
+  x_max = x_size * $cubicle_size - 1
+
+  # Count for unique visual and collision names
+  count = 0
+%>
+<model name="cubicles_<%= $count.to_s() %>">
+
+  <static>true</static>
+
+  <pose>
+    <%= $cubicle_pose[0] %>
+    <%= $cubicle_pose[1] %>
+    <%= $cubicle_pose[2] %>
+    <%= $cubicle_pose[3] %>
+    <%= $cubicle_pose[4] %>
+    <%= $cubicle_pose[5] %>
+  </pose>
+
+  <link name="link">
+
+    <!-- center wall -->
+    <%
+      for x in (x_min..x_max)
+        count += 1
+        type = 'closed'
+        offset = -0.3
+        pose =
+        [
+          x * cubicle_u + offset,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+    %>
+      <visual name="visual_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="collision_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+    <% end %>
+
+    <!-- row divisions -->
+    <%
+      for x in (x_min..(x_max+1)).step(x_size)
+
+        for side in [-1, 1]
+
+          count += 1
+          type = 'wall'
+          offset = -0.9 * side
+          pose =
+          [
+            x * cubicle_u,
+            offset,
+            0.0,
+            0.0,
+            0.0,
+            Math::PI * 0.5 * side
+          ]
+    %>
+      <visual name="visual_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="collision_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <% end %>
+    <% end %>
+
+    <!-- openings -->
+    <%
+      for x in (x_min..(x_max+1)).step(x_size)
+
+        for side in [-1, 1]
+
+          if side == 1 and x == x_min
+            next
+          elsif side == -1 and x == x_max + 1
+            next
+          end
+
+          count += 1
+          type = 'wall'
+          offset = -0.9 * side
+          yaw = side == -1 ? 0.0 : Math::PI
+          pose =
+          [
+            x * cubicle_u + offset,
+           - (2 * cubicle_u + cubicle_corner) * side,
+            0.0,
+            0.0,
+            0.0,
+            yaw
+          ]
+    %>
+      <visual name="visual_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="collision_<%= count %>">
+
+        <pose>
+          <%= pose[0] %>
+          <%= pose[1] %>
+          <%= pose[2] %>
+          <%= pose[3] %>
+          <%= pose[4] %>
+          <%= pose[5] %>
+        </pose>
+
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <% end %>
+    <% end %>
+
+  </link>
+
+</model>

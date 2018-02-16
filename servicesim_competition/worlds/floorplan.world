@@ -1,148 +1,13 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 4942246
-  Floorplan: false
+  Seed: 8728242
+  Floorplan: true
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
 
-
-    <physics type="ode">
-      <real_time_update_rate>1000.0</real_time_update_rate>
-      <max_step_size>0.001</max_step_size>
-      <real_time_factor>1</real_time_factor>
-      <ode>
-        <solver>
-          <type>quick</type>
-          <iters>150</iters>
-          <precon_iters>0</precon_iters>
-          <sor>1.400000</sor>
-          <use_dynamic_moi_rescaling>1</use_dynamic_moi_rescaling>
-        </solver>
-        <constraints>
-          <cfm>0.000000</cfm>
-          <erp>0.800000</erp>
-          <contact_max_correcting_vel>2000.000000</contact_max_correcting_vel>
-          <contact_surface_layer>0.01000</contact_surface_layer>
-        </constraints>
-      </ode>
-    </physics>
-
-    <!-- Competition plugin -->
-    <plugin name="competition" filename="libCompetitionPlugin.so">
-
-      <pick_up_location>
-        reception
-      </pick_up_location>
-
-      <drop_off_location>
-        office_1
-      </drop_off_location>
-
-      <guest_name>guest</guest_name>
-
-      <go_to_pick_up>
-        <name>Go to pick-up location</name>
-        <weight>1.0</weight>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/go_to_pick_up</namespace>
-      </go_to_pick_up>
-
-      <pick_up>
-        <name>Pick-up guest</name>
-        <weight>1.0</weight>
-      </pick_up>
-
-      <drop_off>
-        <name>Drop-off guest</name>
-        <weight>1.0</weight>
-        <guest_name>guest</guest_name>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/drop_off</namespace>
-      </drop_off>
-
-      <return_to_start>
-        <name>Return to start</name>
-        <weight>1.0</weight>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/return_to_start</namespace>
-      </return_to_start>
-
-    </plugin>
-
-    <!-- Pick-up area contain plugin -->
-    <plugin name="pick_up" filename="libContainPlugin.so">
-      <entity>servicebot</entity>
-      <namespace>servicesim/go_to_pick_up</namespace>
-      <enabled>false</enabled>
-      <pose>
-        -6.9
-        1.33
-        1.0
-        1.54
-        0
-        1.9
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            4
-            4
-            10
-          </size>
-        </box>
-      </geometry>
-    </plugin>
-
-    <!-- Drop-off area contain plugin -->
-    <plugin name="drop_off" filename="libContainPlugin.so">
-      <entity>guest</entity>
-      <namespace>servicesim/drop_off</namespace>
-      <enabled>false</enabled>
-      <pose>
-        -2.61
-        7.24
-        0
-        0
-        0
-        0
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            4
-            4
-            10
-          </size>
-        </box>
-      </geometry>
-    </plugin>
-
-    <!-- Start area contain plugin -->
-    <plugin name="start" filename="libContainPlugin.so">
-      <entity>servicebot</entity>
-      <namespace>servicesim/return_to_start</namespace>
-      <enabled>false</enabled>
-      <pose>
-        3.76
-        1.23
-        0
-        0
-        0
-        0
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            2
-            2
-            10
-          </size>
-        </box>
-      </geometry>
-    </plugin>
 
 
     <!-- GUI -->
@@ -8372,28 +8237,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -8553,29 +8396,6 @@
 
   </link>
 
-
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
 
 
 </model>
@@ -8647,28 +8467,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -8829,29 +8627,6 @@
   </link>
 
 
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-
 
 </model>
 
@@ -8921,28 +8696,6 @@
     </collision>
     
 
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
     
 
     
@@ -9693,29 +9446,6 @@
   </link>
 
 
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-
 
 </model>
 
@@ -9785,28 +9515,6 @@
     </collision>
     
 
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
     
 
     
@@ -10348,51 +10056,6 @@
   </link>
 
 
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.542556686187085</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
-
 
 </model>
 
@@ -10462,28 +10125,6 @@
     </collision>
     
 
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
     
 
     
@@ -10796,51 +10437,6 @@
 
   </link>
 
-
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 4.7721151140194</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
 
 
 </model>
@@ -10912,28 +10508,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -11245,51 +10819,6 @@
 
   </link>
 
-
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.19141115415492</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
 
 
 </model>
@@ -11361,28 +10890,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -11580,51 +11087,6 @@
 
   </link>
 
-
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.633772850553702</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
 
 
 </model>
@@ -11696,28 +11158,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -11915,29 +11355,6 @@
 
   </link>
 
-
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
 
 
 </model>
@@ -12009,28 +11426,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -12342,51 +11737,6 @@
 
   </link>
 
-
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.340707511102648</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
 
 
 </model>
@@ -12458,28 +11808,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -12792,29 +12120,6 @@
   </link>
 
 
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-
 
 </model>
 
@@ -12884,28 +12189,6 @@
     </collision>
     
 
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
     
 
     
@@ -13066,29 +12349,6 @@
 
   </link>
 
-
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
 
 
 </model>
@@ -13160,28 +12420,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -13342,29 +12580,6 @@
   </link>
 
 
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-
 
 </model>
 
@@ -13434,28 +12649,6 @@
     </collision>
     
 
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
     
 
     
@@ -13654,51 +12847,6 @@
 
   </link>
 
-
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.111736940436796</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
 
 
 </model>
@@ -13770,28 +12918,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -13989,51 +13115,6 @@
 
   </link>
 
-
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.391223511371984</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
 
 
 </model>
@@ -14105,28 +13186,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -14325,51 +13384,6 @@
   </link>
 
 
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.648307683604465</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
-
 
 </model>
 
@@ -14439,28 +13453,6 @@
     </collision>
     
 
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
     
 
     
@@ -14774,29 +13766,6 @@
   </link>
 
 
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-
 
 </model>
 
@@ -14866,28 +13835,6 @@
     </collision>
     
 
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
     
 
     
@@ -15200,29 +14147,6 @@
 
   </link>
 
-
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
 
 
 </model>
@@ -15294,28 +14218,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -15627,51 +14529,6 @@
 
   </link>
 
-
-  
-
-    <link name="door_frame">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.553073496544965</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-  
 
 
 </model>
@@ -15743,28 +14600,6 @@
     
 
     
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
 
     
     <collision name="right">
@@ -16076,29 +14911,6 @@
 
   </link>
 
-
-  
-    <link name="closed_door">
-      <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
 
 
 </model>
@@ -22310,211 +21122,6 @@
       
     
 
-
-    <!-- Guest -->
-    <actor name="guest">
-
-      <!-- Starting pose, nice for when the world is reset -->
-      <pose>
-        -6.9
-        1.33
-        1.0
-        1.54
-        0
-        1.9
-      </pose>
-
-      <skin>
-        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
-      </skin>
-
-      <animation name="animation">
-        <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
-      </animation>
-
-      <!-- Need one waypoint to idle at -->
-      <script>
-        <trajectory id='0' type='animation'>
-          <waypoint>
-            <time>100</time>
-              <pose>
-                -6.9
-                1.33
-                1.0
-                1.54
-                0
-                1.9
-              </pose>
-          </waypoint>
-        </trajectory>
-      </script>
-
-      <plugin name="trajectory" filename="libFollowActorPlugin.so">
-
-        <namespace>servicesim</namespace>
-
-        <!-- FIXME: currently not avoiding obstacles -->
-        <ignore_obstacle>walls</ignore_obstacle>
-        <ignore_obstacle>floor</ignore_obstacle>
-
-        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
-        <ignore_obstacle>servicebot</ignore_obstacle>
-
-        
-          <drift_time>280</drift_time>
-        
-          <drift_time>476</drift_time>
-        
-          <drift_time>596</drift_time>
-        
-          <drift_time>833</drift_time>
-        
-          <drift_time>1005</drift_time>
-        
-          <drift_time>1050</drift_time>
-        
-          <drift_time>1298</drift_time>
-        
-          <drift_time>1536</drift_time>
-        
-          <drift_time>1692</drift_time>
-        
-          <drift_time>1840</drift_time>
-        
-          <drift_time>2051</drift_time>
-        
-          <drift_time>2256</drift_time>
-        
-          <drift_time>2428</drift_time>
-        
-          <drift_time>2562</drift_time>
-        
-          <drift_time>2596</drift_time>
-        
-          <drift_time>2711</drift_time>
-        
-          <drift_time>2862</drift_time>
-        
-          <drift_time>3149</drift_time>
-        
-          <drift_time>3266</drift_time>
-        
-          <drift_time>3432</drift_time>
-        
-          <drift_time>3456</drift_time>
-        
-          <drift_time>3531</drift_time>
-        
-          <drift_time>3727</drift_time>
-        
-          <drift_time>3897</drift_time>
-        
-          <drift_time>4144</drift_time>
-        
-          <drift_time>4327</drift_time>
-        
-          <drift_time>4411</drift_time>
-        
-          <drift_time>4692</drift_time>
-        
-          <drift_time>4787</drift_time>
-        
-          <drift_time>4843</drift_time>
-        
-
-      </plugin>
-
-    </actor>
-
-    <!-- Trajectory actors -->
-    
-
-    <!-- Idling actors -->
-    
-      
-
-<actor name="actor_13">
-
-  <!-- Starting pose, nice for when the world is reset -->
-  <pose>
-    -2.459
-    1.1477
-    0.0
-    0.0
-    -0.0
-    -1.59
-  </pose>
-
-  <skin>
-    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
-  </skin>
-
-  <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
-  </animation>
-
-  <!-- Need one waypoint to idle at -->
-  <script>
-    <trajectory id='0' type='animation'>
-      <waypoint>
-        <time>100</time>
-          <pose>
-            -2.459
-            1.1477
-            0.0
-            0.0
-            -0.0
-            -1.59
-          </pose>
-      </waypoint>
-    </trajectory>
-  </script>
-
-</actor>
-
-    
-      
-
-<actor name="actor_14">
-
-  <!-- Starting pose, nice for when the world is reset -->
-  <pose>
-    17.09
-    1.97
-    0.0
-    0.0
-    0.0
-    -0.22373
-  </pose>
-
-  <skin>
-    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
-  </skin>
-
-  <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_talking_b.dae</filename>
-  </animation>
-
-  <!-- Need one waypoint to idle at -->
-  <script>
-    <trajectory id='0' type='animation'>
-      <waypoint>
-        <time>100</time>
-          <pose>
-            17.09
-            1.97
-            0.0
-            0.0
-            0.0
-            -0.22373
-          </pose>
-      </waypoint>
-    </trajectory>
-  </script>
-
-</actor>
-
-    
 
 
   </world>

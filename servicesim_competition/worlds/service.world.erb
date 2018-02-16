@@ -3,6 +3,7 @@
   #
   # Command line options (usage erb [opt]=[arg]):
   # s: seed for randomization
+  # f: true to generate unpopulated world (floorplan only)
 
   ###############################################
   #                                             #
@@ -24,6 +25,37 @@
   end
   srand(seed)
 
+  # Floorplan only?
+  $floorplan = false
+  if (defined? f)
+    $floorplan = f.to_s == "true"
+  end
+
+  ###############################################
+  #                                             #
+  #               INITIALIZATION                #
+  #                                             #
+  ###############################################
+
+  # Relative path from where the script is being run to the script's directory
+  DIR = File.dirname(__FILE__)
+
+  # Count to ensure unique names
+  $count = 0
+
+  # PI for short
+  $pi = Math::PI
+
+  # "office unit" - the width of wall panels
+  $o = 1.5
+
+  # "gap unit" - the width of gaps between rooms
+  $g = 0.1
+
+  # Total office size
+  total_x = $o * 33
+  total_y = $o * 15
+
   ###############################################
   #                                             #
   #           IMPORT OTHER ERB FILES            #
@@ -34,6 +66,60 @@
   def fromFile filename
     return ERB.new(File.read(filename), nil, nil, '_sub01').result(binding)
   end
+
+  ###############################################
+  #                                             #
+  #                     ROOMS                   #
+  #                                             #
+  ###############################################
+
+
+  # Get an angle for the door, it's 0.0 for a closed door
+  def doorAngle()
+    open = [true, false].sample()
+    if not open
+      return 0.0
+    else
+      return rand($pi*0.5..$pi*0.8)
+    end
+  end
+
+  # Dictionary with all room types
+  room_types =
+  {
+    :bathroom => {:type => 'bathroom', :floor => 'tile', :size => [0, 1, -1, 0]},
+    :refreshment_area => {:type => 'refreshment_area', :floor => 'tile', :size => [-3, 3, -4, 0]},
+    :meeting_room_large => {:type => 'meeting_room_large', :floor => 'carpet', :size => [-1, 4, -3, 0]},
+    :meeting_room_small => {:type => 'meeting_room_small', :floor => 'carpet', :size => [-1, 2, -2, 0]},
+    :office_small => {:type => 'office_small', :floor => 'carpet', :size => [-1, 1, -1, 0]},
+    :office_large => {:type => 'office_large', :floor => 'carpet', :size => [-1, 2, -2, 0]},
+  }
+
+  # Dictionary with all rooms to be inserted
+  rooms =
+  [
+    # Public area
+    {:name => 'PublicBathroomA',     :type => room_types[:bathroom],           :pose => [  6*$o + 0*$g,   2*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
+    {:name => 'PublicBathroomB',     :type => room_types[:bathroom],           :pose => [  8*$o + 1*$g,   2*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
+    {:name => 'PublicCafe',          :type => room_types[:refreshment_area],   :pose => [  9*$o + 2*$g,   4*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
+    {:name => 'PublicMeetingRoomA',  :type => room_types[:meeting_room_large], :pose => [ 12*$o + 0*$g,  11*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PublicMeetingRoomB',  :type => room_types[:meeting_room_small], :pose => [  3*$o + 0*$g,   5*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle()},
+    {:name => 'PublicMeetingRoomC',  :type => room_types[:meeting_room_small], :pose => [  3*$o + 0*$g,   9*$o + 1*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle()},
+    {:name => 'PublicMeetingRoomD',  :type => room_types[:office_small],       :pose => [  6*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PublicMeetingRoomE',  :type => room_types[:office_small],       :pose => [  3*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    # Employee-only area
+    {:name => 'PrivateMeetingRoomA', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   5*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => $pi * 0.7},
+    {:name => 'PrivateMeetingRoomB', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   9*$o + 1*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
+    {:name => 'PrivateBathroomA',    :type => room_types[:bathroom],           :pose => [ -3*$o + 0*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PrivateBathroomB',    :type => room_types[:bathroom],           :pose => [ -5*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PrivateOfficeA',      :type => room_types[:office_small],       :pose => [ -8*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PrivateOfficeB',      :type => room_types[:office_small],       :pose => [-11*$o - 3*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PrivateOfficeC',      :type => room_types[:office_small],       :pose => [-14*$o - 4*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PrivateOfficeD',      :type => room_types[:office_large],       :pose => [-15*$o - 5*$g,  12*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => 0.0},
+    {:name => 'PrivateMeetingRoomC', :type => room_types[:meeting_room_small], :pose => [ -8*$o + 0*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomD', :type => room_types[:meeting_room_small], :pose => [-12*$o - 1*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomE', :type => room_types[:meeting_room_small], :pose => [-16*$o - 2*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
+  ]
 
   ###############################################
   #                                             #
@@ -139,40 +225,19 @@
     :pose => [3.76, 1.23, 0, 0, 0, 0],
     :size => [2, 2, 10]
   }
-
-  ###############################################
-  #                                             #
-  #               INITIALIZATION                #
-  #                                             #
-  ###############################################
-
-  # Relative path from where the script is being run to the script's directory
-  DIR = File.dirname(__FILE__)
-
-  # Count to ensure unique names
-  $count = 0
-
-  # PI for short
-  $pi = Math::PI
-
-  # "office unit" - the width of wall panels
-  $o = 1.5
-
-  # "gap unit" - the width of gaps between rooms
-  $g = 0.1
-
-  # Total office size
-  total_x = $o * 33
-  total_y = $o * 15
 %>
 <!--
   Generated from service.world.erb
   Seed: <%= seed %>
+  Floorplan: <%= $floorplan %>
 -->
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
 
+<%
+  if not $floorplan
+%>
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
@@ -307,6 +372,9 @@
         </box>
       </geometry>
     </plugin>
+<%
+  end # if not $floorplan
+%>
 
     <!-- GUI -->
     <gui fullscreen='0'>
@@ -412,6 +480,85 @@
     <!-- Extra walls -->
     <%= fromFile(DIR + "/walls.erb") %>
 
+    <!-- Rooms -->
+    <%
+      for room in rooms
+        $room_name = room[:name]
+        $room_type = room[:type][:type]
+        $room_floor = room[:type][:floor]
+        $room_size = room[:type][:size]
+        $room_pose = room[:pose]
+        $door_angle = room[:door]
+    %>
+      <%= fromFile(DIR + "/room.erb") %>
+    <% end %>
+
+    <!-- Public cubicles -->
+    <%
+      for y in [5, 9]
+        $count += 1
+    %>
+    <include>
+      <name>island_<%= $count %></name>
+      <pose>
+        <%= 6 * $o %>
+        <%= y * $o %>
+        0
+        0
+        0
+        0
+      </pose>
+      <uri>model://cubicle_island</uri>
+    </include>
+    <%
+      end
+    %>
+
+    <%
+      s = 9.0 * $o + 2.0 * $g
+      e = 13.0 * $o
+      for x in (s..e).step(1.9)
+        $count += 1
+    %>
+    <include>
+      <name>island_<%= $count %></name>
+      <pose>
+        <%= x - $g %>
+        <%= 7 * $o + $g %>
+        0
+        0
+        0
+        <%= Math::PI %>
+      </pose>
+      <uri>model://cubicle_corner</uri>
+    </include>
+    <%
+      end
+    %>
+
+    <!-- Private cubicles -->
+    <%
+      for x in [-14, -8]
+        for y in [5, 8, 11]
+          $count += 1
+          $cubicle_size = x == -14 ? 4 : 3
+          $cubicle_pose =
+          [
+            x * $o,
+            y * $o,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+          ]
+    %>
+    <%= fromFile(DIR + "/cubicles.erb") %>
+      <% end %>
+    <% end %>
+
+<%
+  if not $floorplan
+%>
     <!-- Guest -->
     <actor name="<%= guest_name %>">
 
@@ -542,6 +689,9 @@
     %>
       <%= fromFile(DIR + "/" + "actor_idle.erb") %>
     <% end %>
+<%
+  end # if not $floorplan
+%>
 
   </world>
 </sdf>
