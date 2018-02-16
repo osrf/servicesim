@@ -99,6 +99,15 @@
     :office_large => {:type => 'office_large', :floor => 'carpet', :size => [-1, 2, -2, 0]},
   }
 
+  # Array with objects that fit well on corners
+  $corner_objs =
+  [
+    'hangout_chair',
+    'mini_fridge',
+    'wastebasket',
+    'office_box',
+  ]
+
   # Dictionary with all rooms to be inserted
   rooms =
   [
@@ -558,6 +567,12 @@
 <%
   if not $floorplan
 %>
+    <!-- Back entrance -->
+    <%= fromFile(DIR + "/back_entrance.erb") %>
+
+    <!-- Front entrance -->
+    <%= fromFile(DIR + "/front_entrance.erb") %>
+
     <!-- Guest -->
     <actor name="<%= guest_name %>">
 
