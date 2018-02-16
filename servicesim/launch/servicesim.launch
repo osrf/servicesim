@@ -17,6 +17,7 @@
     -x 3.7 -y 1.23 -z 0.75 -yaw 1.03"
   />
     <!--
+    -x 6.5 -y -18.2 -z 0.75"
     -J left_shoulder_joint -0.55
     -J left_upper_arm_joint 1.35
     -J left_elbow_joint -0.5
@@ -31,7 +32,7 @@
     </node>
   </group>
   <group if="$(arg rviz)">
-    <arg name="config_file" value="$(find servicesim)/config/rviz_config.rviz"/>
+    <arg name="config_file" value="$(find servicesim)/config/rviz_config2.rviz"/>
     <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />
   </group>
   <group if="$(arg controllers)">
