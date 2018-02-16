@@ -2,7 +2,7 @@
   <arg name="world_name" value="$(find servicesim_competition)/worlds/service.world"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <env name="GAZEBO_RESOURCE_PATH" value="$(find servicesim_competition)/worlds"/>
+    <env name="GAZEBO_RESOURCE_PATH" value="$(find servicesim_competition)/worlds:$(find servicesim_competition)"/>
     <env name="GAZEBO_MODEL_PATH" value="$(find servicesim_competition)/models"/>
     <env name="GAZEBO_PLUGIN_PATH" value="$(find servicesim_competition)/plugins"/>
     <arg name="world_name" value="$(arg world_name)" />

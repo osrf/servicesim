@@ -89,7 +89,7 @@
   ###############################################
 
   guest_name = 'guest'
-  guest_pose = [-12.7, -18.78, 1.19, 1.54, 0, 1.9]
+  guest_pose = [-6.9, 1.33, 1.00, 1.54, 0, 1.9]
   guest_skin = skins.sample
   guest_anim = animations_trajectory[0]
   drift_times = []
@@ -128,7 +128,7 @@
   drop_off_location =
   {
     :name => 'office_1',
-    :pose => [-12.4, -13.5, 0, 0, 0, 0],
+    :pose => [-2.61, 7.24, 0, 0, 0, 0],
     :size => [4, 4, 10]
   }
 
@@ -136,7 +136,7 @@
   start_location =
   {
     :name => 'cafeteria_1',
-    :pose => [-6.5, -18.2, 0, 0, 0, 0],
+    :pose => [3.76, 1.23, 0, 0, 0, 0],
     :size => [2, 2, 10]
   }
 
@@ -149,11 +149,21 @@
   # Relative path from where the script is being run to the script's directory
   DIR = File.dirname(__FILE__)
 
-  # Actor's Z position
-  actor_pos_z = 1.25
-
   # Count to ensure unique names
   $count = 0
+
+  # PI for short
+  $pi = Math::PI
+
+  # "office unit" - the width of wall panels
+  $o = 1.5
+
+  # "gap unit" - the width of gaps between rooms
+  $g = 0.1
+
+  # Total office size
+  total_x = $o * 33
+  total_y = $o * 15
 %>
 <!--
   Generated from service.world.erb
@@ -313,29 +323,94 @@
       <origin_visual>0</origin_visual>
     </scene>
 
-    <!-- Ground collision -->
-    <model name="ground_collision">
+    <!-- Ceiling -->
+    <%
+      x_offset = total_x * -0.06
+      y_offset = total_y * 0.5
+    %>
+    <model name="ceiling">
+      <pose>
+        <%= x_offset %>
+        <%= y_offset %>
+        <%= 2 * $o %>
+        0
+        <%= Math::PI %>
+        0
+      </pose>
+
       <static>true</static>
       <link name="link">
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size><%= total_x %> <%= total_y %></size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/</uri>
+              <uri>file://media/materials/textures/</uri>
+              <name>ServiceSim/Ceiling</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+    </model>
+
+    <!-- Floor -->
+    <model name="floor">
+      <pose>
+        <%= x_offset %>
+        <%= y_offset %>
+        <%= -0.001 %>
+        0
+        0
+        0
+      </pose>
+
+      <static>true</static>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size><%= total_x %> <%= total_y %></size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/</uri>
+              <uri>file://media/materials/textures/</uri>
+              <name>ServiceSim/Hallway</name>
+            </script>
+          </material>
+        </visual>
+
         <collision name="collision">
           <geometry>
             <plane>
               <normal>0 0 1</normal>
-              <size>80 80</size>
+              <size><%= total_x %> <%= total_y %></size>
             </plane>
           </geometry>
           <surface>
-            <mu>1</mu>
-            <mu2>1</mu2>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
           </surface>
         </collision>
+
       </link>
+
     </model>
 
-    <!-- Office -->
-    <include>
-      <uri>model://willowgarage</uri>
-    </include>
+    <!-- Extra walls -->
+    <%= fromFile(DIR + "/walls.erb") %>
 
     <!-- Guest -->
     <actor name="<%= guest_name %>">
@@ -379,8 +454,9 @@
 
         <namespace>servicesim</namespace>
 
-        <ignore_obstacle>willowgarage</ignore_obstacle>
-        <ignore_obstacle>ground_collision</ignore_obstacle>
+        <!-- FIXME: currently not avoiding obstacles -->
+        <ignore_obstacle>walls</ignore_obstacle>
+        <ignore_obstacle>floor</ignore_obstacle>
 
         <!-- FIXME: servicebot's bounding box is huge and always colliding -->
         <ignore_obstacle>servicebot</ignore_obstacle>
