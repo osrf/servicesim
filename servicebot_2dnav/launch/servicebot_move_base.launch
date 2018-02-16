@@ -1,6 +1,6 @@
 <launch>
   <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find servicesim_competition)/map/map2.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find servicesim_competition)/map/map.yaml"/>
 
   <!--- Run AMCL -->
   <include file="$(find servicebot_2dnav)/launch/amcl_diff.launch" />
