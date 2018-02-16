@@ -520,19 +520,17 @@
       e = 13.0 * $o
       for x in (s..e).step(1.9)
         $count += 1
+        $pose =
+        [
+          x - 1 * $g,
+          7 * $o + $g,
+          0,
+          0,
+          0,
+          $pi,
+        ]
     %>
-    <include>
-      <name>island_<%= $count %></name>
-      <pose>
-        <%= x - $g %>
-        <%= 7 * $o + $g %>
-        0
-        0
-        0
-        <%= Math::PI %>
-      </pose>
-      <uri>model://cubicle_corner</uri>
-    </include>
+      <%= fromFile(DIR + "/cubicle_corner.erb") %>
     <%
       end
     %>
