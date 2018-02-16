@@ -1,14 +1,18 @@
 <%
-  # Template for a cubicle island
+  # Template for a cubicle island, which has 4 desks.
+  #
+  # Adds furniture if needed.
   #
   # Required variables
-  # * $o (number) length of an office unit
-  # * $pi (number)
-  # * $count (number)
-  # * $pose (number[6])
+  # * $pi (number) Math::PI
+  # * $count (number) For unique names
+  # * $pose (number[6]) Pose of island center
+  # * $floorplan (boolean) True if only showing floorplan, so computer and chair
+  #                        are hidden.
 
   $count += 1
 
+  # Height of desk surface
   top = 0.76
 %>
   <model name="cubicle_island_<%= $count %>">
@@ -44,8 +48,12 @@
   if not $floorplan
 %>
     <%
+      # offset if computer is on the far end
       far_off = 1.22
+
+      # offset if computer is on the near end
       near_off = 0.45
+
       for x in [-1, 1]
         for y in [-1, 1]
 
@@ -63,6 +71,7 @@
           end
     %>
       <include>
+        <name>computer_<%= x %>_<%= y %></name>
         <pose>
           <%= comp_x %>
           <%= comp_y %>
@@ -75,20 +84,21 @@
       </include>
 
       <%
-         chair_x = (rand(1.13..1.5)) * x
-         chair_y = (rand(1.13..1.5)) * y
+         chair_x = (rand(1.13..2.0)) * x
+         chair_y = (rand(1.13..2.0)) * y
 
           if x < 0 and y < 0
-            chair_yaw = $pi * 0.75 + rand(-0.4..0.4)
+            chair_yaw = $pi * 0.75 + rand(-0.7..0.7)
           elsif x < 0 and y > 0
-            chair_yaw = $pi * 0.25 + rand(-0.4..0.4)
+            chair_yaw = $pi * 0.25 + rand(-0.7..0.7)
           elsif x > 0 and y < 0
-            chair_yaw = -$pi * 0.75 + rand(-0.4..0.4)
+            chair_yaw = -$pi * 0.75 + rand(-0.7..0.7)
           elsif x > 0 and y > 0
-            chair_yaw = -$pi * 0.25 + rand(-0.4..0.4)
+            chair_yaw = -$pi * 0.25 + rand(-0.7..0.7)
           end
       %>
       <include>
+        <name>chair_<%= x %>_<%= y %></name>
         <pose>
           <%= chair_x %>
           <%= chair_y %>

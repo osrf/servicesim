@@ -1,13 +1,19 @@
 <%
-  # Template for a cubicle corner
+  # Template for a cubicle corner, which is a single desk
+  #
+  # Adds furniture if needed.
   #
   # Required variables
-  # * $o (number) length of an office unit
-  # * $pi (number)
-  # * $count (number)
-  # * $pose (number[6])
+  # * $pi (number) Math::PI
+  # * $count (number) For unique names
+  # * $pose (number[6]) Pose of island center
+  # * $floorplan (boolean) True if only showing floorplan, so computer and chair
+  #                        are hidden.
 
   $count += 1
+
+  # Height of desk surface
+  top = 0.76
 %>
   <model name="cubicle_corner_<%= $count %>">
     <static>true</static>
@@ -40,14 +46,55 @@
 <%
   if not $floorplan
 %>
-    <include>
-      <pose>-1.27 -0.45 0.76 0 0 0</pose>
-      <uri>model://computer</uri>
-    </include>
-    <include>
-      <pose>-1.15 -1.20 0 0 0 <%= 2.35 + rand(-0.4..0.4) %></pose>
-      <uri>model://office_chair</uri>
-    </include>
+  <%
+    # offset if computer is on the far end
+    far_off = 1.22
+
+    # offset if computer is on the near end
+    near_off = 0.45
+
+    # placement axis
+    p = ['X', 'Y'].sample
+
+    if p == 'X'
+      comp_x = -far_off
+      comp_y = -near_off
+      comp_yaw = 0.0
+    else
+      comp_x = -near_off
+      comp_y = -far_off
+      comp_yaw = -$pi * 0.5
+    end
+  %>
+  <include>
+    <pose>
+      <%= comp_x %>
+      <%= comp_y %>
+      <%= top %>
+      0
+      0
+      <%= comp_yaw %>
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  <%
+     chair_x = (rand(1.13..1.4)) * -1
+     chair_y = (rand(1.13..2.0)) * -1
+
+     chair_yaw = $pi * 0.75 + rand(-0.7..0.7)
+  %>
+  <include>
+    <pose>
+      <%= chair_x %>
+      <%= chair_y %>
+      0
+      0
+      0
+      <%= chair_yaw %>
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
 <%
   end # if not $floorplan
 %>
