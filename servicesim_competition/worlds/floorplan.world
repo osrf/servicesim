@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 8728242
+  Seed: 6243188
   Floorplan: true
 -->
 <?xml version="1.0" ?>
@@ -14919,31 +14919,75 @@
 
     <!-- Public cubicles -->
     
-    <include>
-      <name>island_1</name>
-      <pose>
-        9.0
-        7.5
-        0
-        0
-        0
-        0
-      </pose>
-      <uri>model://cubicle_island</uri>
-    </include>
+      
+  <model name="cubicle_island_1">
+    <static>true</static>
+    <pose>
+      9.0
+      7.5
+      0
+      0
+      0
+      0
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_island/meshes/cubicle_island.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_island/meshes/cubicle_island.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+
+
+</model>
+
     
-    <include>
-      <name>island_2</name>
-      <pose>
-        9.0
-        13.5
-        0
-        0
-        0
-        0
-      </pose>
-      <uri>model://cubicle_island</uri>
-    </include>
+      
+  <model name="cubicle_island_2">
+    <static>true</static>
+    <pose>
+      9.0
+      13.5
+      0
+      0
+      0
+      0
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_island/meshes/cubicle_island.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_island/meshes/cubicle_island.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+
+
+</model>
+
     
 
     
