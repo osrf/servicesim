@@ -84,7 +84,7 @@
     if not open
       return 0.0
     else
-      return rand($pi*0.5..$pi)
+      return rand($pi*0.7..$pi)
     end
   end
 
@@ -115,7 +115,7 @@
     {:name => 'PublicBathroomA',     :type => room_types[:bathroom],           :pose => [  6*$o + 0*$g,   2*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
     {:name => 'PublicBathroomB',     :type => room_types[:bathroom],           :pose => [  8*$o + 1*$g,   2*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
     {:name => 'PublicCafe',          :type => room_types[:refreshment_area],   :pose => [  9*$o + 2*$g,   4*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle(1)},
-    {:name => 'PublicMeetingRoomA',  :type => room_types[:meeting_room_large], :pose => [ 12*$o + 0*$g,  11*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PublicMeetingRoomA',  :type => room_types[:meeting_room_large], :pose => [ 12*$o + 0*$g,  11*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle(1)},
     {:name => 'PublicMeetingRoomB',  :type => room_types[:meeting_room_small], :pose => [  3*$o + 0*$g,   5*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle()},
     {:name => 'PublicMeetingRoomC',  :type => room_types[:meeting_room_small], :pose => [  3*$o + 0*$g,   9*$o + 1*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle()},
     {:name => 'PublicMeetingRoomD',  :type => room_types[:office_small],       :pose => [  6*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
