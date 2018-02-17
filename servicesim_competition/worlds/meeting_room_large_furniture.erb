@@ -1,0 +1,33 @@
+<%
+  # Large meeting room furniture template
+  #
+  # Required variables
+  # * $o (number) length of an office unit
+  # * $pi (number) Math::Pi
+
+  $table_size = 'large'
+  $pose =
+  [
+    1.15*$o,
+    -2*$o,
+    0,
+    0,
+    0,
+    0
+  ]
+%>
+
+<%= fromFile(DIR + "/conference_table.erb") %>
+
+<include>
+  <pose>
+    <%= -$o %>
+    <%= -3*$o %>
+    0
+    0
+    0
+    <%= $pi*0.75 + rand(-0.2..0.2) %>
+  </pose>
+  <uri>model://whiteboard</uri>
+</include>
+
