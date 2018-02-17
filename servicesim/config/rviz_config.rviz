@@ -31,7 +31,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LaserScan
 Visualization Manager:
   Class: ""
   Displays:
@@ -92,6 +92,8 @@ Visualization Manager:
           Value: true
         lidar_frame:
           Value: true
+        map:
+          Value: true
         odom:
           Value: true
         pelvis_link:
@@ -128,7 +130,48 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        map:
+          odom:
+            base_link:
+              head_pan_link:
+                head_link:
+                  front_camera_frame:
+                    front_camera_optical_frame:
+                      {}
+                  rear_camera_frame:
+                    rear_camera_optical_frame:
+                      {}
+              left_shoulder_link:
+                left_upper_arm_link:
+                  left_elbow_attach_link:
+                    left_forearm_link:
+                      left_hand_link:
+                        left_lower_hand_link:
+                          {}
+              left_wheel_link:
+                {}
+              lidar_frame:
+                {}
+              pelvis_link:
+                left_thigh_link:
+                  left_upper_leg_link:
+                    left_foot_link:
+                      left_caster_wheel_link:
+                        {}
+                right_thigh_link:
+                  right_upper_leg_link:
+                    right_foot_link:
+                      right_caster_wheel_link:
+                        {}
+              right_shoulder_link:
+                right_upper_arm_link:
+                  right_elbow_attach_link:
+                    right_forearm_link:
+                      right_hand_link:
+                        right_lower_hand_link:
+                          {}
+              right_wheel_link:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -306,22 +349,22 @@ Visualization Manager:
       Channel Name: intensity
       Class: rviz/LaserScan
       Color: 255; 255; 255
-      Color Transformer: ""
+      Color Transformer: Intensity
       Decay Time: 0
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 4096
+      Max Intensity: 0
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: LaserScan
-      Position Transformer: ""
+      Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00999999978
+      Size (m): 0.0500000007
       Style: Flat Squares
-      Topic: /scan
+      Topic: /servicebot/scan
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -330,9 +373,19 @@ Visualization Manager:
       Class: rviz/Map
       Color Scheme: map
       Draw Behind: false
+      Enabled: false
+      Name: Map
+      Topic: /servicebot/map
+      Unreliable: false
+      Use Timestamp: false
+      Value: false
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
       Enabled: true
       Name: Map
-      Topic: /map
+      Topic: /servicebot/move_base/global_costmap/costmap
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -342,17 +395,7 @@ Visualization Manager:
       Draw Behind: false
       Enabled: true
       Name: Map
-      Topic: /move_base/local_costmap/costmap
-      Unreliable: false
-      Use Timestamp: false
-      Value: true
-    - Alpha: 0.699999988
-      Class: rviz/Map
-      Color Scheme: map
-      Draw Behind: false
-      Enabled: true
-      Name: Map
-      Topic: /move_base/global_costmap/costmap
+      Topic: /servicebot/move_base/local_costmap/costmap
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -369,7 +412,7 @@ Visualization Manager:
       Shaft Length: 0.230000004
       Shaft Radius: 0.00999999978
       Shape: Arrow (Flat)
-      Topic: /particlecloud
+      Topic: /servicebot/particlecloud
       Unreliable: false
       Value: true
   Enabled: true
@@ -397,7 +440,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 41.3267059
+      Distance: 43.0479355
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1

@@ -1,7 +1,7 @@
 <launch>
 <node ns="servicebot" pkg="amcl" type="amcl" name="amcl" output="screen">
   <!-- Publish scans from best pose at a max of 10 Hz -->
-  <param name="odom_model_type" value="diff"/>
+  <param name="odom_model_type" value="diff-corrected"/>
   <param name="odom_alpha5" value="0.1"/>
   <param name="transform_tolerance" value="0.2" />
   <param name="gui_publish_rate" value="10.0"/>
@@ -32,5 +32,9 @@
   <param name="transform_tolerance" value="0.1"/>
   <param name="recovery_alpha_slow" value="0.0"/>
   <param name="recovery_alpha_fast" value="0.0"/>
+
+  <param name="initial_cov_xx" value="1.0"/>
+  <param name="initial_cov_yy" value="1.0"/>
+  <param name="initial_cov_aa" value="1.0"/>
 </node>
 </launch>
