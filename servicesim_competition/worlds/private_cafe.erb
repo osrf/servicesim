@@ -133,6 +133,32 @@
     </pose>
     <uri>model://office_table</uri>
   </include>
+
+  <%
+    nn = 0
+    for c_x in [-23.0, -25.0]
+      for c_y in [12.5, 11.75, 9.15, 8.34]
+
+        nn += 1
+        yaw = c_x == -23.0 ? 0.0 : $pi
+        yaw += rand(-0.5..0.5)
+  %>
+
+    <!--include>
+      <name>chair_<%= n %>_<%= nn %></name>
+      <pose>
+        <%= c_x%>
+        <%= c_y %>
+        0
+        0
+        0
+        <%= yaw %>
+      </pose>
+      <uri>model://chair</uri>
+    </include-->
+
+      <% end %>
+    <% end %>
 <% end %>
 
 <include>

@@ -150,5 +150,39 @@
     <uri>model://cafe_table</uri>
   </include>
 
+  <%
+    nn = 0
+    for c_x in [-0.5, 0.5]
+      for c_y in [-0.5, 0.5]
+
+        nn += 1
+
+        if c_x == -0.5 and c_y == -0.5
+          yaw = -$pi * 0.75
+        elsif c_x == -0.5 and c_y == 0.5
+          yaw = $pi * 0.75
+        elsif c_x == 0.5 and c_y == -0.5
+          yaw = -$pi * 0.25
+        elsif c_x == 0.5 and c_y == 0.5
+          yaw = $pi * 0.25
+        end
+
+        yaw += rand(-0.5..0.5)
+
+        $pose =
+        [
+          start_x + x * space_x + c_x,
+          start_y + y * space_y + c_y,
+          0,
+          0,
+          0,
+          yaw
+        ]
+  %>
+
+        <%= fromFile(DIR + "/chair.erb") %>
+
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>

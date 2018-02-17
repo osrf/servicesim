@@ -1,0 +1,347 @@
+<%
+  # Template for a cafe chair
+  #
+  # Required variables
+  # * $count (number) For unique names
+  # * $cubicle_pose (number[6]) Pose of starting edge
+
+  $count += 1
+
+  $color =
+  [
+    rand(0.0..1.0),
+    rand(0.0..1.0),
+    rand(0.0..1.0),
+  ]
+
+  def printMaterial()
+
+      "<material>\n"\
+      "  <diffuse>\n"\
+      "    0.5\n"\
+      "    0.5\n"\
+      "    0.5\n"\
+      "    1\n"\
+      "  </diffuse>\n"\
+      "  <specular>\n"\
+      "    0.5\n"\
+      "    0.5\n"\
+      "    0.5\n"\
+      "    1\n"\
+      "  </specular>\n"\
+      "  <ambient>\n"\
+      "  " + $color[0].to_s() + "\n"\
+      "  " + $color[1].to_s() + "\n"\
+      "  " + $color[2].to_s() + "\n"\
+      "    1\n"\
+      "  </ambient>\n"\
+      "</material>\n"
+  end
+%>
+
+
+<model name='chair_<%= $count %>'>
+
+  <static>true</static>
+
+  <pose>
+    <%= $pose[0] %>
+    <%= $pose[1] %>
+    <%= $pose[2] + 0.85 %>
+    <%= $pose[3] %>
+    <%= $pose[4] %>
+    <%= $pose[5] %>
+  </pose>
+
+  <link name='link_0'>
+    <pose frame=''>-0.112954 0.002154 -0.208402 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.254492</radius>
+          <length>0.0690057</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.254492</radius>
+          <length>0.069006</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone'>
+    <pose frame=''>-0.23509 -0.177559 -0.509133 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.624683</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.624683</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone_clone'>
+    <pose frame=''>-0.240938 0.153013 -0.509133 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.624683</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.624683</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone_clone_0'>
+    <pose frame=''>0.036021 0.151623 -0.509133 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.624683</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.624683</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone_clone_1'>
+    <pose frame=''>0.010219 -0.181073 -0.509133 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.624683</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.624683</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone_clone_1_clone'>
+    <pose frame=''>0.014987 -0.161898 0.047314 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone_clone_1_clone_clone'>
+    <pose frame=''>0.067643 -0.07581 0.047314 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone_clone_1_clone_clone_0'>
+    <pose frame=''>0.09896 0.009345 0.047314 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone_clone_1_clone_clone_1'>
+    <pose frame=''>0.062061 0.101632 0.047314 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_0_clone_clone_1_clone_clone_2'>
+    <pose frame=''>0.017719 0.173047 0.047314 0 -0 0</pose>
+    <visual name='visual'>
+      <geometry>
+        <cylinder>
+          <radius>0.0139887</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <cylinder>
+          <radius>0.013989</radius>
+          <length>0.470785</length>
+        </cylinder>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_1'>
+    <pose frame=''>0.029884 -0.160862 0.401672 0 0 -0.896575</pose>
+    <visual name='visual'>
+      <geometry>
+        <box>
+          <size>0.085272 0.095133 0.269596</size>
+        </box>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <box>
+          <size>0.085272 0.095133 0.269596</size>
+        </box>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_1_clone'>
+    <pose frame=''>0.07344 -0.104423 0.401674 0 0 -0.405782</pose>
+    <visual name='visual'>
+      <geometry>
+        <box>
+          <size>0.085272 0.095133 0.269596</size>
+        </box>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <box>
+          <size>0.085272 0.095133 0.269596</size>
+        </box>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_1_clone_0'>
+    <pose frame=''>0.086562 0.003017 0.401674 0 -0 0.028173</pose>
+    <visual name='visual'>
+      <geometry>
+        <box>
+          <size>0.085272 0.161256 0.269596</size>
+        </box>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <box>
+          <size>0.085272 0.161256 0.269596</size>
+        </box>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_1_clone_1'>
+    <pose frame=''>0.06694 0.106481 0.401674 0 -0 0.482169</pose>
+    <visual name='visual'>
+      <geometry>
+        <box>
+          <size>0.085272 0.095133 0.269596</size>
+        </box>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <box>
+          <size>0.085272 0.095133 0.269596</size>
+        </box>
+      </geometry>
+    </collision>
+  </link>
+  <link name='link_1_clone_2'>
+    <pose frame=''>0.021757 0.157964 0.401674 0 -0 0.877817</pose>
+    <visual name='visual'>
+      <geometry>
+        <box>
+          <size>0.085272 0.095133 0.269596</size>
+        </box>
+      </geometry>
+      <%= printMaterial() %>
+    </visual>
+    <collision name='collision'>
+      <geometry>
+        <box>
+          <size>0.085272 0.095133 0.269596</size>
+        </box>
+      </geometry>
+    </collision>
+  </link>
+  <static>0</static>
+</model>
