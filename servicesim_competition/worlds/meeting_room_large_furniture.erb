@@ -3,20 +3,21 @@
   #
   # Required variables
   # * $o (number) length of an office unit
-  # * $pi (number)
+  # * $pi (number) Math::Pi
+
+  $table_size = 'large'
+  $pose =
+  [
+    1.15*$o,
+    -2*$o,
+    0,
+    0,
+    0,
+    0
+  ]
 %>
 
-<include>
-  <pose>
-    <%= 1.15*$o %>
-    <%= -2*$o %>
-    0
-    0
-    0
-    0
-  </pose>
-  <uri>model://conference_table_large</uri>
-</include>
+<%= fromFile(DIR + "/conference_table.erb") %>
 
 <include>
   <pose>
@@ -30,24 +31,3 @@
   <uri>model://whiteboard</uri>
 </include>
 
-<%
-  for x in (0..4)
-    for y in [-1.6*$o, -1*$o]
-      yaw = y == -1 * $o ? 0.0 : $pi
-      yaw += rand(-0.15..0.15)
-      y += rand(-0.05..0.05)
-%>
-  <include>
-    <name>chair_<%= x %>_<%= y %></name>
-    <pose>
-      <%= x * $o * 0.6 %>
-      <%= y * $o %>
-      0
-      0
-      0
-      <%= yaw %>
-    </pose>
-    <uri>model://desk_chair</uri>
-  </include>
-  <% end %>
-<% end %>
