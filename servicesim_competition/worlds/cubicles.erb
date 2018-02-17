@@ -234,10 +234,14 @@
       for side in [-1, 1]
 
         count += 1
-        x_off = 0.8
+
+        x_off = 0.884
         x_off_chair = x_off + rand(-0.1..0.1)
-        y_off = -0.4 * side
-        y_off_chair = -0.7 * side
+
+        y_off = -0.1 * side
+        y_off_chair = rand(-0.7..-0.4) * side
+        y_comp = -0.15 * side
+
         yaw = side == -1 ? 0.0 : Math::PI
         yaw_comp = side == -1 ? Math::PI : 0.0
   %>
@@ -253,18 +257,27 @@
       </pose>
       <uri>model://desk</uri>
     </include>
-    <include>
-      <name>computer_<%= count %></name>
+
+    <link name="computer_<%= count %>">
       <pose>
         <%= x * cubicle_u + x_off %>
-        <%= y_off %>
+        <%= y_comp %>
         0.78
         0
         0
         <%= yaw_comp %>
       </pose>
-      <uri>model://computer</uri>
-    </include>
+      <visual name="monitor">
+        <geometry>
+          <mesh>
+            <uri>model://computer/meshes/computer_monitor.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+
+    </link>
+
     <include>
       <name>chair_<%= count %></name>
       <pose>
@@ -273,7 +286,7 @@
         0
         0
         0
-        <%= yaw + rand(-0.4..0.4) %>
+        <%= yaw + rand(-0.7..0.7) %>
       </pose>
       <uri>model://office_chair</uri>
     </include>
