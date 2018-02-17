@@ -7,6 +7,7 @@
   # * $count (number) For unique names
   # * $cubicle_size (number) row count
   # * $cubicle_pose (number[6]) Pose of starting edge
+  # * $floorplan (bool)
 
   # Unit size of a cubicle element
   cubicle_u = 0.6
@@ -42,7 +43,7 @@
     <%= $cubicle_pose[5] %>
   </pose>
 
-  <link name="link">
+  <link name="walls">
 
     <!-- center wall -->
     <%
@@ -222,5 +223,77 @@
     <% end %>
 
   </link>
+
+<%
+  if not $floorplan
+%>
+  <!-- furniture -->
+  <%
+    for x in (x_min..x_max).step(x_size)
+
+      for side in [-1, 1]
+
+        count += 1
+
+        x_off = 0.884
+        x_off_chair = x_off + rand(-0.1..0.1)
+
+        y_off = -0.1 * side
+        y_off_chair = rand(-0.7..-0.4) * side
+        y_comp = -0.15 * side
+
+        yaw = side == -1 ? 0.0 : Math::PI
+        yaw_comp = side == -1 ? Math::PI : 0.0
+  %>
+    <include>
+      <name>desk_<%= count %></name>
+      <pose>
+        <%= x * cubicle_u + x_off %>
+        <%= y_off %>
+        0.1
+        0
+        0
+        <%= yaw %>
+      </pose>
+      <uri>model://desk</uri>
+    </include>
+
+    <link name="computer_<%= count %>">
+      <pose>
+        <%= x * cubicle_u + x_off %>
+        <%= y_comp %>
+        0.78
+        0
+        0
+        <%= yaw_comp %>
+      </pose>
+      <visual name="monitor">
+        <geometry>
+          <mesh>
+            <uri>model://computer/meshes/computer_monitor.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+
+    </link>
+
+    <include>
+      <name>chair_<%= count %></name>
+      <pose>
+        <%= x * cubicle_u + x_off_chair %>
+        <%= y_off_chair %>
+        0
+        0
+        0
+        <%= yaw + rand(-0.7..0.7) %>
+      </pose>
+      <uri>model://office_chair</uri>
+    </include>
+    <% end %>
+  <% end %>
+<%
+  end # if not $floorplan
+%>
 
 </model>
