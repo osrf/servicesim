@@ -1,7 +1,7 @@
 
 <!--
   Generated from service.world.erb
-  Seed: 7144249
+  Seed: 7963076
   Floorplan: false
 -->
 <?xml version="1.0" ?>
@@ -8831,12 +8831,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -8844,12 +8845,62 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 5.588748038684627</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+<include>
+  <pose>
+    -0.6
+    -2.1
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+  <uri>model://toilet</uri>
+</include>
+
+<include>
+  <pose>
+    0.9
+    -2.35
+    0
+    0
+    0
+    -0.7853981633974483
+  </pose>
+  <uri>model://wastebasket</uri>
+</include>
+
 
   
 
@@ -9718,7 +9769,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.7410195936440385</pose>
+      <pose>-0.3 -0.05 0 0 0 6.234478055746349</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -10399,7 +10450,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.904075773629675</pose>
+      <pose>-0.3 -0.05 0 0 0 5.5517712444091405</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -10439,135 +10490,135 @@
 
 
   <include>
-    <name>chair_0.0_-4.452983166019174</name>
+    <name>chair_0.0_-3.9164049291726184</name>
     <pose>
       0.0
-      -4.452983166019174
+      -3.9164049291726184
       0
       0
       0
-      2.754227681584349
+      3.460722857461126
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.0_-1.649301359167675</name>
+    <name>chair_0.0_-2.0922606447487517</name>
     <pose>
       0.0
-      -1.649301359167675
+      -2.0922606447487517
       0
       0
       0
-      0.21517266377181143
+      0.10454872686213312
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_0.9_-3.777902153527303</name>
+    <name>chair_0.9_-3.9755623090806065</name>
     <pose>
       0.9
-      -3.777902153527303
+      -3.9755623090806065
       0
       0
       0
-      3.032255827934002
+      2.8362905776232257
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.9_-2.065144744780154</name>
+    <name>chair_0.9_-2.1051228391677377</name>
     <pose>
       0.9
-      -2.065144744780154
+      -2.1051228391677377
       0
       0
       0
-      -0.1086190470330326
+      0.33325726580030746
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_1.8_-3.7712052604007966</name>
+    <name>chair_1.8_-3.994339667913205</name>
     <pose>
       1.8
-      -3.7712052604007966
+      -3.994339667913205
       0
       0
       0
-      3.357531068114791
+      3.101987001793283
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_1.8_-2.2046818484153263</name>
+    <name>chair_1.8_-1.6538907405711822</name>
     <pose>
       1.8
-      -2.2046818484153263
+      -1.6538907405711822
       0
       0
       0
-      0.28273459419922364
+      -0.2446481696931918
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_2.7_-3.8909076027224976</name>
+    <name>chair_2.7_-4.138346242439599</name>
     <pose>
       2.7
-      -3.8909076027224976
+      -4.138346242439599
       0
       0
       0
-      3.3251223900612352
+      3.4197081206820696
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_2.7_-1.633378287959931</name>
+    <name>chair_2.7_-2.459241084438629</name>
     <pose>
       2.7
-      -1.633378287959931
+      -2.459241084438629
       0
       0
       0
-      0.14914608195969659
+      0.3529983640071205
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_3.6_-3.8483569570000817</name>
+    <name>chair_3.6_-3.802463502878651</name>
     <pose>
       3.6
-      -3.8483569570000817
+      -3.802463502878651
       0
       0
       0
-      3.3502738289796814
+      3.3190101979057545
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_3.6_-2.0257354769649916</name>
+    <name>chair_3.6_-1.9954921799260537</name>
     <pose>
       3.6
-      -2.0257354769649916
+      -1.9954921799260537
       0
       0
       0
-      0.11824579573018346
+      -0.12718353639291957
     </pose>
     <uri>model://desk_chair</uri>
   </include>
@@ -10582,7 +10633,7 @@
     0
     0
     0
-    2.2744989590839384
+    2.319901286137891
   </pose>
   <uri>model://whiteboard</uri>
 </include>
@@ -10996,13 +11047,12 @@
 
 
   
-
-    <link name="door_frame">
+    <link name="closed_door">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -11010,148 +11060,12 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.697381864644183</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <!-- Furniture if door is open -->
-    
-
-
-
-<include>
-  <pose>
-    0.44999999999999996
-    -2.4000000000000004
-    0
-    0
-    0
-    0
-  </pose>
-  <uri>model://conference_table_small</uri>
-</include>
-
-
-  <include>
-    <name>chair_0.0_-3.750567820187078</name>
-    <pose>
-      0.0
-      -3.750567820187078
-      0
-      0
-      0
-      3.2634267391695024
-    </pose>
-    <uri>model://desk_chair</uri>
-  </include>
-  
-  <include>
-    <name>chair_0.0_-1.2629490470195828</name>
-    <pose>
-      0.0
-      -1.2629490470195828
-      0
-      0
-      0
-      0.3179782292359514
-    </pose>
-    <uri>model://desk_chair</uri>
-  </include>
-  
-
-  <include>
-    <name>chair_0.9_-3.892890028717331</name>
-    <pose>
-      0.9
-      -3.892890028717331
-      0
-      0
-      0
-      3.2150280247708753
-    </pose>
-    <uri>model://desk_chair</uri>
-  </include>
-  
-  <include>
-    <name>chair_0.9_-1.3857013312164521</name>
-    <pose>
-      0.9
-      -1.3857013312164521
-      0
-      0
-      0
-      0.006542745596069377
-    </pose>
-    <uri>model://desk_chair</uri>
-  </include>
-  
-
-  <include>
-    <name>chair_1.8_-3.24182334239908</name>
-    <pose>
-      1.8
-      -3.24182334239908
-      0
-      0
-      0
-      3.010400439177159
-    </pose>
-    <uri>model://desk_chair</uri>
-  </include>
-  
-  <include>
-    <name>chair_1.8_-1.6582901241255532</name>
-    <pose>
-      1.8
-      -1.6582901241255532
-      0
-      0
-      0
-      -0.16831511048497216
-    </pose>
-    <uri>model://desk_chair</uri>
-  </include>
-  
-
-
-
-<include>
-  <pose>
-    -2.25
-    -2.0999999999999996
-    0
-    0
-    0
-    1.5707963267948966
-  </pose>
-  <uri>model://whiteboard</uri>
-</include>
-
 
   
 
@@ -11583,7 +11497,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.4858531967952</pose>
+      <pose>-0.3 -0.05 0 0 0 5.627582460134938</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -11623,81 +11537,81 @@
 
 
   <include>
-    <name>chair_0.0_-3.39857194541187</name>
+    <name>chair_0.0_-3.8776403503804713</name>
     <pose>
       0.0
-      -3.39857194541187
+      -3.8776403503804713
       0
       0
       0
-      2.9037793128357037
+      2.9096187821135757
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.0_-0.9851697967932058</name>
+    <name>chair_0.0_-1.0108187194547953</name>
     <pose>
       0.0
-      -0.9851697967932058
+      -1.0108187194547953
       0
       0
       0
-      -0.32842641183197413
+      0.1122027286537588
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_0.9_-3.572484827511644</name>
+    <name>chair_0.9_-3.1846388787060516</name>
     <pose>
       0.9
-      -3.572484827511644
+      -3.1846388787060516
       0
       0
       0
-      2.9807849253897567
+      3.3216155278806014
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.9_-1.6664775669301497</name>
+    <name>chair_0.9_-1.1069110953056402</name>
     <pose>
       0.9
-      -1.6664775669301497
+      -1.1069110953056402
       0
       0
       0
-      0.37196124048772006
+      -0.1738348206177844
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_1.8_-3.3417103953716336</name>
+    <name>chair_1.8_-3.7713249787973777</name>
     <pose>
       1.8
-      -3.3417103953716336
+      -3.7713249787973777
       0
       0
       0
-      3.4059861078796327
+      3.0088134924313263
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_1.8_-1.646128653796569</name>
+    <name>chair_1.8_-1.3663193022070352</name>
     <pose>
       1.8
-      -1.646128653796569
+      -1.3663193022070352
       0
       0
       0
-      0.062155097996655084
+      0.2728113203476994
     </pose>
     <uri>model://desk_chair</uri>
   </include>
@@ -12012,13 +11926,12 @@
 
 
   
-
-    <link name="door_frame">
+    <link name="closed_door">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -12026,37 +11939,13 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
 
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.921232985152464</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <!-- Furniture if door is open -->
-    
   
 
 
@@ -12351,13 +12240,12 @@
 
 
   
-
-    <link name="door_frame">
+    <link name="closed_door">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -12365,37 +12253,13 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
 
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.98891490584276</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <!-- Furniture if door is open -->
-    
   
 
 
@@ -12826,7 +12690,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.765013304140701</pose>
+      <pose>-0.3 -0.05 0 0 0 5.919933750139573</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -12866,81 +12730,81 @@
 
 
   <include>
-    <name>chair_0.0_-2.950289947520247</name>
+    <name>chair_0.0_-3.6798415100810704</name>
     <pose>
       0.0
-      -2.950289947520247
+      -3.6798415100810704
       0
       0
       0
-      3.4555888064520643
+      2.8161177527521097
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.0_-1.4594255587214995</name>
+    <name>chair_0.0_-0.9351021774998296</name>
     <pose>
       0.0
-      -1.4594255587214995
+      -0.9351021774998296
       0
       0
       0
-      -0.0015640361212984066
+      0.07477852663139661
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_0.9_-3.1863266908668777</name>
+    <name>chair_0.9_-3.193838199741891</name>
     <pose>
       0.9
-      -3.1863266908668777
+      -3.193838199741891
       0
       0
       0
-      3.279976682749786
+      3.0696794551104483
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.9_-1.2688133171331741</name>
+    <name>chair_0.9_-1.772415755687005</name>
     <pose>
       0.9
-      -1.2688133171331741
+      -1.772415755687005
       0
       0
       0
-      -0.22402710546508794
+      -0.14422085657613293
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_1.8_-3.76446691508247</name>
+    <name>chair_1.8_-3.1461736609529476</name>
     <pose>
       1.8
-      -3.76446691508247
+      -3.1461736609529476
       0
       0
       0
-      2.981025370664635
+      3.540265944261603
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_1.8_-1.4278117861907051</name>
+    <name>chair_1.8_-1.331140370621736</name>
     <pose>
       1.8
-      -1.4278117861907051
+      -1.331140370621736
       0
       0
       0
-      -0.03413090503723515
+      -0.32263860907624786
     </pose>
     <uri>model://desk_chair</uri>
   </include>
@@ -13391,7 +13255,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.998987004415822</pose>
+      <pose>-0.3 -0.05 0 0 0 5.912393614517795</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -13431,81 +13295,81 @@
 
 
   <include>
-    <name>chair_0.0_-3.088686849318652</name>
+    <name>chair_0.0_-3.2059809612209516</name>
     <pose>
       0.0
-      -3.088686849318652
+      -3.2059809612209516
       0
       0
       0
-      3.186188057093644
+      3.3705146116588605
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.0_-1.8178241889035531</name>
+    <name>chair_0.0_-1.8708323961854187</name>
     <pose>
       0.0
-      -1.8178241889035531
+      -1.8708323961854187
       0
       0
       0
-      0.05647976557773837
+      0.2019685690108013
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_0.9_-2.948162083715318</name>
+    <name>chair_0.9_-3.8664350375473497</name>
     <pose>
       0.9
-      -2.948162083715318
+      -3.8664350375473497
       0
       0
       0
-      2.763774528745508
+      3.438148304180304
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.9_-0.9379453933328947</name>
+    <name>chair_0.9_-1.8212667281295651</name>
     <pose>
       0.9
-      -0.9379453933328947
+      -1.8212667281295651
       0
       0
       0
-      0.3597164696173242
+      0.350695349675582
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_1.8_-3.892993179656088</name>
+    <name>chair_1.8_-3.1236052668299994</name>
     <pose>
       1.8
-      -3.892993179656088
+      -3.1236052668299994
       0
       0
       0
-      3.4926011674962387
+      3.138298877618944
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_1.8_-1.0490627074573018</name>
+    <name>chair_1.8_-1.4972157732656175</name>
     <pose>
       1.8
-      -1.0490627074573018
+      -1.4972157732656175
       0
       0
       0
-      0.031034711443973517
+      -0.06404564613280223
     </pose>
     <uri>model://desk_chair</uri>
   </include>
@@ -13782,12 +13646,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -13795,12 +13660,62 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 6.029998240073981</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+<include>
+  <pose>
+    -0.6
+    -2.1
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+  <uri>model://toilet</uri>
+</include>
+
+<include>
+  <pose>
+    0.9
+    -2.35
+    0
+    0
+    0
+    -0.7853981633974483
+  </pose>
+  <uri>model://wastebasket</uri>
+</include>
+
 
   
 
@@ -14058,12 +13973,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -14071,12 +13987,62 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 5.609634156237242</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+<include>
+  <pose>
+    -0.6
+    -2.1
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+  <uri>model://toilet</uri>
+</include>
+
+<include>
+  <pose>
+    0.9
+    -2.35
+    0
+    0
+    0
+    -0.7853981633974483
+  </pose>
+  <uri>model://wastebasket</uri>
+</include>
+
 
   
 
@@ -14394,7 +14360,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.635612784728657</pose>
+      <pose>-0.3 -0.05 0 0 0 5.412104045943664</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -14417,6 +14383,153 @@
 
     <!-- Furniture if door is open -->
     
+
+
+
+  <model name="cubicle_corner_1">
+    <static>true</static>
+    <pose>
+      1.5
+      -3.0
+      0
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -0.45
+      -1.22
+      0.76
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.21479299605352
+      -1.3700535819144493
+      0
+      0
+      0
+      1.8901352819765478
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
+
+  <model name="cubicle_corner_2">
+    <static>true</static>
+    <pose>
+      -3.0
+      -3.0
+      0
+      0
+      0
+      3.141592653589793
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -0.45
+      -1.22
+      0.76
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.3044935527351997
+      -1.2163881762826028
+      0
+      0
+      0
+      2.3222320999874144
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
+<include>
+  <pose>
+    -2.5
+    -0.5
+    0
+    0
+    0
+    0
+  </pose>
+  <uri>model://office_box</uri>
+</include>
+
+
+<include>
+  <pose>
+    1.1
+    -0.5
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+  <uri>model://hangout_chair</uri>
+</include>
+
   
 
 
@@ -14711,12 +14824,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -14724,12 +14838,183 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 5.792295875969334</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+
+
+  <model name="cubicle_corner_3">
+    <static>true</static>
+    <pose>
+      1.5
+      -3.0
+      0
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -0.45
+      -1.22
+      0.76
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.1642959014164325
+      -1.5156335629708984
+      0
+      0
+      0
+      2.6298873011406183
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
+
+  <model name="cubicle_corner_4">
+    <static>true</static>
+    <pose>
+      -3.0
+      -3.0
+      0
+      0
+      0
+      3.141592653589793
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -1.22
+      -0.45
+      0.76
+      0
+      0
+      0.0
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.202454908508791
+      -1.4096525799508646
+      0
+      0
+      0
+      1.6588437328900894
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
+<include>
+  <pose>
+    -2.5
+    -0.5
+    0
+    0
+    0
+    0
+  </pose>
+  <uri>model://wastebasket</uri>
+</include>
+
+
+<include>
+  <pose>
+    1.1
+    -0.5
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+  <uri>model://hangout_chair</uri>
+</include>
 
   
 
@@ -15025,12 +15310,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -15038,12 +15324,183 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 5.949229080075476</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+
+
+  <model name="cubicle_corner_5">
+    <static>true</static>
+    <pose>
+      1.5
+      -3.0
+      0
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -1.22
+      -0.45
+      0.76
+      0
+      0
+      0.0
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.2788788307019785
+      -1.8424037127498392
+      0
+      0
+      0
+      2.564522596366637
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
+
+  <model name="cubicle_corner_6">
+    <static>true</static>
+    <pose>
+      -3.0
+      -3.0
+      0
+      0
+      0
+      3.141592653589793
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -1.22
+      -0.45
+      0.76
+      0
+      0
+      0.0
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.2649808062034646
+      -1.6518532432704713
+      0
+      0
+      0
+      2.1981417452697016
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
+<include>
+  <pose>
+    -2.5
+    -0.5
+    0
+    0
+    0
+    0
+  </pose>
+  <uri>model://office_box</uri>
+</include>
+
+
+<include>
+  <pose>
+    1.1
+    -0.5
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+  <uri>model://hangout_chair</uri>
+</include>
 
   
 
@@ -15475,7 +15932,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 6.234801351366114</pose>
+      <pose>-0.3 -0.05 0 0 0 5.4477311519791165</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -15498,6 +15955,201 @@
 
     <!-- Furniture if door is open -->
     
+
+
+<include>
+  <pose>
+    -2.4000000000000004
+    -0.4
+    0
+    0
+    0
+    0
+  </pose>
+  <uri>model://hangout_chair</uri>
+</include>
+
+
+
+  <model name="cubicle_corner_7">
+    <static>true</static>
+    <pose>
+      3.0
+      -4.5
+      0
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -0.45
+      -1.22
+      0.76
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.383979961401201
+      -1.3254743255030628
+      0
+      0
+      0
+      2.2771482255753406
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
+
+  <model name="cubicle_corner_8">
+    <static>true</static>
+    <pose>
+      -3.0
+      -4.5
+      0
+      0
+      0
+      3.141592653589793
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -0.45
+      -1.22
+      0.76
+      0
+      0
+      -1.5707963267948966
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.1846846169732947
+      -1.2755476354333815
+      0
+      0
+      0
+      2.821361140940678
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
+
+  <model name="cubicle_corner_9">
+    <static>true</static>
+    <pose>
+      3.0
+      0
+      0
+      0
+      0
+      0
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -1.22
+      -0.45
+      0.76
+      0
+      0
+      0.0
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.2289026730204873
+      -1.9017969223098126
+      0
+      0
+      0
+      1.7735912469900168
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+
+
   
 
 
@@ -15928,7 +16580,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.903051319694319</pose>
+      <pose>-0.3 -0.05 0 0 0 6.072186101325736</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -15968,81 +16620,81 @@
 
 
   <include>
-    <name>chair_0.0_-3.4012630376601374</name>
+    <name>chair_0.0_-3.1104376008540893</name>
     <pose>
       0.0
-      -3.4012630376601374
+      -3.1104376008540893
       0
       0
       0
-      3.203721405794811
+      2.926329104309637
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.0_-1.3679665199354196</name>
+    <name>chair_0.0_-1.1818809791187421</name>
     <pose>
       0.0
-      -1.3679665199354196
+      -1.1818809791187421
       0
       0
       0
-      0.15570980501441223
+      0.11452539465623945
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_0.9_-3.404693244797406</name>
+    <name>chair_0.9_-3.149529723757788</name>
     <pose>
       0.9
-      -3.404693244797406
+      -3.149529723757788
       0
       0
       0
-      3.313469805518668
+      2.9268184929912047
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_0.9_-1.8101938958807156</name>
+    <name>chair_0.9_-1.319557924389902</name>
     <pose>
       0.9
-      -1.8101938958807156
+      -1.319557924389902
       0
       0
       0
-      0.13314497704449368
+      0.33482677459132315
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
 
   <include>
-    <name>chair_1.8_-3.71131895851272</name>
+    <name>chair_1.8_-3.298060542705957</name>
     <pose>
       1.8
-      -3.71131895851272
+      -3.298060542705957
       0
       0
       0
-      2.9641323805468827
+      2.9511593395179894
     </pose>
     <uri>model://desk_chair</uri>
   </include>
   
   <include>
-    <name>chair_1.8_-1.8119994067678848</name>
+    <name>chair_1.8_-1.7249043132085324</name>
     <pose>
       1.8
-      -1.8119994067678848
+      -1.7249043132085324
       0
       0
       0
-      -0.23662461236380922
+      -0.3133311778844914
     </pose>
     <uri>model://desk_chair</uri>
   </include>
@@ -16471,12 +17123,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -16484,12 +17137,148 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 6.1215824036015185</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+
+
+<include>
+  <pose>
+    0.44999999999999996
+    -2.4000000000000004
+    0
+    0
+    0
+    0
+  </pose>
+  <uri>model://conference_table_small</uri>
+</include>
+
+
+  <include>
+    <name>chair_0.0_-3.5842646926145427</name>
+    <pose>
+      0.0
+      -3.5842646926145427
+      0
+      0
+      0
+      3.1497498459017814
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+  <include>
+    <name>chair_0.0_-1.1993524136107079</name>
+    <pose>
+      0.0
+      -1.1993524136107079
+      0
+      0
+      0
+      -0.249963639111352
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+
+  <include>
+    <name>chair_0.9_-2.967620500066237</name>
+    <pose>
+      0.9
+      -2.967620500066237
+      0
+      0
+      0
+      3.381675542007099
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+  <include>
+    <name>chair_0.9_-1.7308375901767223</name>
+    <pose>
+      0.9
+      -1.7308375901767223
+      0
+      0
+      0
+      0.06749006427321247
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+
+  <include>
+    <name>chair_1.8_-3.639920459658492</name>
+    <pose>
+      1.8
+      -3.639920459658492
+      0
+      0
+      0
+      2.9924914330613857
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+  <include>
+    <name>chair_1.8_-1.8503205162139442</name>
+    <pose>
+      1.8
+      -1.8503205162139442
+      0
+      0
+      0
+      0.34800005889924157
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+
+
+
+<include>
+  <pose>
+    -2.25
+    -2.0999999999999996
+    0
+    0
+    0
+    1.5707963267948966
+  </pose>
+  <uri>model://whiteboard</uri>
+</include>
+
 
   
 
@@ -16899,12 +17688,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -16912,12 +17702,148 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 5.988280676718326</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+
+
+<include>
+  <pose>
+    0.44999999999999996
+    -2.4000000000000004
+    0
+    0
+    0
+    0
+  </pose>
+  <uri>model://conference_table_small</uri>
+</include>
+
+
+  <include>
+    <name>chair_0.0_-3.4901921795447706</name>
+    <pose>
+      0.0
+      -3.4901921795447706
+      0
+      0
+      0
+      2.862324540219719
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+  <include>
+    <name>chair_0.0_-1.5306952947625796</name>
+    <pose>
+      0.0
+      -1.5306952947625796
+      0
+      0
+      0
+      0.006940878288835051
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+
+  <include>
+    <name>chair_0.9_-3.000114453437293</name>
+    <pose>
+      0.9
+      -3.000114453437293
+      0
+      0
+      0
+      3.002611065943004
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+  <include>
+    <name>chair_0.9_-1.5000545695575234</name>
+    <pose>
+      0.9
+      -1.5000545695575234
+      0
+      0
+      0
+      -0.09168861047697208
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+
+  <include>
+    <name>chair_1.8_-3.309826757882273</name>
+    <pose>
+      1.8
+      -3.309826757882273
+      0
+      0
+      0
+      2.796687397185316
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+  <include>
+    <name>chair_1.8_-1.7054796238163374</name>
+    <pose>
+      1.8
+      -1.7054796238163374
+      0
+      0
+      0
+      0.06331934165650993
+    </pose>
+    <uri>model://desk_chair</uri>
+  </include>
+  
+
+
+
+<include>
+  <pose>
+    -2.25
+    -2.0999999999999996
+    0
+    0
+    0
+    1.5707963267948966
+  </pose>
+  <uri>model://whiteboard</uri>
+</include>
+
 
   
 
@@ -16930,7 +17856,7 @@
     <!-- Public cubicles -->
     
       
-  <model name="cubicle_island_1">
+  <model name="cubicle_island_10">
     <static>true</static>
     <pose>
       9.0
@@ -16978,12 +17904,12 @@
       <include>
         <name>chair_-1_-1</name>
         <pose>
-          -1.790114271532551
-          -1.1855756935975912
+          -1.6600825458815733
+          -1.649919705661226
           0
           0
           0
-          1.9781082088372002
+          2.5209971532336946
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -17005,12 +17931,12 @@
       <include>
         <name>chair_-1_1</name>
         <pose>
-          -1.5663858103126551
-          1.8902541884847186
+          -1.2556223881862332
+          1.6216110830982113
           0
           0
           0
-          0.3154331187074365
+          1.4605734748741745
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -17019,12 +17945,12 @@
       <include>
         <name>computer_1_-1</name>
         <pose>
-          1.22
-          -0.45
+          0.45
+          -1.22
           0.76
           0
           0
-          0.0
+          1.5707963267948966
         </pose>
         <uri>model://computer</uri>
       </include>
@@ -17033,12 +17959,12 @@
       <include>
         <name>chair_1_-1</name>
         <pose>
-          1.6623349908864666
-          -1.1675826520660169
+          1.6466895975557718
+          -1.4603971854527873
           0
           0
           0
-          -1.9391869725737187
+          -2.484016591911716
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -17060,12 +17986,12 @@
       <include>
         <name>chair_1_1</name>
         <pose>
-          1.220727303443661
-          1.480209710751035
+          1.7757827743483845
+          1.3743848575017468
           0
           0
           0
-          -0.17173886355469214
+          -0.16423631362446955
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -17077,7 +18003,7 @@
 
     
       
-  <model name="cubicle_island_2">
+  <model name="cubicle_island_11">
     <static>true</static>
     <pose>
       9.0
@@ -17125,12 +18051,12 @@
       <include>
         <name>chair_-1_-1</name>
         <pose>
-          -1.5029292362993028
-          -1.5159115513371468
+          -1.8411020578389605
+          -1.4709696529041891
           0
           0
           0
-          2.2869567681917524
+          1.8170128712647673
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -17152,12 +18078,12 @@
       <include>
         <name>chair_-1_1</name>
         <pose>
-          -1.3584067294345452
-          1.9508750963812742
+          -1.4137979139809216
+          1.6982527471521869
           0
           0
           0
-          0.8332716029856624
+          1.289438537049151
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -17166,12 +18092,12 @@
       <include>
         <name>computer_1_-1</name>
         <pose>
-          1.22
-          -0.45
+          0.45
+          -1.22
           0.76
           0
           0
-          0.0
+          1.5707963267948966
         </pose>
         <uri>model://computer</uri>
       </include>
@@ -17180,12 +18106,12 @@
       <include>
         <name>chair_1_-1</name>
         <pose>
-          1.96945856337693
-          -1.5939961921776624
+          1.8629587061375843
+          -1.3149042304114096
           0
           0
           0
-          -2.7520680364510732
+          -1.8353337418641993
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -17207,12 +18133,12 @@
       <include>
         <name>chair_1_1</name>
         <pose>
-          1.817984581612656
-          1.3662488364341971
+          1.5932321899499216
+          1.8543605634739537
           0
           0
           0
-          -0.09806294423014239
+          -0.8597516337367803
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -17226,7 +18152,7 @@
 
     
       
-  <model name="cubicle_corner_4">
+  <model name="cubicle_corner_13">
     <static>true</static>
     <pose>
       13.6
@@ -17258,12 +18184,12 @@
   
   <include>
     <pose>
-      -0.45
       -1.22
+      -0.45
       0.76
       0
       0
-      -1.5707963267948966
+      0.0
     </pose>
     <uri>model://computer</uri>
   </include>
@@ -17271,12 +18197,12 @@
   
   <include>
     <pose>
-      -1.222161656899839
-      -1.659834021052275
+      -1.3280651612430405
+      -1.383591620806819
       0
       0
       0
-      2.6652965834735642
+      2.6506761936477403
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -17285,7 +18211,7 @@
 
     
       
-  <model name="cubicle_corner_6">
+  <model name="cubicle_corner_15">
     <static>true</static>
     <pose>
       15.5
@@ -17330,12 +18256,12 @@
   
   <include>
     <pose>
-      -1.309221992004401
-      -1.7875367009064864
+      -1.1920247698006647
+      -1.362181466860646
       0
       0
       0
-      3.01722412846871
+      2.287893242400022
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -17344,69 +18270,10 @@
 
     
       
-  <model name="cubicle_corner_8">
+  <model name="cubicle_corner_17">
     <static>true</static>
     <pose>
       17.4
-      10.6
-      0
-      0
-      0
-      3.141592653589793
-    </pose>
-    <link name="link">
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-  <include>
-    <pose>
-      -1.22
-      -0.45
-      0.76
-      0
-      0
-      0.0
-    </pose>
-    <uri>model://computer</uri>
-  </include>
-
-  
-  <include>
-    <pose>
-      -1.3347477892822484
-      -1.7260316610914939
-      0
-      0
-      0
-      2.231837484778957
-    </pose>
-    <uri>model://office_chair</uri>
-  </include>
-
-  </model>
-
-    
-      
-  <model name="cubicle_corner_10">
-    <static>true</static>
-    <pose>
-      19.299999999999997
       10.6
       0
       0
@@ -17448,12 +18315,71 @@
   
   <include>
     <pose>
-      -1.3935745443620258
-      -1.9321839724559542
+      -1.234461938617087
+      -1.1853548589202663
       0
       0
       0
-      3.007122276086668
+      2.6815127979579225
+    </pose>
+    <uri>model://office_chair</uri>
+  </include>
+
+  </model>
+
+    
+      
+  <model name="cubicle_corner_19">
+    <static>true</static>
+    <pose>
+      19.299999999999997
+      10.6
+      0
+      0
+      0
+      3.141592653589793
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+  
+  <include>
+    <pose>
+      -1.22
+      -0.45
+      0.76
+      0
+      0
+      0.0
+    </pose>
+    <uri>model://computer</uri>
+  </include>
+
+  
+  <include>
+    <pose>
+      -1.1344005044951568
+      -1.5098570876133723
+      0
+      0
+      0
+      2.912713291554521
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -17465,7 +18391,7 @@
     <!-- Private cubicles -->
     
     
-<model name="cubicles_11">
+<model name="cubicles_20">
 
   <static>true</static>
 
@@ -18615,7 +19541,7 @@
 
       
     
-<model name="cubicles_12">
+<model name="cubicles_21">
 
   <static>true</static>
 
@@ -19765,7 +20691,7 @@
 
       
     
-<model name="cubicles_13">
+<model name="cubicles_22">
 
   <static>true</static>
 
@@ -20916,7 +21842,7 @@
       
     
     
-<model name="cubicles_14">
+<model name="cubicles_23">
 
   <static>true</static>
 
@@ -21805,7 +22731,7 @@
 
       
     
-<model name="cubicles_15">
+<model name="cubicles_24">
 
   <static>true</static>
 
@@ -22694,7 +23620,7 @@
 
       
     
-<model name="cubicles_16">
+<model name="cubicles_25">
 
   <static>true</static>
 
@@ -23594,12 +24520,12 @@
   <include>
     <name>chair_1</name>
     <pose>
-      1.3664113325457814
-      21.51631516333714
+      1.5076831954159384
+      21.577141411360337
       0
       0
       0
-      -1.7465924914389084
+      -2.036957958400982
     </pose>
     <uri>model://hangout_chair</uri>
   </include>
@@ -23607,12 +24533,12 @@
   <include>
     <name>chair_2</name>
     <pose>
-      1.8764161926937795
-      19.931743437835866
+      1.8550208591423398
+      19.92786410261063
       0
       0
       0
-      2.4515534083607675
+      2.798196600985646
     </pose>
     <uri>model://hangout_chair</uri>
   </include>
@@ -23620,12 +24546,12 @@
   <include>
     <name>chair_3</name>
     <pose>
-      0.5615737121458027
-      20.35444679212023
+      0.4583801868096726
+      20.328850590099684
       0
       0
       0
-      0.2271744950985062
+      0.07747402657741373
     </pose>
     <uri>model://hangout_chair</uri>
   </include>
@@ -23792,7 +24718,7 @@
       </pose>
 
       <skin>
-        <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+        <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
       </skin>
 
       <animation name="animation">
@@ -23828,65 +24754,65 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>286</drift_time>
+          <drift_time>37</drift_time>
         
-          <drift_time>446</drift_time>
+          <drift_time>48</drift_time>
         
-          <drift_time>546</drift_time>
+          <drift_time>62</drift_time>
         
-          <drift_time>724</drift_time>
+          <drift_time>257</drift_time>
         
-          <drift_time>879</drift_time>
+          <drift_time>432</drift_time>
         
-          <drift_time>1153</drift_time>
+          <drift_time>608</drift_time>
         
-          <drift_time>1384</drift_time>
+          <drift_time>888</drift_time>
         
-          <drift_time>1546</drift_time>
+          <drift_time>1135</drift_time>
         
-          <drift_time>1557</drift_time>
+          <drift_time>1235</drift_time>
         
-          <drift_time>1819</drift_time>
+          <drift_time>1311</drift_time>
         
-          <drift_time>1861</drift_time>
+          <drift_time>1500</drift_time>
         
-          <drift_time>1937</drift_time>
+          <drift_time>1607</drift_time>
         
-          <drift_time>2176</drift_time>
+          <drift_time>1797</drift_time>
         
-          <drift_time>2220</drift_time>
+          <drift_time>1982</drift_time>
         
-          <drift_time>2311</drift_time>
+          <drift_time>2124</drift_time>
         
-          <drift_time>2464</drift_time>
+          <drift_time>2255</drift_time>
         
-          <drift_time>2564</drift_time>
+          <drift_time>2332</drift_time>
         
-          <drift_time>2781</drift_time>
+          <drift_time>2568</drift_time>
         
-          <drift_time>2930</drift_time>
+          <drift_time>2620</drift_time>
         
-          <drift_time>3078</drift_time>
+          <drift_time>2859</drift_time>
         
-          <drift_time>3165</drift_time>
+          <drift_time>2868</drift_time>
         
-          <drift_time>3198</drift_time>
+          <drift_time>2885</drift_time>
         
-          <drift_time>3267</drift_time>
+          <drift_time>3022</drift_time>
         
-          <drift_time>3340</drift_time>
+          <drift_time>3120</drift_time>
         
-          <drift_time>3551</drift_time>
+          <drift_time>3205</drift_time>
         
-          <drift_time>3590</drift_time>
+          <drift_time>3211</drift_time>
         
-          <drift_time>3659</drift_time>
+          <drift_time>3404</drift_time>
         
-          <drift_time>3729</drift_time>
+          <drift_time>3648</drift_time>
         
-          <drift_time>3752</drift_time>
+          <drift_time>3789</drift_time>
         
-          <drift_time>3831</drift_time>
+          <drift_time>3872</drift_time>
         
 
       </plugin>
@@ -23900,7 +24826,7 @@
     
       
 
-<actor name="actor_17">
+<actor name="actor_26">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -23942,7 +24868,7 @@
     
       
 
-<actor name="actor_18">
+<actor name="actor_27">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
