@@ -567,6 +567,9 @@
 <%
   if not $floorplan
 %>
+    <!-- Private cafe -->
+    <%= fromFile(DIR + "/private_cafe.erb") %>
+
     <!-- Back entrance -->
     <%= fromFile(DIR + "/back_entrance.erb") %>
 
