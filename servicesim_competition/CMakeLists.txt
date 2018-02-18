@@ -22,6 +22,7 @@ add_service_files(
     DropOffGuest.srv
     NewTask.srv
     PickUpGuest.srv
+    RoomInfo.srv
 )
 
 # Generate added messages and services with any dependencies listed here

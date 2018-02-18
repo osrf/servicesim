@@ -4,6 +4,7 @@
   # Command line options (usage erb [opt]=[arg]):
   # s: seed for randomization
   # f: true to generate unpopulated world (floorplan only)
+  # d: true to generate debug visuals
 
   ###############################################
   #                                             #
@@ -29,6 +30,12 @@
   $floorplan = false
   if (defined? f)
     $floorplan = f.to_s == "true"
+  end
+
+  # Debug
+  $debug = false
+  if (defined? d)
+    $debug = d.to_s == "true"
   end
 
   ###############################################
@@ -112,27 +119,130 @@
   rooms =
   [
     # Public area
-    {:name => 'PublicBathroomA',     :type => room_types[:bathroom],           :pose => [  6*$o + 0*$g,   2*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
-    {:name => 'PublicBathroomB',     :type => room_types[:bathroom],           :pose => [  8*$o + 1*$g,   2*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
-    {:name => 'PublicCafe',          :type => room_types[:refreshment_area],   :pose => [  9*$o + 2*$g,   4*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle(1)},
-    {:name => 'PublicMeetingRoomA',  :type => room_types[:meeting_room_large], :pose => [ 12*$o + 0*$g,  11*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle(1)},
-    {:name => 'PublicMeetingRoomB',  :type => room_types[:meeting_room_small], :pose => [  3*$o + 0*$g,   5*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle()},
-    {:name => 'PublicMeetingRoomC',  :type => room_types[:meeting_room_small], :pose => [  3*$o + 0*$g,   9*$o + 1*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle()},
-    {:name => 'PublicMeetingRoomD',  :type => room_types[:office_small],       :pose => [  6*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
-    {:name => 'PublicMeetingRoomE',  :type => room_types[:office_small],       :pose => [  3*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PublicBathroomA',
+     :type => room_types[:bathroom],
+     :pose => [  6*$o + 0*$g,   2*$o + 0*$g, 0, 0, 0, 0],
+     :door => doorAngle()},
+    {:name => 'PublicBathroomB',
+     :type => room_types[:bathroom],
+     :pose => [  8*$o + 1*$g,   2*$o + 0*$g, 0, 0, 0, 0],
+     :door => doorAngle()},
+    {:name => 'PublicCafe',
+     :type => room_types[:refreshment_area],
+     :pose => [  9*$o + 2*$g,   4*$o + 0*$g, 0, 0, 0, $pi * 0.5],
+     :door => doorAngle(1)},
+    {:name => 'PublicMeetingRoomA',
+     :type => room_types[:meeting_room_large],
+     :pose => [ 12*$o + 0*$g,  11*$o + 0*$g, 0, 0, 0, $pi],
+     :door => doorAngle(1)},
+    {:name => 'PublicMeetingRoomB',
+     :type => room_types[:meeting_room_small],
+     :pose => [  3*$o + 0*$g,   5*$o + 0*$g, 0, 0, 0, -$pi * 0.5],
+     :door => doorAngle()},
+    {:name => 'PublicMeetingRoomC',
+     :type => room_types[:meeting_room_small],
+     :pose => [  3*$o + 0*$g,   9*$o + 1*$g, 0, 0, 0, -$pi * 0.5],
+     :door => doorAngle()},
+    {:name => 'PublicMeetingRoomD',
+     :type => room_types[:office_small],
+     :pose => [  6*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi],
+     :door => doorAngle()},
+    {:name => 'PublicMeetingRoomE',
+     :type => room_types[:office_small],
+     :pose => [  3*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi],
+     :door => doorAngle()},
     # Employee-only area
-    {:name => 'PrivateMeetingRoomA', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   5*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
-    {:name => 'PrivateMeetingRoomB', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   9*$o + 1*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
-    {:name => 'PrivateBathroomA',    :type => room_types[:bathroom],           :pose => [ -3*$o + 0*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
-    {:name => 'PrivateBathroomB',    :type => room_types[:bathroom],           :pose => [ -5*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
-    {:name => 'PrivateOfficeA',      :type => room_types[:office_small],       :pose => [ -8*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
-    {:name => 'PrivateOfficeB',      :type => room_types[:office_small],       :pose => [-11*$o - 3*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
-    {:name => 'PrivateOfficeC',      :type => room_types[:office_small],       :pose => [-14*$o - 4*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
-    {:name => 'PrivateOfficeD',      :type => room_types[:office_large],       :pose => [-15*$o - 5*$g,  12*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle(1)},
-    {:name => 'PrivateMeetingRoomC', :type => room_types[:meeting_room_small], :pose => [ -8*$o + 0*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
-    {:name => 'PrivateMeetingRoomD', :type => room_types[:meeting_room_small], :pose => [-12*$o - 1*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
-    {:name => 'PrivateMeetingRoomE', :type => room_types[:meeting_room_small], :pose => [-16*$o - 2*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomA',
+     :type => room_types[:meeting_room_small],
+     :pose => [ -3*$o - 1*$g,   5*$o + 0*$g, 0, 0, 0, $pi * 0.5],
+     :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomB',
+     :type => room_types[:meeting_room_small],
+     :pose => [ -3*$o - 1*$g,   9*$o + 1*$g, 0, 0, 0, $pi * 0.5],
+     :door => doorAngle()},
+    {:name => 'PrivateBathroomA',
+     :type => room_types[:bathroom],
+     :pose => [ -3*$o + 0*$g,  13*$o + 0*$g, 0, 0, 0, $pi],
+     :door => doorAngle()},
+    {:name => 'PrivateBathroomB',
+     :type => room_types[:bathroom],
+     :pose => [ -5*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi],
+     :door => doorAngle()},
+    {:name => 'PrivateOfficeA',
+     :type => room_types[:office_small],
+     :pose => [ -8*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi],
+     :door => doorAngle()},
+    {:name => 'PrivateOfficeB',
+     :type => room_types[:office_small],
+     :pose => [-11*$o - 3*$g,  13*$o + 0*$g, 0, 0, 0, $pi],
+     :door => doorAngle()},
+    {:name => 'PrivateOfficeC',
+     :type => room_types[:office_small],
+     :pose => [-14*$o - 4*$g,  13*$o + 0*$g, 0, 0, 0, $pi],
+     :door => doorAngle()},
+    {:name => 'PrivateOfficeD',
+     :type => room_types[:office_large],
+     :pose => [-15*$o - 5*$g,  12*$o + 0*$g, 0, 0, 0, -$pi * 0.5],
+     :door => doorAngle(1)},
+    {:name => 'PrivateMeetingRoomC',
+     :type => room_types[:meeting_room_small],
+     :pose => [ -8*$o + 0*$g,   3*$o + 0*$g, 0, 0, 0, 0],
+     :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomD',
+     :type => room_types[:meeting_room_small],
+     :pose => [-12*$o - 1*$g,   3*$o + 0*$g, 0, 0, 0, 0],
+     :door => doorAngle()},
+    {:name => 'PrivateMeetingRoomE',
+     :type => room_types[:meeting_room_small],
+     :pose => [-16*$o - 2*$g,   3*$o + 0*$g, 0, 0, 0, 0],
+     :door => doorAngle()},
   ]
+
+  # INTERNAL
+  # Calculate drop-off areas
+
+  $drop_areas = []
+
+  for room in rooms
+
+    # min_x, max_x, min_y, max_y office units in room coords
+    size = room[:type][:size]
+
+    # Local min / max coords in meters
+    min_x_local = (size[0] - 1) * $o
+    max_x_local = size[1] * $o
+    min_y_local = (size[2] - 1) * $o
+    max_y_local = size[3] * $o
+
+    # Room coords in world
+    room_x = room[:pose][0]
+    room_y = room[:pose][1]
+    yaw = room[:pose][5]
+
+    # Adjust for room rotation
+    if yaw == $pi
+      min_x_local, max_x_local = -max_x_local, -min_x_local
+      min_y_local, max_y_local = -max_y_local, -min_y_local
+    elsif yaw == $pi * 0.5
+      min_x_local, max_x_local, min_y_local, max_y_local =
+      -max_y_local, -min_y_local, min_x_local, max_x_local
+    elsif yaw == -$pi * 0.5
+      min_x_local, max_x_local, min_y_local, max_y_local =
+      min_y_local, max_y_local, -max_x_local, -min_x_local
+    end
+
+    # Min / max coords in world
+    min_x_world = room_x + min_x_local
+    max_x_world = room_x + max_x_local
+    min_y_world = room_y + min_y_local
+    max_y_world = room_y + max_y_local
+
+    # Fill vectors
+    min = [min_x_world, min_y_world, room[:pose][2]]
+    max = [max_x_world, max_y_world, room[:pose][2]]
+
+    $drop_areas.push({:name => room[:name], :min => min, :max => max})
+  end
 
   ###############################################
   #                                             #
@@ -311,6 +421,16 @@
         <!-- for contain plugin -->
         <namespace>/servicesim/return_to_start</namespace>
       </return_to_start>
+
+      <%
+        for drop in $drop_areas
+      %>
+        <room_info
+          name="<%= drop[:name] %>"
+          min="<%= drop[:min][0] %> <%= drop[:min][1] %> <%= drop[:min][2] %>"
+          max="<%= drop[:max][0] %> <%= drop[:max][1] %> <%= drop[:max][2] %>"
+        />
+      <% end %>
 
     </plugin>
 
@@ -724,6 +844,15 @@
 <%
   end # if not $floorplan
 %>
+
+<%
+  if $debug
+%>
+  <%= fromFile(DIR + "/" + "debug_visuals.erb") %>
+<%
+  end
+%>
+
 
   </world>
 </sdf>
