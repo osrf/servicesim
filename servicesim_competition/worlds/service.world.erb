@@ -209,10 +209,18 @@
     size = room[:type][:size]
 
     # Local min / max coords in meters
-    min_x_local = (size[0] - 1) * $o
-    max_x_local = size[1] * $o
-    min_y_local = (size[2] - 1) * $o
-    max_y_local = size[3] * $o
+    if room[:type][:type] == 'bathroom'
+      # Drop in front of door
+      min_x_local = -$o
+      max_x_local = 0
+      min_y_local = 0
+      max_y_local = $o
+    else
+      min_x_local = (size[0] - 1) * $o
+      max_x_local = size[1] * $o
+      min_y_local = (size[2] - 1) * $o
+      max_y_local = size[3] * $o
+    end
 
     # Room coords in world
     room_x = room[:pose][0]
@@ -381,130 +389,6 @@
         </constraints>
       </ode>
     </physics>
-
-    <!-- Competition plugin -->
-    <plugin name="competition" filename="libCompetitionPlugin.so">
-
-      <pick_up_location>
-        <%= pick_up_location[:name] %>
-      </pick_up_location>
-
-      <drop_off_location>
-        <%= drop_off_location[:name] %>
-      </drop_off_location>
-
-      <guest_name><%= guest_name %></guest_name>
-
-      <go_to_pick_up>
-        <name>Go to pick-up location</name>
-        <weight>1.0</weight>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/go_to_pick_up</namespace>
-      </go_to_pick_up>
-
-      <pick_up>
-        <name>Pick-up guest</name>
-        <weight>1.0</weight>
-      </pick_up>
-
-      <drop_off>
-        <name>Drop-off guest</name>
-        <weight>1.0</weight>
-        <guest_name><%= guest_name %></guest_name>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/drop_off</namespace>
-      </drop_off>
-
-      <return_to_start>
-        <name>Return to start</name>
-        <weight>1.0</weight>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/return_to_start</namespace>
-      </return_to_start>
-
-      <%
-        for drop in $drop_areas
-      %>
-        <room_info
-          name="<%= drop[:name] %>"
-          min="<%= drop[:min][0] %> <%= drop[:min][1] %> <%= drop[:min][2] %>"
-          max="<%= drop[:max][0] %> <%= drop[:max][1] %> <%= drop[:max][2] %>"
-        />
-      <% end %>
-
-    </plugin>
-
-    <!-- Pick-up area contain plugin -->
-    <plugin name="pick_up" filename="libContainPlugin.so">
-      <entity><%= robot_name %></entity>
-      <namespace>servicesim/go_to_pick_up</namespace>
-      <enabled>false</enabled>
-      <pose>
-        <%= pick_up_location[:pose][0] %>
-        <%= pick_up_location[:pose][1] %>
-        <%= pick_up_location[:pose][2] %>
-        <%= pick_up_location[:pose][3] %>
-        <%= pick_up_location[:pose][4] %>
-        <%= pick_up_location[:pose][5] %>
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            <%= pick_up_location[:size][0] %>
-            <%= pick_up_location[:size][1] %>
-            <%= pick_up_location[:size][2] %>
-          </size>
-        </box>
-      </geometry>
-    </plugin>
-
-    <!-- Drop-off area contain plugin -->
-    <plugin name="drop_off" filename="libContainPlugin.so">
-      <entity><%= guest_name %></entity>
-      <namespace>servicesim/drop_off</namespace>
-      <enabled>false</enabled>
-      <pose>
-        <%= drop_off_location[:pose][0] %>
-        <%= drop_off_location[:pose][1] %>
-        <%= drop_off_location[:pose][2] %>
-        <%= drop_off_location[:pose][3] %>
-        <%= drop_off_location[:pose][4] %>
-        <%= drop_off_location[:pose][5] %>
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            <%= drop_off_location[:size][0] %>
-            <%= drop_off_location[:size][1] %>
-            <%= drop_off_location[:size][2] %>
-          </size>
-        </box>
-      </geometry>
-    </plugin>
-
-    <!-- Start area contain plugin -->
-    <plugin name="start" filename="libContainPlugin.so">
-      <entity><%= robot_name %></entity>
-      <namespace>servicesim/return_to_start</namespace>
-      <enabled>false</enabled>
-      <pose>
-        <%= start_location[:pose][0] %>
-        <%= start_location[:pose][1] %>
-        <%= start_location[:pose][2] %>
-        <%= start_location[:pose][3] %>
-        <%= start_location[:pose][4] %>
-        <%= start_location[:pose][5] %>
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            <%= start_location[:size][0] %>
-            <%= start_location[:size][1] %>
-            <%= start_location[:size][2] %>
-          </size>
-        </box>
-      </geometry>
-    </plugin>
 <%
   end # if not $floorplan
 %>
@@ -684,6 +568,7 @@
       for x in [-14, -8]
         for y in [5, 8, 11]
           $count += 1
+          $cubicle_name = 'PrivateCubicle_' + $count.to_s()
           $cubicle_size = x == -14 ? 4 : 3
           $cubicle_pose =
           [
@@ -841,6 +726,130 @@
     %>
       <%= fromFile(DIR + "/" + "actor_idle.erb") %>
     <% end %>
+
+    <!-- Competition plugin -->
+    <plugin name="competition" filename="libCompetitionPlugin.so">
+
+      <pick_up_location>
+        <%= pick_up_location[:name] %>
+      </pick_up_location>
+
+      <drop_off_location>
+        <%= drop_off_location[:name] %>
+      </drop_off_location>
+
+      <guest_name><%= guest_name %></guest_name>
+
+      <go_to_pick_up>
+        <name>Go to pick-up location</name>
+        <weight>1.0</weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/go_to_pick_up</namespace>
+      </go_to_pick_up>
+
+      <pick_up>
+        <name>Pick-up guest</name>
+        <weight>1.0</weight>
+      </pick_up>
+
+      <drop_off>
+        <name>Drop-off guest</name>
+        <weight>1.0</weight>
+        <guest_name><%= guest_name %></guest_name>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/drop_off</namespace>
+      </drop_off>
+
+      <return_to_start>
+        <name>Return to start</name>
+        <weight>1.0</weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/return_to_start</namespace>
+      </return_to_start>
+
+      <%
+        for drop in $drop_areas
+      %>
+        <room_info
+          name="<%= drop[:name] %>"
+          min="<%= drop[:min][0] %> <%= drop[:min][1] %> <%= drop[:min][2] %>"
+          max="<%= drop[:max][0] %> <%= drop[:max][1] %> <%= drop[:max][2] %>"
+        />
+      <% end %>
+
+    </plugin>
+
+    <!-- Pick-up area contain plugin -->
+    <plugin name="pick_up" filename="libContainPlugin.so">
+      <entity><%= robot_name %></entity>
+      <namespace>servicesim/go_to_pick_up</namespace>
+      <enabled>false</enabled>
+      <pose>
+        <%= pick_up_location[:pose][0] %>
+        <%= pick_up_location[:pose][1] %>
+        <%= pick_up_location[:pose][2] %>
+        <%= pick_up_location[:pose][3] %>
+        <%= pick_up_location[:pose][4] %>
+        <%= pick_up_location[:pose][5] %>
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            <%= pick_up_location[:size][0] %>
+            <%= pick_up_location[:size][1] %>
+            <%= pick_up_location[:size][2] %>
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Drop-off area contain plugin -->
+    <plugin name="drop_off" filename="libContainPlugin.so">
+      <entity><%= guest_name %></entity>
+      <namespace>servicesim/drop_off</namespace>
+      <enabled>false</enabled>
+      <pose>
+        <%= drop_off_location[:pose][0] %>
+        <%= drop_off_location[:pose][1] %>
+        <%= drop_off_location[:pose][2] %>
+        <%= drop_off_location[:pose][3] %>
+        <%= drop_off_location[:pose][4] %>
+        <%= drop_off_location[:pose][5] %>
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            <%= drop_off_location[:size][0] %>
+            <%= drop_off_location[:size][1] %>
+            <%= drop_off_location[:size][2] %>
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Start area contain plugin -->
+    <plugin name="start" filename="libContainPlugin.so">
+      <entity><%= robot_name %></entity>
+      <namespace>servicesim/return_to_start</namespace>
+      <enabled>false</enabled>
+      <pose>
+        <%= start_location[:pose][0] %>
+        <%= start_location[:pose][1] %>
+        <%= start_location[:pose][2] %>
+        <%= start_location[:pose][3] %>
+        <%= start_location[:pose][4] %>
+        <%= start_location[:pose][5] %>
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            <%= start_location[:size][0] %>
+            <%= start_location[:size][1] %>
+            <%= start_location[:size][2] %>
+          </size>
+        </box>
+      </geometry>
+    </plugin>
 <%
   end # if not $floorplan
 %>
