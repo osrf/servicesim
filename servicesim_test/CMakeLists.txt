@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   servicesim_competition
 )
 
-find_package(gazebo 8.2.0 REQUIRED)
+find_package(gazebo 8.3.0 REQUIRED)
 
 catkin_package(
 )
