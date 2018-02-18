@@ -14,7 +14,7 @@
     -urdf
     -param robot_description
     -model servicebot
-    -x 3.7 -y 1.23 -z 0.75 -yaw 1.03"
+    -x 3.7 -y 1.23 -z 0.75 -Y 3.14159"
   />
     <!--
     -x 6.5 -y -18.2 -z 0.75"
@@ -33,7 +33,9 @@
   </group>
   <group if="$(arg rviz)">
     <arg name="config_file" value="$(find servicesim)/config/rviz_config.rviz"/>
-    <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />
+    <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)">
+      <remap from="/move_base_simple/goal" to="/servicebot/move_base_simple/goal" />
+    </node>
   </group>
   <group if="$(arg controllers)">
     <include file="$(find servicebot_control)/launch/servicebot_control.launch" />
