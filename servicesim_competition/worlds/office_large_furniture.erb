@@ -5,6 +5,9 @@
   # * $o (number) length of an office unit
   # * $pi (number) Math::Pi
   # * $corner_objs (string[]) List of objects that can go on a corner
+
+  # So cubicle corners don't generate drop areas
+  $dropable = false
 %>
 
 <%
@@ -23,6 +26,7 @@
 </include>
 
 <%
+  $cubicle_name = 'corner_1'
   $pose =
   [
     2 * $o,
@@ -36,6 +40,7 @@
 <%= fromFile(DIR + "/cubicle_corner.erb") %>
 
 <%
+  $cubicle_name = 'corner_2'
   $pose =
   [
     -2 * $o,
@@ -49,6 +54,7 @@
 <%= fromFile(DIR + "/cubicle_corner.erb") %>
 
 <%
+  $cubicle_name = 'corner_3'
   $pose =
   [
     2 * $o,

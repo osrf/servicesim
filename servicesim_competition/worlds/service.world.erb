@@ -205,6 +205,11 @@
 
   for room in rooms
 
+    # Skip rooms with closed doors
+    if room[:door] == 0.0
+      next
+    end
+
     # min_x, max_x, min_y, max_y office units in room coords
     size = room[:type][:size]
 
@@ -526,8 +531,11 @@
     <% end %>
 
     <!-- Public cubicles -->
+    <!-- Islands -->
     <%
       for y in [5, 9]
+        $count += 1
+        $cubicle_name = 'PublicCubicle_' + $count.to_s()
         $pose =
         [
           6 * $o,
@@ -543,11 +551,14 @@
       end
     %>
 
+    <!-- Corners -->
     <%
       s = 9.0 * $o + 2.0 * $g
       e = 13.0 * $o
       for x in (s..e).step(1.9)
         $count += 1
+        $cubicle_name = 'PublicCubicle_' + $count.to_s()
+        $dropable = true
         $pose =
         [
           x - 1 * $g,

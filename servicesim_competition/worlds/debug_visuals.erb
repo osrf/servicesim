@@ -7,6 +7,12 @@
   height = 5.0
 
   for drop in $drop_areas
+
+    size_x = drop[:max][0] - drop[:min][0]
+    size_y = drop[:max][1] - drop[:min][1]
+
+    center_x = drop[:min][0] + size_x * 0.5
+    center_y = drop[:min][1] + size_y * 0.5
 %>
 
 <model name="<%= drop[:name] %>_min">
@@ -74,6 +80,45 @@
         <script>
           <uri>file://media/materials/scripts/gazebo.material</uri>
           <name>Gazebo/GreenTransparent</name>
+        </script>
+      </material>
+    </visual>
+  </link>
+
+</model>
+
+<model name="<%= drop[:name] %>_box">
+
+  <static>true</static>
+
+  <pose>
+    <%= center_x %>
+    <%= center_y %>
+    <%= drop[:max][2] + height * 0.5 %>
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+
+    <visual name="visual">
+      <meta>
+        <layer>2</layer>
+      </meta>
+      <geometry>
+        <box>
+          <size>
+            <%= size_x %>
+            <%= size_y %>
+            <%= height %>
+          </size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/RedTransparent</name>
         </script>
       </material>
     </visual>

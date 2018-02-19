@@ -2,7 +2,21 @@
   # Front entrance template, it creates a model near the elevators
   #
   # Required variables
-  # * $pi (number)
+  # * $pi (number) Math::PI
+  # * $o (number) Office unit
+  # * $drop_areas ([]) Dictionary with drop area info
+
+  $drop_areas.push({:name => 'FrontElevator',
+                    :min => [-3*$o, 0.0, 0],
+                    :max => [$o, 3 * $o, 0]})
+
+  $drop_areas.push({:name => 'FrontCouchA',
+                    :min => [-6*$o, 0.0, 0],
+                    :max => [-3*$o, 3 * $o, 0]})
+
+  $drop_areas.push({:name => 'FrontCouchB',
+                    :min => [$o, 0.0, 0],
+                    :max => [5*$o, 2 * $o, 0]})
 %>
 
 <model name="FrontEntrance">

@@ -5,17 +5,49 @@
   #
   # Required variables
   # * $pi (number) Math::PI
-  # * $count (number) For unique names
+  # * $cubicle_name (string) Model name
   # * $pose (number[6]) Pose of island center
   # * $floorplan (boolean) True if only showing floorplan, so computer and chair
   #                        are hidden.
-
-  $count += 1
+  # * $drop_areas ([]) Dictionary with drop area info
 
   # Height of desk surface
   top = 0.76
+
+  # Fill drop areas in world coords
+  drop_size = 2.5
+  n = 0
+  for x in [-1, 1]
+    for y in [-1, 1]
+
+      n+= 1
+
+      far_x = $pose[0] + x * drop_size
+      far_y = $pose[1] + y * drop_size
+
+      if x < 0
+        min_x_world = far_x
+        max_x_world = $pose[0] + 0.0
+      else
+        max_x_world = far_x
+        min_x_world = $pose[0] + 0.0
+      end
+
+      if y < 0
+        min_y_world = far_y
+        max_y_world = $pose[1] + 0.0
+      else
+        max_y_world = far_y
+        min_y_world = $pose[1] + 0.0
+      end
+
+      $drop_areas.push({:name => $cubicle_name + '_' + n.to_s(),
+                        :min => [min_x_world, min_y_world, $pose[2]],
+                        :max => [max_x_world, max_y_world, $pose[2]]})
+    end
+  end
 %>
-  <model name="cubicle_island_<%= $count %>">
+  <model name="<%= $cubicle_name %>">
     <static>true</static>
     <pose>
       <%= $pose[0] %>

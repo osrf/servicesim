@@ -5,17 +5,30 @@
   #
   # Required variables
   # * $pi (number) Math::PI
-  # * $count (number) For unique names
+  # * $cubicle_name (string) Model name
   # * $pose (number[6]) Pose of island center
   # * $floorplan (boolean) True if only showing floorplan, so computer and chair
   #                        are hidden.
-
-  $count += 1
+  # * $drop_areas ([]) Dictionary with drop area info
+  # * $dropable (boolean) Whether to generate a dropable area for the cubicle
 
   # Height of desk surface
   top = 0.76
+
+  # Only covering one orientation for now
+  if $dropable and $pose[5] == $pi
+    drop_size = 2.5
+    min_x_world = $pose[0]
+    max_x_world = $pose[0] + drop_size
+    min_y_world = $pose[1]
+    max_y_world = $pose[1] + drop_size
+
+    $drop_areas.push({:name => $cubicle_name,
+                      :min => [min_x_world, min_y_world, $pose[2]],
+                      :max => [max_x_world, max_y_world, $pose[2]]})
+  end
 %>
-  <model name="cubicle_corner_<%= $count %>">
+  <model name="<%= $cubicle_name %>">
     <static>true</static>
     <pose>
       <%= $pose[0] %>
