@@ -11,6 +11,17 @@ catkin_package()
 ## Install ##
 #############
 
-install(DIRECTORY launch materials meshes urdf
+install(
+  FILES
+    model.config
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+install(
+  DIRECTORY
+    launch
+    materials
+    meshes
+    urdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )

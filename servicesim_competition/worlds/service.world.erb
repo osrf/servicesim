@@ -671,7 +671,6 @@
     :name => location[:name],
     :pose => [center_x, center_y, 0, 0, 0, 0],
     :size => [size_x, size_y, 10],
-    # TODO: pass this to spawn URDF
     :pivot => location[:pivot]
   }
 %>
@@ -798,6 +797,19 @@
         </box>
       </geometry>
     </plugin>
+
+    <include>
+      <pose>
+        <%= $start_location[:pivot][0] %>
+        <%= $start_location[:pivot][1] %>
+        0.75
+        0
+        0
+        <%= rand(-$pi..$pi) %>
+      </pose>
+      <name>servicebot</name>
+      <uri>model://servicebot_description</uri>
+    </include>
 
     <%
       guest_pose =
