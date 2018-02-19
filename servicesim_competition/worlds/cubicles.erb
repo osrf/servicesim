@@ -44,11 +44,11 @@
 
       if side == -1
         min_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner + drop_width)
-        max_y_world = $cubicle_pose[1]
+        max_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner)
 
         pivot_y = min_y_world - side * drop_width * 0.5
       else
-        min_y_world = $cubicle_pose[1]
+        min_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner)
         max_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner + drop_width)
 
         pivot_y = max_y_world - side * drop_width * 0.5
