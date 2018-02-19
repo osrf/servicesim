@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="gui" default="false" />
+
+  <arg name="world_name" value="$(find servicesim_test)/spawn_robot/spawn_robot.world"/>
+
+  <!-- As in servicesim.launch -->
+  <arg name="robot_model_path" value="$(find servicebot_description)/.."/>
+
+  <!-- As in competition.launch -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <env name="GAZEBO_MODEL_PATH" value="$(find servicesim_competition)/models:$(arg robot_model_path)"/>
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="verbose" value="true"/>
+  </include>
+  <test
+    test-name="spawn_robot"
+    pkg="servicesim_test"
+    type="spawn_robot-test"
+    clear_params="true"
+    time-limit="30.0"
+  />
+</launch>

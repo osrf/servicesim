@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  servicebot_control
+  servicebot_description
   servicesim_competition
 )
 
@@ -39,6 +41,14 @@ if (CATKIN_ENABLE_TESTING)
                     trajectory_actor_plugin/trajectory_actor_plugin.test
                     trajectory_actor_plugin/trajectory_actor_plugin.cpp)
   target_link_libraries(trajectory_actor_plugin-test
+    ${catkin_LIBRARIES}
+    ${GAZEBO_LIBRARIES}
+  )
+
+  add_rostest_gtest(spawn_robot-test
+                    spawn_robot/spawn_robot.test
+                    spawn_robot/spawn_robot.cpp)
+  target_link_libraries(spawn_robot-test
     ${catkin_LIBRARIES}
     ${GAZEBO_LIBRARIES}
   )
