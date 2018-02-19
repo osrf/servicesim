@@ -1,0 +1,188 @@
+<%
+  # Refreshment area furniture template
+  #
+  # Required variables
+  # * $pi (number)
+
+  counter_top = 0.92
+%>
+
+<%
+  n = -1
+  for counter in ['no_sink', 'no_sink', 'no_sink', 'sink']
+    n += 1
+    if counter == ''
+      next
+    end
+%>
+  <link name="counter_<%= n %>">
+    <pose>
+      -5.7
+      <%= -6.7 + 1.2 * n %>
+      0
+      0
+      0
+      <%= $pi * 0.5 %>
+    </pose>
+    <collision name="collision">
+      <geometry>
+        <mesh>
+          <uri>model://cafe_counter/meshes/counter_<%= counter %>.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <geometry>
+        <mesh>
+          <uri>model://cafe_counter/meshes/counter_<%= counter %>.obj</uri>
+          <scale>0.01 0.01 0.01</scale>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+<% end %>
+
+<%
+  n = 0
+  for y in [-6.94, -6.38]
+    n += 1
+%>
+  <include>
+    <name>microwave_<%= n %></name>
+    <pose>
+      -5.54
+      <%= y %>
+      <%= counter_top %>
+      0
+      0
+      <%= $pi * 0.5 %>
+    </pose>
+    <uri>model://microwave</uri>
+  </include>
+<% end %>
+
+<%
+  n = 0
+  for y in [-5.82, -5.54, -5.26]
+    n += 1
+%>
+  <include>
+    <name>coffee_maker_<%= n %></name>
+    <pose>
+      -5.54
+      <%= y %>
+      <%= counter_top %>
+      0
+      0
+      <%= $pi * 0.5 %>
+    </pose>
+  <uri>model://coffee_maker</uri>
+  </include>
+<% end %>
+
+<include>
+  <pose>
+    -5.65
+    -2.18
+    0
+    0
+    0
+    <%= $pi * 0.5 %>
+  </pose>
+  <uri>model://dishwasher</uri>
+</include>
+
+<%
+  n = 0
+  for y in [-1.4, -0.59]
+    n += 1
+%>
+  <include>
+    <name>refrigerator_<%= n %></name>
+    <pose>
+      -5.54
+      <%= y %>
+      0
+      0
+      0
+      <%= $pi * 0.5 %>
+    </pose>
+    <uri>model://refrigerator</uri>
+  </include>
+<% end %>
+
+<include>
+  <pose>
+    3.51
+    -6.0
+    0
+    0
+    0
+    <%= -$pi * 0.75 %>
+  </pose>
+  <uri>model://tv_stand</uri>
+</include>
+
+<%
+  start_x = -3.1
+  start_y = -4.5
+  space_x = 2.5
+  space_y = 2.2
+  n = 0
+  for x in (0..2)
+    for y in (0..1)
+      n += 1
+      x += rand(-0.1..0.1)
+      y += rand(-0.1..0.1)
+%>
+
+  <include>
+    <name>table_<%= n %></name>
+    <pose>
+      <%= start_x + x * space_x %>
+      <%= start_y + y * space_y %>
+      0
+      0
+      0
+      <%= $pi * 0.25 %>
+    </pose>
+    <uri>model://cafe_table</uri>
+  </include>
+
+  <%
+    nn = 0
+    for c_x in [-0.5, 0.5]
+      for c_y in [-0.5, 0.5]
+
+        nn += 1
+
+        if c_x == -0.5 and c_y == -0.5
+          yaw = -$pi * 0.75
+        elsif c_x == -0.5 and c_y == 0.5
+          yaw = $pi * 0.75
+        elsif c_x == 0.5 and c_y == -0.5
+          yaw = -$pi * 0.25
+        elsif c_x == 0.5 and c_y == 0.5
+          yaw = $pi * 0.25
+        end
+
+        yaw += rand(-0.5..0.5)
+
+        $pose =
+        [
+          start_x + x * space_x + c_x,
+          start_y + y * space_y + c_y,
+          0,
+          0,
+          0,
+          yaw
+        ]
+  %>
+
+        <%= fromFile(DIR + "/chair.erb") %>
+
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

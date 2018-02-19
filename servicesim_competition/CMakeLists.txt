@@ -4,6 +4,7 @@ project(servicesim_competition)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
+  roscpp
   std_msgs
 )
 
@@ -35,6 +36,7 @@ catkin_package(
   CATKIN_DEPENDS
     geometry_msgs
     message_runtime
+    roscpp
     std_msgs
   LIBRARIES ${trajectory_actor_plugin_name}
 )

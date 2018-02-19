@@ -75,12 +75,16 @@
 
 
   # Get an angle for the door, it's 0.0 for a closed door
-  def doorAngle()
-    open = [true, false].sample()
+  # open (number) 0 for closed, 1 for open and -1 for random
+  def doorAngle(open = -1)
+    if open == -1
+      open = [true, false].sample()
+    end
+
     if not open
       return 0.0
     else
-      return rand($pi*0.5..$pi*0.8)
+      return rand($pi*0.7..$pi)
     end
   end
 
@@ -95,27 +99,36 @@
     :office_large => {:type => 'office_large', :floor => 'carpet', :size => [-1, 2, -2, 0]},
   }
 
+  # Array with objects that fit well on corners
+  $corner_objs =
+  [
+    'hangout_chair',
+    'mini_fridge',
+    'wastebasket',
+    'office_box',
+  ]
+
   # Dictionary with all rooms to be inserted
   rooms =
   [
     # Public area
     {:name => 'PublicBathroomA',     :type => room_types[:bathroom],           :pose => [  6*$o + 0*$g,   2*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
     {:name => 'PublicBathroomB',     :type => room_types[:bathroom],           :pose => [  8*$o + 1*$g,   2*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
-    {:name => 'PublicCafe',          :type => room_types[:refreshment_area],   :pose => [  9*$o + 2*$g,   4*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
-    {:name => 'PublicMeetingRoomA',  :type => room_types[:meeting_room_large], :pose => [ 12*$o + 0*$g,  11*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
+    {:name => 'PublicCafe',          :type => room_types[:refreshment_area],   :pose => [  9*$o + 2*$g,   4*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle(1)},
+    {:name => 'PublicMeetingRoomA',  :type => room_types[:meeting_room_large], :pose => [ 12*$o + 0*$g,  11*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle(1)},
     {:name => 'PublicMeetingRoomB',  :type => room_types[:meeting_room_small], :pose => [  3*$o + 0*$g,   5*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle()},
     {:name => 'PublicMeetingRoomC',  :type => room_types[:meeting_room_small], :pose => [  3*$o + 0*$g,   9*$o + 1*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle()},
     {:name => 'PublicMeetingRoomD',  :type => room_types[:office_small],       :pose => [  6*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PublicMeetingRoomE',  :type => room_types[:office_small],       :pose => [  3*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     # Employee-only area
-    {:name => 'PrivateMeetingRoomA', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   5*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => $pi * 0.7},
+    {:name => 'PrivateMeetingRoomA', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   5*$o + 0*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
     {:name => 'PrivateMeetingRoomB', :type => room_types[:meeting_room_small], :pose => [ -3*$o - 1*$g,   9*$o + 1*$g, 0, 0, 0, $pi * 0.5], :door => doorAngle()},
     {:name => 'PrivateBathroomA',    :type => room_types[:bathroom],           :pose => [ -3*$o + 0*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PrivateBathroomB',    :type => room_types[:bathroom],           :pose => [ -5*$o - 1*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PrivateOfficeA',      :type => room_types[:office_small],       :pose => [ -8*$o - 2*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PrivateOfficeB',      :type => room_types[:office_small],       :pose => [-11*$o - 3*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
     {:name => 'PrivateOfficeC',      :type => room_types[:office_small],       :pose => [-14*$o - 4*$g,  13*$o + 0*$g, 0, 0, 0, $pi], :door => doorAngle()},
-    {:name => 'PrivateOfficeD',      :type => room_types[:office_large],       :pose => [-15*$o - 5*$g,  12*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => 0.0},
+    {:name => 'PrivateOfficeD',      :type => room_types[:office_large],       :pose => [-15*$o - 5*$g,  12*$o + 0*$g, 0, 0, 0, -$pi * 0.5], :door => doorAngle(1)},
     {:name => 'PrivateMeetingRoomC', :type => room_types[:meeting_room_small], :pose => [ -8*$o + 0*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
     {:name => 'PrivateMeetingRoomD', :type => room_types[:meeting_room_small], :pose => [-12*$o - 1*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
     {:name => 'PrivateMeetingRoomE', :type => room_types[:meeting_room_small], :pose => [-16*$o - 2*$g,   3*$o + 0*$g, 0, 0, 0, 0], :door => doorAngle()},
@@ -391,6 +404,21 @@
       <origin_visual>0</origin_visual>
     </scene>
 
+    <!-- Light just so some objects are shaded -->
+    <light name='directional_light' type='directional'>
+      <pose>0.0 0.0 -100.0 0 0 0</pose>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <direction>0.1 0.1 -0.9</direction>
+      <attenuation>
+        <range>20</range>
+        <constant>0.5</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>0</cast_shadows>
+    </light>
+
     <!-- Ceiling -->
     <%
       x_offset = total_x * -0.06
@@ -496,20 +524,17 @@
     <!-- Public cubicles -->
     <%
       for y in [5, 9]
-        $count += 1
+        $pose =
+        [
+          6 * $o,
+          y * $o,
+          0,
+          0,
+          0,
+          0,
+        ]
     %>
-    <include>
-      <name>island_<%= $count %></name>
-      <pose>
-        <%= 6 * $o %>
-        <%= y * $o %>
-        0
-        0
-        0
-        0
-      </pose>
-      <uri>model://cubicle_island</uri>
-    </include>
+      <%= fromFile(DIR + "/cubicle_island.erb") %>
     <%
       end
     %>
@@ -519,19 +544,17 @@
       e = 13.0 * $o
       for x in (s..e).step(1.9)
         $count += 1
+        $pose =
+        [
+          x - 1 * $g,
+          7 * $o + $g,
+          0,
+          0,
+          0,
+          $pi,
+        ]
     %>
-    <include>
-      <name>island_<%= $count %></name>
-      <pose>
-        <%= x - $g %>
-        <%= 7 * $o + $g %>
-        0
-        0
-        0
-        <%= Math::PI %>
-      </pose>
-      <uri>model://cubicle_corner</uri>
-    </include>
+      <%= fromFile(DIR + "/cubicle_corner.erb") %>
     <%
       end
     %>
@@ -559,6 +582,15 @@
 <%
   if not $floorplan
 %>
+    <!-- Private cafe -->
+    <%= fromFile(DIR + "/private_cafe.erb") %>
+
+    <!-- Back entrance -->
+    <%= fromFile(DIR + "/back_entrance.erb") %>
+
+    <!-- Front entrance -->
+    <%= fromFile(DIR + "/front_entrance.erb") %>
+
     <!-- Guest -->
     <actor name="<%= guest_name %>">
 

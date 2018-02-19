@@ -1,0 +1,31 @@
+<%
+  # Bathroom furniture template
+  #
+  # Required variables
+  # * $pi (number)
+%>
+
+<include>
+  <pose>
+    -0.6
+    -2.1
+    0
+    0
+    0
+    <%= $pi %>
+  </pose>
+  <uri>model://toilet</uri>
+</include>
+
+<include>
+  <pose>
+    0.9
+    -2.35
+    0
+    0
+    0
+    <%= -$pi * 0.25 %>
+  </pose>
+  <uri>model://wastebasket</uri>
+</include>
+

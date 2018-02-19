@@ -1,0 +1,68 @@
+<%
+  # Template for furniture for a small office
+  #
+  # Required variables
+  # * $o (number) length of an office unit
+  # * $pi (number) Math::Pi
+  # * $corner_objs (string[]) List of objects that can go on a corner
+%>
+
+<%
+  $pose =
+  [
+    1 * $o,
+    -2 * $o,
+    0,
+    0,
+    0,
+    -$pi * 0.5,
+  ]
+%>
+<%= fromFile(DIR + "/cubicle_corner.erb") %>
+
+<%
+  $pose =
+  [
+    -2 * $o,
+    -2 * $o,
+    0,
+    0,
+    0,
+    $pi,
+  ]
+%>
+<%= fromFile(DIR + "/cubicle_corner.erb") %>
+
+<%
+  # Deep copy array
+  objs = Marshal.load(Marshal.dump($corner_objs))
+
+  # Pick and remove random sample
+  obj = objs.delete objs.sample
+%>
+<include>
+  <pose>
+    -2.5
+    -0.5
+    0
+    0
+    0
+    0
+  </pose>
+  <uri>model://<%= obj %></uri>
+</include>
+
+<%
+  obj = objs.delete objs.sample
+%>
+<include>
+  <pose>
+    1.1
+    -0.5
+    0
+    0
+    0
+    <%= $pi %>
+  </pose>
+  <uri>model://<%= obj %></uri>
+</include>

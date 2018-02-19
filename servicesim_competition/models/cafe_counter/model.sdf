@@ -4,11 +4,11 @@
     <static>true</static>
     <link name="with_sink">
       <collision name="collision">
+        <pose>0.598126 -0.024529 0.539205 0 0 0</pose>
         <geometry>
-          <mesh>
-            <uri>model://cafe_counter/meshes/counter_sink.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
+          <box>
+            <size>2.424880 0.666320 1.078160</size>
+          </box>
         </geometry>
       </collision>
       <visual name="visual">
@@ -22,14 +22,6 @@
     </link>
     <link name="no_sink">
       <pose>1.2 0 0 0 0 0</pose>
-      <collision name="collision">
-        <geometry>
-          <mesh>
-            <uri>model://cafe_counter/meshes/counter_no_sink.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
       <visual name="visual">
         <geometry>
           <mesh>
