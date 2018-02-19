@@ -211,8 +211,6 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
       this->dataPtr->checkpoints[this->dataPtr->current - 1]->Start();
   }
 
-  // TODO: Check penalties
-
   // Publish ROS score message
   static gazebo::common::Time lastScorePubTime = _info.simTime;
 

@@ -43,14 +43,17 @@ namespace servicesim
         servicesim_competition::PickUpGuest::Request &_req,
         servicesim_competition::PickUpGuest::Response &_res);
 
-    /// \brief Ignition transport node for communication.
-    private: ignition::transport::Node ignNode;
-
     /// \brief ROS node handle
     public: std::unique_ptr<ros::NodeHandle> rosNode;
 
+    /// \brief Ignition transport node for communication.
+    private: ignition::transport::Node ignNode;
+
     /// \brief PickUp ROS service
     private: ros::ServiceServer pickUpRosService;
+
+    /// \brief The weight for each failed pick-up attempt
+    private: double weightFailedAttempt{0.0};
   };
 }
 #endif

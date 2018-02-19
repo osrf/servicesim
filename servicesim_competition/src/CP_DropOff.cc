@@ -31,6 +31,36 @@ CP_DropOff::CP_DropOff(const sdf::ElementPtr &_sdf)
 {
   this->canPause = true;
 
+  // Get SDF params
+  if (!_sdf)
+  {
+    gzerr << "Missing checkpoint's SDF element" << std::endl;
+    return;
+  }
+
+  if (!_sdf->HasElement("weight"))
+  {
+    gzerr << "Missing checkpoint's <weight> element" << std::endl;
+    return;
+  }
+
+  auto weightElem = _sdf->GetElement("weight");
+  if (!weightElem->HasElement("failed_attempt"))
+  {
+    gzerr << "Missing checkpoint's <weight><failed_attempt> element"
+          << std::endl;
+    return;
+  }
+  this->weightFailedAttempt = weightElem->Get<double>("failed_attempt");
+
+  if (!weightElem->HasElement("too_fast"))
+  {
+    gzerr << "Missing checkpoint's <weight><too_fast> element"
+          << std::endl;
+    return;
+  }
+  this->weightTooFast = weightElem->Get<double>("too_fast");
+
   if (!_sdf->HasElement("guest_name"))
     gzerr << "Missing <guest_name> to monitor follow plugin" << std::endl;
   else
@@ -74,7 +104,7 @@ void CP_DropOff::OnDrift(const ignition::msgs::UInt32 &_msg)
   // 1: Robot moved too fast and actor couldn't follow
   if (reason == 1u)
   {
-    // TODO: apply penalty
+    this->penalty += this->weightTooFast;
   }
   // 2: Scheduled drift time
   else if (reason == 2u)
@@ -148,7 +178,8 @@ bool CP_DropOff::OnDropOffRosRequest(
   // Check if guest is in drop-off location
   if (!this->containGuest)
   {
-    // TODO: apply penalty for bad dropoff request
+    this->penalty += this->weightFailedAttempt;
+
     gzwarn << "Failed to drop-off, guest not in drop-off area" << std::endl;
     _res.success = false;
     return true;
@@ -168,7 +199,7 @@ bool CP_DropOff::OnDropOffRosRequest(
 
   if (!this->Done())
   {
-    // TODO: apply penalty for bad dropoff request
+    this->penalty += this->weightFailedAttempt;
   }
 
   _res.success = this->Done();

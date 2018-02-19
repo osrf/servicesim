@@ -285,21 +285,34 @@
 
       <guest_name><%= guest_name %></guest_name>
 
+      <weight>
+        <collision>10.0</collision>
+      </weight>
+
       <go_to_pick_up>
         <name>Go to pick-up location</name>
-        <weight>1.0</weight>
+        <weight>
+          <time>1.0</time>
+        </weight>
         <!-- for contain plugin -->
         <namespace>/servicesim/go_to_pick_up</namespace>
       </go_to_pick_up>
 
       <pick_up>
         <name>Pick-up guest</name>
-        <weight>1.0</weight>
+        <weight>
+          <time>1.0</time>
+          <failed_attempt>30.0</failed_attempt>
+        </weight>
       </pick_up>
 
       <drop_off>
         <name>Drop-off guest</name>
-        <weight>1.0</weight>
+        <weight>
+          <time>1.0</time>
+          <too_fast>20.0</too_fast>
+          <failed_attempt>30.0</failed_attempt>
+        </weight>
         <guest_name><%= guest_name %></guest_name>
         <!-- for contain plugin -->
         <namespace>/servicesim/drop_off</namespace>
@@ -307,7 +320,9 @@
 
       <return_to_start>
         <name>Return to start</name>
-        <weight>1.0</weight>
+        <weight>
+          <time>1.0</time>
+        </weight>
         <!-- for contain plugin -->
         <namespace>/servicesim/return_to_start</namespace>
       </return_to_start>
