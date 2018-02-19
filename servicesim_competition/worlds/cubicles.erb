@@ -40,18 +40,24 @@
 
       min_x_world = $cubicle_pose[0] + x * cubicle_u
       max_x_world = $cubicle_pose[0] + (x + x_size) * cubicle_u
+      pivot_x = min_x_world + (max_x_world - min_x_world) * rand(0.0..1.0)
 
       if side == -1
         min_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner + drop_width)
         max_y_world = $cubicle_pose[1]
+
+        pivot_y = min_y_world - side * drop_width * 0.5
       else
         min_y_world = $cubicle_pose[1]
         max_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner + drop_width)
+
+        pivot_y = max_y_world - side * drop_width * 0.5
       end
 
       $drop_areas.push({:name => $cubicle_name + '_' + n.to_s(),
                         :min => [min_x_world, min_y_world, $cubicle_pose[2]],
-                        :max => [max_x_world, max_y_world, $cubicle_pose[2]]})
+                        :max => [max_x_world, max_y_world, $cubicle_pose[2]],
+                        :pivot => [pivot_x, pivot_y, $cubicle_pose[2]]})
     end
   end
 %>

@@ -40,6 +40,23 @@
 
   ###############################################
   #                                             #
+  #            TRANSFORMATION MATRIX            #
+  #                                             #
+  ###############################################
+
+  require 'matrix'
+
+  # Helper function to create a 2D transform matrix
+  def TMatrix(_x, _y, _yaw)
+    return Matrix.rows([
+             [Math::cos(_yaw), -Math::sin(_yaw), _x],
+             [Math::sin(_yaw),  Math::cos(_yaw), _y],
+             [0, 0, 1]
+           ])
+  end
+
+  ###############################################
+  #                                             #
   #               INITIALIZATION                #
   #                                             #
   ###############################################
@@ -198,64 +215,8 @@
      :door => doorAngle()},
   ]
 
-  # INTERNAL
-  # Calculate drop-off areas
-
+  # Array is filled as rooms are created
   $drop_areas = []
-
-  for room in rooms
-
-    # Skip rooms with closed doors
-    if room[:door] == 0.0
-      next
-    end
-
-    # min_x, max_x, min_y, max_y office units in room coords
-    size = room[:type][:size]
-
-    # Local min / max coords in meters
-    if room[:type][:type] == 'bathroom'
-      # Drop in front of door
-      min_x_local = -$o
-      max_x_local = 0
-      min_y_local = 0
-      max_y_local = $o
-    else
-      min_x_local = (size[0] - 1) * $o
-      max_x_local = size[1] * $o
-      min_y_local = (size[2] - 1) * $o
-      max_y_local = size[3] * $o
-    end
-
-    # Room coords in world
-    room_x = room[:pose][0]
-    room_y = room[:pose][1]
-    yaw = room[:pose][5]
-
-    # Adjust for room rotation
-    if yaw == $pi
-      min_x_local, max_x_local = -max_x_local, -min_x_local
-      min_y_local, max_y_local = -max_y_local, -min_y_local
-    elsif yaw == $pi * 0.5
-      min_x_local, max_x_local, min_y_local, max_y_local =
-      -max_y_local, -min_y_local, min_x_local, max_x_local
-    elsif yaw == -$pi * 0.5
-      min_x_local, max_x_local, min_y_local, max_y_local =
-      min_y_local, max_y_local, -max_x_local, -min_x_local
-    end
-
-    # Min / max coords in world
-    min_x_world = room_x + min_x_local
-    max_x_world = room_x + max_x_local
-    min_y_world = room_y + min_y_local
-    max_y_world = room_y + max_y_local
-
-    # Fill vectors
-    min = [min_x_world, min_y_world, room[:pose][2]]
-    max = [max_x_world, max_y_world, room[:pose][2]]
-
-    $drop_areas.push({:name => room[:name], :min => min, :max => max})
-  end
 
   ###############################################
   #                                             #
@@ -311,7 +272,6 @@
   ###############################################
 
   guest_name = 'guest'
-  guest_pose = [-6.9, 1.33, 1.00, 1.54, 0, 1.9]
   guest_skin = skins.sample
   guest_anim = animations_trajectory[0]
   drift_times = []
@@ -332,35 +292,6 @@
   ###############################################
 
   robot_name = 'servicebot'
-
-  ###############################################
-  #                                             #
-  #               CHECKPOINTS                   #
-  #                                             #
-  ###############################################
-
-  # TODO: randomize locations
-  pick_up_location =
-  {
-    :name => 'reception',
-    :pose => guest_pose,
-    :size => [4, 4, 10]
-  }
-
-  drop_off_location =
-  {
-    :name => 'office_1',
-    :pose => [-2.61, 7.24, 0, 0, 0, 0],
-    :size => [4, 4, 10]
-  }
-
-  # TODO: must sync this with USRF spawn location
-  start_location =
-  {
-    :name => 'cafeteria_1',
-    :pose => [3.76, 1.23, 0, 0, 0, 0],
-    :size => [2, 2, 10]
-  }
 %>
 <!--
   Generated from service.world.erb
@@ -607,63 +538,6 @@
     <!-- Front entrance -->
     <%= fromFile(DIR + "/front_entrance.erb") %>
 
-    <!-- Guest -->
-    <actor name="<%= guest_name %>">
-
-      <!-- Starting pose, nice for when the world is reset -->
-      <pose>
-        <%= guest_pose[0] %>
-        <%= guest_pose[1] %>
-        <%= guest_pose[2] %>
-        <%= guest_pose[3] %>
-        <%= guest_pose[4] %>
-        <%= guest_pose[5] %>
-      </pose>
-
-      <skin>
-        <filename>model://actor/meshes/<%= guest_skin %></filename>
-      </skin>
-
-      <animation name="animation">
-        <filename>model://actor/meshes/<%= guest_anim %></filename>
-      </animation>
-
-      <!-- Need one waypoint to idle at -->
-      <script>
-        <trajectory id='0' type='animation'>
-          <waypoint>
-            <time>100</time>
-              <pose>
-                <%= guest_pose[0] %>
-                <%= guest_pose[1] %>
-                <%= guest_pose[2] %>
-                <%= guest_pose[3] %>
-                <%= guest_pose[4] %>
-                <%= guest_pose[5] %>
-              </pose>
-          </waypoint>
-        </trajectory>
-      </script>
-
-      <plugin name="trajectory" filename="libFollowActorPlugin.so">
-
-        <namespace>servicesim</namespace>
-
-        <!-- FIXME: currently not avoiding obstacles -->
-        <ignore_obstacle>walls</ignore_obstacle>
-        <ignore_obstacle>floor</ignore_obstacle>
-
-        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
-        <ignore_obstacle>servicebot</ignore_obstacle>
-
-        <% for time in drift_times %>
-          <drift_time><%= time.to_s %></drift_time>
-        <% end %>
-
-      </plugin>
-
-    </actor>
-
     <!-- Trajectory actors -->
     <%
       for actor in actors_trajectory
@@ -738,15 +612,78 @@
       <%= fromFile(DIR + "/" + "actor_idle.erb") %>
     <% end %>
 
+<%
+  ###############################################
+  #                                             #
+  #               CHECKPOINTS                   #
+  #                                             #
+  ###############################################
+
+  # Pick-up (guest's start point)
+  location = $drop_areas.sample()
+
+  size_x = location[:max][0] - location[:min][0]
+  size_y = location[:max][1] - location[:min][1]
+
+  center_x = location[:min][0] + size_x * 0.5
+  center_y = location[:min][1] + size_y * 0.5
+
+  $pick_up_location  =
+  {
+    :name => location[:name],
+    :pose => [center_x, center_y, 0, 0, 0, 0],
+    :size => [size_x, size_y, 10],
+    :pivot => location[:pivot]
+  }
+
+  # Drop-off (guest's end point)
+  while location[:name] == $pick_up_location[:name]
+    location = $drop_areas.sample()
+  end
+
+  size_x = location[:max][0] - location[:min][0]
+  size_y = location[:max][1] - location[:min][1]
+
+  center_x = location[:min][0] + size_x * 0.5
+  center_y = location[:min][1] + size_y * 0.5
+
+  $drop_off_location =
+  {
+    :name => location[:name],
+    :pose => [center_x, center_y, 0, 0, 0, 0],
+    :size => [size_x, size_y, 10]
+  }
+
+  # Start (robot's start/end point)
+  while location[:name] == $pick_up_location[:name] or
+        location[:name] == $drop_off_location[:name]
+    location = $drop_areas.sample()
+  end
+
+  size_x = location[:max][0] - location[:min][0]
+  size_y = location[:max][1] - location[:min][1]
+
+  center_x = location[:min][0] + size_x * 0.5
+  center_y = location[:min][1] + size_y * 0.5
+
+  $start_location =
+  {
+    :name => location[:name],
+    :pose => [center_x, center_y, 0, 0, 0, 0],
+    :size => [size_x, size_y, 10],
+    # TODO: pass this to spawn URDF
+    :pivot => location[:pivot]
+  }
+%>
     <!-- Competition plugin -->
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
       <pick_up_location>
-        <%= pick_up_location[:name] %>
+        <%= $pick_up_location[:name] %>
       </pick_up_location>
 
       <drop_off_location>
-        <%= drop_off_location[:name] %>
+        <%= $drop_off_location[:name] %>
       </drop_off_location>
 
       <guest_name><%= guest_name %></guest_name>
@@ -796,19 +733,19 @@
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
-        <%= pick_up_location[:pose][0] %>
-        <%= pick_up_location[:pose][1] %>
-        <%= pick_up_location[:pose][2] %>
-        <%= pick_up_location[:pose][3] %>
-        <%= pick_up_location[:pose][4] %>
-        <%= pick_up_location[:pose][5] %>
+        <%= $pick_up_location[:pose][0] %>
+        <%= $pick_up_location[:pose][1] %>
+        <%= $pick_up_location[:pose][2] %>
+        <%= $pick_up_location[:pose][3] %>
+        <%= $pick_up_location[:pose][4] %>
+        <%= $pick_up_location[:pose][5] %>
       </pose>
       <geometry>
         <box>
           <size>
-            <%= pick_up_location[:size][0] %>
-            <%= pick_up_location[:size][1] %>
-            <%= pick_up_location[:size][2] %>
+            <%= $pick_up_location[:size][0] %>
+            <%= $pick_up_location[:size][1] %>
+            <%= $pick_up_location[:size][2] %>
           </size>
         </box>
       </geometry>
@@ -820,19 +757,19 @@
       <namespace>servicesim/drop_off</namespace>
       <enabled>false</enabled>
       <pose>
-        <%= drop_off_location[:pose][0] %>
-        <%= drop_off_location[:pose][1] %>
-        <%= drop_off_location[:pose][2] %>
-        <%= drop_off_location[:pose][3] %>
-        <%= drop_off_location[:pose][4] %>
-        <%= drop_off_location[:pose][5] %>
+        <%= $drop_off_location[:pose][0] %>
+        <%= $drop_off_location[:pose][1] %>
+        <%= $drop_off_location[:pose][2] %>
+        <%= $drop_off_location[:pose][3] %>
+        <%= $drop_off_location[:pose][4] %>
+        <%= $drop_off_location[:pose][5] %>
       </pose>
       <geometry>
         <box>
           <size>
-            <%= drop_off_location[:size][0] %>
-            <%= drop_off_location[:size][1] %>
-            <%= drop_off_location[:size][2] %>
+            <%= $drop_off_location[:size][0] %>
+            <%= $drop_off_location[:size][1] %>
+            <%= $drop_off_location[:size][2] %>
           </size>
         </box>
       </geometry>
@@ -844,23 +781,92 @@
       <namespace>servicesim/return_to_start</namespace>
       <enabled>false</enabled>
       <pose>
-        <%= start_location[:pose][0] %>
-        <%= start_location[:pose][1] %>
-        <%= start_location[:pose][2] %>
-        <%= start_location[:pose][3] %>
-        <%= start_location[:pose][4] %>
-        <%= start_location[:pose][5] %>
+        <%= $start_location[:pose][0] %>
+        <%= $start_location[:pose][1] %>
+        <%= $start_location[:pose][2] %>
+        <%= $start_location[:pose][3] %>
+        <%= $start_location[:pose][4] %>
+        <%= $start_location[:pose][5] %>
       </pose>
       <geometry>
         <box>
           <size>
-            <%= start_location[:size][0] %>
-            <%= start_location[:size][1] %>
-            <%= start_location[:size][2] %>
+            <%= $start_location[:size][0] %>
+            <%= $start_location[:size][1] %>
+            <%= $start_location[:size][2] %>
           </size>
         </box>
       </geometry>
     </plugin>
+
+    <%
+      guest_pose =
+      [
+        $pick_up_location[:pivot][0],
+        $pick_up_location[:pivot][1],
+        1.00,
+        1.54,
+        0,
+        rand(-$pi..$pi)
+      ]
+    %>
+
+    <!-- Guest -->
+    <actor name="<%= guest_name %>">
+
+      <!-- Starting pose, nice for when the world is reset -->
+      <pose>
+        <%= guest_pose[0] %>
+        <%= guest_pose[1] %>
+        <%= guest_pose[2] %>
+        <%= guest_pose[3] %>
+        <%= guest_pose[4] %>
+        <%= guest_pose[5] %>
+      </pose>
+
+      <skin>
+        <filename>model://actor/meshes/<%= guest_skin %></filename>
+      </skin>
+
+      <animation name="animation">
+        <filename>model://actor/meshes/<%= guest_anim %></filename>
+      </animation>
+
+      <!-- Need one waypoint to idle at -->
+      <script>
+        <trajectory id='0' type='animation'>
+          <waypoint>
+            <time>100</time>
+              <pose>
+                <%= guest_pose[0] %>
+                <%= guest_pose[1] %>
+                <%= guest_pose[2] %>
+                <%= guest_pose[3] %>
+                <%= guest_pose[4] %>
+                <%= guest_pose[5] %>
+              </pose>
+          </waypoint>
+        </trajectory>
+      </script>
+
+      <plugin name="trajectory" filename="libFollowActorPlugin.so">
+
+        <namespace>servicesim</namespace>
+
+        <!-- FIXME: currently not avoiding obstacles -->
+        <ignore_obstacle>walls</ignore_obstacle>
+        <ignore_obstacle>floor</ignore_obstacle>
+
+        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
+        <ignore_obstacle>servicebot</ignore_obstacle>
+
+        <% for time in drift_times %>
+          <drift_time><%= time.to_s %></drift_time>
+        <% end %>
+
+      </plugin>
+
+    </actor>
 <%
   end # if not $floorplan
 %>

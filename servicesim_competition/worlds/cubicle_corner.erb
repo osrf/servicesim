@@ -22,10 +22,13 @@
     max_x_world = $pose[0] + drop_size
     min_y_world = $pose[1]
     max_y_world = $pose[1] + drop_size
+    pivot_x = rand(min_x_world..max_x_world)
+    pivot_y = rand((max_y_world-0.2)..max_y_world)
 
     $drop_areas.push({:name => $cubicle_name,
                       :min => [min_x_world, min_y_world, $pose[2]],
-                      :max => [max_x_world, max_y_world, $pose[2]]})
+                      :max => [max_x_world, max_y_world, $pose[2]],
+                      :pivot => [pivot_x, pivot_y, 0]})
   end
 %>
   <model name="<%= $cubicle_name %>">

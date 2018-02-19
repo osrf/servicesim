@@ -87,6 +87,42 @@
 
 </model>
 
+<model name="<%= drop[:name] %>_pivot">
+
+  <static>true</static>
+
+  <pose>
+    <%= drop[:pivot][0] %>
+    <%= drop[:pivot][1] %>
+    <%= drop[:pivot][2] + height * 0.5 %>
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+
+    <visual name="visual">
+      <meta>
+        <layer>1</layer>
+      </meta>
+      <geometry>
+        <cylinder>
+          <radius>0.1</radius>
+          <length><%= height %></length>
+        </cylinder>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/OrangeTransparent</name>
+        </script>
+      </material>
+    </visual>
+  </link>
+
+</model>
+
 <model name="<%= drop[:name] %>_box">
 
   <static>true</static>
@@ -127,3 +163,111 @@
 </model>
 
 <% end %>
+
+<model name="pick_up_location">
+
+  <static>true</static>
+
+  <pose>
+    <%= $pick_up_location[:pivot][0] %>
+    <%= $pick_up_location[:pivot][1] %>
+    <%= $pick_up_location[:pivot][2] + height * 0.5 %>
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+
+    <visual name="visual">
+      <meta>
+        <layer>3</layer>
+      </meta>
+      <geometry>
+        <cylinder>
+          <radius>0.1</radius>
+          <length><%= height %></length>
+        </cylinder>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Yellow</name>
+        </script>
+      </material>
+    </visual>
+  </link>
+
+</model>
+
+<model name="drop_off_location">
+
+  <static>true</static>
+
+  <pose>
+    <%= $drop_off_location[:pose][0] %>
+    <%= $drop_off_location[:pose][1] %>
+    <%= $drop_off_location[:pose][2] + height * 0.5 %>
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+
+    <visual name="visual">
+      <meta>
+        <layer>3</layer>
+      </meta>
+      <geometry>
+        <cylinder>
+          <radius>0.1</radius>
+          <length><%= height %></length>
+        </cylinder>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/Purple</name>
+        </script>
+      </material>
+    </visual>
+  </link>
+
+</model>
+
+<model name="start_location">
+
+  <static>true</static>
+
+  <pose>
+    <%= $start_location[:pivot][0] %>
+    <%= $start_location[:pivot][1] %>
+    <%= $start_location[:pivot][2] + height * 0.5 %>
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+
+    <visual name="visual">
+      <meta>
+        <layer>3</layer>
+      </meta>
+      <geometry>
+        <cylinder>
+          <radius>0.1</radius>
+          <length><%= height %></length>
+        </cylinder>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/SkyBlue</name>
+        </script>
+      </material>
+    </visual>
+  </link>
+
+</model>

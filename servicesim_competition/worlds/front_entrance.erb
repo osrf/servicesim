@@ -8,15 +8,18 @@
 
   $drop_areas.push({:name => 'FrontElevator',
                     :min => [-3*$o, 0.0, 0],
-                    :max => [$o, 3 * $o, 0]})
+                    :max => [$o, 3 * $o, 0],
+                    :pivot => [rand(-3*$o..$o), rand(0.1*$o..2*$o), 0]})
 
   $drop_areas.push({:name => 'FrontCouchA',
                     :min => [-6*$o, 0.0, 0],
-                    :max => [-3*$o, 3 * $o, 0]})
+                    :max => [-3*$o, 3 * $o, 0],
+                    :pivot => [rand(-6.81..-5.34), rand(0.65..3.45), 0]})
 
   $drop_areas.push({:name => 'FrontCouchB',
                     :min => [$o, 0.0, 0],
-                    :max => [5*$o, 2 * $o, 0]})
+                    :max => [5*$o, 2 * $o, 0],
+                    :pivot => [rand(3.92..5.39), 1.56, 0]})
 %>
 
 <model name="FrontEntrance">
