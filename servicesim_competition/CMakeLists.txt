@@ -150,6 +150,7 @@ install(TARGETS ${competition_plugin_name}
 install(
   DIRECTORY
     launch
+    map
     media
     models
     worlds
