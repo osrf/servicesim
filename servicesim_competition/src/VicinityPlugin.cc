@@ -15,8 +15,6 @@
  *
 */
 
-#include <servicesim_competition/ActorNames.h>
-
 #include "VicinityPlugin.hh"
 
 using namespace servicesim;

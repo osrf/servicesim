@@ -23,6 +23,8 @@
 
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/Plugin.hh>
+
+#include <servicesim_competition/ActorNames.h>
 #include <ros/ros.h>
 
 namespace servicesim
