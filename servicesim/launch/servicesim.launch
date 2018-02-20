@@ -17,7 +17,6 @@
     -x 3.7 -y 1.23 -z 0.75 -Y 3.14159"
   />
     <!--
-    -x 6.5 -y -18.2 -z 0.75"
     -J left_shoulder_joint -0.55
     -J left_upper_arm_joint 1.35
     -J left_elbow_joint -0.5
@@ -27,21 +26,15 @@
     -Y 1.57"
      -->
   <group if="$(arg teleop)">
-    <node ns="servicebot" name="servicebot_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" respawn="false" output="screen">
-      <param name="speed" type="double" value="2.2" />
-    </node>
+    <include file="$(find servicesim)/launch/teleop.launch" />
   </group>
   <group if="$(arg rviz)">
-    <arg name="config_file" value="$(find servicesim)/config/rviz_config.rviz"/>
-    <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)">
-      <remap from="/move_base_simple/goal" to="/servicebot/move_base_simple/goal" />
-    </node>
+    <include file="$(find servicesim)/launch/rviz.launch" />
   </group>
   <group if="$(arg controllers)">
     <include file="$(find servicebot_control)/launch/servicebot_control.launch" />
   </group>
   <group if="$(arg dashboard)">
-    <arg name="perspective_file" value="$(find servicesim)/config/servicesim_perspective.perspective"/>
-    <node name="$(anon rqt)" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(arg perspective_file)" />
+    <include file="$(find servicesim)/launch/rqt_dashboard.launch" />
   </group>
 </launch>

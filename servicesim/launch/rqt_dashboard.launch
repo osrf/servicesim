@@ -1,0 +1,5 @@
+<launch>
+  <arg name="perspective_file" default="$(find servicesim)/config/servicesim_perspective.perspective"/>
+
+  <node name="$(anon rqt)" pkg="rqt_gui" type="rqt_gui" respawn="false" output="screen" args="--perspective-file $(arg perspective_file)" />
+</launch>
