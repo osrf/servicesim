@@ -156,6 +156,7 @@ target_link_libraries(${competition_plugin_name}
 )
 add_dependencies(${competition_plugin_name}
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  servicesim_competition_generate_messages_cpp
 )
 install(TARGETS ${competition_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

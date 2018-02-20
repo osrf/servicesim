@@ -15,27 +15,29 @@
  *
 */
 
+#include <servicesim_competition/ActorNames.h>
+
 #include "VicinityPlugin.hh"
+
 using namespace servicesim;
 
 GZ_REGISTER_MODEL_PLUGIN(servicesim::VicinityPlugin);
 
-////////////////////////
-// Constructor
+//////////////////////////////////////////////////
 VicinityPlugin::VicinityPlugin()
 {
 }
 
-//Destructor
+//////////////////////////////////////////////////
 VicinityPlugin::~VicinityPlugin()
 {
 
 }
 
+//////////////////////////////////////////////////
 void VicinityPlugin::Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 {
-  // TODO(mikaelarguedas) Get the robot namespace from sdf instead of hard coding it
-  this->rosnode_ = new ros::NodeHandle("/servicebot");
+  this->rosnode_ = new ros::NodeHandle("/" + _parent->GetName());
 
   this->model_ = _parent;
   this->world_ = _parent->GetWorld(); // Store the pointer to the world
@@ -43,12 +45,14 @@ void VicinityPlugin::Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sd
   for (unsigned int i = 0; i < this->world_->ModelCount(); ++i)
   {
     auto model = this->world_->ModelByIndex(i);
-    if (gazebo::physics::ActorPtr a = boost::dynamic_pointer_cast<gazebo::physics::Actor>(model))
+    if (gazebo::physics::ActorPtr a =
+        boost::dynamic_pointer_cast<gazebo::physics::Actor>(model))
     {
       this->actorPtrs_.push_back(a);
     }
   }
-  gzmsg << "Found " << this->actorPtrs_.size() << " actors in the world" << std::endl;
+  gzmsg << "[VicinityPlugin] Found " << this->actorPtrs_.size()
+        << " actors in the world" << std::endl;
 
   if (!_sdf->HasElement("threshold"))
   {
@@ -77,17 +81,20 @@ void VicinityPlugin::Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sd
     this->update_rate_ = _sdf->GetElement("updateRate")->Get<double>();
   }
 
-  this->vicinity_pub_ = this->rosnode_->advertise<servicesim_competition::ActorNames>(
+  this->vicinity_pub_ =
+      this->rosnode_->advertise<servicesim_competition::ActorNames>(
       this->topicName_, 1
   );
 
 
   this->last_time_ = this->world_->SimTime();
+
   // Listen to the update event
   this->updateConnection = gazebo::event::Events::ConnectWorldUpdateBegin(
-    boost::bind(&VicinityPlugin::Update, this));
+    std::bind(&VicinityPlugin::Update, this));
 }
 
+//////////////////////////////////////////////////
 void VicinityPlugin::Update()
 {
   gazebo::common::Time cur_time = this->world_->SimTime();
@@ -109,8 +116,8 @@ void VicinityPlugin::Update()
       msg.actor_names.push_back(actor->GetName());
     }
   }
-  if (msg.actor_names.size() > 0) {
-    gzmsg << "publishing message" << std::endl;
+  if (msg.actor_names.size() > 0)
+  {
     this->vicinity_pub_.publish(msg);
   }
   this->last_time_ = cur_time;

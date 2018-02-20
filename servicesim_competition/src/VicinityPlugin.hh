@@ -15,42 +15,67 @@
  *
 */
 
-#ifndef GAZEBO_PLUGINS_VICINITY_PLUGIN_HH
-#define GAZEBO_PLUGINS_VICINITY_PLUGIN_HH
+#ifndef SERVICESIM_VICINITYPLUGIN_HH
+#define SERVICESIM_VICINITYPLUGIN_HH
 
 #include <string>
 #include <vector>
 
-#include <boost/bind.hpp>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/Plugin.hh>
-#include "ros/ros.h"
-#include <servicesim_competition/ActorNames.h>
+#include <ros/ros.h>
 
 namespace servicesim
 {
+  /// \brief Reports the name of all actors within a given radius of the model
+  ///
+  /// SDF params:
+  ///   * <threshold> Radius in meters, defaults to 5.0
+  ///   * <topicName> ROS topic name: /<robotName>/<topicName>, defaults to RFID
+  ///   * <updateRate> Publish frequency in Hz
   class VicinityPlugin: public gazebo::ModelPlugin
   {
+    /// \brief Constructor
+    public: VicinityPlugin();
 
-  public: VicinityPlugin();
-  public: virtual ~VicinityPlugin();
-  public: void Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sdf);
-  public: void Update();
+    /// \brief Destructor
+    public: virtual ~VicinityPlugin();
 
-  //Store pointer to the model
-  private: gazebo::physics::ModelPtr model_;
-  //Store pointer to the world
-  private: gazebo::physics::WorldPtr world_;
-  private: gazebo::event::ConnectionPtr updateConnection;
-  private: double threshold_;
-  private: double update_rate_;
-  private: std::string topicName_;
-  private: gazebo::common::Time last_time_;
+    // Documentation inherited
+    public: void Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sdf);
 
-  private: std::vector<gazebo::physics::ActorPtr> actorPtrs_;
-  /// ROS stuff
-  private: ros::NodeHandle * rosnode_;
-  private: ros::Publisher vicinity_pub_;
+    /// \brief Called at every simulation iteration
+    public: void Update();
+
+    /// \brief Store pointer to the model
+    private: gazebo::physics::ModelPtr model_;
+
+    /// \brief Store pointer to the world
+    private: gazebo::physics::WorldPtr world_;
+
+    /// \brief Update event connection
+    private: gazebo::event::ConnectionPtr updateConnection;
+
+    /// \brief Radius in meters
+    private: double threshold_;
+
+    /// \brief Publish frequency
+    private: double update_rate_;
+
+    /// \brief Topic name
+    private: std::string topicName_;
+
+    /// \brief Last update time
+    private: gazebo::common::Time last_time_;
+
+    /// \brief Store pointers to all actors in the world
+    private: std::vector<gazebo::physics::ActorPtr> actorPtrs_;
+
+    /// \brief ROS node handle
+    private: ros::NodeHandle *rosnode_;
+
+    /// \brief ROS publisher
+    private: ros::Publisher vicinity_pub_;
   };
 }
 
