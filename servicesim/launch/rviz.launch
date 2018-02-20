@@ -1,0 +1,4 @@
+<launch>
+    <arg name="config_file" default="$(find servicesim)/config/rviz_config.rviz"/>
+    <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false" output="screen" args="-d $(arg config_file)" />
+</launch>

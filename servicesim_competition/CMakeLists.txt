@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 # Gazebo
-find_package(gazebo 8.2.0 REQUIRED)
+find_package(gazebo 8.3.0 EXACT REQUIRED)
 
 add_message_files(
   FILES
@@ -97,6 +97,28 @@ install(TARGETS ${follow_actor_plugin_name}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
+#############################
+## Collision Actor plugin ##
+#############################
+
+# Create the libCollisionActorPlugin.so library.
+set(collision_actor_plugin_name CollisionActorPlugin)
+add_library(${collision_actor_plugin_name} SHARED
+  src/CollisionActorPlugin.cc
+)
+target_link_libraries(${collision_actor_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+add_dependencies(${collision_actor_plugin_name}
+  servicesim_competition_generate_messages_cpp
+)
+install(TARGETS ${collision_actor_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
 ##########################
 ##      Competition     ##
 ##########################
@@ -129,6 +151,7 @@ install(TARGETS ${competition_plugin_name}
 install(
   DIRECTORY
     launch
+    map
     media
     models
     worlds
