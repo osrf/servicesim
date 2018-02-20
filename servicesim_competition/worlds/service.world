@@ -30,135 +30,6 @@
       </ode>
     </physics>
 
-    <!-- Competition plugin -->
-    <plugin name="competition" filename="libCompetitionPlugin.so">
-
-      <pick_up_location>
-        reception
-      </pick_up_location>
-
-      <drop_off_location>
-        office_1
-      </drop_off_location>
-
-      <guest_name>guest</guest_name>
-
-      <weight>
-        <collision>10.0</collision>
-      </weight>
-
-      <go_to_pick_up>
-        <name>Go to pick-up location</name>
-        <weight>
-          <time>1.0</time>
-        </weight>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/go_to_pick_up</namespace>
-      </go_to_pick_up>
-
-      <pick_up>
-        <name>Pick-up guest</name>
-        <weight>
-          <time>1.0</time>
-          <failed_attempt>30.0</failed_attempt>
-        </weight>
-      </pick_up>
-
-      <drop_off>
-        <name>Drop-off guest</name>
-        <weight>
-          <time>1.0</time>
-          <too_fast>20.0</too_fast>
-          <failed_attempt>30.0</failed_attempt>
-        </weight>
-        <guest_name>guest</guest_name>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/drop_off</namespace>
-      </drop_off>
-
-      <return_to_start>
-        <name>Return to start</name>
-        <weight>
-          <time>1.0</time>
-        </weight>
-        <!-- for contain plugin -->
-        <namespace>/servicesim/return_to_start</namespace>
-      </return_to_start>
-
-    </plugin>
-
-    <!-- Pick-up area contain plugin -->
-    <plugin name="pick_up" filename="libContainPlugin.so">
-      <entity>servicebot</entity>
-      <namespace>servicesim/go_to_pick_up</namespace>
-      <enabled>false</enabled>
-      <pose>
-        -6.9
-        1.33
-        1.0
-        1.54
-        0
-        1.9
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            4
-            4
-            10
-          </size>
-        </box>
-      </geometry>
-    </plugin>
-
-    <!-- Drop-off area contain plugin -->
-    <plugin name="drop_off" filename="libContainPlugin.so">
-      <entity>guest</entity>
-      <namespace>servicesim/drop_off</namespace>
-      <enabled>false</enabled>
-      <pose>
-        -2.61
-        7.24
-        0
-        0
-        0
-        0
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            4
-            4
-            10
-          </size>
-        </box>
-      </geometry>
-    </plugin>
-
-    <!-- Start area contain plugin -->
-    <plugin name="start" filename="libContainPlugin.so">
-      <entity>servicebot</entity>
-      <namespace>servicesim/return_to_start</namespace>
-      <enabled>false</enabled>
-      <pose>
-        3.76
-        1.23
-        0
-        0
-        0
-        0
-      </pose>
-      <geometry>
-        <box>
-          <size>
-            2
-            2
-            10
-          </size>
-        </box>
-      </geometry>
-    </plugin>
-
 
     <!-- GUI -->
     <gui fullscreen='0'>
@@ -224,6 +95,7 @@
     </model>
 
     <!-- Floor -->
+    
     <model name="floor">
       <pose>
         -2.9699999999999998
@@ -46416,7 +46288,7 @@
     
       
 
-<actor name="actor_58">
+<actor name="human_58">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -46458,7 +46330,7 @@
     
       
 
-<actor name="actor_59">
+<actor name="human_59">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -46498,6 +46370,139 @@
 </actor>
 
     
+
+    <!-- Competition plugin -->
+    <plugin name="competition" filename="libCompetitionPlugin.so">
+
+      <pick_up_location>
+        reception
+      </pick_up_location>
+
+      <drop_off_location>
+        office_1
+      </drop_off_location>
+
+      <guest_name>guest</guest_name>
+      <robot_name>servicebot</robot_name>
+      <ground_name>floor</ground_name>
+      <human_name>human</human_name>
+
+      <weight>
+        <human_contact>30000.0</human_contact>
+        <obj_contact>10000.0</obj_contact>
+      </weight>
+
+      <go_to_pick_up>
+        <name>Go to pick-up location</name>
+        <weight>
+          <time>1.0</time>
+        </weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/go_to_pick_up</namespace>
+      </go_to_pick_up>
+
+      <pick_up>
+        <name>Pick-up guest</name>
+        <weight>
+          <time>1.0</time>
+          <failed_attempt>30.0</failed_attempt>
+        </weight>
+      </pick_up>
+
+      <drop_off>
+        <name>Drop-off guest</name>
+        <weight>
+          <time>1.0</time>
+          <too_fast>20.0</too_fast>
+          <failed_attempt>30.0</failed_attempt>
+        </weight>
+        <guest_name>guest</guest_name>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/drop_off</namespace>
+      </drop_off>
+
+      <return_to_start>
+        <name>Return to start</name>
+        <weight>
+          <time>1.0</time>
+        </weight>
+        <!-- for contain plugin -->
+        <namespace>/servicesim/return_to_start</namespace>
+      </return_to_start>
+
+    </plugin>
+
+    <!-- Pick-up area contain plugin -->
+    <plugin name="pick_up" filename="libContainPlugin.so">
+      <entity>servicebot</entity>
+      <namespace>servicesim/go_to_pick_up</namespace>
+      <enabled>false</enabled>
+      <pose>
+        -6.9
+        1.33
+        1.0
+        1.54
+        0
+        1.9
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            4
+            4
+            10
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Drop-off area contain plugin -->
+    <plugin name="drop_off" filename="libContainPlugin.so">
+      <entity>guest</entity>
+      <namespace>servicesim/drop_off</namespace>
+      <enabled>false</enabled>
+      <pose>
+        -2.61
+        7.24
+        0
+        0
+        0
+        0
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            4
+            4
+            10
+          </size>
+        </box>
+      </geometry>
+    </plugin>
+
+    <!-- Start area contain plugin -->
+    <plugin name="start" filename="libContainPlugin.so">
+      <entity>servicebot</entity>
+      <namespace>servicesim/return_to_start</namespace>
+      <enabled>false</enabled>
+      <pose>
+        3.76
+        1.23
+        0
+        0
+        0
+        0
+      </pose>
+      <geometry>
+        <box>
+          <size>
+            2
+            2
+            10
+          </size>
+        </box>
+      </geometry>
+    </plugin>
 
 
   </world>

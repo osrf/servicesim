@@ -108,6 +108,7 @@ add_library(${competition_plugin_name} SHARED
   src/Checkpoint.cc
   src/CP_DropOff.cc
   src/CP_PickUp.cc
+  src/PenaltyChecker.cc
 )
 target_link_libraries(${competition_plugin_name}
   ${GAZEBO_LIBRARIES}

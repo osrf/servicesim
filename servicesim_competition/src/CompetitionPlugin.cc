@@ -27,6 +27,7 @@
 #include "CP_GoToPickUp.hh"
 #include "CP_PickUp.hh"
 #include "CP_ReturnToStart.hh"
+#include "PenaltyChecker.hh"
 
 /////////////////////////////////////////////////
 class servicesim::CompetitionPluginPrivate
@@ -61,6 +62,9 @@ class servicesim::CompetitionPluginPrivate
 
   /// \brief Frequency in Hz to publish score message
   public: double scoreFreq{50};
+
+  /// \brief Penalty checker
+  public: std::unique_ptr<PenaltyChecker> penaltyChecker{nullptr};
 };
 
 using namespace servicesim;
@@ -123,6 +127,9 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
         _sdf->GetElement("return_to_start")));
     this->dataPtr->checkpoints.push_back(std::move(cp));
   }
+
+  // Penalty checker
+  this->dataPtr->penaltyChecker.reset(new PenaltyChecker(_sdf));
 
   // ROS transport
   if (!ros::isInitialized())
@@ -226,7 +233,7 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
     total += score;
   }
 
-  // TODO add penalties
+  total -= this->dataPtr->penaltyChecker->Penalty();
 
   msg.score = total;
 
