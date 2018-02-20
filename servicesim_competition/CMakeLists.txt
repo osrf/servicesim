@@ -4,6 +4,7 @@ project(servicesim_competition)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
+  roscpp
   std_msgs
 )
 
@@ -35,6 +36,7 @@ catkin_package(
   CATKIN_DEPENDS
     geometry_msgs
     message_runtime
+    roscpp
     std_msgs
   LIBRARIES ${trajectory_actor_plugin_name}
 )
@@ -94,47 +96,6 @@ install(TARGETS ${follow_actor_plugin_name}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
-#############################
-## Collision Actor plugin ##
-#############################
-
-# Create the libCollisionActorPlugin.so library.
-set(collision_actor_plugin_name CollisionActorPlugin)
-add_library(${collision_actor_plugin_name} SHARED
-  src/CollisionActorPlugin.cc
-)
-target_link_libraries(${collision_actor_plugin_name}
-  ${GAZEBO_LIBRARIES}
-  ${roscpp_LIBRARIES}
-)
-add_dependencies(${collision_actor_plugin_name}
-  servicesim_competition_generate_messages_cpp
-)
-install(TARGETS ${collision_actor_plugin_name}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-)
-
-#############################
-###### Vicinity plugin ######
-#############################
-
-# Create the libVicinityPlugin.so library.
-set(vicinity_plugin_name VicinityPlugin)
-add_library(${vicinity_plugin_name} SHARED
-  src/VicinityPlugin.cc
-)
-target_link_libraries(${vicinity_plugin_name}
-  ${GAZEBO_LIBRARIES}
-  ${catkin_LIBRARIES}
-)
-install(TARGETS ${vicinity_plugin_name}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-)
-
 ##########################
 ##      Competition     ##
 ##########################
@@ -167,6 +128,7 @@ install(TARGETS ${competition_plugin_name}
 install(
   DIRECTORY
     launch
+    map
     media
     models
     worlds

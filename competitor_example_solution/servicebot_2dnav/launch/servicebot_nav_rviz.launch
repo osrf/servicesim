@@ -1,0 +1,5 @@
+<launch>
+  <node name="$(anon rviz)" pkg="rviz" type="rviz" args="-d $(find servicebot_2dnav)/config/rviz_config.rviz">
+    <remap from="/move_base_simple/goal" to="/servicebot/move_base_simple/goal" />
+  </node>
+</launch>

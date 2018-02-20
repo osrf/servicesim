@@ -6,6 +6,10 @@
   # * $actor_pose (array[6]) Pose for idling actor
   # * $actor_skin (string) A skin Collada file from model://actor/meshes/
   # * $actor_anim (string) An animation Collada file from model://actor/meshes/
+  # * $enable_collisions (boolean) True to enable actor collisions
+
+  # TODO: set from servicesim world
+  $enable_collisions = true
 %>
 
 <actor name="<%= $actor_name %>">
@@ -44,5 +48,10 @@
       </waypoint>
     </trajectory>
   </script>
+
+  <!-- Enable collisions -->
+  <% if $enable_collisions %>
+    <%= fromFile(DIR + "/actor_collisions.erb") %>
+  <% end %>
 
 </actor>
