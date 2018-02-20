@@ -140,6 +140,7 @@
   #                                             #
   ###############################################
 
+  # Prefix for all human names (guest and non-guest)
   human_name = 'human'
 
   # Skin files under model://actor/meshes
@@ -189,7 +190,7 @@
   #                                             #
   ###############################################
 
-  guest_name = 'guest'
+  guest_name = human_name + '_' + rand(10000..99999).to_s()
   guest_pose = [-6.9, 1.33, 1.00, 1.54, 0, 1.9]
   guest_skin = skins.sample
   guest_anim = animations_trajectory[0]
@@ -545,7 +546,7 @@
 
         # unique name
         $count = $count + 1
-        $actor_name = human_name + '_' + $count.to_s;
+        $actor_name = human_name + '_' + rand(10000..99999).to_s()
 
         # skin
         $actor_skin = nil
@@ -585,7 +586,7 @@
 
         # unique name
         $count = $count + 1
-        $actor_name = human_name + '_' + $count.to_s;
+        $actor_name = human_name + '_' + rand(10000..99999).to_s()
 
         # skin
         $actor_skin = nil
