@@ -716,6 +716,14 @@
     </plugin>
   </gazebo>
 
+  <gazebo>
+    <plugin name="rfid_plugin" filename="libVicinityPlugin.so">
+      <topicName>rfid</topicName>
+      <updateRate>10</updateRate>
+      <threshold>2</threshold>
+    </plugin>
+  </gazebo>
+
   <gazebo reference="front_camera_frame">
     <sensor type="camera" name="FrontCamera">
         <update_rate>24.0</update_rate>

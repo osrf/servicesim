@@ -16,8 +16,7 @@
 */
 
 #include "VicinityPlugin.hh"
-
-using namespace::servicesim;
+using namespace servicesim;
 
 GZ_REGISTER_MODEL_PLUGIN(servicesim::VicinityPlugin);
 
@@ -35,7 +34,8 @@ VicinityPlugin::~VicinityPlugin()
 
 void VicinityPlugin::Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 {
-  this->threshold_ = 5.0;
+  // TODO(mikaelarguedas) Get the robot namespace from sdf instead of hard coding it
+  this->rosnode_ = new ros::NodeHandle("/servicebot");
 
   this->model_ = _parent;
   this->world_ = _parent->GetWorld(); // Store the pointer to the world
@@ -50,22 +50,22 @@ void VicinityPlugin::Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sd
   }
   gzmsg << "Found " << this->actorPtrs_.size() << " actors in the world" << std::endl;
 
-  // std::string model_name = this->model->GetName();
-  // std::string topic_name = "vicinity";
-  // pub = nh.advertise<std_msgs::Bool>(topic_name,1);
-  // paramName = "guest_name";
-  // if (_sdf->HasElement(paramName))
-  // {
-  //   this->entity = world->GetEntity(_sdf->Get<std::string>(paramName));
-  // }
-  paramName = "threshold";
-  if (_sdf->HasElement(paramName))
+  if (!_sdf->HasElement("threshold"))
   {
-    this->threshold_ = _sdf->Get<double>(paramName);
+    this->threshold_ = 5.0;
   }
   else
   {
-    this->threshold_ = 5.0;
+    this->threshold_ = _sdf->GetElement("threshold")->Get<double>();
+  }
+
+  if (!_sdf->HasElement("topicName"))
+  {
+    this->topicName_ = "RFID";
+  }
+  else
+  {
+    this->topicName_ = _sdf->GetElement("topicName")->Get<std::string>();
   }
 
   if (!_sdf->HasElement("updateRate"))
@@ -73,7 +73,13 @@ void VicinityPlugin::Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sd
     this->update_rate_ = 1.0;
   }
   else
+  {
     this->update_rate_ = _sdf->GetElement("updateRate")->Get<double>();
+  }
+
+  this->vicinity_pub_ = this->rosnode_->advertise<servicesim_competition::ActorNames>(
+      this->topicName_, 1
+  );
 
 
   this->last_time_ = this->world_->SimTime();
@@ -85,12 +91,27 @@ void VicinityPlugin::Load(gazebo::physics::ModelPtr _parent, sdf::ElementPtr _sd
 void VicinityPlugin::Update()
 {
   gazebo::common::Time cur_time = this->world_->SimTime();
-  // rate control
+
   if (this->update_rate_ > 0 &&
       (cur_time - this->last_time_).Double() < (1.0 / this->update_rate_))
     return;
-  gzmsg << "Updating Vicinity" << std::endl;
+
+  servicesim_competition::ActorNames msg;
+  for (auto actor : actorPtrs_)
+  {
+    auto robotPos = this->model_->WorldPose().Pos();
+    auto actorPos = actor->WorldPose().Pos();
+
+    auto poseDiff = actorPos - robotPos;
+    poseDiff.Z(0);
+    if (poseDiff.Length() <= this->threshold_)
+    {
+      msg.actor_names.push_back(actor->GetName());
+    }
+  }
+  if (msg.actor_names.size() > 0) {
+    gzmsg << "publishing message" << std::endl;
+    this->vicinity_pub_.publish(msg);
+  }
   this->last_time_ = cur_time;
-  // auto robot_pos = this->model->WorldPose().Pos();
-  // auto entity_pos = this->entity->WordlPose().Pos();
 }

@@ -26,7 +26,7 @@
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/Plugin.hh>
 #include "ros/ros.h"
-#include <std_msgs/Bool.h>
+#include <servicesim_competition/ActorNames.h>
 
 namespace servicesim
 {
@@ -42,21 +42,17 @@ namespace servicesim
   private: gazebo::physics::ModelPtr model_;
   //Store pointer to the world
   private: gazebo::physics::WorldPtr world_;
-  //Store pointer to the entity
-  private: gazebo::physics::EntityPtr entity_;
   private: gazebo::event::ConnectionPtr updateConnection;
-  private: std::string paramName;
   private: double threshold_;
   private: double distance_;
   private: double update_rate_;
+  private: std::string topicName_;
   private: gazebo::common::Time last_time_;
 
   private: std::vector<gazebo::physics::ActorPtr> actorPtrs_;
-  // private: ignition:math:Pose3d robot_pos, entity_pos;
   /// ROS stuff
-  private: ros::NodeHandle nh;
-  private: ros::Publisher pub;
-  private: std_msgs::Bool flag;
+  private: ros::NodeHandle * rosnode_;
+  private: ros::Publisher vicinity_pub_;
   };
 }
 
