@@ -22,7 +22,6 @@
 #include <vector>
 
 #include <boost/bind.hpp>
-// #include <gazebo/gazebo.h>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/Plugin.hh>
 #include "ros/ros.h"
@@ -44,7 +43,6 @@ namespace servicesim
   private: gazebo::physics::WorldPtr world_;
   private: gazebo::event::ConnectionPtr updateConnection;
   private: double threshold_;
-  private: double distance_;
   private: double update_rate_;
   private: std::string topicName_;
   private: gazebo::common::Time last_time_;
