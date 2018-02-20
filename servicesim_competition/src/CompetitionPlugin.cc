@@ -228,12 +228,10 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   double total{0.0};
   for (int i = 0; i < this->dataPtr->checkpoints.size(); ++i)
   {
-    auto score = this->dataPtr->checkpoints[i]->Score();
-    msg.checkpoints.push_back(score);
-    total += score;
+    total += this->dataPtr->checkpoints[i]->Score();
   }
 
-  total -= this->dataPtr->penaltyChecker->Penalty();
+  total += this->dataPtr->penaltyChecker->Penalty();
 
   msg.score = total;
 
