@@ -5,7 +5,7 @@
       "keys": {
         "running-plugins": {
           "type": "repr",
-          "repr": "{u'rqt_service_caller/ServiceCaller': [1], u'rqt_image_view/ImageView': [2, 1], u'rqt_publisher/Publisher': [1]}"
+          "repr": "{u'rqt_service_caller/ServiceCaller': [1], u'rqt_ez_publisher/EzPublisher': [1], u'rqt_image_view/ImageView': [2, 1], u'rqt_publisher/Publisher': [1]}"
         }
       },
       "groups": {
@@ -25,6 +25,37 @@
                 "dock_widget_title": {
                   "type": "repr",
                   "repr": "u'rviz_config.rviz[*] - RViz'"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_service_caller__ServiceCaller__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__ServiceCallerWidget": {
+              "keys": {
+                "dockable": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                },
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "u'Service Caller'"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {
+                "splitter_orientation": {
+                  "type": "repr",
+                  "repr": "2"
                 }
               },
               "groups": {}
@@ -173,7 +204,7 @@
               "keys": {
                 "publishers": {
                   "type": "repr",
-                  "repr": "u\"[{'type_name': 'std_msgs/Float64', 'topic_name': '/servicebot/head_pan_position_controller/command', 'enabled': False, 'rate': 1.0, 'expressions': {u'/servicebot/head_pan_position_controller/command/data': '-0.8'}, 'publisher_id': 0, 'counter': 0}, {'type_name': 'std_msgs/Float64', 'topic_name': '/servicebot/head_tilt_position_controller/command', 'enabled': False, 'rate': 1.0, 'expressions': {u'/servicebot/head_tilt_position_controller/command/data': '0.3'}, 'publisher_id': 1, 'counter': 0}, {'type_name': 'geometry_msgs/Twist', 'topic_name': '/servicebot/cmd_vel', 'enabled': False, 'rate': 1.0, 'expressions': {}, 'publisher_id': 2, 'counter': 0}]\""
+                  "repr": "u\"[{'topic_name': '/servicebot/head_pan_position_controller/command', 'type_name': 'std_msgs/Float64', 'enabled': False, 'rate': 1.0, 'expressions': {u'/servicebot/head_pan_position_controller/command/data': '-0.8'}, 'publisher_id': 0, 'counter': 0}, {'topic_name': '/servicebot/head_tilt_position_controller/command', 'type_name': 'std_msgs/Float64', 'enabled': False, 'rate': 1.0, 'expressions': {u'/servicebot/head_tilt_position_controller/command/data': '0.3'}, 'publisher_id': 1, 'counter': 0}, {'topic_name': '/servicebot/cmd_vel', 'type_name': 'geometry_msgs/Twist', 'enabled': False, 'rate': 1.0, 'expressions': {}, 'publisher_id': 2, 'counter': 0}]\""
                 }
               },
               "groups": {}
@@ -242,10 +273,10 @@
             }
           }
         },
-        "plugin__rqt_service_caller__ServiceCaller__1": {
+        "plugin__rqt_ez_publisher__EzPublisher__1": {
           "keys": {},
           "groups": {
-            "dock_widget__ServiceCallerWidget": {
+            "dock_widget__EzPublisherPluginUi": {
               "keys": {
                 "dockable": {
                   "type": "repr",
@@ -257,19 +288,65 @@
                 },
                 "dock_widget_title": {
                   "type": "repr",
-                  "repr": "u'Service Caller'"
+                  "repr": "u''"
                 }
               },
               "groups": {}
             },
             "plugin": {
               "keys": {
-                "splitter_orientation": {
+                "texts": {
                   "type": "repr",
-                  "repr": "2"
+                  "repr": "[u'/servicebot/head_pan_position_controller/command/data', u'/servicebot/head_tilt_position_controller/command/data']"
+                },
+                "publish_interval": {
+                  "type": "repr",
+                  "repr": "100"
                 }
               },
-              "groups": {}
+              "groups": {
+                "servicebot": {
+                  "keys": {},
+                  "groups": {
+                    "head_tilt_position_controller": {
+                      "keys": {},
+                      "groups": {
+                        "command": {
+                          "keys": {
+                            "data_range": {
+                              "type": "repr",
+                              "repr": "(-1.0, 1.0)"
+                            },
+                            "data_is_repeat": {
+                              "type": "repr",
+                              "repr": "False"
+                            }
+                          },
+                          "groups": {}
+                        }
+                      }
+                    },
+                    "head_pan_position_controller": {
+                      "keys": {},
+                      "groups": {
+                        "command": {
+                          "keys": {
+                            "data_range": {
+                              "type": "repr",
+                              "repr": "(-1.0, 1.0)"
+                            },
+                            "data_is_repeat": {
+                              "type": "repr",
+                              "repr": "False"
+                            }
+                          },
+                          "groups": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -279,13 +356,13 @@
       "keys": {
         "geometry": {
           "type": "repr(QByteArray.hex)",
-          "repr(QByteArray.hex)": "QtCore.QByteArray('01d9d0cb000200000000004100000018000005200000059f0000004100000034000005200000059f00000001000000000a00')",
-          "pretty-print": "     A       A 4         "
+          "repr(QByteArray.hex)": "QtCore.QByteArray('01d9d0cb000200000000006e0000006e000007030000030c0000006e0000008a000007030000030c00000000000000000a00')",
+          "pretty-print": "     n n     n           "
         },
         "state": {
           "type": "repr(QByteArray.hex)",
-          "repr(QByteArray.hex)": "QtCore.QByteArray('000000ff00000000fd0000000100000003000004e000000556fc0100000003fc00000000000004e00000027500fffffffc0200000003fb00000058007200710074005f007000750062006c00690073006800650072005f005f005000750062006c00690073006800650072005f005f0031005f005f005000750062006c006900730068006500720057006900640067006500740100000000000000c50000009300fffffffb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0031005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000000cb0000024a0000013600fffffffc0000031b0000023b0000005100fffffffc0100000002fb0000005a007200710074005f0069006d006100670065005f0076006900650077005f005f0049006d0061006700650056006900650077005f005f0031005f005f0049006d006100670065005600690065007700570069006400670065007401000000000000026e000000c700fffffffb0000005a007200710074005f0069006d006100670065005f0076006900650077005f005f0049006d0061006700650056006900650077005f005f0032005f005f0049006d006100670065005600690065007700570069006400670065007401000002740000026c000000dd00fffffffb00000026007200710074005f007200760069007a005f005f005200560069007a005f005f0031005f005f01000002be000007010000000000000000fc0000026b000002750000000000fffffffc0200000002fb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0032005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000001d3000001cc0000000000000000fb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0033005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000002bc000002b60000000000000000000004e00000000000000004000000040000000800000008fc00000001000000030000000100000036004d0069006e0069006d0069007a006500640044006f0063006b00570069006400670065007400730054006f006f006c0062006100720000000000ffffffff0000000000000000')",
-          "pretty-print": "                     u                                                                                                                           J 6               Zrqt_image_view__ImageView__1__ImageViewWidget          Zrqt_image_view__ImageView__2__ImageViewWidget          &rqt_rviz__RViz__1__          k u                                                                                                                                                                                                       "
+          "repr(QByteArray.hex)": "QtCore.QByteArray('000000ff00000000fd0000000100000003000006960000025afc0100000004fc00000000000002aa0000027700fffffffc0200000002fb00000058007200710074005f007000750062006c00690073006800650072005f005f005000750062006c00690073006800650072005f005f0031005f005f005000750062006c006900730068006500720057006900640067006500740100000013000000c10000008a00fffffffb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0031005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000000da000001930000012000fffffffb00000026007200710074005f007200760069007a005f005f005200560069007a005f005f0031005f005f01000002be000007010000000000000000fc0000026b000002750000000000fffffffc0200000002fb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0032005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000001d3000001cc0000000000000000fb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0033005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000002bc000002b60000000000000000fc000002b0000003e60000039800fffffffc0200000002fb0000006a007200710074005f0065007a005f007000750062006c00690073006800650072005f005f0045007a005000750062006c00690073006800650072005f005f0031005f005f0045007a005000750062006c006900730068006500720050006c007500670069006e005500690100000013000000f80000009e00fffffffc000001110000015c0000005000fffffffc0100000002fb0000005a007200710074005f0069006d006100670065005f0076006900650077005f005f0049006d0061006700650056006900650077005f005f0032005f005f0049006d006100670065005600690065007700570069006400670065007401000002b000000212000000d300fffffffb0000005a007200710074005f0069006d006100670065005f0076006900650077005f005f0049006d0061006700650056006900650077005f005f0031005f005f0049006d006100670065005600690065007700570069006400670065007401000004c8000001ce000000bf00ffffff000006960000000000000004000000040000000800000008fc00000001000000030000000100000036004d0069006e0069006d0069007a006500640044006f0063006b00570069006400670065007400730054006f006f006c0062006100720000000000ffffffff0000000000000000')",
+          "pretty-print": "                     w                                                                                                                                                                           rrqt_service_caller__ServiceCaller__2__ServiceCallerWidget          rrqt_service_caller__ServiceCaller__3__ServiceCallerWidget                                                                                                 Zrqt_image_view__ImageView__2__ImageViewWidget          Zrqt_image_view__ImageView__1__ImageViewWidget                            6MinimizedDockWidgetsToolbar        "
         }
       },
       "groups": {
