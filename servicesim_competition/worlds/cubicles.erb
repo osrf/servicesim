@@ -309,18 +309,21 @@
 
     </link>
 
-    <include>
-      <name>chair_<%= count %></name>
-      <pose>
-        <%= x * cubicle_u + x_off_chair %>
-        <%= y_off_chair %>
-        0
-        0
-        0
-        <%= yaw + rand(-0.7..0.7) %>
-      </pose>
-      <uri>model://office_chair</uri>
-    </include>
+    <%
+      $name = 'chair_' + count.to_s()
+      $pose =
+      [
+        x * cubicle_u + x_off_chair,
+        y_off_chair,
+        0,
+        0,
+        0,
+        yaw + rand(-0.7..0.7),
+      ]
+      $collisions = false
+    %>
+    <%= fromFile(DIR + "/office_chair.erb") %>
+
     <% end %>
   <% end %>
 <%
