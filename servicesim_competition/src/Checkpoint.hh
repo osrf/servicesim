@@ -70,8 +70,11 @@ namespace servicesim
     /// \return True if done.
     protected: bool Done() const;
 
-    /// \brief The weight for this checkpoint when scoring.
-    protected: double weight{0.0};
+    /// \brief The total penalty for this checkpoint
+    protected: double penalty{0.0};
+
+    /// \brief The weight for this checkpoint's time when scoring.
+    protected: double weightTime{0.0};
 
     /// \brief The checkpoint's name
     protected: std::string name;
