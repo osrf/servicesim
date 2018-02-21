@@ -3,6 +3,14 @@
   #
   # Required variables
   # * $pi (number)
+  # * $o (number)
+  # * $g (number)
+  # * $drop_areas ([]) Dictionary with drop area info
+
+  $drop_areas.push({:name => 'BackEntrance',
+                    :min => [-2*$o, 11*$o, 0],
+                    :max => [2*$o - $g, 15*$o, 0],
+                    :pivot => [rand(-1.77..-0.89), rand(19.0..20.42), 0]})
 %>
 
 <model name="BackEntrance">

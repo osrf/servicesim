@@ -25,6 +25,7 @@
 #include <gazebo/common/UpdateInfo.hh>
 
 #include <servicesim_competition/NewTask.h>
+#include <servicesim_competition/RoomInfo.h>
 
 namespace servicesim
 {
@@ -46,6 +47,14 @@ namespace servicesim
     private: bool OnNewTaskRosService(
         servicesim_competition::NewTask::Request &_req,
         servicesim_competition::NewTask::Response &_res);
+
+    /// \brief Service when competitor asks information about a room.
+    /// \param[in] _req Competitor's request.
+    /// \param[out] _res Response containing information about the room.
+    /// \return False if failed.
+    private: bool OnRoomInfoRosService(
+        servicesim_competition::RoomInfo::Request &_req,
+        servicesim_competition::RoomInfo::Response &_res);
 
     /// \brief Update on world update begin
     /// \param[in] _info Update info
