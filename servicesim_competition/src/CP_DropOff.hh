@@ -82,6 +82,13 @@ namespace servicesim
 
     /// \brief True if guest is currently in the drop-off area
     private: bool containGuest{false};
+
+    /// \brief The weight for each failed pick-up attempt
+    private: double weightFailedAttempt{0.0};
+
+    /// \brief The weight for each time the robot moves too fast and the guest
+    /// can't follow.
+    private: double weightTooFast{0.0};
   };
 }
 #endif
