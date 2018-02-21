@@ -11,15 +11,6 @@
     <arg name="robot_model_path" value="$(find servicebot_description)/.."/>
   </include>
 
-    <!--
-    -J left_shoulder_joint -0.55
-    -J left_upper_arm_joint 1.35
-    -J left_elbow_joint -0.5
-    -J right_shoulder_joint -0.55
-    -J right_upper_arm_joint 1.35
-    -J right_elbow_joint -0.5
-    -Y 1.57"
-     -->
   <group if="$(arg teleop)">
     <include file="$(find servicesim)/launch/teleop.launch" />
   </group>

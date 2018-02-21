@@ -31,6 +31,28 @@ CP_PickUp::CP_PickUp(const sdf::ElementPtr &_sdf)
 {
   this->canPause = true;
 
+  // Get SDF params
+  if (!_sdf)
+  {
+    gzerr << "Missing checkpoint's SDF element" << std::endl;
+    return;
+  }
+
+  if (!_sdf->HasElement("weight"))
+  {
+    gzerr << "Missing checkpoint's <weight> element" << std::endl;
+    return;
+  }
+
+  auto weightElem = _sdf->GetElement("weight");
+  if (!weightElem->HasElement("failed_attempt"))
+  {
+    gzerr << "Missing checkpoint's <weight><failed_attempt> element"
+          << std::endl;
+    return;
+  }
+  this->weightFailedAttempt = weightElem->Get<double>("failed_attempt");
+
   // ROS transport
   if (!ros::isInitialized())
   {
@@ -78,7 +100,10 @@ bool CP_PickUp::OnPickUpRosRequest(
 
   if (!this->Done())
   {
-    // TODO: apply penalty for bad pickup request
+    gzmsg  << "[ServiceSim] " << this->weightFailedAttempt
+           << " penalty: failed pick-up" << std::endl;
+
+    this->penalty += this->weightFailedAttempt;
   }
 
   _res.success = this->Done();

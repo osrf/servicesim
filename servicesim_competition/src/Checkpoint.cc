@@ -32,7 +32,26 @@ Checkpoint::Checkpoint(const sdf::ElementPtr &_sdf)
     return;
   }
 
-  this->weight = _sdf->Get<double>("weight");
+  if (!_sdf->HasElement("weight"))
+  {
+    gzerr << "Missing checkpoint's <weight> element" << std::endl;
+    return;
+  }
+
+  auto weightElem = _sdf->GetElement("weight");
+  if (!weightElem->HasElement("time"))
+  {
+    gzerr << "Missing checkpoint's <weight><time> element" << std::endl;
+    return;
+  }
+  this->weightTime = weightElem->Get<double>("time");
+
+
+  if (!_sdf->HasElement("name"))
+  {
+    gzerr << "Missing checkpoint's <name> element" << std::endl;
+    return;
+  }
   this->name = _sdf->Get<std::string>("name");
 }
 
@@ -56,7 +75,7 @@ double Checkpoint::Score() const
     elapsedSeconds += (end - start).Double();
   }
 
-  return elapsedSeconds * this->weight;
+  return elapsedSeconds * this->weightTime + this->penalty;
 }
 
 /////////////////////////////////////////////////
