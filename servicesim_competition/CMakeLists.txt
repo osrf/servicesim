@@ -13,6 +13,7 @@ find_package(gazebo 8.3.0 EXACT REQUIRED)
 
 add_message_files(
   FILES
+    ActorNames.msg
     Score.msg
 )
 
@@ -118,6 +119,25 @@ install(TARGETS ${collision_actor_plugin_name}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
+#############################
+###### Vicinity plugin ######
+#############################
+
+# Create the libVicinityPlugin.so library.
+set(vicinity_plugin_name VicinityPlugin)
+add_library(${vicinity_plugin_name} SHARED
+  src/VicinityPlugin.cc
+)
+target_link_libraries(${vicinity_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${catkin_LIBRARIES}
+)
+install(TARGETS ${vicinity_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
 ##########################
 ##      Competition     ##
 ##########################
@@ -136,6 +156,7 @@ target_link_libraries(${competition_plugin_name}
 )
 add_dependencies(${competition_plugin_name}
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  servicesim_competition_generate_messages_cpp
 )
 install(TARGETS ${competition_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
