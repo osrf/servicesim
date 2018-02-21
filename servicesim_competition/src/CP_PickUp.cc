@@ -100,6 +100,9 @@ bool CP_PickUp::OnPickUpRosRequest(
 
   if (!this->Done())
   {
+    gzmsg  << "[ServiceSim] " << this->weightFailedAttempt
+           << " penalty: failed pick-up" << std::endl;
+
     this->penalty += this->weightFailedAttempt;
   }
 

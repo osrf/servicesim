@@ -104,6 +104,8 @@ void CP_DropOff::OnDrift(const ignition::msgs::UInt32 &_msg)
   // 1: Robot moved too fast and actor couldn't follow
   if (reason == 1u)
   {
+    gzmsg  << "[ServiceSim] " << this->weightTooFast
+           << " penalty: lost guest for moving too fast" << std::endl;
     this->penalty += this->weightTooFast;
   }
   // 2: Scheduled drift time
@@ -180,7 +182,9 @@ bool CP_DropOff::OnDropOffRosRequest(
   {
     this->penalty += this->weightFailedAttempt;
 
-    gzwarn << "Failed to drop-off, guest not in drop-off area" << std::endl;
+    gzmsg  << "[ServiceSim] " << this->weightFailedAttempt
+           << " penalty: guest not in drop-off area" << std::endl;
+
     _res.success = false;
     return true;
   }
@@ -199,6 +203,9 @@ bool CP_DropOff::OnDropOffRosRequest(
 
   if (!this->Done())
   {
+    gzmsg  << "[ServiceSim] " << this->weightFailedAttempt
+           << " penalty: failed drop-off" << std::endl;
+
     this->penalty += this->weightFailedAttempt;
   }
 

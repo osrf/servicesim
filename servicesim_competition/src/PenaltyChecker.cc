@@ -104,12 +104,22 @@ void PenaltyChecker::OnContacts(ConstContactsPtr &_msg)
     if (contact.collision1().find(this->humanName) != std::string::npos ||
         contact.collision2().find(this->humanName) != std::string::npos)
     {
-      this->penalty += this->weightHumanContact * depth;
+      auto p = this->weightHumanContact * depth;
+
+      gzmsg  << "[ServiceSim] " << p << " penalty: collided with human"
+             << std::endl;
+
+      this->penalty += p;
     }
     // Contact with other objects
     else
     {
-      this->penalty += this->weightObjContact * depth;
+      auto p = this->weightObjContact * depth;
+
+      gzmsg  << "[ServiceSim] " << p << " penalty: collided with object"
+             << std::endl;
+
+      this->penalty += p;
     }
   }
 }
