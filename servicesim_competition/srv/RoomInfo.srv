@@ -1,0 +1,18 @@
+# Service which returns the coordinates of a given room's drop-off area.
+# Depending on the room, this could be inside the room or in front of it.
+#
+# The coordinates are given as the area's minimum and maximum coordinates in
+# 3D space, in world coordinated.
+#
+# All drop-off areas are rectangles aligned with the world axes.
+
+# Room name
+string name
+
+---
+
+# Position of minimum corner in world coordinates
+geometry_msgs/Point min
+
+# Position of maximum corner in world coordinates
+geometry_msgs/Point max

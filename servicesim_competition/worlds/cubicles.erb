@@ -5,9 +5,11 @@
   #
   # Required variables
   # * $count (number) For unique names
+  # * $cubicle_name (string) Name for this group of cubicles
   # * $cubicle_size (number) row count
   # * $cubicle_pose (number[6]) Pose of starting edge
-  # * $floorplan (bool)
+  # * $floorplan (bool) True if only showing floorplan
+  # * $drop_areas ([]) Dictionary with drop area info
 
   # Unit size of a cubicle element
   cubicle_u = 0.6
@@ -18,9 +20,6 @@
   # Number of cubicle units along the X axis
   x_size = 3
 
-  # Y position of center line (which extends along X)
-  center_y = $cubicle_pose[1]
-
   # Minimum X
   x_min = 0
 
@@ -29,8 +28,40 @@
 
   # Count for unique visual and collision names
   count = 0
+
+  # Fill drop areas in world coords
+  drop_width = 1.0
+  n = 0
+  for x in (x_min..x_max).step(x_size)
+
+    for side in [-1, 1]
+
+      n += 1
+
+      min_x_world = $cubicle_pose[0] + x * cubicle_u
+      max_x_world = $cubicle_pose[0] + (x + x_size) * cubicle_u
+      pivot_x = min_x_world + (max_x_world - min_x_world) * rand(0.0..1.0)
+
+      if side == -1
+        min_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner + drop_width)
+        max_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner)
+
+        pivot_y = min_y_world - side * drop_width * 0.5
+      else
+        min_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner)
+        max_y_world = $cubicle_pose[1] + side * (2 * cubicle_u + cubicle_corner + drop_width)
+
+        pivot_y = max_y_world - side * drop_width * 0.5
+      end
+
+      $drop_areas.push({:name => $cubicle_name + '_' + n.to_s(),
+                        :min => [min_x_world, min_y_world, $cubicle_pose[2]],
+                        :max => [max_x_world, max_y_world, $cubicle_pose[2]],
+                        :pivot => [pivot_x, pivot_y, $cubicle_pose[2]]})
+    end
+  end
 %>
-<model name="cubicles_<%= $count.to_s() %>">
+<model name="<%= $cubicle_name %>">
 
   <static>true</static>
 

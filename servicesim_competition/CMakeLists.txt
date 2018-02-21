@@ -23,6 +23,7 @@ add_service_files(
     DropOffGuest.srv
     NewTask.srv
     PickUpGuest.srv
+    RoomInfo.srv
 )
 
 # Generate added messages and services with any dependencies listed here
@@ -131,6 +132,10 @@ add_library(${vicinity_plugin_name} SHARED
 target_link_libraries(${vicinity_plugin_name}
   ${GAZEBO_LIBRARIES}
   ${catkin_LIBRARIES}
+)
+add_dependencies(${competition_plugin_name}
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  servicesim_competition_generate_messages_cpp
 )
 install(TARGETS ${vicinity_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

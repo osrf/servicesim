@@ -19,13 +19,20 @@
 #define SERVICESIM_CONVERSIONS_HH_
 
 #include <geometry_msgs/Pose.h>
+#include <geometry_msgs/Point.h>
 #include <ignition/math/Pose3.hh>
+#include <ignition/math/Vector3.hh>
 
 namespace servicesim
 {
   /// \brief Return the equivalent ROS message
-  /// \param[in] _vec Ignition vector 3d to convert.
+  /// \param[in] _vec Ignition pose 3d to convert.
   /// \return ROS geometry pose message
   geometry_msgs::Pose convert(const ignition::math::Pose3d &_pose);
+
+  /// \brief Return the equivalent ROS message
+  /// \param[in] _vec Ignition vector 3d to convert.
+  /// \return ROS geometry pose message
+  geometry_msgs::Point convert(const ignition::math::Vector3d &_vec);
 }
 #endif

@@ -32,3 +32,14 @@ geometry_msgs::Pose servicesim::convert(
   return msg;
 }
 
+//////////////////////////////////////////////////
+geometry_msgs::Point servicesim::convert(
+    const ignition::math::Vector3d &_vec)
+{
+  geometry_msgs::Point msg;
+  msg.x = _vec.X();
+  msg.y = _vec.Y();
+  msg.z = _vec.Z();
+  return msg;
+}
+

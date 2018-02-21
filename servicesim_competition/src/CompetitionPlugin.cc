@@ -57,11 +57,19 @@ class servicesim::CompetitionPluginPrivate
   /// \brief ROS new task service server
   public: ros::ServiceServer newTaskRosService;
 
+  /// \brief ROS room info service server
+  public: ros::ServiceServer roomInfoRosService;
+
   /// \brief ROS publisher for the score.
   public: ros::Publisher scoreRosPub;
 
   /// \brief Frequency in Hz to publish score message
   public: double scoreFreq{50};
+
+  /// \brief Map with coordinates for every room's drop-off region
+  /// Room name - pair<min, max>
+  public: std::map<std::string, std::pair<ignition::math::Vector3d,
+                                          ignition::math::Vector3d>> roomInfo;
 
   /// \brief Penalty checker
   public: std::unique_ptr<PenaltyChecker> penaltyChecker{nullptr};
@@ -103,6 +111,24 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
 
   this->dataPtr->guestName = _sdf->Get<std::string>("guest_name");
 
+  if (!_sdf->HasElement("room_info"))
+  {
+    gzerr << "Missing <room_info>, competition not initialized"
+          << std::endl;
+    return;
+  }
+
+  auto roomInfoElem = _sdf->GetElement("room_info");
+  while (roomInfoElem)
+  {
+    auto name = roomInfoElem->Get<std::string>("name");
+    auto min = roomInfoElem->Get<ignition::math::Vector3d>("min");
+    auto max = roomInfoElem->Get<ignition::math::Vector3d>("max");
+
+    this->dataPtr->roomInfo[name] = std::make_pair(min, max);
+    roomInfoElem = roomInfoElem->GetNextElement("room_info");
+  }
+
   // Create checkpoints
   {
     std::unique_ptr<CP_GoToPickUp> cp(new CP_GoToPickUp(
@@ -142,10 +168,13 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
 
   this->dataPtr->rosNode.reset(new ros::NodeHandle());
 
-
   // Advertise new task service
   this->dataPtr->newTaskRosService = this->dataPtr->rosNode->advertiseService(
       "/servicesim/new_task", &CompetitionPlugin::OnNewTaskRosService, this);
+
+  // Advertise room info service
+  this->dataPtr->roomInfoRosService = this->dataPtr->rosNode->advertiseService(
+      "/servicesim/room_info", &CompetitionPlugin::OnRoomInfoRosService, this);
 
   // Advertise score messages
   this->dataPtr->scoreRosPub =
@@ -179,6 +208,25 @@ bool CompetitionPlugin::OnNewTaskRosService(
   _res.pick_up_location = this->dataPtr->pickUpLocation;
   _res.drop_off_location = this->dataPtr->dropOffLocation;
   _res.guest_name = this->dataPtr->guestName;
+
+  return true;
+}
+
+/////////////////////////////////////////////////
+bool CompetitionPlugin::OnRoomInfoRosService(
+    servicesim_competition::RoomInfo::Request &_req,
+    servicesim_competition::RoomInfo::Response &_res)
+{
+  if (this->dataPtr->roomInfo.find(_req.name) == this->dataPtr->roomInfo.end())
+  {
+    gzwarn << "Unknown room [" << _req.name << "]" << std::endl;
+    return false;
+  }
+
+  auto pts = this->dataPtr->roomInfo[_req.name];
+
+  _res.min = convert(pts.first);
+  _res.max = convert(pts.second);
 
   return true;
 }
