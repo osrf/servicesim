@@ -51,6 +51,20 @@ PenaltyChecker::PenaltyChecker(const sdf::ElementPtr &_sdf)
   }
   this->weightObjContact = weightElem->Get<double>("obj_contact");
 
+  if (!weightElem->HasElement("human_approximation"))
+  {
+    gzerr << "Missing top-level <weight><human_approximation> element" << std::endl;
+    return;
+  }
+  this->weightHumanApproximation = weightElem->Get<double>("human_approximation");
+
+  if (!weightElem->HasElement("obj_approximation"))
+  {
+    gzerr << "Missing top-level <weight><obj_approximation> element" << std::endl;
+    return;
+  }
+  this->weightObjApproximation = weightElem->Get<double>("obj_approximation");
+
   this->robotName = _sdf->Get<std::string>("robot_name");
   this->groundName = _sdf->Get<std::string>("ground_name");
   this->humanName = _sdf->Get<std::string>("human_name");
@@ -93,6 +107,52 @@ void PenaltyChecker::OnContacts(ConstContactsPtr &_msg)
       continue;
     }
 
+    // Human or object
+    bool human{false};
+    if (contact.collision1().find(this->humanName) != std::string::npos ||
+        contact.collision2().find(this->humanName) != std::string::npos)
+    {
+      human = true;
+    }
+
+    // Approximation
+    bool approximation{false};
+    if (contact.collision1().find("inflation_people") != std::string::npos ||
+        contact.collision2().find("inflation_people") != std::string::npos)
+    {
+      if (!human)
+        continue;
+
+      approximation = true;
+    }
+
+    if (contact.collision1().find("inflation_obj") != std::string::npos ||
+        contact.collision2().find("inflation_obj") != std::string::npos)
+    {
+      if (human)
+        continue;
+
+      approximation = true;
+    }
+
+    // Choose weight
+    double weight{0.0};
+
+    if (human)
+    {
+      if (approximation)
+        weight = this->weightHumanApproximation;
+      else
+        weight = this->weightHumanContact;
+    }
+    else
+    {
+      if (approximation)
+        weight = this->weightObjApproximation;
+      else
+        weight = this->weightObjContact;
+    }
+
     // In case of multiple contact points, take highest depth
     double depth{0.0};
     for (int d = 0; d < contact.depth_size(); ++d)
@@ -100,27 +160,29 @@ void PenaltyChecker::OnContacts(ConstContactsPtr &_msg)
       depth = std::max(depth, contact.depth(d));
     }
 
-    // Contact with human
-    if (contact.collision1().find(this->humanName) != std::string::npos ||
-        contact.collision2().find(this->humanName) != std::string::npos)
-    {
-      auto p = this->weightHumanContact * depth;
+    // Penalty
+    auto p = weight * depth;
+    this->penalty += p;
 
-      gzmsg  << "[ServiceSim] " << p << " penalty: collided with human"
-             << std::endl;
+    // Message
+    // Commenting out because it's too spammy, consider adding a flag or a
+    // topic to debug this
+/*
+    std::stringstream msg;
+    msg << "[ServiceSim] " << p << " penalty: ";
 
-      this->penalty += p;
-    }
-    // Contact with other objects
+    if (approximation)
+      msg << "too close to ";
     else
-    {
-      auto p = this->weightObjContact * depth;
+      msg << "collided with ";
 
-      gzmsg  << "[ServiceSim] " << p << " penalty: collided with object"
-             << std::endl;
+    if (human)
+      msg << "human";
+    else
+      msg << "object";
 
-      this->penalty += p;
-    }
+    gzmsg << msg.str() << std::endl;
+*/
   }
 }
 

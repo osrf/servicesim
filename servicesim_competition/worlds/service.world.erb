@@ -695,8 +695,16 @@
       <human_name><%= human_name %></human_name>
 
       <weight>
+        <!-- Contact and approximation weights are multiplied by contact depth -->
+
+        <!-- Collision is usually very brief and millimiters deep, so we compensate with high weights -->
         <human_contact>30000.0</human_contact>
         <obj_contact>10000.0</obj_contact>
+
+        <!-- Approximation usually lasts longer and may get very deep, so we compensate with low weights -->
+        <human_approximation>1.0</human_approximation>
+        <obj_approximation>0.25</obj_approximation>
+
       </weight>
 
       <go_to_pick_up>
@@ -915,7 +923,6 @@
 <%
   end
 %>
-
 
   </world>
 </sdf>
