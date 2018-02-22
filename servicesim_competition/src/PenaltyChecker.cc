@@ -165,6 +165,9 @@ void PenaltyChecker::OnContacts(ConstContactsPtr &_msg)
     this->penalty += p;
 
     // Message
+    // Commenting out because it's too spammy, consider adding a flag or a
+    // topic to debug this
+/*
     std::stringstream msg;
     msg << "[ServiceSim] " << p << " penalty: ";
 
@@ -179,6 +182,7 @@ void PenaltyChecker::OnContacts(ConstContactsPtr &_msg)
       msg << "object";
 
     gzmsg << msg.str() << std::endl;
+*/
   }
 }
 

@@ -22,19 +22,6 @@
         <cylinder radius="0.07" length="0.10"/>
       </geometry>
     </collision>
-    <!-- inflations -->
-    <collision name="inflation_people">
-      <origin rpy="0 0 -0.08" xyz="0 0 0"/>
-      <geometry>
-        <cylinder radius="0.75" length="1.07"/>
-      </geometry>
-    </collision>
-    <collision name="inflation_objs">
-      <origin rpy="0 0 -0.08" xyz="0 0 0"/>
-      <geometry>
-        <cylinder radius="0.45" length="1.07"/>
-      </geometry>
-    </collision>
     <inertial>
       <origin rpy="0 0 0" xyz="0.0 0 -2.20"/>
       <mass value="3"/>
@@ -711,6 +698,68 @@
     <!--origin xyz="0 0 0" rpy="0 0 0"/-->
   </joint>
 
+  <!-- Inflations -->
+
+  <link name="inflation_people">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 -0.08" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.75" length="1.07"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="inflation_people">
+    <collision>
+      <surface>
+        <contact>
+          <collide_without_contact>true</collide_without_contact>
+        </contact>
+      </surface>
+    </collision>
+  </gazebo>
+  <joint name="inflation_people_fixedjoint" type="fixed">
+    <parent link="base_link"/>
+    <child link="inflation_people"/>
+  </joint>
+  <gazebo reference='inflation_people_fixedjoint'>
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <link name="inflation_obj">
+    <inertial>
+      <mass value="0.001"/>
+      <inertia ixx="1.0e-06" iyy="1.0e-06" izz="1.0e-06" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <collision>
+      <origin rpy="0 0 -0.08" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.35" length="1.07"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="inflation_obj">
+    <collision>
+      <surface>
+        <contact>
+          <collide_without_contact>true</collide_without_contact>
+        </contact>
+      </surface>
+    </collision>
+  </gazebo>
+  <joint name="inflation_obj_fixedjoint" type="fixed">
+    <parent link="base_link"/>
+    <child link="inflation_obj"/>
+  </joint>
+  <gazebo reference='inflation_obj_fixedjoint'>
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <!-- /Inflations -->
+
   <gazebo>
     <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
       <!--robotNamespace>servicebot</robotNamespace-->
@@ -863,13 +912,6 @@
         <frameName>base_link</frameName>
       </plugin>
     </sensor>
-  </gazebo>
-
-  <gazebo>
-    <plugin name="inflation" filename="libInflationPlugin.so">
-      <link>base_link</link>
-      <collision>inflation</collision>
-    </plugin>
   </gazebo>
 
   <gazebo reference="base_link">
