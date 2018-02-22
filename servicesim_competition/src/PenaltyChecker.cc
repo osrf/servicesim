@@ -116,18 +116,23 @@ void PenaltyChecker::OnContacts(ConstContactsPtr &_msg)
     }
 
     // Approximation
-    bool approximationHuman{false};
-    if (contact.collision1().find("inflation_people") == std::string::npos &&
-        contact.collision2().find("inflation_people") == std::string::npos)
+    bool approximation{false};
+    if (contact.collision1().find("inflation_people") != std::string::npos ||
+        contact.collision2().find("inflation_people") != std::string::npos)
     {
-      approximationHuman = true;
+      if (!human)
+        continue;
+
+      approximation = true;
     }
 
-    bool approximationObj{false};
-    if (contact.collision1().find("inflation_obj") == std::string::npos &&
-        contact.collision2().find("inflation_obj") == std::string::npos)
+    if (contact.collision1().find("inflation_obj") != std::string::npos ||
+        contact.collision2().find("inflation_obj") != std::string::npos)
     {
-      approximationObj = true;
+      if (human)
+        continue;
+
+      approximation = true;
     }
 
     // Choose weight
@@ -135,20 +140,14 @@ void PenaltyChecker::OnContacts(ConstContactsPtr &_msg)
 
     if (human)
     {
-      // Skip inflation obj + human
-      if (approximationObj)
-        continue;
-      else if (approximationHuman)
+      if (approximation)
         weight = this->weightHumanApproximation;
       else
         weight = this->weightHumanContact;
     }
     else
     {
-      // Skip inflation human + obj
-      if (approximationHuman)
-        continue;
-      else if (approximationObj)
+      if (approximation)
         weight = this->weightObjApproximation;
       else
         weight = this->weightObjContact;
@@ -169,7 +168,7 @@ void PenaltyChecker::OnContacts(ConstContactsPtr &_msg)
     std::stringstream msg;
     msg << "[ServiceSim] " << p << " penalty: ";
 
-    if (approximationHuman || approximationObj)
+    if (approximation)
       msg << "too close to ";
     else
       msg << "collided with ";
