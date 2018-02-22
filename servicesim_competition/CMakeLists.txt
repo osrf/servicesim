@@ -143,6 +143,25 @@ install(TARGETS ${vicinity_plugin_name}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
+#############################
+## Inflation plugin ##
+#############################
+
+# Create the libInflationPlugin.so library.
+set(Inflation_plugin_name InflationPlugin)
+add_library(${Inflation_plugin_name} SHARED
+  src/InflationPlugin.cc
+)
+target_link_libraries(${Inflation_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+install(TARGETS ${Inflation_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
 ##########################
 ##      Competition     ##
 ##########################
