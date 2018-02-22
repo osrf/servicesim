@@ -320,7 +320,31 @@
   minInterval = 5
   maxInterval = 300
   time = 0
-  (1..30).each do
+  drift_count = 30
+
+  if config and config.key?('drift')
+
+    d = config['drift']
+
+    if d.key?('min_interval')
+      minInterval = d['min_interval']
+    end
+
+    if d.key?('max_interval')
+      maxInterval = d['max_interval']
+    end
+
+    if d.key?('start_time')
+      time = d['start_time']
+    end
+
+    if d.key?('count')
+      drift_count = d['count']
+    end
+
+  end
+
+  (1..drift_count).each do
     time += rand(minInterval..maxInterval)
     drift_times.push(time)
   end
