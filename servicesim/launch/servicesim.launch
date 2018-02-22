@@ -8,23 +8,9 @@
   <include file="$(find servicebot_description)/launch/upload_servicebot.launch" />
 
   <include file="$(find servicesim_competition)/launch/competition.launch">
+    <arg name="robot_model_path" value="$(find servicebot_description)/.."/>
   </include>
 
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
-    -urdf
-    -param robot_description
-    -model servicebot
-    -x 3.7 -y 1.23 -z 0.75 -Y 1.57"
-  />
-    <!--
-    -J left_shoulder_joint -0.55
-    -J left_upper_arm_joint 1.35
-    -J left_elbow_joint -0.5
-    -J right_shoulder_joint -0.55
-    -J right_upper_arm_joint 1.35
-    -J right_elbow_joint -0.5
-    -Y 1.57"
-     -->
   <group if="$(arg teleop)">
     <include file="$(find servicesim)/launch/teleop.launch" />
   </group>
