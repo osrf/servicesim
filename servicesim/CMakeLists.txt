@@ -3,6 +3,8 @@ project(servicesim)
 
 set(CMAKE_CXX_STANDARD 11)
 
+find_package(catkin REQUIRED)
+
 catkin_package()
 
 include_directories()
@@ -12,6 +14,6 @@ include_directories()
 #############
 
 # Install launch files
-install(DIRECTORY launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+install(DIRECTORY config launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )

@@ -7,6 +7,10 @@
   # * $actor_anim (string) An animation Collada file from model://actor/meshes/
   # * $actor_velocity (double) Velocity for trajectory actors, in m/s
   # * $actor_trajectory (array[array[6]]) Array or waypoint poses
+  # * $enable_collisions (boolean) True to enable actor collisions
+
+  # TODO: set from servicesim world
+  $enable_collisions = true
 %>
 
 <actor name="<%= $actor_name %>">
@@ -45,9 +49,17 @@
     <% end %>
 
     <velocity><%= $actor_velocity %></velocity>
-    <ignore_obstacle>willowgarage</ignore_obstacle>
-    <ignore_obstacle>ground_collision</ignore_obstacle>
+    <obstacle_margin>0.0</obstacle_margin>
+    <ignore_obstacle>walls</ignore_obstacle>
+    <ignore_obstacle>floor</ignore_obstacle>
+    <!-- FIXME: servicebot's bounding box is huge and always colliding -->
+    <ignore_obstacle>servicebot</ignore_obstacle>
 
   </plugin>
+
+  <!-- Enable collisions -->
+  <% if $enable_collisions %>
+    <%= fromFile(DIR + "/actor_collisions.erb") %>
+  <% end %>
 
 </actor>

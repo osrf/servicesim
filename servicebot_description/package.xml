@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>servicebot_description</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>The servicebot_description package</description>
 
   <maintainer email="mikael@osrfoundation.org">Mikael Arguedas</maintainer>
@@ -10,7 +10,10 @@
   <license>Apache License 2.0</license>
 
   <depend>urdf</depend>
-  <depend>xacro</depend>
+
+  <exec_depend>gazebo_plugins</exec_depend>
+  <exec_depend>gazebo_ros_control</exec_depend>
+  <exec_depend>roslaunch</exec_depend>
 
   <buildtool_depend>catkin</buildtool_depend>
 

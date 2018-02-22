@@ -1,0 +1,15 @@
+<launch>
+  <!-- Run the map server -->
+  <node ns="servicebot" name="map_server" pkg="map_server" type="map_server" args="$(find servicesim_competition)/map/map.yaml"/>
+
+  <!--- Run AMCL -->
+  <include file="$(find servicebot_2dnav)/launch/amcl_diff.launch" />
+
+  <node ns="servicebot" pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find servicebot_2dnav)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find servicebot_2dnav)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find servicebot_2dnav)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find servicebot_2dnav)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find servicebot_2dnav)/config/base_local_planner_params.yaml" command="load" />
+  </node>
+</launch>

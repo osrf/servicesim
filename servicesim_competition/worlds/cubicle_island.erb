@@ -1,0 +1,155 @@
+<%
+  # Template for a cubicle island, which has 4 desks.
+  #
+  # Adds furniture if needed.
+  #
+  # Required variables
+  # * $pi (number) Math::PI
+  # * $cubicle_name (string) Model name
+  # * $pose (number[6]) Pose of island center
+  # * $floorplan (boolean) True if only showing floorplan, so computer and chair
+  #                        are hidden.
+  # * $drop_areas ([]) Dictionary with drop area info
+
+  # Height of desk surface
+  top = 0.76
+
+  # Fill drop areas in world coords
+  drop_size = 2.5
+  n = 0
+  for x in [-1, 1]
+    for y in [-1, 1]
+
+      n+= 1
+
+      far_x = $pose[0] + x * drop_size
+      far_y = $pose[1] + y * drop_size
+
+      if x < 0
+        min_x_world = far_x
+        max_x_world = $pose[0]
+        pivot_x = min_x_world + rand(-0.1..0.1)
+      else
+        max_x_world = far_x
+        min_x_world = $pose[0]
+        pivot_x = max_x_world + rand(-0.1..0.1)
+      end
+
+      if y < 0
+        min_y_world = far_y
+        max_y_world = $pose[1] + 0.0
+        pivot_y = min_y_world + rand(-0.1..0.1)
+      else
+        max_y_world = far_y
+        min_y_world = $pose[1] + 0.0
+        pivot_y = max_y_world + rand(-0.1..0.1)
+      end
+
+      $drop_areas.push({:name => $cubicle_name + '_' + n.to_s(),
+                        :min => [min_x_world, min_y_world, $pose[2]],
+                        :max => [max_x_world, max_y_world, $pose[2]],
+                        :pivot => [pivot_x, pivot_y, 0]})
+    end
+  end
+%>
+  <model name="<%= $cubicle_name %>">
+    <static>true</static>
+    <pose>
+      <%= $pose[0] %>
+      <%= $pose[1] %>
+      <%= $pose[2] %>
+      <%= $pose[3] %>
+      <%= $pose[4] %>
+      <%= $pose[5] %>
+    </pose>
+    <link name="link">
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_island/meshes/cubicle_island.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://cubicle_island/meshes/cubicle_island.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+<%
+  if not $floorplan
+%>
+    <%
+      # offset if computer is on the far end
+      far_off = 1.22
+
+      # offset if computer is on the near end
+      near_off = 0.45
+
+      for x in [-1, 1]
+        for y in [-1, 1]
+
+          # placement axis
+          p = ['X', 'Y'].sample
+
+          if p == 'X'
+            comp_x = far_off * x
+            comp_y = near_off * y
+            comp_yaw = y > 0 ? $pi : 0.0
+          else
+            comp_x = near_off * x
+            comp_y = far_off * y
+            comp_yaw = x > 0 ? $pi * 0.5 : -$pi * 0.5
+          end
+    %>
+      <include>
+        <name>computer_<%= x %>_<%= y %></name>
+        <pose>
+          <%= comp_x %>
+          <%= comp_y %>
+          <%= top %>
+          0
+          0
+          <%= comp_yaw %>
+        </pose>
+        <uri>model://computer</uri>
+      </include>
+
+      <%
+         chair_x = (rand(1.13..2.0)) * x
+         chair_y = (rand(1.13..2.0)) * y
+
+          if x < 0 and y < 0
+            chair_yaw = $pi * 0.75 + rand(-0.7..0.7)
+          elsif x < 0 and y > 0
+            chair_yaw = $pi * 0.25 + rand(-0.7..0.7)
+          elsif x > 0 and y < 0
+            chair_yaw = -$pi * 0.75 + rand(-0.7..0.7)
+          elsif x > 0 and y > 0
+            chair_yaw = -$pi * 0.25 + rand(-0.7..0.7)
+          end
+      %>
+      <include>
+        <name>chair_<%= x %>_<%= y %></name>
+        <pose>
+          <%= chair_x %>
+          <%= chair_y %>
+          0
+          0
+          0
+          <%= chair_yaw %>
+        </pose>
+        <uri>model://office_chair</uri>
+      </include>
+      <% end %>
+    <% end %>
+<%
+  end # if not $floorplan
+%>
+
+</model>

@@ -21,34 +21,32 @@
 #include <ignition/math/Rand.hh>
 #include <ignition/math/Vector3.hh>
 
+#include <ignition/msgs/boolean.pb.h>
+#include <ignition/transport/Node.hh>
+
 #include <gazebo/common/Animation.hh>
 #include <gazebo/common/Console.hh>
 #include <gazebo/common/KeyFrame.hh>
 #include <gazebo/physics/physics.hh>
 
-#include <ros/ros.h>
-#include <servicesim_competition/DropOffGuest.h>
-#include <servicesim_competition/PickUpGuest.h>
-
 #include "FollowActorPlugin.hh"
 
-using namespace gazebo;
 using namespace servicesim;
 GZ_REGISTER_MODEL_PLUGIN(servicesim::FollowActorPlugin)
 
 class servicesim::FollowActorPluginPrivate
 {
   /// \brief Pointer to the actor.
-  public: physics::ActorPtr actor{nullptr};
+  public: gazebo::physics::ActorPtr actor{nullptr};
 
   /// \brief Velocity of the actor
   public: double velocity{0.8};
 
   /// \brief List of connections such as WorldUpdateBegin
-  public: std::vector<event::ConnectionPtr> connections;
+  public: std::vector<gazebo::event::ConnectionPtr> connections;
 
   /// \brief Current target model to follow
-  public: physics::ModelPtr target{nullptr};
+  public: gazebo::physics::ModelPtr target{nullptr};
 
   /// \brief Minimum distance in meters to keep away from target.
   public: double minDistance{1.2};
@@ -70,26 +68,29 @@ class servicesim::FollowActorPluginPrivate
   /// \brief Maximum angle when drifting
   public: double maxDriftAngle{IGN_PI * 0.2};
 
-  /// \brief List of times when guest should drift away
-  public: std::vector<common::Time> driftTimes;
+  /// \brief List of times when actor should drift away
+  public: std::vector<gazebo::common::Time> driftTimes;
 
   /// \brief Time of the last update.
-  public: common::Time lastUpdate;
+  public: gazebo::common::Time lastUpdate;
 
   /// \brief Time tolerance when checking drift time
-  public: common::Time timeTolerance{0.5};
+  public: gazebo::common::Time timeTolerance{0.5};
 
   /// \brief List of models to ignore when checking collisions.
   public: std::vector<std::string> ignoreModels;
 
-  /// \brief Ros node handle
-  public: std::unique_ptr<ros::NodeHandle> rosNode;
+  /// \brief Ignition transport node for communication
+  public: ignition::transport::Node ignNode;
 
-  /// \brief PickUp ROS service
-  public: ros::ServiceServer pickUpRosService;
+  /// \brief Publishes drift notifications
+  public: ignition::transport::Node::Publisher driftIgnPub;
 
-  /// \brief DropOff ROS service
-  public: ros::ServiceServer dropOffRosService;
+  /// \brief Namespace for Ignition transport communication:
+  /// * /<namespace>/<actor_name>/follow
+  /// * /<namespace>/<actor_name>/unfollow
+  /// * /<namespace>/<actor_name>/drift
+  public: std::string ns;
 };
 
 /////////////////////////////////////////////////
@@ -99,9 +100,15 @@ FollowActorPlugin::FollowActorPlugin()
 }
 
 /////////////////////////////////////////////////
-void FollowActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
+void FollowActorPlugin::Load(gazebo::physics::ModelPtr _model,
+    sdf::ElementPtr _sdf)
 {
-  this->dataPtr->actor = boost::dynamic_pointer_cast<physics::Actor>(_model);
+  this->dataPtr->actor =
+      boost::dynamic_pointer_cast<gazebo::physics::Actor>(_model);
+
+  // Read in the namespace
+  if (_sdf->HasElement("namespace"))
+    this->dataPtr->ns = "/" + _sdf->Get<std::string>("namespace");
 
   // Read in the velocity
   if (_sdf->HasElement("velocity"))
@@ -166,42 +173,45 @@ void FollowActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   else
   {
     // Set custom trajectory
-    physics::TrajectoryInfoPtr trajectoryInfo(new physics::TrajectoryInfo());
+    gazebo::physics::TrajectoryInfoPtr
+        trajectoryInfo(new gazebo::physics::TrajectoryInfo());
     trajectoryInfo->type = animation;
     trajectoryInfo->duration = 1.0;
 
     this->dataPtr->actor->SetCustomTrajectory(trajectoryInfo);
   }
 
-
   // Update loop
-  this->dataPtr->connections.push_back(event::Events::ConnectWorldUpdateBegin(
+  this->dataPtr->connections.push_back(
+      gazebo::event::Events::ConnectWorldUpdateBegin(
       std::bind(&FollowActorPlugin::OnUpdate, this, std::placeholders::_1)));
 
-  // ROS transport
-  if (!ros::isInitialized())
-  {
-    ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized,"
-        << "unable to load plugin. Load the Gazebo system plugin "
-        << "'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
-    return;
-  }
+  // Pickup service
+  this->dataPtr->ignNode.Advertise(
+      this->dataPtr->ns + "/" + this->dataPtr->actor->GetName() + "/follow",
+      &FollowActorPlugin::OnFollow, this);
 
-  this->dataPtr->rosNode.reset(new ros::NodeHandle());
+  this->dataPtr->ignNode.Advertise(
+      this->dataPtr->ns + "/" + this->dataPtr->actor->GetName() + "/unfollow",
+      &FollowActorPlugin::OnUnfollow, this);
 
-  this->dataPtr->pickUpRosService = this->dataPtr->rosNode->advertiseService(
-      "/servicesim/pickup_guest", &FollowActorPlugin::OnPickUpRosRequest, this);
-
-  this->dataPtr->dropOffRosService = this->dataPtr->rosNode->advertiseService(
-      "/servicesim/dropoff_guest", &FollowActorPlugin::OnDropOffRosRequest,
-      this);
+  // Drift publisher
+  this->dataPtr->driftIgnPub =
+      this->dataPtr->ignNode.Advertise<ignition::msgs::UInt32>(
+      this->dataPtr->ns + "/" + this->dataPtr->actor->GetName() + "/drift");
 }
 
 /////////////////////////////////////////////////
 void FollowActorPlugin::Reset()
 {
+  if (this->dataPtr->actor && this->dataPtr->target)
+  {
+    gzmsg << "Actor [" << this->dataPtr->actor->GetName()
+          << "] stopped following target [" << this->dataPtr->target->GetName()
+          << "]" << std::endl;
+  }
   this->dataPtr->target = nullptr;
-  this->dataPtr->lastUpdate = common::Time::Zero;
+  this->dataPtr->lastUpdate = gazebo::common::Time::Zero;
 }
 
 /////////////////////////////////////////////////
@@ -225,6 +235,10 @@ bool FollowActorPlugin::ObstacleOnTheWay() const
     // Obstacle's bounding box
     auto bb = model->BoundingBox();
 
+    // Models without collision have invalid boxes
+    if (!bb.Min().IsFinite() || !bb.Max().IsFinite())
+      continue;
+
     // Increase box by margin
     bb.Min() -= ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
     bb.Max() += ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
@@ -246,7 +260,7 @@ bool FollowActorPlugin::ObstacleOnTheWay() const
 }
 
 /////////////////////////////////////////////////
-void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
+void FollowActorPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
 {
   // Time delta
   double dt = (_info.simTime - this->dataPtr->lastUpdate).Double();
@@ -258,17 +272,18 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
     return;
 
   // Don't move if there's an obstacle on the way
-  if (this->ObstacleOnTheWay())
-    return;
+  // TODO: Find another way to handle obstacles
+//  if (this->ObstacleOnTheWay())
+  //  return;
 
   // Is it drift time?
-  bool drift{false};
+  gazebo::common::Time driftTime;
   for (auto t : this->dataPtr->driftTimes)
   {
     double diff = abs((t - _info.simTime).Double());
     if (diff <= this->dataPtr->timeTolerance.Double())
     {
-      drift = true;
+      driftTime = t;
       break;
     }
 
@@ -287,14 +302,26 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   auto dir = targetPose.Pos() - actorPose.Pos();
 
   // Stop if too close to target
-  if (!drift && dir.Length() <= this->dataPtr->minDistance)
+  if (driftTime == gazebo::common::Time::Zero &&
+      dir.Length() <= this->dataPtr->minDistance)
+  {
     return;
+  }
 
   // Stop following if too far from target
   if (dir.Length() > this->dataPtr->maxDistance)
   {
-    gzwarn << "Robot too far, guest stopped following" << std::endl;
+    gzwarn << "Target [" << this->dataPtr->target->GetName()
+           <<  "] too far, actor [" << this->dataPtr->actor->GetName()
+           <<"] stopped following" << std::endl;
     this->dataPtr->target = nullptr;
+
+    // Publish drift notification
+    // 1: target too far
+    ignition::msgs::UInt32 msg;
+    msg.set_data(1);
+    this->dataPtr->driftIgnPub.Publish(msg);
+
     return;
   }
   dir.Normalize();
@@ -302,12 +329,25 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
   // Towards target
   ignition::math::Angle yaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
 
-  // If drift, change direction a bit
-  if (drift)
+  // Drift
+  if (driftTime != gazebo::common::Time::Zero)
   {
+    // Change direction a bit
     yaw += ignition::math::Rand::DblUniform(-1, 1) *
         this->dataPtr->maxDriftAngle;
+
+    // Stop following
     this->dataPtr->target = nullptr;
+
+    // Notify
+    // 2: drift time
+    ignition::msgs::UInt32 msg;
+    msg.set_data(2);
+    this->dataPtr->driftIgnPub.Publish(msg);
+
+    gzwarn << "Actor [" << this->dataPtr->actor->GetName()
+           <<  "] drifting due to scheduled time: " << driftTime << std::endl;
+    // Don't return yet, so the actor moves away
   }
   yaw.Normalize();
 
@@ -327,23 +367,14 @@ void FollowActorPlugin::OnUpdate(const common::UpdateInfo &_info)
 }
 
 /////////////////////////////////////////////////
-bool FollowActorPlugin::OnPickUpRosRequest(
-    servicesim_competition::PickUpGuest::Request &_req,
-    servicesim_competition::PickUpGuest::Response &_res)
+void FollowActorPlugin::OnFollow(const ignition::msgs::StringMsg &_req,
+    ignition::msgs::Boolean &_res, bool &_result)
 {
-  _res.success = true;
+  _res.set_data(false);
+  _result = false;
 
-  // Requesting the correct guest?
-  auto actorName = _req.guest_name;
-  if (actorName != this->dataPtr->actor->GetName())
-  {
-    gzwarn << "Wrong guest name: [" << actorName << "]" << std::endl;
-    _res.success = false;
-    return false;
-  }
-
-  // Get target model (robot)
-  auto targetName = _req.robot_name;
+  // Get target model
+  auto targetName = _req.data();
 
   auto world = this->dataPtr->actor->GetWorld();
 
@@ -351,8 +382,7 @@ bool FollowActorPlugin::OnPickUpRosRequest(
   if (!model)
   {
     gzwarn << "Failed to find model: [" << targetName << "]" << std::endl;
-    _res.success = false;
-    return false;
+    return;
   }
 
   // Check pickup radius
@@ -364,31 +394,43 @@ bool FollowActorPlugin::OnPickUpRosRequest(
 
   if (posDiff.Length() > this->dataPtr->pickUpRadius)
   {
-    gzwarn << "Robot too far from guest" << std::endl;
-    _res.success = false;
-    return false;
+    gzwarn << "Target [" << model->GetName() <<  "] too far from actor ["
+           << this->dataPtr->actor->GetName() <<"]" << std::endl;
+    return;
   }
 
+  gzmsg << "Actor [" << this->dataPtr->actor->GetName()
+        << "] is following target [" << targetName << "]" << std::endl;
+
   this->dataPtr->target = model;
-  return true;
+  _res.set_data(true);
+  _result = true;
 }
 
 /////////////////////////////////////////////////
-bool FollowActorPlugin::OnDropOffRosRequest(
-    servicesim_competition::DropOffGuest::Request &_req,
-    servicesim_competition::DropOffGuest::Response &_res)
+void FollowActorPlugin::OnUnfollow(ignition::msgs::Boolean &_res,
+    bool &_result)
 {
-  _res.success = true;
-
-  // Requesting the correct guest?
-  auto actorName = _req.guest_name;
-  if (actorName != this->dataPtr->actor->GetName())
+  if (!this->dataPtr->target)
   {
-    gzwarn << "Wrong guest name: [" << actorName << "]" << std::endl;
-    _res.success = false;
-    return false;
+    _res.set_data(false);
+    _result = false;
+    return;
   }
 
+  gzmsg << "Actor [" << this->dataPtr->actor->GetName()
+        << "] stopped following target [" << this->dataPtr->target->GetName()
+        << "]" << std::endl;
+
   this->dataPtr->target = nullptr;
-  return true;
+
+  // Publish drift notification
+  // 3: user requested
+  ignition::msgs::UInt32 msg;
+  msg.set_data(3);
+  this->dataPtr->driftIgnPub.Publish(msg);
+
+  _res.set_data(true);
+  _result = true;
 }
+

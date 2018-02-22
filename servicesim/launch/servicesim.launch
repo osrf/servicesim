@@ -1,9 +1,26 @@
 <launch>
 
+  <arg name="controllers" default="true" />
+  <arg name="dashboard" default="true" />
+  <arg name="rviz" default="true" />
+  <arg name="teleop" default="true" />
+
   <include file="$(find servicebot_description)/launch/upload_servicebot.launch" />
 
   <include file="$(find servicesim_competition)/launch/competition.launch">
+    <arg name="robot_model_path" value="$(find servicebot_description)/.."/>
   </include>
 
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x -9.75 -y -17.9 -z 0.2 -Y 1.57  -model servicebot" />
+  <group if="$(arg teleop)">
+    <include file="$(find servicesim)/launch/teleop.launch" />
+  </group>
+  <group if="$(arg rviz)">
+    <include file="$(find servicesim)/launch/rviz.launch" />
+  </group>
+  <group if="$(arg controllers)">
+    <include file="$(find servicebot_control)/launch/servicebot_control.launch" />
+  </group>
+  <group if="$(arg dashboard)">
+    <include file="$(find servicesim)/launch/rqt_dashboard.launch" />
+  </group>
 </launch>

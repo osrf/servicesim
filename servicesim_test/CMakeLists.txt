@@ -5,13 +5,12 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  servicesim_competition
 )
 
-find_package(gazebo 8.2.0 REQUIRED)
+find_package(gazebo 8.3.0 EXACT REQUIRED)
 
 catkin_package(
-  CATKIN_DEPENDS
-    roscpp
 )
 
 ###########
@@ -20,9 +19,8 @@ catkin_package(
 
 include_directories(
   include
-  ${GAZEBO_INCLUDE_DIRS}
-  ${roscpp_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
+  ${GAZEBO_INCLUDE_DIRS}
 )
 
 link_directories(

@@ -5,69 +5,47 @@ set (CMAKE_AUTOMOC ON)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
-  std_msgs
   roscpp
+  std_msgs
 )
 
 # Gazebo
-find_package(gazebo 8.2.0 REQUIRED)
+find_package(gazebo 8.3.0 EXACT REQUIRED)
 
 # Qt for GUI plugins
 find_package (Qt5Widgets REQUIRED)
 find_package (Qt5Core REQUIRED)
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
-## Uncomment this if the package has a setup.py. This macro ensures
-## modules and global scripts declared therein get installed
-## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
-
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
-## To declare and build messages, services or actions from within this
-## package, follow these steps:
-## * Let MSG_DEP_SET be the set of packages whose message types you use in
-##   your messages/services/actions (e.g. std_msgs, actionlib_msgs, ...).
-## * In the file package.xml:
-##   * add a build_depend tag for "message_generation"
-##   * add a build_depend and a run_depend tag for each package in MSG_DEP_SET
-##   * If MSG_DEP_SET isn't empty the following dependency has been pulled in
-##     but can be declared for certainty nonetheless:
-##     * add a run_depend tag for "message_runtime"
-## * In this file (CMakeLists.txt):
-##   * add "message_generation" and every package in MSG_DEP_SET to
-##     find_package(catkin REQUIRED COMPONENTS ...)
-##   * add "message_runtime" and every package in MSG_DEP_SET to
-##     catkin_package(CATKIN_DEPENDS ...)
-##   * uncomment the add_*_files sections below as needed
-##     and list every .msg/.srv/.action file to be processed
-##   * uncomment the generate_messages entry below
-##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
-
+add_message_files(
+  FILES
+    ActorNames.msg
+    Score.msg
+)
 
 # Generate services in the 'srv' folder
 add_service_files(
   FILES
-  DropOffGuest.srv
-  GetGuestIdentity.srv
-  PickUpGuest.srv
+    DropOffGuest.srv
+    NewTask.srv
+    PickUpGuest.srv
+    RoomInfo.srv
 )
 
 # Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
-  geometry_msgs std_msgs
+    geometry_msgs
+    std_msgs
 )
 
+set(trajectory_actor_plugin_name TrajectoryActorPlugin)
 catkin_package(
   CATKIN_DEPENDS
     geometry_msgs
     message_runtime
+    roscpp
     std_msgs
+  LIBRARIES ${trajectory_actor_plugin_name}
 )
 
 ###########
@@ -77,13 +55,12 @@ catkin_package(
 include_directories(
   include
   ${GAZEBO_INCLUDE_DIRS}
-  ${roscpp_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
 link_directories(
-  ${catkin_LIBRARY_DIRS}
   ${GAZEBO_LIBRARY_DIRS}
+  ${catkin_LIBRARY_DIRS}
 )
 
 #############################
@@ -91,18 +68,18 @@ link_directories(
 #############################
 
 # Create the libTrajectoryActorPlugin.so library.
-set(trajectory_actor_plugin_name TrajectoryActorPlugin)
 add_library(${trajectory_actor_plugin_name} SHARED
   src/TrajectoryActorPlugin.cc
 )
 target_link_libraries(${trajectory_actor_plugin_name}
   ${GAZEBO_LIBRARIES}
-  ${roscpp_LIBRARIES}
+  ${catkin_LIBRARIES}
 )
 install(TARGETS ${trajectory_actor_plugin_name}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
 
 #############################
 ## Follow Actor plugin ##
@@ -121,9 +98,55 @@ add_dependencies(${follow_actor_plugin_name}
   servicesim_competition_generate_messages_cpp
 )
 install(TARGETS ${follow_actor_plugin_name}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
+#############################
+## Collision Actor plugin ##
+#############################
+
+# Create the libCollisionActorPlugin.so library.
+set(collision_actor_plugin_name CollisionActorPlugin)
+add_library(${collision_actor_plugin_name} SHARED
+  src/CollisionActorPlugin.cc
+)
+target_link_libraries(${collision_actor_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+add_dependencies(${collision_actor_plugin_name}
+  servicesim_competition_generate_messages_cpp
+)
+install(TARGETS ${collision_actor_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
+#############################
+###### Vicinity plugin ######
+#############################
+
+# Create the libVicinityPlugin.so library.
+set(vicinity_plugin_name VicinityPlugin)
+add_library(${vicinity_plugin_name} SHARED
+  src/VicinityPlugin.cc
+)
+target_link_libraries(${vicinity_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${catkin_LIBRARIES}
+)
+add_dependencies(${competition_plugin_name}
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  servicesim_competition_generate_messages_cpp
+)
+install(TARGETS ${vicinity_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
 
 #########################
 ## Create Actor plugin ##
@@ -141,9 +164,10 @@ target_link_libraries(${create_actor_plugin_name}
   ${Qt5Widgets_LIBRARIES}
 )
 install(TARGETS ${create_actor_plugin_name}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
 
 ##########################
 ## Number Visual plugin ##
@@ -159,14 +183,49 @@ target_link_libraries(${number_visual_plugin_name}
   ${roscpp_LIBRARIES}
 )
 install(TARGETS ${number_visual_plugin_name}
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
+##########################
+##      Competition     ##
+##########################
+
+# Create the libCompetitionPlugin.so library.
+set(competition_plugin_name CompetitionPlugin)
+add_library(${competition_plugin_name} SHARED
+  src/CompetitionPlugin.cc
+  src/Conversions.cc
+  src/Checkpoint.cc
+  src/CP_DropOff.cc
+  src/CP_PickUp.cc
+  src/PenaltyChecker.cc
+)
+target_link_libraries(${competition_plugin_name}
+  ${GAZEBO_LIBRARIES}
+)
+add_dependencies(${competition_plugin_name}
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  servicesim_competition_generate_messages_cpp
+)
+install(TARGETS ${competition_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
 
 #############
 ## Install ##
 #############
 
-install(DIRECTORY launch models worlds
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/
+install(
+  DIRECTORY
+    launch
+    map
+    media
+    models
+    worlds
+  DESTINATION
+    ${CATKIN_PACKAGE_SHARE_DESTINATION}/
 )

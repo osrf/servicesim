@@ -15,17 +15,85 @@
  *
 */
 
-#ifndef SERVICESIM_PLUGINS_FOLLOWACTORPLUGIN_HH_
-#define SERVICESIM_PLUGINS_FOLLOWACTORPLUGIN_HH_
+#ifndef SERVICESIM_FOLLOWACTORPLUGIN_HH_
+#define SERVICESIM_FOLLOWACTORPLUGIN_HH_
+
+#include <memory>
 
 #include <gazebo/common/Plugin.hh>
-#include "gazebo/util/system.hh"
 
 namespace servicesim
 {
   class FollowActorPluginPrivate;
 
-  class GAZEBO_VISIBLE FollowActorPlugin : public gazebo::ModelPlugin
+  /// \brief Make an actor follow a target entity in the world.
+  ///
+  /// ## Ignition transport interface
+  ///
+  /// Follow service:
+  ///   * Use: Ask actor to follow a (new) target
+  ///   * Topic: /<namespace>/<actor_name>/follow
+  ///   * Request: ignition.msgs.StringMsg with target entity name
+  ///   * Response: ignition.msgs.Boolean with success / failure.
+  ///               Reasons for failure:
+  ///               * Target outside <pickup_radius>
+  ///               * Target not found
+  ///
+  /// Unfollow service:
+  ///   * Use: Ask actor to stop following a target, if following
+  ///   * Topic: /<namespace>/<actor_name>/unfollow
+  ///   * No request
+  ///   * Response: ignition.msgs.Boolean with success / failure.
+  ///               Reasons for failure:
+  ///               * Not currently following
+  ///
+  /// Drift publisher:
+  ///   * Use: Listen to drift notifications, i.e. when the actor stops
+  ///          following the target
+  ///   * Topic: /<namespace>/<actor_name>/drift
+  ///   * Message: ignition.msgs.UInt32, where the number is a code for the
+  ///              drift reason:
+  ///              1: Target too far (beyond <max_distance>)
+  ///              2: Scheduled drift time
+  ///              3: User requested unfollow
+  ///
+  /// ## SDF parameters
+  ///
+  /// <namespace>: Namespace for transport
+  ///
+  /// <min_distance>: Distance in meters to keep from target's origin
+  ///
+  /// <max_distance>: Distance in meters from target's origin when to stop
+  ///                 following
+  ///
+  /// <pickup_radius>: Distance in meters from the target's origin from which
+  ///                  the /follow service will succeed
+  ///
+  /// <obstacle_margin>: Amount in meters by which obstacles' bounding boxes
+  ///                    are expanded in all directions. The robot will stop
+  ///                    before that to avoid collision
+  ///
+  /// <velocity>: Actor's velocity in m/s
+  ///
+  /// <ignore_obstacle>: Objects in the world which can be ignored for
+  ///                    bounding-box collision checking
+  ///
+  /// ## Demo
+  ///
+  /// Try out the demo world: follow_actor_demo.world
+  ///
+  /// Request follow, for example:
+  ///
+  ///    ign service -s /demo/slow_follower/follow --reqtype ignition.msgs.StringMsg --reptype ignition.msgs.Boolean --timeout 1000 --req 'data: "number5"'
+  ///
+  /// To stop following:
+  ///
+  ///    ign service -s /demo/fast_follower/unfollow --reqtype ignition.msgs.Empty --reptype ignition.msgs.Boolean --timeout 1000 --req 'unused: true'
+  ///
+  /// Listen to drift notifications, for example:
+  ///
+  ///    ign topic -e -t /demo/slow_follower/drift
+  class FollowActorPlugin : public gazebo::ModelPlugin
   {
     /// \brief Constructor
     public: FollowActorPlugin();
@@ -47,22 +115,20 @@ namespace servicesim
     /// \return True if there is
     private: bool ObstacleOnTheWay() const;
 
-    /// \brief Service for picking up the actor
-    /// \param[in] _req Request
-    /// \param[in] _res Response
-    private: bool OnPickUpRosRequest(
-        servicesim_competition::PickUpGuest::Request &_req,
-        servicesim_competition::PickUpGuest::Response &_res);
+    /// \brief Callback for Ignition follow service
+    /// \param[in] _req Request with target name
+    /// \param[out] _res Response with true for success
+    /// \param[out] _result True for success
+    private: void OnFollow(const ignition::msgs::StringMsg &_req,
+        ignition::msgs::Boolean &_res, bool &_result);
 
-    /// \brief Service for dropping off the actor
-    /// \param[in] _req Request
-    /// \param[in] _res Response
-    private: bool OnDropOffRosRequest(
-        servicesim_competition::DropOffGuest::Request &_req,
-        servicesim_competition::DropOffGuest::Response &_res);
+    /// \brief Callback for Ignition unfollow service
+    /// \param[out] _res Response with true for success
+    /// \param[out] _result True for success
+    private: void OnUnfollow(ignition::msgs::Boolean &_res, bool &_result);
 
     /// \internal
-    private: FollowActorPluginPrivate *dataPtr;
+    private: std::unique_ptr<FollowActorPluginPrivate> dataPtr;
   };
 }
 #endif
