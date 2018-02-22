@@ -236,10 +236,16 @@
   ]
 
   # Idling animation files under model://actor/meshes
-  animations_idle =
+  animations_idle_standing =
   [
+    "ANIMATION_standing.dae",
     "ANIMATION_talking_a.dae",
     "ANIMATION_talking_b.dae"
+  ]
+
+  animations_idle_sitting =
+  [
+    "ANIMATION_sitting.dae",
   ]
 
   # Trajectory animation files under model://actor/meshes
@@ -253,7 +259,7 @@
   actors_idle =
   [
     # Example randomizing skin and animation
-    {:skin => skins.sample, :anim => animations_idle.sample, :config_file => 'idle_near_entrance.erb'},
+    {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
     # Example using skin and animation from config
     {:config_file => 'idle_near_fridge.erb'}
   ]
