@@ -306,8 +306,13 @@
   #                                             #
   ###############################################
 
+  if config and config.key?('guest') and config['guest'].key?('skin')
+    guest_skin = config['guest']['skin']
+  else
+    guest_skin = skins.sample
+  end
+
   guest_name = human_name + '_' + rand(10000..99999).to_s()
-  guest_skin = skins.sample
   guest_anim = animations_trajectory[0]
   drift_times = []
 
