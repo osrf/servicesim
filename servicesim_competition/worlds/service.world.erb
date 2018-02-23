@@ -357,13 +357,13 @@
 
   robot_name = 'servicebot'
 %>
+<?xml version="1.0" ?>
 <!--
   Generated from service.world.erb
   Seed: <%= seed %>
   Floorplan: <%= $floorplan %>
   Config: <%= config %>
 -->
-<?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
 
@@ -924,19 +924,6 @@
         </box>
       </geometry>
     </plugin>
-
-    <include>
-      <pose>
-        <%= $start_location[:pivot][0] %>
-        <%= $start_location[:pivot][1] %>
-        0.75
-        0
-        0
-        <%= rand(-$pi..$pi) %>
-      </pose>
-      <name>servicebot</name>
-      <uri>model://servicebot_description</uri>
-    </include>
 
     <%
       guest_pose =
