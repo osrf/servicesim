@@ -1,5 +1,6 @@
 <launch>
-  <arg name="world_name" value="$(find servicesim_competition)/worlds/service.world"/>
+  <arg if="$(optenv USE_CUSTOM_WORLD 0)" name="world_name" default="$(env CUSTOM_WORLD_PATH)" />
+  <arg unless="$(optenv USE_CUSTOM_WORLD 0)" name="world_name" value="$(find servicesim_competition)/worlds/service.world"/>
   <arg name="robot_model_path"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
