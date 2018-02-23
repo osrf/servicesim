@@ -108,7 +108,7 @@
     if not open
       return 0.0
     else
-      return rand($pi*0.7..$pi)
+      return rand($pi*0.8..$pi)
     end
   end
 
@@ -216,7 +216,7 @@
   ]
 
   # Array is filled as rooms are created
-  $drop_areas = []
+  $target_areas = []
 
   ###############################################
   #                                             #
@@ -630,7 +630,7 @@
   ###############################################
 
   # Pick-up (guest's start point)
-  location = $drop_areas.sample()
+  location = $target_areas.sample()
 
   size_x = location[:max][0] - location[:min][0]
   size_y = location[:max][1] - location[:min][1]
@@ -648,7 +648,7 @@
 
   # Drop-off (guest's end point)
   while location[:name] == $pick_up_location[:name]
-    location = $drop_areas.sample()
+    location = $target_areas.sample()
   end
 
   size_x = location[:max][0] - location[:min][0]
@@ -667,7 +667,7 @@
   # Start (robot's start/end point)
   while location[:name] == $pick_up_location[:name] or
         location[:name] == $drop_off_location[:name]
-    location = $drop_areas.sample()
+    location = $target_areas.sample()
   end
 
   size_x = location[:max][0] - location[:min][0]
@@ -753,12 +753,12 @@
       </return_to_start>
 
       <%
-        for drop in $drop_areas
+        for target in $target_areas
       %>
         <room_info
-          name="<%= drop[:name] %>"
-          min="<%= drop[:min][0] %> <%= drop[:min][1] %> <%= drop[:min][2] %>"
-          max="<%= drop[:max][0] %> <%= drop[:max][1] %> <%= drop[:max][2] %>"
+          name="<%= target[:name] %>"
+          min="<%= target[:min][0] %> <%= target[:min][1] %> <%= target[:min][2] %>"
+          max="<%= target[:max][0] %> <%= target[:max][1] %> <%= target[:max][2] %>"
         />
       <% end %>
 

@@ -4,19 +4,19 @@
   # Required variables
   # * $pi (number) Math::PI
   # * $o (number) Office unit
-  # * $drop_areas ([]) Dictionary with drop area info
+  # * $target_areas ([]) Dictionary with target area info
 
-  $drop_areas.push({:name => 'FrontElevator',
+  $target_areas.push({:name => 'FrontElevator',
                     :min => [-3*$o, 0.0, 0],
                     :max => [$o, 3 * $o, 0],
                     :pivot => [rand(-3*$o..$o), rand(0.1*$o..2*$o), 0]})
 
-  $drop_areas.push({:name => 'FrontCouchA',
+  $target_areas.push({:name => 'FrontCouchA',
                     :min => [-6*$o, 0.0, 0],
                     :max => [-3*$o, 3 * $o, 0],
                     :pivot => [rand(-6.81..-5.34), rand(0.65..3.45), 0]})
 
-  $drop_areas.push({:name => 'FrontCouchB',
+  $target_areas.push({:name => 'FrontCouchB',
                     :min => [$o, 0.0, 0],
                     :max => [5*$o, 2 * $o, 0],
                     :pivot => [rand(3.92..5.39), 1.56, 0]})
