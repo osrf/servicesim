@@ -41,7 +41,7 @@ class PanTilt(Plugin):
         self._tilt_publisher = rospy.Publisher(self.TILT_TOPIC, Float64, queue_size=10)
 
         self._widget = QWidget()
-        ui_file = os.path.join(rp.get_path('rqt_pan_tilt'), 'resource', 'PanTilt.ui')
+        ui_file = os.path.join(rp.get_path('rqt_servicebot_pan_tilt'), 'resource', 'PanTilt.ui')
         loadUi(ui_file, self._widget)
         self._widget.setObjectName('PanTiltUi')
         if context.serial_number() > 1:
