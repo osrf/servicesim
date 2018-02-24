@@ -25,11 +25,11 @@
       <%= $pi * 0.5 %>
     </pose>
     <collision name="collision">
+      <pose>0.0 -0.025 <%= counter_top * 0.5 %> 0 0 0</pose>
       <geometry>
-        <mesh>
-          <uri>model://cafe_counter/meshes/counter_<%= counter %>.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
+        <box>
+          <size>1.2 0.67 <%= counter_top %></size>
+        </box>
       </geometry>
     </collision>
     <visual name="visual">
@@ -147,7 +147,7 @@
       0
       <%= $pi * 0.25 %>
     </pose>
-    <uri>model://cafe_table</uri>
+    <uri>model://office_cafe_table</uri>
   </include>
 
   <%
