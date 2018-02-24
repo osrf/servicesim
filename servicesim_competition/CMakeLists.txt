@@ -90,7 +90,7 @@ target_link_libraries(${follow_actor_plugin_name}
   ${roscpp_LIBRARIES}
 )
 add_dependencies(${follow_actor_plugin_name}
-  servicesim_competition_generate_messages_cpp
+  ${PROJECT_NAME}_generate_messages_cpp
 )
 install(TARGETS ${follow_actor_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -112,7 +112,7 @@ target_link_libraries(${collision_actor_plugin_name}
   ${roscpp_LIBRARIES}
 )
 add_dependencies(${collision_actor_plugin_name}
-  servicesim_competition_generate_messages_cpp
+  ${PROJECT_NAME}_generate_messages_cpp
 )
 install(TARGETS ${collision_actor_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -133,9 +133,8 @@ target_link_libraries(${vicinity_plugin_name}
   ${GAZEBO_LIBRARIES}
   ${catkin_LIBRARIES}
 )
-add_dependencies(${competition_plugin_name}
-  ${${PROJECT_NAME}_EXPORTED_TARGETS}
-  servicesim_competition_generate_messages_cpp
+add_dependencies(${vicinity_plugin_name}
+  ${PROJECT_NAME}_generate_messages_cpp
 )
 install(TARGETS ${vicinity_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -161,8 +160,7 @@ target_link_libraries(${competition_plugin_name}
   ${GAZEBO_LIBRARIES}
 )
 add_dependencies(${competition_plugin_name}
-  ${${PROJECT_NAME}_EXPORTED_TARGETS}
-  servicesim_competition_generate_messages_cpp
+  ${PROJECT_NAME}_generate_messages_cpp
 )
 install(TARGETS ${competition_plugin_name}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
