@@ -4,10 +4,13 @@ usage()
 {
 cat << EOF
 OPTIONS:
-   -h        Help
-   -d        Download latest template files
-   -p [arg]  Custom file prefix, consists of the file path and name without
-             extension. Defaults to "service"
+   -h          Help
+   -d          Download latest template files
+   -args [arg] Passes arguments to the erb command, for example `-args "d=true"`
+               will generate a world with debug visuals. See service.world.erb
+               for other options.
+   -p [arg]    Custom file prefix, consists of the file path and name without
+               extension. Defaults to "service"
 EOF
 exit
 }
@@ -15,6 +18,7 @@ exit
 # Default values
 DOWNLOAD=false
 PREFIX="service"
+ARGS=""
 
 GetOpts()
 {
@@ -30,6 +34,15 @@ GetOpts()
             echo "Missing file prefix after -p"
           else
             PREFIX="$1"
+          fi
+          shift
+          ;;
+        -args)
+          if [ $# -eq 0 -o "${1:0:1}" = "-" ]
+          then
+            echo "Missing args after -args"
+          else
+            ARGS="$1"
           fi
           shift
           ;;
@@ -87,6 +100,6 @@ if $DOWNLOAD; then
 fi
 
 echo -e "\e[92mGenerating files...\e[39m"
-erb urdf_launch=$PREFIX.launch service.world.erb > $PREFIX.world
+erb $ARGS urdf_launch=$PREFIX.launch service.world.erb > $PREFIX.world
 echo -e "\e[92m... generated\e[39m"
 
