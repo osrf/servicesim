@@ -51,6 +51,14 @@ namespace servicesim
     /// multiplied by contact depth.
     private: double weightObjContact{0.0};
 
+    /// \brief Penalty weight when approximation with human happens. Will be
+    /// multiplied by approximation depth.
+    private: double weightHumanApproximation{0.0};
+
+    /// \brief Penalty weight when approximation with an object happens. Will be
+    /// multiplied by approximation depth.
+    private: double weightObjApproximation{0.0};
+
     /// \brief Robot name
     private: std::string robotName;
 
