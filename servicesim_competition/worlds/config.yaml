@@ -1,0 +1,43 @@
+# Scenario configuration used to generate a custom world file.
+#
+# Empty fields will be randomized.
+#
+# World generation instructions here:
+# https://bitbucket.org/osrf/servicesim/wiki/World%20generation
+
+# Target room names, see full list here:
+# https://bitbucket.org/osrf/servicesim/wiki/Room%20names
+targets:
+
+    # Room where robot starts and must return to
+    robot_start: PublicCafe
+
+    # Room where guest starts
+    pick_up: FrontElevator
+
+    # Room where guest should be taken
+    drop_off: PrivateOfficeA
+
+# Guest
+guest:
+
+    # A skin file from here:
+    # https://bitbucket.org/osrf/servicesim/src/default/servicesim_competition/models/actor/meshes/
+    skin: SKIN_man_blue_shirt.dae
+
+# Parameters used to randomly generate guest drift times
+drift:
+
+  # Minimum time in seconds between drifts
+  min_interval: 15
+
+  # Maximum time in seconds between drifts
+  max_interval: 300
+
+  # No drifts before this time
+  start_time: 0
+
+  # Total number of drift times
+  count: 30
+
+

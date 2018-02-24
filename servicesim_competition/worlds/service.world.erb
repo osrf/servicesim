@@ -40,6 +40,19 @@
 
   ###############################################
   #                                             #
+  #              YAML CONFIGURATION             #
+  #                                             #
+  ###############################################
+
+  require 'yaml'
+
+  # Relative path from where the script is being run to the script's directory
+  DIR = File.dirname(__FILE__)
+
+  config = YAML.load_file(DIR + '/config.yaml')
+
+  ###############################################
+  #                                             #
   #            TRANSFORMATION MATRIX            #
   #                                             #
   ###############################################
@@ -60,9 +73,6 @@
   #               INITIALIZATION                #
   #                                             #
   ###############################################
-
-  # Relative path from where the script is being run to the script's directory
-  DIR = File.dirname(__FILE__)
 
   # Count to ensure unique names
   $count = 0
@@ -215,6 +225,28 @@
      :door => doorAngle()},
   ]
 
+  # Open doors for rooms explicitly targeted on the config file
+  if config and config.key?('targets')
+
+    target_rooms = []
+
+    if config['targets'].key?('robot_start')
+      target_rooms.push(config['targets']['robot_start'])
+    end
+    if config['targets'].key?('pick_up')
+      target_rooms.push(config['targets']['pick_up'])
+    end
+    if config['targets'].key?('drop_off')
+      target_rooms.push(config['targets']['drop_off'])
+    end
+
+    for room in rooms
+      if target_rooms.include? room[:name]
+        room[:door] = doorAngle(1)
+      end
+    end
+  end
+
   # Array is filled as rooms are created
   $target_areas = []
 
@@ -280,8 +312,13 @@
   #                                             #
   ###############################################
 
+  if config and config.key?('guest') and config['guest'].key?('skin')
+    guest_skin = config['guest']['skin']
+  else
+    guest_skin = skins.sample
+  end
+
   guest_name = human_name + '_' + rand(10000..99999).to_s()
-  guest_skin = skins.sample
   guest_anim = animations_trajectory[0]
   drift_times = []
 
@@ -289,7 +326,31 @@
   minInterval = 5
   maxInterval = 300
   time = 0
-  (1..30).each do
+  drift_count = 30
+
+  if config and config.key?('drift')
+
+    d = config['drift']
+
+    if d.key?('min_interval')
+      minInterval = d['min_interval']
+    end
+
+    if d.key?('max_interval')
+      maxInterval = d['max_interval']
+    end
+
+    if d.key?('start_time')
+      time = d['start_time']
+    end
+
+    if d.key?('count')
+      drift_count = d['count']
+    end
+
+  end
+
+  (1..drift_count).each do
     time += rand(minInterval..maxInterval)
     drift_times.push(time)
   end
@@ -302,12 +363,13 @@
 
   robot_name = 'servicebot'
 %>
+<?xml version="1.0" ?>
 <!--
   Generated from service.world.erb
   Seed: <%= seed %>
   Floorplan: <%= $floorplan %>
+  Config: <%= config %>
 -->
-<?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
 
@@ -630,7 +692,16 @@
   ###############################################
 
   # Pick-up (guest's start point)
-  location = $target_areas.sample()
+  if config and config.key?('targets') and config['targets'].key?('pick_up')
+    for area in $target_areas
+      if area[:name] == config['targets']['pick_up']
+        location = area
+        break
+      end
+    end
+  else
+    location = $drop_areas.sample()
+  end
 
   size_x = location[:max][0] - location[:min][0]
   size_y = location[:max][1] - location[:min][1]
@@ -647,8 +718,19 @@
   }
 
   # Drop-off (guest's end point)
-  while location[:name] == $pick_up_location[:name]
-    location = $target_areas.sample()
+  location = {}
+  if config and config.key?('targets') and config['targets'].key?('drop_off')
+    for area in $target_areas
+      if area[:name] == config['targets']['drop_off']
+        location = area
+        break
+      end
+    end
+  else
+    location = $pick_up_location
+    while location[:name] == $pick_up_location[:name]
+      location = $drop_areas.sample()
+    end
   end
 
   size_x = location[:max][0] - location[:min][0]
@@ -665,9 +747,20 @@
   }
 
   # Start (robot's start/end point)
-  while location[:name] == $pick_up_location[:name] or
-        location[:name] == $drop_off_location[:name]
-    location = $target_areas.sample()
+  location = {}
+  if config and config.key?('targets') and config['targets'].key?('robot_start')
+    for area in $target_areas
+      if area[:name] == config['targets']['robot_start']
+        location = area
+        break
+      end
+    end
+  else
+    location = $pick_up_location
+    while location[:name] == $pick_up_location[:name] or
+          location[:name] == $drop_off_location[:name]
+      location = $drop_areas.sample()
+    end
   end
 
   size_x = location[:max][0] - location[:min][0]
@@ -681,7 +774,6 @@
     :name => location[:name],
     :pose => [center_x, center_y, 0, 0, 0, 0],
     :size => [size_x, size_y, 10],
-    # TODO: pass this to spawn URDF
     :pivot => location[:pivot]
   }
 %>
@@ -765,6 +857,7 @@
     </plugin>
 
     <!-- Pick-up area contain plugin -->
+    <!-- Location: <%= $pick_up_location[:name] %> -->
     <plugin name="pick_up" filename="libContainPlugin.so">
       <entity><%= robot_name %></entity>
       <namespace>servicesim/go_to_pick_up</namespace>
@@ -789,6 +882,7 @@
     </plugin>
 
     <!-- Drop-off area contain plugin -->
+    <!-- Location: <%= $drop_off_location[:name] %> -->
     <plugin name="drop_off" filename="libContainPlugin.so">
       <entity><%= guest_name %></entity>
       <namespace>servicesim/drop_off</namespace>
@@ -813,6 +907,7 @@
     </plugin>
 
     <!-- Start area contain plugin -->
+    <!-- Location: <%= $start_location[:name] %> -->
     <plugin name="start" filename="libContainPlugin.so">
       <entity><%= robot_name %></entity>
       <namespace>servicesim/return_to_start</namespace>
