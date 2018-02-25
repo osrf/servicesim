@@ -1,0 +1,18 @@
+<%
+  # Prints a link with a collision for an actor
+  #
+  # Requires:
+  # * $pi (number) Math::PI
+%>
+
+<link name='cylinder'>
+  <collision name='collision'>
+    <pose>0 0 0 <%= -$pi * 0.5 %> 0 0</pose>
+    <geometry>
+      <cylinder>
+        <radius>0.3</radius>
+        <length>1.8</length>
+      </cylinder>
+    </geometry>
+  </collision>
+</link>
