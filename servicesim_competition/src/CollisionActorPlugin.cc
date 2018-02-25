@@ -39,21 +39,26 @@ void CollisionActorPlugin::Load(gazebo::physics::ModelPtr _model, sdf::ElementPt
 
   // Map of collision scaling factors
   std::map<std::string, ignition::math::Vector3d> scaling;
+
+  // Map of collision pose offsets
   std::map<std::string, ignition::math::Pose3d> offsets;
 
+  // Vector of collisions to be deleted
+  std::vector<std::string> deleting;
+
   // Read in the collision scaling factors, if present
-  if (_sdf->HasElement("scaling"))
+  if (_sdf->HasElement("collision"))
   {
-    auto elem = _sdf->GetElement("scaling");
+    auto elem = _sdf->GetElement("collision");
     while (elem)
     {
-      if (!elem->HasAttribute("collision"))
+      if (!elem->HasAttribute("name"))
       {
-        gzwarn << "Skipping element without collision attribute" << std::endl;
-        elem = elem->GetNextElement("scaling");
+        gzwarn << "Skipping element without name attribute" << std::endl;
+        elem = elem->GetNextElement("collision");
         continue;
       }
-      auto name = elem->Get<std::string>("collision");
+      auto name = elem->Get<std::string>("name");
 
       if (elem->HasAttribute("scale"))
       {
@@ -66,7 +71,12 @@ void CollisionActorPlugin::Load(gazebo::physics::ModelPtr _model, sdf::ElementPt
         auto pose = elem->Get<ignition::math::Pose3d>("pose");
         offsets[name] = pose;
       }
-      elem = elem->GetNextElement("scaling");
+
+      if (elem->HasAttribute("delete") && elem->Get<bool>("delete"))
+      {
+        deleting.push_back(name);
+      }
+      elem = elem->GetNextElement("collision");
     }
   }
 
@@ -82,6 +92,13 @@ void CollisionActorPlugin::Load(gazebo::physics::ModelPtr _model, sdf::ElementPt
     for (const auto &collision : link->GetCollisions())
     {
       auto name = collision->GetName();
+
+      if (std::find(deleting.begin(), deleting.end(), name) != deleting.end())
+      {
+        gzdbg << "Remove col " << name << std::endl;
+        link->RemoveCollision(name);
+        continue;
+      }
 
       if (scaling.find(name) != scaling.end())
       {
