@@ -300,6 +300,7 @@ void FollowActorPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
 
   // Direction to target
   auto dir = targetPose.Pos() - actorPose.Pos();
+  dir.Z(0);
 
   // Stop if too close to target
   if (driftTime == gazebo::common::Time::Zero &&
