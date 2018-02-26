@@ -5,6 +5,8 @@
   # s: seed for randomization
   # f: true to generate unpopulated world (floorplan only)
   # d: true to generate debug visuals
+  # urdf_launch: File name for spawn urdf launch file to be generated on same
+  #              directory as world file.
 
   ###############################################
   #                                             #
@@ -36,6 +38,12 @@
   $debug = false
   if (defined? d)
     $debug = d.to_s == "true"
+  end
+
+  # URDF
+  $urdf_launch = ''
+  if (defined? urdf_launch)
+    $urdf_launch = urdf_launch.to_s()
   end
 
   ###############################################
@@ -268,10 +276,16 @@
   ]
 
   # Idling animation files under model://actor/meshes
-  animations_idle =
+  animations_idle_standing =
   [
+    "ANIMATION_standing.dae",
     "ANIMATION_talking_a.dae",
     "ANIMATION_talking_b.dae"
+  ]
+
+  animations_idle_sitting =
+  [
+    "ANIMATION_sitting.dae",
   ]
 
   # Trajectory animation files under model://actor/meshes
@@ -285,9 +299,11 @@
   actors_idle =
   [
     # Example randomizing skin and animation
-    {:skin => skins.sample, :anim => animations_idle.sample, :config_file => 'idle_near_entrance.erb'},
+    {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
     # Example using skin and animation from config
-    {:config_file => 'idle_near_fridge.erb'}
+    {:config_file => 'idle_near_fridge.erb'},
+    {:config_file => 'idle_sitting_couch.erb'},
+    {:config_file => 'idle_back.erb'}
   ]
 
   # List of trajectory actors to be inserted
@@ -355,13 +371,15 @@
   #                                             #
   ###############################################
 
-  robot_name = 'servicebot'
+  $robot_name = 'servicebot'
 %>
 <?xml version="1.0" ?>
 <!--
   Generated from service.world.erb
   Seed: <%= seed %>
   Floorplan: <%= $floorplan %>
+  Debug: <%= $debug %>
+  URDF launch file: <%= $urdf_launch %>
   Config: <%= config %>
 -->
 <sdf version="1.6">
@@ -371,13 +389,13 @@
   if not $floorplan
 %>
     <physics type="ode">
-      <real_time_update_rate>1000.0</real_time_update_rate>
-      <max_step_size>0.001</max_step_size>
+      <real_time_update_rate>500.0</real_time_update_rate>
+      <max_step_size>0.002</max_step_size>
       <real_time_factor>1</real_time_factor>
       <ode>
         <solver>
           <type>quick</type>
-          <iters>150</iters>
+          <iters>300</iters>
           <precon_iters>0</precon_iters>
           <sor>1.400000</sor>
           <use_dynamic_moi_rescaling>1</use_dynamic_moi_rescaling>
@@ -774,6 +792,8 @@
     <!-- Competition plugin -->
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
+      <sor_lcp_tolerance>0.1</sor_lcp_tolerance>
+
       <pick_up_location>
         <%= $pick_up_location[:name] %>
       </pick_up_location>
@@ -783,7 +803,7 @@
       </drop_off_location>
 
       <guest_name><%= guest_name %></guest_name>
-      <robot_name><%= robot_name %></robot_name>
+      <robot_name><%= $robot_name %></robot_name>
       <ground_name><%= ground_name %></ground_name>
       <human_name><%= human_name %></human_name>
 
@@ -853,7 +873,7 @@
     <!-- Pick-up area contain plugin -->
     <!-- Location: <%= $pick_up_location[:name] %> -->
     <plugin name="pick_up" filename="libContainPlugin.so">
-      <entity><%= robot_name %></entity>
+      <entity><%= $robot_name %></entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
@@ -903,7 +923,7 @@
     <!-- Start area contain plugin -->
     <!-- Location: <%= $start_location[:name] %> -->
     <plugin name="start" filename="libContainPlugin.so">
-      <entity><%= robot_name %></entity>
+      <entity><%= $robot_name %></entity>
       <namespace>servicesim/return_to_start</namespace>
       <enabled>false</enabled>
       <pose>
@@ -992,7 +1012,7 @@
 
       </plugin>
 
-      <%= fromFile(DIR + "/" + "actor_collisions.erb") %>
+      <%= fromFile(DIR + "/actor_collisions.erb") %>
 
     </actor>
 <%
@@ -1002,8 +1022,19 @@
 <%
   if $debug
 %>
-  <%= fromFile(DIR + "/" + "debug_visuals.erb") %>
+  <%= fromFile(DIR + "/debug_visuals.erb") %>
 <%
+  end
+%>
+
+<%
+  # Launch file to spawn URDF
+  if $urdf_launch != ''
+
+    File.open($urdf_launch, "w") do |f|
+      f.write(fromFile(DIR + "/spawn_urdf.launch.erb"))
+    end
+
   end
 %>
 
