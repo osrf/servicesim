@@ -5,6 +5,8 @@
   # s: seed for randomization
   # f: true to generate unpopulated world (floorplan only)
   # d: true to generate debug visuals
+  # urdf_launch: File name for spawn urdf launch file to be generated on same
+  #              directory as world file.
 
   ###############################################
   #                                             #
@@ -36,6 +38,12 @@
   $debug = false
   if (defined? d)
     $debug = d.to_s == "true"
+  end
+
+  # URDF
+  $urdf_launch = ''
+  if (defined? urdf_launch)
+    $urdf_launch = urdf_launch.to_s()
   end
 
   ###############################################
@@ -363,13 +371,15 @@
   #                                             #
   ###############################################
 
-  robot_name = 'servicebot'
+  $robot_name = 'servicebot'
 %>
 <?xml version="1.0" ?>
 <!--
   Generated from service.world.erb
   Seed: <%= seed %>
   Floorplan: <%= $floorplan %>
+  Debug: <%= $debug %>
+  URDF launch file: <%= $urdf_launch %>
   Config: <%= config %>
 -->
 <sdf version="1.6">
@@ -793,7 +803,7 @@
       </drop_off_location>
 
       <guest_name><%= guest_name %></guest_name>
-      <robot_name><%= robot_name %></robot_name>
+      <robot_name><%= $robot_name %></robot_name>
       <ground_name><%= ground_name %></ground_name>
       <human_name><%= human_name %></human_name>
 
@@ -863,7 +873,7 @@
     <!-- Pick-up area contain plugin -->
     <!-- Location: <%= $pick_up_location[:name] %> -->
     <plugin name="pick_up" filename="libContainPlugin.so">
-      <entity><%= robot_name %></entity>
+      <entity><%= $robot_name %></entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
@@ -913,7 +923,7 @@
     <!-- Start area contain plugin -->
     <!-- Location: <%= $start_location[:name] %> -->
     <plugin name="start" filename="libContainPlugin.so">
-      <entity><%= robot_name %></entity>
+      <entity><%= $robot_name %></entity>
       <namespace>servicesim/return_to_start</namespace>
       <enabled>false</enabled>
       <pose>
@@ -1002,7 +1012,7 @@
 
       </plugin>
 
-      <%= fromFile(DIR + "/" + "actor_collisions.erb") %>
+      <%= fromFile(DIR + "/actor_collisions.erb") %>
 
     </actor>
 <%
@@ -1012,8 +1022,19 @@
 <%
   if $debug
 %>
-  <%= fromFile(DIR + "/" + "debug_visuals.erb") %>
+  <%= fromFile(DIR + "/debug_visuals.erb") %>
 <%
+  end
+%>
+
+<%
+  # Launch file to spawn URDF
+  if $urdf_launch != ''
+
+    File.open($urdf_launch, "w") do |f|
+      f.write(fromFile(DIR + "/spawn_urdf.launch.erb"))
+    end
+
   end
 %>
 
