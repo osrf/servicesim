@@ -8,17 +8,17 @@
 
   $target_areas.push({:name => 'FrontElevator',
                     :min => [-3*$o, 0.0, 0],
-                    :max => [$o, 3 * $o, 0],
+                    :max => [$o, 1.8 * $o, 0],
                     :pivot => [rand(-2.0*$o..0.0), rand(0.1*$o..2*$o), 0]})
 
   $target_areas.push({:name => 'FrontCouchA',
-                    :min => [-6*$o, 0.0, 0],
+                    :min => [-5*$o, 0.0, 0],
                     :max => [-3*$o, 3 * $o, 0],
                     :pivot => [rand(-6.81..-5.34), rand(0.65..3.45), 0]})
 
   $target_areas.push({:name => 'FrontCouchB',
-                    :min => [$o, 0.0, 0],
-                    :max => [5*$o, 2 * $o, 0],
+                    :min => [2.5*$o, 0.0, 0],
+                    :max => [4*$o, 1.5*$o, 0],
                     :pivot => [rand(3.92..5.39), 1.56, 0]})
 %>
 
@@ -47,7 +47,7 @@
       0
       0
     </pose>
-    <uri>model://cafe_table</uri>
+    <uri>model://office_cafe_table</uri>
   </include>
 
   <include>
@@ -88,20 +88,7 @@
   </include>
 
   <include>
-    <name>chair_1</name>
-    <pose>
-      4.9
-      0.61
-      0
-      0
-      0
-      <%= $pi * 0.5 %>
-    </pose>
-    <uri>model://hangout_chair</uri>
-  </include>
-
-  <include>
-    <name>chair_2</name>
+    <name>chair</name>
     <pose>
       4.9
       2.6

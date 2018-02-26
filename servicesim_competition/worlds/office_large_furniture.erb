@@ -16,7 +16,7 @@
 <include>
   <pose>
     <%= -1.6*$o %>
-    -0.4
+    <%= -3*$o + 0.4 %>
     0
     0
     0
@@ -41,20 +41,6 @@
 
 <%
   $cubicle_name = 'corner_2'
-  $pose =
-  [
-    -2 * $o,
-    -3 * $o,
-    0,
-    0,
-    0,
-    $pi,
-  ]
-%>
-<%= fromFile(DIR + "/cubicle_corner.erb") %>
-
-<%
-  $cubicle_name = 'corner_3'
   $pose =
   [
     2 * $o,

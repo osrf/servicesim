@@ -17,11 +17,12 @@
 
   # Only covering one orientation for now
   if $targetable and $pose[5] == $pi
-    target_size = 2.5
+    target_size_x = 2.0
+    target_size_y = 3.0
     min_x_world = $pose[0]
-    max_x_world = $pose[0] + target_size
+    max_x_world = $pose[0] + target_size_x
     min_y_world = $pose[1]
-    max_y_world = $pose[1] + target_size
+    max_y_world = $pose[1] + target_size_y
     pivot_x = rand(min_x_world..max_x_world)
     pivot_y = rand((max_y_world-0.2)..max_y_world)
 
@@ -42,12 +43,42 @@
       <%= $pose[5] %>
     </pose>
     <link name="link">
-      <collision name="collision">
+      <%
+        a = 3.7 * 0.5
+        b = 1.5 * 0.5
+      %>
+      <collision name="collision_x">
+        <pose>
+          <%= -a * 0.5 %>
+          <%= -b * 0.5 %>
+          <%= top * 0.5 %>
+          0 0 0
+        </pose>
         <geometry>
-          <mesh>
-            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
+          <box>
+            <size>
+              <%= a %>
+              <%= b %>
+              <%= top %>
+            </size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name="collision_y">
+        <pose>
+          <%= -b * 0.5 %>
+          <%= -a * 0.5 %>
+          <%= top * 0.5 %>
+          0 0 0
+        </pose>
+        <geometry>
+          <box>
+            <size>
+              <%= b %>
+              <%= a %>
+              <%= top %>
+            </size>
+          </box>
         </geometry>
       </collision>
       <visual name="visual">

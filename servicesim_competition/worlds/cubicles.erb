@@ -26,11 +26,11 @@
   # Maximum X, in cubicle units
   x_max = x_size * $cubicle_size - 1
 
-  # Count for unique visual and collision names
+  # Count for unique visual names
   count = 0
 
   # Fill target areas in world coords
-  target_width = 1.0
+  target_width = 1.5
   n = 0
   for x in (x_min..x_max).step(x_size)
 
@@ -110,24 +110,6 @@
           </mesh>
         </geometry>
       </visual>
-      <collision name="collision_<%= count %>">
-
-        <pose>
-          <%= pose[0] %>
-          <%= pose[1] %>
-          <%= pose[2] %>
-          <%= pose[3] %>
-          <%= pose[4] %>
-          <%= pose[5] %>
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
     <% end %>
 
     <!-- row divisions -->
@@ -167,24 +149,6 @@
           </mesh>
         </geometry>
       </visual>
-      <collision name="collision_<%= count %>">
-
-        <pose>
-          <%= pose[0] %>
-          <%= pose[1] %>
-          <%= pose[2] %>
-          <%= pose[3] %>
-          <%= pose[4] %>
-          <%= pose[5] %>
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
       <% end %>
     <% end %>
 
@@ -232,26 +196,39 @@
           </mesh>
         </geometry>
       </visual>
-      <collision name="collision_<%= count %>">
-
-        <pose>
-          <%= pose[0] %>
-          <%= pose[1] %>
-          <%= pose[2] %>
-          <%= pose[3] %>
-          <%= pose[4] %>
-          <%= pose[5] %>
-        </pose>
-
-        <geometry>
-          <mesh>
-            <uri>model://cubicle_wall/meshes/cubicle_<%= type %>.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
       <% end %>
     <% end %>
+
+    <%
+      height = 1.5
+      col_size =
+      [
+        (x_max + 1) * cubicle_u + 2 * cubicle_corner,
+        2 * (2 * cubicle_u + cubicle_corner) + 2 * cubicle_corner,
+        height
+      ]
+    %>
+    <collision name="collision">
+
+      <pose>
+        <%= col_size[0] * 0.5 - cubicle_corner %>
+        0.0
+        <%= height * 0.5 %>
+        0.0
+        0.0
+        0.0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            <%= col_size[0] %>
+            <%= col_size[1] %>
+            <%= col_size[2] %>
+          </size>
+        </box>
+      </geometry>
+    </collision>
 
   </link>
 

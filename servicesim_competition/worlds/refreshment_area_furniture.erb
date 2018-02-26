@@ -25,11 +25,11 @@
       <%= $pi * 0.5 %>
     </pose>
     <collision name="collision">
+      <pose>0.0 -0.025 <%= counter_top * 0.5 %> 0 0 0</pose>
       <geometry>
-        <mesh>
-          <uri>model://cafe_counter/meshes/counter_<%= counter %>.obj</uri>
-          <scale>0.01 0.01 0.01</scale>
-        </mesh>
+        <box>
+          <size>1.2 0.67 <%= counter_top %></size>
+        </box>
       </geometry>
     </collision>
     <visual name="visual">
@@ -115,11 +115,11 @@
 <include>
   <pose>
     3.51
-    -6.0
+    -1.0
     0
     0
     0
-    <%= -$pi * 0.75 %>
+    <%= -$pi * 0.25 %>
   </pose>
   <uri>model://tv_stand</uri>
 </include>
@@ -127,10 +127,10 @@
 <%
   start_x = -2.9
   start_y = -6.0
-  space_x = 3.2
+  space_x = 2.9
   space_y = 2.4
   n = 0
-  for x in (0..1)
+  for x in (0..2)
     for y in (0..1)
       n += 1
       x += rand(-0.1..0.1)
@@ -147,7 +147,7 @@
       0
       <%= $pi * 0.25 %>
     </pose>
-    <uri>model://cafe_table</uri>
+    <uri>model://office_cafe_table</uri>
   </include>
 
   <%

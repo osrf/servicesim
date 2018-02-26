@@ -38,22 +38,16 @@
   # If door is closed, room can't be target
   if $door_angle != 0.0
 
-    # Local min / max coords in meters
-    if $room_type == 'bathroom' or
-       $room_type == 'office_small'
-      # Drop in front of door
-      min_local_frame = TMatrix(-$o, 0, 0)
-      max_local_frame = TMatrix(0, $o, 0)
+    # Drop in a 3.0 X 1.5 m area in front of room
+    drop_width = 3.0
+    drop_depth = 1.5
+    if $room_type == 'bathroom'
+      min_local_frame = TMatrix(-0.5*$o - drop_width * 0.5, 0, 0)
+      max_local_frame = TMatrix(-0.5*$o + drop_width * 0.5, drop_depth, 0)
+    # Drop in a 3.0 X 3.0 m area inside room
     else
-      min_local_frame = TMatrix(
-        ($room_size[0] - 1) * $o,
-        ($room_size[2] - 1) * $o,
-        0)
-
-      max_local_frame = TMatrix(
-        $room_size[1] * $o,
-        $room_size[3] * $o,
-        0)
+      min_local_frame = TMatrix(- drop_width, -drop_width, 0)
+      max_local_frame = TMatrix(0.0, 0.0, 0)
     end
 
     # Local pivot
@@ -121,8 +115,10 @@
   <link name="link">
 
     <%
-      width = max_x * $o + door_side
-      if width != 0.0
+      # Wall collisions if door is open
+      if $door_angle != 0.0
+        width = max_x * $o + door_side
+        if width != 0.0
     %>
     <collision name="right_of_door">
 
@@ -274,6 +270,38 @@
         </box>
       </geometry>
     </collision>
+    <%
+      # A single collision if door is closed
+      else
+        box_size =
+        [
+          (max_x - min_x + 1) * $o,
+          (max_y - min_y + 1) * $o,
+          height
+        ]
+    %>
+    <collision name="box_collision">
+
+      <pose>
+        <%= box_size[0] * 0.5 + (min_x - 1) * $o %>
+        <%= -box_size[1] * 0.5 %>
+        <%= box_size[2] * 0.5 %>
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            <%= box_size[0] %>
+            <%= box_size[1] %>
+            <%= box_size[2] %>
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    <% end %>
 
     <visual name="visual">
       <geometry>

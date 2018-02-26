@@ -6,31 +6,29 @@
   # * $table_size (string) small, medium or large
   # * $pose (number[6]) Pose
 
-  # Rows of chairs
   if $table_size == 'large'
+    # Rows of chairs
     rows = 5
-  elsif $table_size == 'medium'
-    rows = 4
+    # Min / max y offset for chairs
+    chair_y = [0.5, 1.5]
+    # Initial x pos for chairs
+    chair_x_0 = -2.0
   elsif $table_size == 'small'
     rows = 3
+    chair_y = [0.5, 0.8]
+    chair_x_0 = -0.9
   end
 
   # Chair X
   chair_x = []
-  (0..(rows-1)).each {|n| chair_x.push(n * 0.9)}
+  (0..(rows-1)).each {|n| chair_x.push(chair_x_0 + n * 0.9)}
 
   # Min / max yaw for chairs
   chair_yaw = [-0.4, 0.4]
-
-  # Min / max y offset for chairs
-  if $table_size == 'large'
-    chair_y = [0.5, 1.5]
-  else
-    chair_y = [0.5, 0.8]
-  end
 %>
 
-<include>
+<model name="table_and_chairs">
+
   <pose>
     <%= $pose[0] %>
     <%= $pose[1] %>
@@ -39,31 +37,35 @@
     <%= $pose[4] %>
     <%= $pose[5] %>
   </pose>
-  <uri>model://conference_table_<%= $table_size %></uri>
-</include>
 
-<%
-  for x in chair_x
-
-    min_y = $pose[1] - rand(chair_y[0]..chair_y[1])
-    max_y = $pose[1] + rand(chair_y[0]..chair_y[1])
-
-    for y in [min_y, max_y]
-
-      yaw = y == max_y ? 0.0 : $pi
-      yaw += rand(chair_yaw[0]..chair_yaw[1])
-%>
   <include>
-    <name>chair_<%= x %>_<%= y %></name>
-    <pose>
-      <%= x %>
-      <%= y %>
-      0
-      0
-      0
-      <%= yaw %>
-    </pose>
-    <uri>model://desk_chair</uri>
+    <uri>model://conference_table_<%= $table_size %></uri>
   </include>
+
+  <%
+    for x in chair_x
+
+      min_y = - rand(chair_y[0]..chair_y[1])
+      max_y = + rand(chair_y[0]..chair_y[1])
+
+      for y in [min_y, max_y]
+
+        yaw = y == max_y ? 0.0 : $pi
+        yaw += rand(chair_yaw[0]..chair_yaw[1])
+  %>
+    <include>
+      <name>chair_<%= x %>_<%= y %></name>
+      <pose>
+        <%= x %>
+        <%= y %>
+        0
+        0
+        0
+        <%= yaw %>
+      </pose>
+      <uri>model://desk_chair</uri>
+    </include>
+    <% end %>
   <% end %>
-<% end %>
+
+</model>
