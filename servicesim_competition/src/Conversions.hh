@@ -18,10 +18,12 @@
 #ifndef SERVICESIM_CONVERSIONS_HH_
 #define SERVICESIM_CONVERSIONS_HH_
 
+#include <ros/time.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/Point.h>
 #include <ignition/math/Pose3.hh>
 #include <ignition/math/Vector3.hh>
+#include <gazebo/common/Time.hh>
 
 namespace servicesim
 {
@@ -34,5 +36,10 @@ namespace servicesim
   /// \param[in] _vec Ignition vector 3d to convert.
   /// \return ROS geometry pose message
   geometry_msgs::Point convert(const ignition::math::Vector3d &_vec);
+
+  /// \brief Return the equivalent ROS message
+  /// \param[in] _time Gazebo time
+  /// \return ROS time
+  ros::Time convert(const gazebo::common::Time &_time);
 }
 #endif

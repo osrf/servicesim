@@ -43,3 +43,12 @@ geometry_msgs::Point servicesim::convert(
   return msg;
 }
 
+//////////////////////////////////////////////////
+ros::Time servicesim::convert(const gazebo::common::Time &_time)
+{
+  ros::Time t;
+  t.sec = _time.sec;
+  t.nsec = _time.nsec;
+  return t;
+}
+

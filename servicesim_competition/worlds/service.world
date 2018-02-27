@@ -4,6 +4,8 @@
   Generated from service.world.erb
   Seed: 100
   Floorplan: false
+  Debug: false
+  URDF launch file: ../../servicesim/launch/spawn_urdf.launch
   Config: {"targets"=>{"robot_start"=>"PublicCafe", "pick_up"=>"FrontElevator", "drop_off"=>"PrivateOfficeA"}, "guest"=>{"skin"=>"SKIN_man_blue_shirt.dae"}, "drift"=>{"min_interval"=>15, "max_interval"=>300, "start_time"=>0, "count"=>30}}
 -->
 <sdf version="1.6">
@@ -31,13 +33,6 @@
       </ode>
     </physics>
 
-
-    <!-- GUI -->
-    <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose>-3.664 1 1.94 0 0.31 0.177</pose>
-      </camera>
-    </gui>
 
     <!-- Scene -->
     <scene>
@@ -41061,6 +41056,15 @@
         PrivateOfficeA
       </drop_off_location>
 
+      <robot_start_pose>
+        14.35
+        3.8003029934292787
+        0.75
+        0.0
+        0.0
+        2.8656208106813006
+      </robot_start_pose>
+
       <guest_name>human_86093</guest_name>
       <robot_name>servicebot</robot_name>
       <ground_name>floor</ground_name>
@@ -41628,7 +41632,7 @@
         1.0
         1.54
         0
-        2.8656208106813006
+        0.2871923148082556
       </pose>
 
       <skin>
@@ -41650,7 +41654,7 @@
                 1.0
                 1.54
                 0
-                2.8656208106813006
+                0.2871923148082556
               </pose>
           </waypoint>
         </trajectory>
@@ -41837,6 +41841,22 @@
 
 
     </actor>
+
+    <!-- GUI -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>
+        15.35
+        4.800302993429279
+        1.5
+        0.0
+        0.6
+        -2.356194490192345
+        </pose>
+      </camera>
+    </gui>
+
+
 
 
 

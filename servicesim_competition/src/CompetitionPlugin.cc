@@ -21,6 +21,7 @@
 
 #include <ros/ros.h>
 #include <servicesim_competition/Score.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
 
 #include "CompetitionPlugin.hh"
 #include "Conversions.hh"
@@ -42,6 +43,9 @@ class servicesim::CompetitionPluginPrivate
   /// \brief Guest name
   public: std::string guestName;
 
+  /// \brief Keep robot start pose
+  public: geometry_msgs::PoseWithCovarianceStamped robotInitialPose;
+
   /// \brief Connection to world update
   public: gazebo::event::ConnectionPtr updateConnection{nullptr};
 
@@ -60,6 +64,9 @@ class servicesim::CompetitionPluginPrivate
 
   /// \brief ROS room info service server
   public: ros::ServiceServer roomInfoRosService;
+
+  /// \brief ROS publisher for the robot's initial pose (needed by amcl).
+  public: ros::Publisher robotInitialPoseRosPub;
 
   /// \brief ROS publisher for the score.
   public: ros::Publisher scoreRosPub;
@@ -117,6 +124,15 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr _world,
     return;
   }
   this->dataPtr->dropOffLocation = _sdf->Get<std::string>("drop_off_location");
+
+  if (!_sdf->HasElement("robot_start_pose"))
+  {
+    gzerr << "Missing <robot_start_pose>, competition not initialized"
+          << std::endl;
+    return;
+  }
+  this->dataPtr->robotInitialPose.pose.pose = convert(
+      _sdf->Get<ignition::math::Pose3d>("robot_start_pose"));
 
   this->dataPtr->guestName = _sdf->Get<std::string>("guest_name");
 
@@ -190,6 +206,10 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr _world,
       this->dataPtr->rosNode->advertise<servicesim_competition::Score>(
       "/servicesim/score", 1000);
 
+  // Advertise robot initial pose
+  this->dataPtr->robotInitialPoseRosPub = this->dataPtr->rosNode->advertise<
+      geometry_msgs::PoseWithCovarianceStamped>("/servicebot/initialpose", 1000);
+
   // Trigger update at every world iteration
   this->dataPtr->updateConnection =
       gazebo::event::Events::ConnectWorldUpdateBegin(
@@ -243,8 +263,14 @@ bool CompetitionPlugin::OnRoomInfoRosService(
 /////////////////////////////////////////////////
 void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
 {
+  // While not started, publish robot initial pose messages
   if (this->dataPtr->current == 0)
+  {
+    this->dataPtr->robotInitialPose.header.stamp = convert(_info.simTime);
+    this->dataPtr->robotInitialPoseRosPub.publish(
+        this->dataPtr->robotInitialPose);
     return;
+  }
 
   // If current checkpoint is complete
   if (this->dataPtr->checkpoints[this->dataPtr->current - 1]->Check())
