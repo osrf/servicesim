@@ -9,23 +9,24 @@
   # * $pose (number[6]) Pose of island center
   # * $floorplan (boolean) True if only showing floorplan, so computer and chair
   #                        are hidden.
-  # * $drop_areas ([]) Dictionary with drop area info
-  # * $dropable (boolean) Whether to generate a dropable area for the cubicle
+  # * $target_areas ([]) Dictionary with target area info
+  # * $targetable (boolean) Whether to generate a targetable area for the cubicle
 
   # Height of desk surface
   top = 0.76
 
   # Only covering one orientation for now
-  if $dropable and $pose[5] == $pi
-    drop_size = 2.5
+  if $targetable and $pose[5] == $pi
+    target_size_x = 2.0
+    target_size_y = 3.0
     min_x_world = $pose[0]
-    max_x_world = $pose[0] + drop_size
-    min_y_world = $pose[1]
-    max_y_world = $pose[1] + drop_size
+    max_x_world = $pose[0] + target_size_x
+    min_y_world = $pose[1] + target_size_y - 1.0
+    max_y_world = $pose[1] + target_size_y
     pivot_x = rand(min_x_world..max_x_world)
     pivot_y = rand((max_y_world-0.2)..max_y_world)
 
-    $drop_areas.push({:name => $cubicle_name,
+    $target_areas.push({:name => $cubicle_name,
                       :min => [min_x_world, min_y_world, $pose[2]],
                       :max => [max_x_world, max_y_world, $pose[2]],
                       :pivot => [pivot_x, pivot_y, 0]})
