@@ -4,7 +4,9 @@
   Generated from service.world.erb
   Seed: 100
   Floorplan: false
-  Config: {"targets"=>{"robot_start"=>"PublicCafe", "pick_up"=>"FrontElevator", "drop_off"=>"PrivateOfficeA"}, "guest"=>{"skin"=>"SKIN_man_blue_shirt.dae"}, "drift"=>{"min_interval"=>15, "max_interval"=>300, "start_time"=>0, "count"=>30}}
+  Debug: false
+  URDF launch file: ../../servicesim/launch/spawn_urdf.launch
+  Config: {"targets"=>{"robot_start"=>"PublicCafe", "pick_up"=>"FrontElevator", "drop_off"=>"PrivateOfficeA"}, "guest"=>{"skin"=>"SKIN_man_blue_shirt.dae"}, "drift"=>{"min_interval"=>15, "max_interval"=>300, "start_time"=>0, "count"=>30}, "scoring"=>{"weight_human_contact"=>40000, "weight_object_contact"=>20000, "weight_human_approximation"=>1, "weight_object_approximation"=>0.25, "weight_pickup_location"=>1, "weight_pickup_guest"=>2, "weight_drop_off_guest"=>2, "weight_return_start"=>1, "weight_failed_pickup"=>40, "weight_failed_drop_off"=>50, "weight_too_fast"=>25}}
 -->
 <sdf version="1.6">
   <world name="default">
@@ -41048,6 +41050,8 @@
     
 
 
+
+
     <!-- Competition plugin -->
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
@@ -41070,19 +41074,19 @@
         <!-- Contact and approximation weights are multiplied by contact depth -->
 
         <!-- Collision is usually very brief and millimiters deep, so we compensate with high weights -->
-        <human_contact>30000.0</human_contact>
-        <obj_contact>10000.0</obj_contact>
+        <human_contact>40000</human_contact>
+        <obj_contact>20000</obj_contact>
 
         <!-- Approximation usually lasts longer and may get very deep, so we compensate with low weights -->
-        <human_approximation>1.0</human_approximation>
-        <obj_approximation>0.25</obj_approximation>
+        <human_approximation>1</human_approximation>
+        <obj_approximation>0.25></obj_approximation>
 
       </weight>
 
       <go_to_pick_up>
         <name>Go to pick-up location</name>
         <weight>
-          <time>1.0</time>
+          <time>1</time>
         </weight>
         <!-- for contain plugin -->
         <namespace>/servicesim/go_to_pick_up</namespace>
@@ -41091,17 +41095,17 @@
       <pick_up>
         <name>Pick-up guest</name>
         <weight>
-          <time>1.0</time>
-          <failed_attempt>30.0</failed_attempt>
+          <time>2</time>
+          <failed_attempt>40</failed_attempt>
         </weight>
       </pick_up>
 
       <drop_off>
         <name>Drop-off guest</name>
         <weight>
-          <time>1.0</time>
-          <too_fast>20.0</too_fast>
-          <failed_attempt>30.0</failed_attempt>
+          <time>2</time>
+          <too_fast>25</too_fast>
+          <failed_attempt>50</failed_attempt>
         </weight>
         <guest_name>human_86093</guest_name>
         <!-- for contain plugin -->
@@ -41111,7 +41115,7 @@
       <return_to_start>
         <name>Return to start</name>
         <weight>
-          <time>1.0</time>
+          <time>1</time>
         </weight>
         <!-- for contain plugin -->
         <namespace>/servicesim/return_to_start</namespace>
@@ -41837,6 +41841,8 @@
 
 
     </actor>
+
+
 
 
 

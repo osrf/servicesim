@@ -804,6 +804,12 @@
   # Object contact penalty
   weight_object_contact = 10000
 
+  # Human approximation penalty
+  weight_human_approximation = 1
+
+  # Object approximation penalty
+  weight_object_approximation = 0.25
+
   # Time for robot to reach pickup location
   weight_pickup_location = 1
 
@@ -817,7 +823,10 @@
   weight_return_start = 1
 
   # Failed pickup attempts
-  weight_failed_attempt = 30
+  weight_failed_pickup = 30
+
+  # Failed drop_off attempts
+  weight_failed_drop_off = 30
 
   # Robot has gone too fast
   weight_too_fast = 20
@@ -832,6 +841,14 @@
 
     if s.key?('weight_object_contact')
       weight_object_contact = s['weight_object_contact']
+    end
+
+    if s.key?('weight_human_approximation')
+      weight_human_approximation = s['weight_human_approximation']
+    end
+
+    if s.key?('weight_object_approximation')
+      weight_object_approximation = s['weight_object_approximation']
     end
 
     if s.key?('weight_pickup_location')
@@ -850,8 +867,12 @@
       weight_return_start = s['weight_return_start']
     end
 
-    if s.key?('weight_failed_attempt')
-      weight_failed_attempt = s['weight_failed_attempt']
+    if s.key?('weight_failed_pickup')
+      weight_failed_pickup = s['weight_failed_pickup']
+    end
+
+    if s.key?('weight_failed_drop_off')
+      weight_failed_drop_off = s['weight_failed_drop_off']
     end
 
     if s.key?('weight_too_fast')
@@ -886,8 +907,8 @@
         <obj_contact><%= weight_object_contact %></obj_contact>
 
         <!-- Approximation usually lasts longer and may get very deep, so we compensate with low weights -->
-        <human_approximation>1.0</human_approximation>
-        <obj_approximation>0.25</obj_approximation>
+        <human_approximation><%= weight_human_approximation %></human_approximation>
+        <obj_approximation><%= weight_object_approximation %>></obj_approximation>
 
       </weight>
 
@@ -904,7 +925,7 @@
         <name>Pick-up guest</name>
         <weight>
           <time><%= weight_pickup_guest %></time>
-          <failed_attempt><%= weight_failed_attempt %></failed_attempt>
+          <failed_attempt><%= weight_failed_pickup %></failed_attempt>
         </weight>
       </pick_up>
 
@@ -913,7 +934,7 @@
         <weight>
           <time><%= weight_drop_off_guest %></time>
           <too_fast><%= weight_too_fast %></too_fast>
-          <failed_attempt><%= weight_failed_attempt %></failed_attempt>
+          <failed_attempt><%= weight_failed_drop_off %></failed_attempt>
         </weight>
         <guest_name><%= guest_name %></guest_name>
         <!-- for contain plugin -->
