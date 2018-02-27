@@ -693,6 +693,35 @@
   #                                             #
   ###############################################
 
+  # Add pivots to target areas which don't have it yet
+  padding = 1.0
+
+  for area in $target_areas
+    if area.key?(:pivot)
+      next
+    end
+
+    min_x = area[:min][0]
+    max_x = area[:max][0]
+
+    if (max_x - min_x) > padding * 2.0
+      x = rand((min_x+padding)..(max_x-padding))
+    else
+      x = min_x + (max_x - min_x) * 0.5
+    end
+
+    min_y = area[:min][1]
+    max_y = area[:max][1]
+
+    if (max_y - min_y) > padding * 2.0
+      y = rand((min_y+padding)..(max_y-padding))
+    else
+      y = min_y + (max_y - min_y) * 0.5
+    end
+
+    area[:pivot] = [x, y, 0.0]
+  end
+
   # Pick-up (guest's start point)
   if config and config.key?('targets') and config['targets'].key?('pick_up')
     for area in $target_areas

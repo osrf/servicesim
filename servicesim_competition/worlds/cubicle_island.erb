@@ -28,21 +28,21 @@
       if x < 0
         min_x_world = far_x
         max_x_world = $pose[0]
-        pivot_x = min_x_world + rand(-0.1..0.1)
+        pivot_x = min_x_world + rand(0.4..0.6)
       else
         max_x_world = far_x
         min_x_world = $pose[0]
-        pivot_x = max_x_world + rand(-0.1..0.1)
+        pivot_x = max_x_world + rand(-0.6..-0.4)
       end
 
       if y < 0
         min_y_world = far_y
         max_y_world = $pose[1] + 0.0
-        pivot_y = min_y_world + rand(-0.1..0.1)
+        pivot_y = min_y_world + rand(0.4..0.6)
       else
         max_y_world = far_y
         min_y_world = $pose[1] + 0.0
-        pivot_y = max_y_world + rand(-0.1..0.1)
+        pivot_y = max_y_world + rand(-0.6..-0.4)
       end
 
       $target_areas.push({:name => $cubicle_name + '_' + n.to_s(),

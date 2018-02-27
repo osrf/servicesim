@@ -50,50 +50,18 @@
       max_local_frame = TMatrix(0.0, 0.0, 0)
     end
 
-    # Local pivot
-    if $room_type == 'bathroom'
-      pivot_local_frame = TMatrix(
-        rand(-0.6..-0.4) * $o,
-        rand(0.4..0.6) * $o,
-        0)
-    elsif $room_type == 'refreshment_area'
-      pivot_local_frame = TMatrix(
-        rand(-4.14..-0.9),
-        -0.65,
-        0)
-    elsif $room_type == 'meeting_room_large'
-      pivot_local_frame = TMatrix(
-        rand(-2.42..-1),
-        rand(-3.3..-1.32),
-        0)
-    elsif $room_type == 'meeting_room_small'
-      pivot_local_frame = TMatrix(
-        -1.43,
-        rand(-3.45..-1.32),
-        0)
-    elsif $room_type == 'office_small'
-      pivot_local_frame = TMatrix(
-        -0.74,
-        rand(-1.0..-0.58),
-        0)
-    elsif $room_type == 'office_large'
-      pivot_local_frame = TMatrix(
-        -0.74,
-        rand(-1.83..-0.58),
-        0)
-    end
-
     # Adjust for room rotation
     min_world_frame = room_frame * min_local_frame
     max_world_frame = room_frame * max_local_frame
-    pivot_world_frame = room_frame * pivot_local_frame
+
+    xs = [min_world_frame[0, 2], max_world_frame[0, 2]]
+    ys = [min_world_frame[1, 2], max_world_frame[1, 2]]
 
     # Fill vectors
-    min = [min_world_frame[0, 2], min_world_frame[1, 2], $room_pose[2]]
-    max = [max_world_frame[0, 2], max_world_frame[1, 2], $room_pose[2]]
-    pivot = [pivot_world_frame[0, 2], pivot_world_frame[1, 2], $room_pose[2]]
+    min = [xs.min, ys.min, $room_pose[2]]
+    max = [xs.max, ys.max, $room_pose[2]]
 
-    $target_areas.push({:name => $room_name, :min => min, :max => max, :pivot => pivot})
+    $target_areas.push({:name => $room_name, :min => min, :max => max})
 
   end
 

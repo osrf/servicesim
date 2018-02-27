@@ -21,7 +21,7 @@
     target_size_y = 3.0
     min_x_world = $pose[0]
     max_x_world = $pose[0] + target_size_x
-    min_y_world = $pose[1]
+    min_y_world = $pose[1] + target_size_y - 1.0
     max_y_world = $pose[1] + target_size_y
     pivot_x = rand(min_x_world..max_x_world)
     pivot_y = rand((max_y_world-0.2)..max_y_world)
