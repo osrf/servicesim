@@ -41,6 +41,10 @@ namespace gazebo
     /// \brief Destructor.
     public: virtual ~CreateActorPlugin();
 
+    // Documentation inherited
+    public: virtual void Load(sdf::ElementPtr _sdf)
+        override;
+
     /// \brief Spawn current actor
     private: void Spawn();
 

@@ -31,6 +31,7 @@ std::map<std::string, std::string> skinMap;
 std::map<std::string, std::string> animIdleMap;
 std::map<std::string, std::string> animTrajectoryMap;
 std::map<std::string, ignition::math::Pose3d> animPoseMap;
+std::vector<std::string> obstacles;
 
 // Keep track of how many actors have been spawned
 unsigned int actorCount{0};
@@ -120,7 +121,7 @@ void processGhostPoses()
     ghostPoses.push_back(pose);
 
     // Delete ghost
-    transport::requestNoReply("CreateActor", "entity_delete",
+    transport::requestNoReply("default", "entity_delete",
         ghostName);
 
     // Next ghost
@@ -154,9 +155,13 @@ void fillSDF()
   {
     trajectory += "\
    <plugin name='trajectory_plugin' filename='libTrajectoryActorPlugin.so'>\n\
-     <velocity>" + std::to_string(current.velocity) + "</velocity>\n\
-     <ignore_obstacle>willowgarage</ignore_obstacle>\n\
-     <ignore_obstacle>ground_collision</ignore_obstacle>\n";
+     <velocity>" + std::to_string(current.velocity) + "</velocity>\n";
+
+    for (const auto &obstacle : obstacles)
+    {
+      trajectory += "\
+       <obstacle>" + obstacle + "</obstacle>\n";
+    }
 
     for (const auto &pose : ghostPoses)
     {
@@ -298,6 +303,23 @@ void fillERB()
 CreateActorPlugin::CreateActorPlugin()
   : GUIPlugin(), dataPtr(new CreateActorPluginPrivate)
 {
+}
+
+/////////////////////////////////////////////////
+void CreateActorPlugin::Load(sdf::ElementPtr _sdf)
+{
+  // SDF params
+  if (_sdf->HasElement("obstacle"))
+  {
+    auto obstacleElem = _sdf->GetElement("obstacle");
+    while (obstacleElem)
+    {
+      auto name = obstacleElem->Get<std::string>();
+      obstacles.push_back(name);
+      obstacleElem = obstacleElem->GetNextElement("obstacle");
+    }
+  }
+
   // Maps
   skinMap["Green shirt"] = "SKIN_man_green_shirt";
   skinMap["Red shirt"] = "SKIN_man_red_shirt";

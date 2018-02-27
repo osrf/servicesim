@@ -66,8 +66,8 @@ class servicesim::TrajectoryActorPluginPrivate
   /// \brief Time when the corner starts
   public: common::Time firstCornerUpdate;
 
-  /// \brief List of models to ignore when checking collisions.
-  public: std::vector<std::string> ignoreModels;
+  /// \brief List of models to avoid
+  public: std::vector<std::string> obstacles;
 
   /// \brief Animation for corners
   public: common::PoseAnimation *cornerAnimation{nullptr};
@@ -111,18 +111,15 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   if (_sdf->HasElement("animation_factor"))
     this->dataPtr->animationFactor = _sdf->Get<double>("animation_factor");
 
-  // Add our own name to models we should ignore when avoiding obstacles.
-  this->dataPtr->ignoreModels.push_back(this->dataPtr->actor->GetName());
-
-  // Read in the other obstacles to ignore
-  if (_sdf->HasElement("ignore_obstacle"))
+  // Read in the obstacles
+  if (_sdf->HasElement("obstacle"))
   {
-    auto ignoreElem = _sdf->GetElement("ignore_obstacle");
-    while (ignoreElem)
+    auto obstacleElem = _sdf->GetElement("obstacle");
+    while (obstacleElem)
     {
-      auto name = ignoreElem->Get<std::string>();
-      this->dataPtr->ignoreModels.push_back(name);
-      ignoreElem = ignoreElem->GetNextElement("ignore_obstacle");
+      auto name = obstacleElem->Get<std::string>();
+      this->dataPtr->obstacles.push_back(name);
+      obstacleElem = obstacleElem->GetNextElement("obstacle");
     }
   }
 
@@ -165,11 +162,11 @@ bool TrajectoryActorPlugin::ObstacleOnTheWay() const
   // Iterate over all models in the world
   for (unsigned int i = 0; i < world->ModelCount(); ++i)
   {
-    // Skip models we're ignoring
+    // Skip if it's not an obstacle
     auto model = world->ModelByIndex(i);
-    if (std::find(this->dataPtr->ignoreModels.begin(),
-                  this->dataPtr->ignoreModels.end(), model->GetName()) !=
-                  this->dataPtr->ignoreModels.end())
+    if (std::find(this->dataPtr->obstacles.begin(),
+                  this->dataPtr->obstacles.end(), model->GetName()) ==
+                  this->dataPtr->obstacles.end())
     {
       continue;
     }

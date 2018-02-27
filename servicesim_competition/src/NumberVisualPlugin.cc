@@ -48,8 +48,8 @@ void NumberVisualPlugin::Load(rendering::VisualPtr _visual, sdf::ElementPtr _sdf
   // Visual name
   auto name = _visual->Name();
 
-  // Skip if it't the preview
-  if (name == "CreateActor::ghost::head::Visual_0")
+  // Skip if it's the preview
+  if (name.find("Visual_0") != std::string::npos)
     return;
 
   // Number from name

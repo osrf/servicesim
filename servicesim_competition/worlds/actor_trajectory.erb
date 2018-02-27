@@ -8,6 +8,8 @@
   # * $actor_velocity (double) Velocity for trajectory actors, in m/s
   # * $actor_trajectory (array[array[6]]) Array or waypoint poses
   # * $enable_collisions (boolean) True to enable actor collisions
+  # * $robot_name (string) Robot name
+  # * $guest_name (string) Guest name
 
   # TODO: set from servicesim world
   $enable_collisions = true
@@ -49,11 +51,9 @@
     <% end %>
 
     <velocity><%= $actor_velocity %></velocity>
-    <obstacle_margin>0.0</obstacle_margin>
-    <ignore_obstacle>walls</ignore_obstacle>
-    <ignore_obstacle>floor</ignore_obstacle>
-    <!-- FIXME: servicebot's bounding box is huge and always colliding -->
-    <ignore_obstacle>servicebot</ignore_obstacle>
+    <obstacle_margin>0.3</obstacle_margin>
+    <obstacle><%= $robot_name %></obstacle>
+    <obstacle><%= $guest_name %></obstacle>
 
   </plugin>
 

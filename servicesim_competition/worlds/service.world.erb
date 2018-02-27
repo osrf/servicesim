@@ -318,9 +318,9 @@
   actors_trajectory =
   [
     # Example randomizing skin
-    # {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
+    {:skin => skins.sample, :config_file => 'trajectory_private_a.erb'},
     # Example setting velocity
-    # {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
+    {:velocity => rand(0.9..1.2), :config_file => 'trajectory_public_a.erb'},
   ]
 
   ###############################################
@@ -335,7 +335,7 @@
     guest_skin = skins.sample
   end
 
-  guest_name = human_name + '_' + rand(10000..99999).to_s()
+  $guest_name = human_name + '_' + rand(10000..99999).to_s()
   guest_anim = animations_trajectory[0]
   drift_times = []
 
@@ -426,7 +426,9 @@
         <pose>-3.664 1 1.94 0 0.31 0.177</pose>
       </camera>
       <% if create_actors %>
-      <plugin name="CreateActor" filename="libCreateActorPlugin.so"></plugin>
+      <plugin name="CreateActor" filename="libCreateActorPlugin.so">
+        <obstacle><%= $robot_name %></obstacle>
+      </plugin>
       <% end %>
     </gui>
 
@@ -814,7 +816,7 @@
         <%= $drop_off_location[:name] %>
       </drop_off_location>
 
-      <guest_name><%= guest_name %></guest_name>
+      <guest_name><%= $guest_name %></guest_name>
       <robot_name><%= $robot_name %></robot_name>
       <ground_name><%= ground_name %></ground_name>
       <human_name><%= human_name %></human_name>
@@ -856,7 +858,7 @@
           <too_fast>20.0</too_fast>
           <failed_attempt>30.0</failed_attempt>
         </weight>
-        <guest_name><%= guest_name %></guest_name>
+        <guest_name><%= $guest_name %></guest_name>
         <!-- for contain plugin -->
         <namespace>/servicesim/drop_off</namespace>
       </drop_off>
@@ -910,7 +912,7 @@
     <!-- Drop-off area contain plugin -->
     <!-- Location: <%= $drop_off_location[:name] %> -->
     <plugin name="drop_off" filename="libContainPlugin.so">
-      <entity><%= guest_name %></entity>
+      <entity><%= $guest_name %></entity>
       <namespace>servicesim/drop_off</namespace>
       <enabled>false</enabled>
       <pose>
@@ -970,7 +972,7 @@
     %>
 
     <!-- Guest -->
-    <actor name="<%= guest_name %>">
+    <actor name="<%= $guest_name %>">
 
       <!-- Starting pose, nice for when the world is reset -->
       <pose>
