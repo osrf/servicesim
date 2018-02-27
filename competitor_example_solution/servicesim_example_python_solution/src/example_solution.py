@@ -138,7 +138,8 @@ class ExampleNode(object):
         # tf_buffer = tf2_ros.Buffer()
         # tflistener = tf2_ros.TransformListener(tf_buffer)
         tflistener = tf.TransformListener()
-        while True:
+        self.start_pose = None
+        while self.start_pose is None:
             now = rospy.Time.now()
             rospy.loginfo('waiting for transform transform')
             try:
@@ -148,7 +149,6 @@ class ExampleNode(object):
                 # (trans, rot) = tf_buffer.lookup_transform(
                 #     'map', 'base_link', now, rospy.Duration(1.0))
                 self.start_pose = Pose(trans, rot)
-                break
             except tf2_ros.TransformException as e:
                 rospy.loginfo(e.message)
                 pass
