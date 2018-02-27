@@ -126,7 +126,7 @@
     if not open
       return 0.0
     else
-      return rand($pi*0.7..$pi)
+      return rand($pi*0.8..$pi)
     end
   end
 
@@ -256,7 +256,7 @@
   end
 
   # Array is filled as rooms are created
-  $drop_areas = []
+  $target_areas = []
 
   ###############################################
   #                                             #
@@ -566,7 +566,7 @@
       for x in (s..e).step(1.9)
         $count += 1
         $cubicle_name = 'PublicCubicle_' + $count.to_s()
-        $dropable = true
+        $targetable = true
         $pose =
         [
           x - 1 * $g,
@@ -696,9 +696,38 @@
   #                                             #
   ###############################################
 
+  # Add pivots to target areas which don't have it yet
+  padding = 1.0
+
+  for area in $target_areas
+    if area.key?(:pivot)
+      next
+    end
+
+    min_x = area[:min][0]
+    max_x = area[:max][0]
+
+    if (max_x - min_x) > padding * 2.0
+      x = rand((min_x+padding)..(max_x-padding))
+    else
+      x = min_x + (max_x - min_x) * 0.5
+    end
+
+    min_y = area[:min][1]
+    max_y = area[:max][1]
+
+    if (max_y - min_y) > padding * 2.0
+      y = rand((min_y+padding)..(max_y-padding))
+    else
+      y = min_y + (max_y - min_y) * 0.5
+    end
+
+    area[:pivot] = [x, y, 0.0]
+  end
+
   # Pick-up (guest's start point)
   if config and config.key?('targets') and config['targets'].key?('pick_up')
-    for area in $drop_areas
+    for area in $target_areas
       if area[:name] == config['targets']['pick_up']
         location = area
         break
@@ -725,7 +754,7 @@
   # Drop-off (guest's end point)
   location = {}
   if config and config.key?('targets') and config['targets'].key?('drop_off')
-    for area in $drop_areas
+    for area in $target_areas
       if area[:name] == config['targets']['drop_off']
         location = area
         break
@@ -754,7 +783,7 @@
   # Start (robot's start/end point)
   location = {}
   if config and config.key?('targets') and config['targets'].key?('robot_start')
-    for area in $drop_areas
+    for area in $target_areas
       if area[:name] == config['targets']['robot_start']
         location = area
         break
@@ -790,6 +819,98 @@
     ]
   }
 %>
+
+<%
+  ###############################################
+  #                                             #
+  #               SCORING                       #
+  #                                             #
+  ###############################################
+
+  # Default penalty and scoring weights:
+  # Human contact penalty
+  weight_human_contact = 30000
+
+  # Object contact penalty
+  weight_object_contact = 10000
+
+  # Human approximation penalty
+  weight_human_approximation = 1
+
+  # Object approximation penalty
+  weight_object_approximation = 0.25
+
+  # Time for robot to reach pickup location
+  weight_pickup_location = 1
+
+  # Time for robot to pickup guest
+  weight_pickup_guest = 1
+
+  # Time to drop off guest
+  weight_drop_off_guest = 1
+
+  # Time to return to the start
+  weight_return_start = 1
+
+  # Failed pickup attempts
+  weight_failed_pickup = 30
+
+  # Failed drop_off attempts
+  weight_failed_drop_off = 30
+
+  # Robot has gone too fast
+  weight_too_fast = 20
+
+  if config and config.key?('scoring')
+
+    s = config['scoring']
+
+    if s.key?('weight_human_contact')
+      weight_human_contact = s['weight_human_contact']
+    end
+
+    if s.key?('weight_object_contact')
+      weight_object_contact = s['weight_object_contact']
+    end
+
+    if s.key?('weight_human_approximation')
+      weight_human_approximation = s['weight_human_approximation']
+    end
+
+    if s.key?('weight_object_approximation')
+      weight_object_approximation = s['weight_object_approximation']
+    end
+
+    if s.key?('weight_pickup_location')
+      weight_pickup_location = s['weight_pickup_location']
+    end
+
+    if s.key?('weight_pickup_guest')
+      weight_pickup_guest = s['weight_pickup_guest']
+    end
+
+    if s.key?('weight_drop_off_guest')
+      weight_drop_off_guest  = s['weight_drop_off_guest']
+    end
+
+    if s.key?('weight_return_start')
+      weight_return_start = s['weight_return_start']
+    end
+
+    if s.key?('weight_failed_pickup')
+      weight_failed_pickup = s['weight_failed_pickup']
+    end
+
+    if s.key?('weight_failed_drop_off')
+      weight_failed_drop_off = s['weight_failed_drop_off']
+    end
+
+    if s.key?('weight_too_fast')
+      weight_too_fast = s['weight_too_fast']
+    end
+
+  end
+%>
     <!-- Competition plugin -->
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
@@ -821,19 +942,19 @@
         <!-- Contact and approximation weights are multiplied by contact depth -->
 
         <!-- Collision is usually very brief and millimiters deep, so we compensate with high weights -->
-        <human_contact>30000.0</human_contact>
-        <obj_contact>10000.0</obj_contact>
+        <human_contact><%= weight_human_contact %></human_contact>
+        <obj_contact><%= weight_object_contact %></obj_contact>
 
         <!-- Approximation usually lasts longer and may get very deep, so we compensate with low weights -->
-        <human_approximation>1.0</human_approximation>
-        <obj_approximation>0.25</obj_approximation>
+        <human_approximation><%= weight_human_approximation %></human_approximation>
+        <obj_approximation><%= weight_object_approximation %></obj_approximation>
 
       </weight>
 
       <go_to_pick_up>
         <name>Go to pick-up location</name>
         <weight>
-          <time>1.0</time>
+          <time><%= weight_pickup_location %></time>
         </weight>
         <!-- for contain plugin -->
         <namespace>/servicesim/go_to_pick_up</namespace>
@@ -842,17 +963,17 @@
       <pick_up>
         <name>Pick-up guest</name>
         <weight>
-          <time>1.0</time>
-          <failed_attempt>30.0</failed_attempt>
+          <time><%= weight_pickup_guest %></time>
+          <failed_attempt><%= weight_failed_pickup %></failed_attempt>
         </weight>
       </pick_up>
 
       <drop_off>
         <name>Drop-off guest</name>
         <weight>
-          <time>1.0</time>
-          <too_fast>20.0</too_fast>
-          <failed_attempt>30.0</failed_attempt>
+          <time><%= weight_drop_off_guest %></time>
+          <too_fast><%= weight_too_fast %></too_fast>
+          <failed_attempt><%= weight_failed_drop_off %></failed_attempt>
         </weight>
         <guest_name><%= guest_name %></guest_name>
         <!-- for contain plugin -->
@@ -862,19 +983,19 @@
       <return_to_start>
         <name>Return to start</name>
         <weight>
-          <time>1.0</time>
+          <time><%= weight_return_start %></time>
         </weight>
         <!-- for contain plugin -->
         <namespace>/servicesim/return_to_start</namespace>
       </return_to_start>
 
       <%
-        for drop in $drop_areas
+        for target in $target_areas
       %>
         <room_info
-          name="<%= drop[:name] %>"
-          min="<%= drop[:min][0] %> <%= drop[:min][1] %> <%= drop[:min][2] %>"
-          max="<%= drop[:max][0] %> <%= drop[:max][1] %> <%= drop[:max][2] %>"
+          name="<%= target[:name] %>"
+          min="<%= target[:min][0] %> <%= target[:min][1] %> <%= target[:min][2] %>"
+          max="<%= target[:max][0] %> <%= target[:max][1] %> <%= target[:max][2] %>"
         />
       <% end %>
 
