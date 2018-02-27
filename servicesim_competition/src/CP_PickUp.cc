@@ -63,15 +63,25 @@ CP_PickUp::CP_PickUp(const sdf::ElementPtr &_sdf)
   }
 
   this->rosNode.reset(new ros::NodeHandle());
-
-  this->pickUpRosService = this->rosNode->advertiseService(
-      "/servicesim/pickup_guest", &CP_PickUp::OnPickUpRosRequest, this);
 }
 
 /////////////////////////////////////////////////
 bool CP_PickUp::Check()
 {
-  return this->Done();
+  // Setup service
+  if (!this->pickUpRosService)
+  {
+    this->pickUpRosService = this->rosNode->advertiseService(
+        "/servicesim/pickup_guest", &CP_PickUp::OnPickUpRosRequest, this);
+  }
+
+  auto complete = this->Done();
+  if (complete && this->pickUpRosService)
+  {
+    this->pickUpRosService = ros::ServiceServer();
+  }
+
+  return complete;
 }
 
 /////////////////////////////////////////////////
