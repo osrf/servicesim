@@ -1,0 +1,21 @@
+<%
+  # Template for spawn_urdf.launch file
+  #
+  # Requires:
+  # $start_location {} Contains information about start location
+%>
+<!--
+  Generated from spawn_urdf.launch.erb
+-->
+<launch>
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
+    -urdf
+    -param robot_description
+    -model servicebot
+    -x <%= $start_location[:pivot][0] %>
+    -y <%= $start_location[:pivot][1] %>
+    -z 0.75
+    -Y <%= rand(-$pi..$pi) %>"
+  />
+</launch>
+

@@ -6,6 +6,8 @@
   # f: true to generate unpopulated world (floorplan only)
   # d: true to generate debug visuals
   # a: true to create a world suitable for actor creation
+  # urdf_launch: File name for spawn urdf launch file to be generated on same
+  #              directory as world file.
 
   ###############################################
   #                                             #
@@ -45,6 +47,25 @@
     create_actors = a.to_s == "true"
   end
 
+  # URDF
+  $urdf_launch = ''
+  if (defined? urdf_launch)
+    $urdf_launch = urdf_launch.to_s()
+  end
+
+  ###############################################
+  #                                             #
+  #              YAML CONFIGURATION             #
+  #                                             #
+  ###############################################
+
+  require 'yaml'
+
+  # Relative path from where the script is being run to the script's directory
+  DIR = File.dirname(__FILE__)
+
+  config = YAML.load_file(DIR + '/config.yaml')
+
   ###############################################
   #                                             #
   #            TRANSFORMATION MATRIX            #
@@ -67,9 +88,6 @@
   #               INITIALIZATION                #
   #                                             #
   ###############################################
-
-  # Relative path from where the script is being run to the script's directory
-  DIR = File.dirname(__FILE__)
 
   # Count to ensure unique names
   $count = 0
@@ -222,6 +240,28 @@
      :door => doorAngle()},
   ]
 
+  # Open doors for rooms explicitly targeted on the config file
+  if config and config.key?('targets')
+
+    target_rooms = []
+
+    if config['targets'].key?('robot_start')
+      target_rooms.push(config['targets']['robot_start'])
+    end
+    if config['targets'].key?('pick_up')
+      target_rooms.push(config['targets']['pick_up'])
+    end
+    if config['targets'].key?('drop_off')
+      target_rooms.push(config['targets']['drop_off'])
+    end
+
+    for room in rooms
+      if target_rooms.include? room[:name]
+        room[:door] = doorAngle(1)
+      end
+    end
+  end
+
   # Array is filled as rooms are created
   $drop_areas = []
 
@@ -243,10 +283,16 @@
   ]
 
   # Idling animation files under model://actor/meshes
-  animations_idle =
+  animations_idle_standing =
   [
+    "ANIMATION_standing.dae",
     "ANIMATION_talking_a.dae",
     "ANIMATION_talking_b.dae"
+  ]
+
+  animations_idle_sitting =
+  [
+    "ANIMATION_sitting.dae",
   ]
 
   # Trajectory animation files under model://actor/meshes
@@ -260,9 +306,11 @@
   actors_idle =
   [
     # Example randomizing skin and animation
-    {:skin => skins.sample, :anim => animations_idle.sample, :config_file => 'idle_near_entrance.erb'},
+    {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
     # Example using skin and animation from config
-    {:config_file => 'idle_near_fridge.erb'}
+    {:config_file => 'idle_near_fridge.erb'},
+    {:config_file => 'idle_sitting_couch.erb'},
+    {:config_file => 'idle_back.erb'}
   ]
 
   # List of trajectory actors to be inserted
@@ -281,8 +329,13 @@
   #                                             #
   ###############################################
 
+  if config and config.key?('guest') and config['guest'].key?('skin')
+    guest_skin = config['guest']['skin']
+  else
+    guest_skin = skins.sample
+  end
+
   guest_name = human_name + '_' + rand(10000..99999).to_s()
-  guest_skin = skins.sample
   guest_anim = animations_trajectory[0]
   drift_times = []
 
@@ -290,7 +343,31 @@
   minInterval = 5
   maxInterval = 300
   time = 0
-  (1..30).each do
+  drift_count = 30
+
+  if config and config.key?('drift')
+
+    d = config['drift']
+
+    if d.key?('min_interval')
+      minInterval = d['min_interval']
+    end
+
+    if d.key?('max_interval')
+      maxInterval = d['max_interval']
+    end
+
+    if d.key?('start_time')
+      time = d['start_time']
+    end
+
+    if d.key?('count')
+      drift_count = d['count']
+    end
+
+  end
+
+  (1..drift_count).each do
     time += rand(minInterval..maxInterval)
     drift_times.push(time)
   end
@@ -301,16 +378,18 @@
   #                                             #
   ###############################################
 
-  robot_name = 'servicebot'
+  $robot_name = 'servicebot'
 %>
+<?xml version="1.0" ?>
 <!--
   Generated from service.world.erb
   Seed: <%= seed %>
   Floorplan: <%= $floorplan %>
   Debug: <%= $debug %>
   Create actor: <%= create_actors %>
+  URDF launch file: <%= $urdf_launch %>
+  Config: <%= config %>
 -->
-<?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="default">
 
@@ -318,13 +397,13 @@
   if not $floorplan and not create_actors
 %>
     <physics type="ode">
-      <real_time_update_rate>1000.0</real_time_update_rate>
-      <max_step_size>0.001</max_step_size>
+      <real_time_update_rate>500.0</real_time_update_rate>
+      <max_step_size>0.002</max_step_size>
       <real_time_factor>1</real_time_factor>
       <ode>
         <solver>
           <type>quick</type>
-          <iters>150</iters>
+          <iters>300</iters>
           <precon_iters>0</precon_iters>
           <sor>1.400000</sor>
           <use_dynamic_moi_rescaling>1</use_dynamic_moi_rescaling>
@@ -637,7 +716,16 @@
   ###############################################
 
   # Pick-up (guest's start point)
-  location = $drop_areas.sample()
+  if config and config.key?('targets') and config['targets'].key?('pick_up')
+    for area in $drop_areas
+      if area[:name] == config['targets']['pick_up']
+        location = area
+        break
+      end
+    end
+  else
+    location = $drop_areas.sample()
+  end
 
   size_x = location[:max][0] - location[:min][0]
   size_y = location[:max][1] - location[:min][1]
@@ -654,8 +742,19 @@
   }
 
   # Drop-off (guest's end point)
-  while location[:name] == $pick_up_location[:name]
-    location = $drop_areas.sample()
+  location = {}
+  if config and config.key?('targets') and config['targets'].key?('drop_off')
+    for area in $drop_areas
+      if area[:name] == config['targets']['drop_off']
+        location = area
+        break
+      end
+    end
+  else
+    location = $pick_up_location
+    while location[:name] == $pick_up_location[:name]
+      location = $drop_areas.sample()
+    end
   end
 
   size_x = location[:max][0] - location[:min][0]
@@ -672,9 +771,20 @@
   }
 
   # Start (robot's start/end point)
-  while location[:name] == $pick_up_location[:name] or
-        location[:name] == $drop_off_location[:name]
-    location = $drop_areas.sample()
+  location = {}
+  if config and config.key?('targets') and config['targets'].key?('robot_start')
+    for area in $drop_areas
+      if area[:name] == config['targets']['robot_start']
+        location = area
+        break
+      end
+    end
+  else
+    location = $pick_up_location
+    while location[:name] == $pick_up_location[:name] or
+          location[:name] == $drop_off_location[:name]
+      location = $drop_areas.sample()
+    end
   end
 
   size_x = location[:max][0] - location[:min][0]
@@ -694,6 +804,8 @@
     <!-- Competition plugin -->
     <plugin name="competition" filename="libCompetitionPlugin.so">
 
+      <sor_lcp_tolerance>0.1</sor_lcp_tolerance>
+
       <pick_up_location>
         <%= $pick_up_location[:name] %>
       </pick_up_location>
@@ -703,7 +815,7 @@
       </drop_off_location>
 
       <guest_name><%= guest_name %></guest_name>
-      <robot_name><%= robot_name %></robot_name>
+      <robot_name><%= $robot_name %></robot_name>
       <ground_name><%= ground_name %></ground_name>
       <human_name><%= human_name %></human_name>
 
@@ -771,8 +883,9 @@
     </plugin>
 
     <!-- Pick-up area contain plugin -->
+    <!-- Location: <%= $pick_up_location[:name] %> -->
     <plugin name="pick_up" filename="libContainPlugin.so">
-      <entity><%= robot_name %></entity>
+      <entity><%= $robot_name %></entity>
       <namespace>servicesim/go_to_pick_up</namespace>
       <enabled>false</enabled>
       <pose>
@@ -795,6 +908,7 @@
     </plugin>
 
     <!-- Drop-off area contain plugin -->
+    <!-- Location: <%= $drop_off_location[:name] %> -->
     <plugin name="drop_off" filename="libContainPlugin.so">
       <entity><%= guest_name %></entity>
       <namespace>servicesim/drop_off</namespace>
@@ -819,8 +933,9 @@
     </plugin>
 
     <!-- Start area contain plugin -->
+    <!-- Location: <%= $start_location[:name] %> -->
     <plugin name="start" filename="libContainPlugin.so">
-      <entity><%= robot_name %></entity>
+      <entity><%= $robot_name %></entity>
       <namespace>servicesim/return_to_start</namespace>
       <enabled>false</enabled>
       <pose>
@@ -841,19 +956,6 @@
         </box>
       </geometry>
     </plugin>
-
-    <include>
-      <pose>
-        <%= $start_location[:pivot][0] %>
-        <%= $start_location[:pivot][1] %>
-        0.75
-        0
-        0
-        <%= rand(-$pi..$pi) %>
-      </pose>
-      <name>servicebot</name>
-      <uri>model://servicebot_description</uri>
-    </include>
 
     <%
       guest_pose =
@@ -922,7 +1024,7 @@
 
       </plugin>
 
-      <%= fromFile(DIR + "/" + "actor_collisions.erb") %>
+      <%= fromFile(DIR + "/actor_collisions.erb") %>
 
     </actor>
 <%
@@ -933,8 +1035,19 @@
 <%
   if $debug
 %>
-  <%= fromFile(DIR + "/" + "debug_visuals.erb") %>
+  <%= fromFile(DIR + "/debug_visuals.erb") %>
 <%
+  end
+%>
+
+<%
+  # Launch file to spawn URDF
+  if $urdf_launch != ''
+
+    File.open($urdf_launch, "w") do |f|
+      f.write(fromFile(DIR + "/spawn_urdf.launch.erb"))
+    end
+
   end
 %>
 

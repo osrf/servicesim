@@ -4,11 +4,15 @@
   <arg name="dashboard" default="true" />
   <arg name="rviz" default="true" />
   <arg name="teleop" default="true" />
+  <arg name="robot" default="true" />
+  <arg name="custom" default="false" />
+  <arg name="custom_prefix" default="" />
 
   <include file="$(find servicebot_description)/launch/upload_servicebot.launch" />
 
   <include file="$(find servicesim_competition)/launch/competition.launch">
-    <arg name="robot_model_path" value="$(find servicebot_description)/.."/>
+    <arg name="custom" value="$(arg custom)"/>
+    <arg name="custom_prefix" value="$(arg custom_prefix)"/>
   </include>
 
   <group if="$(arg teleop)">
@@ -23,4 +27,11 @@
   <group if="$(arg dashboard)">
     <include file="$(find servicesim)/launch/rqt_dashboard.launch" />
   </group>
+
+  <group if="$(arg robot)">
+    <arg if="$(arg custom)" name="launch_file" default="$(arg custom_prefix).launch" />
+    <arg unless="$(arg custom)" name="launch_file" value="$(find servicesim)/launch/spawn_urdf.launch"/>
+    <include file="$(arg launch_file)" />
+  </group>
+
 </launch>

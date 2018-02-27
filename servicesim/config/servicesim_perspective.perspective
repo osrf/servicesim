@@ -5,7 +5,7 @@
       "keys": {
         "running-plugins": {
           "type": "repr",
-          "repr": "{u'rqt_service_caller/ServiceCaller': [1], u'rqt_image_view/ImageView': [2, 1], u'rqt_publisher/Publisher': [1]}"
+          "repr": "{u'rqt_service_caller/ServiceCaller': [1], u'rqt_servicebot_pan_tilt/PanTilt': [1], u'rqt_robot_steering/RobotSteering': [1], u'rqt_image_view/ImageView': [1, 2], u'rqt_servicesim_score/ServicesimScore': [1]}"
         }
       },
       "groups": {
@@ -25,6 +25,53 @@
                 "dock_widget_title": {
                   "type": "repr",
                   "repr": "u'rviz_config.rviz[*] - RViz'"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_robot_steering__RobotSteering__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__RobotSteeringUi": {
+              "keys": {
+                "dockable": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                },
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "u'Robot Steering'"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {
+                "topic": {
+                  "type": "repr",
+                  "repr": "u'/servicebot/cmd_vel'"
+                },
+                "vx_min": {
+                  "type": "repr",
+                  "repr": "-1.0"
+                },
+                "vw_min": {
+                  "type": "repr",
+                  "repr": "-3.0"
+                },
+                "vw_max": {
+                  "type": "repr",
+                  "repr": "3.0"
+                },
+                "vx_max": {
+                  "type": "repr",
+                  "repr": "1.0"
                 }
               },
               "groups": {}
@@ -84,6 +131,28 @@
                 "publish_click_location": {
                   "type": "repr",
                   "repr": "False"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_servicebot_pan_tilt__PanTilt__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__PanTiltUi": {
+              "keys": {
+                "dockable": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                },
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "u'PAN TILT'"
                 }
               },
               "groups": {}
@@ -173,7 +242,7 @@
               "keys": {
                 "publishers": {
                   "type": "repr",
-                  "repr": "u\"[{'type_name': 'std_msgs/Float64', 'topic_name': '/servicebot/head_pan_position_controller/command', 'enabled': False, 'rate': 1.0, 'expressions': {u'/servicebot/head_pan_position_controller/command/data': '-0.8'}, 'publisher_id': 0, 'counter': 0}, {'type_name': 'std_msgs/Float64', 'topic_name': '/servicebot/head_tilt_position_controller/command', 'enabled': False, 'rate': 1.0, 'expressions': {u'/servicebot/head_tilt_position_controller/command/data': '0.3'}, 'publisher_id': 1, 'counter': 0}, {'type_name': 'geometry_msgs/Twist', 'topic_name': '/servicebot/cmd_vel', 'enabled': False, 'rate': 1.0, 'expressions': {}, 'publisher_id': 2, 'counter': 0}]\""
+                  "repr": "u\"[{'topic_name': '/servicebot/head_pan_position_controller/command', 'type_name': 'std_msgs/Float64', 'enabled': False, 'rate': 1.0, 'expressions': {u'/servicebot/head_pan_position_controller/command/data': '-0.8'}, 'publisher_id': 0, 'counter': 0}, {'topic_name': '/servicebot/head_tilt_position_controller/command', 'type_name': 'std_msgs/Float64', 'enabled': False, 'rate': 1.0, 'expressions': {u'/servicebot/head_tilt_position_controller/command/data': '0.3'}, 'publisher_id': 1, 'counter': 0}, {'topic_name': '/servicebot/cmd_vel', 'type_name': 'geometry_msgs/Twist', 'enabled': False, 'rate': 1.0, 'expressions': {}, 'publisher_id': 2, 'counter': 0}]\""
                 }
               },
               "groups": {}
@@ -272,6 +341,28 @@
               "groups": {}
             }
           }
+        },
+        "plugin__rqt_servicesim_score__ServicesimScore__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__ServicesimScoreUi": {
+              "keys": {
+                "dockable": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                },
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "u'ServiceSim Score'"
+                }
+              },
+              "groups": {}
+            }
+          }
         }
       }
     },
@@ -279,13 +370,13 @@
       "keys": {
         "geometry": {
           "type": "repr(QByteArray.hex)",
-          "repr(QByteArray.hex)": "QtCore.QByteArray('01d9d0cb000200000000004100000018000005200000059f0000004100000034000005200000059f00000001000000000a00')",
-          "pretty-print": "     A       A 4         "
+          "repr(QByteArray.hex)": "QtCore.QByteArray('01d9d0cb000200000000037b0000009c00000752000004d80000037b000000b800000752000004d800000000000000000a00')",
+          "pretty-print": "     {   R   {   R       "
         },
         "state": {
           "type": "repr(QByteArray.hex)",
-          "repr(QByteArray.hex)": "QtCore.QByteArray('000000ff00000000fd0000000100000003000004e000000556fc0100000003fc00000000000004e00000027500fffffffc0200000003fb00000058007200710074005f007000750062006c00690073006800650072005f005f005000750062006c00690073006800650072005f005f0031005f005f005000750062006c006900730068006500720057006900640067006500740100000000000000c50000009300fffffffb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0031005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000000cb0000024a0000013600fffffffc0000031b0000023b0000005100fffffffc0100000002fb0000005a007200710074005f0069006d006100670065005f0076006900650077005f005f0049006d0061006700650056006900650077005f005f0031005f005f0049006d006100670065005600690065007700570069006400670065007401000000000000026e000000c700fffffffb0000005a007200710074005f0069006d006100670065005f0076006900650077005f005f0049006d0061006700650056006900650077005f005f0032005f005f0049006d006100670065005600690065007700570069006400670065007401000002740000026c000000dd00fffffffb00000026007200710074005f007200760069007a005f005f005200560069007a005f005f0031005f005f01000002be000007010000000000000000fc0000026b000002750000000000fffffffc0200000002fb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0032005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000001d3000001cc0000000000000000fb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0033005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000002bc000002b60000000000000000000004e00000000000000004000000040000000800000008fc00000001000000030000000100000036004d0069006e0069006d0069007a006500640044006f0063006b00570069006400670065007400730054006f006f006c0062006100720000000000ffffffff0000000000000000')",
-          "pretty-print": "                     u                                                                                                                           J 6               Zrqt_image_view__ImageView__1__ImageViewWidget          Zrqt_image_view__ImageView__2__ImageViewWidget          &rqt_rviz__RViz__1__          k u                                                                                                                                                                                                       "
+          "repr(QByteArray.hex)": "QtCore.QByteArray('000000ff00000000fd0000000100000003000003d8000003f8fc0100000003fc00000000000003d80000027f00fffffffc0200000003fc0000001300000102000000e800fffffffc0100000004fc00000000000001ff0000000000fffffffa000000000100000002fb00000046007200710074005f00700061006e005f00740069006c0074005f005f00500061006e00540069006c0074005f005f0031005f005f00500061006e00540069006c0074005500690100000000ffffffff0000000000000000fb00000058007200710074005f007000750062006c00690073006800650072005f005f005000750062006c00690073006800650072005f005f0031005f005f005000750062006c006900730068006500720057006900640067006500740100000000000002710000000000000000fb0000005c007200710074005f00730065007200760069006300650062006f0074005f00700061006e005f00740069006c0074005f005f00500061006e00540069006c0074005f005f0031005f005f00500061006e00540069006c0074005500690100000000000001dc000000af00fffffffb0000006a007200710074005f0072006f0062006f0074005f007300740065006500720069006e0067005f005f0052006f0062006f0074005300740065006500720069006e0067005f005f0031005f005f0052006f0062006f0074005300740065006500720069006e00670055006901000001e20000010f000000e300fffffffb00000076007200710074005f007300650072007600690063006500730069006d005f00730063006f00720065005f005f005300650072007600690063006500730069006d00530063006f00720065005f005f0031005f005f005300650072007600690063006500730069006d00530063006f007200650055006901000002f7000000e1000000e100fffffffb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0031005f005f005300650072007600690063006500430061006c006c00650072005700690064006700650074010000011b000001200000012000fffffffc00000241000001ca0000005000fffffffc0100000002fb0000005a007200710074005f0069006d006100670065005f0076006900650077005f005f0049006d0061006700650056006900650077005f005f0031005f005f0049006d00610067006500560069006500770057006900640067006500740100000000000001ea000000bf00fffffffb0000005a007200710074005f0069006d006100670065005f0076006900650077005f005f0049006d0061006700650056006900650077005f005f0032005f005f0049006d006100670065005600690065007700570069006400670065007401000001f0000001e8000000d300fffffffb00000026007200710074005f007200760069007a005f005f005200560069007a005f005f0031005f005f01000002be000007010000000000000000fc0000026b000002750000000000fffffffc0200000002fb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0032005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000001d3000001cc0000000000000000fb00000072007200710074005f0073006500720076006900630065005f00630061006c006c00650072005f005f005300650072007600690063006500430061006c006c00650072005f005f0033005f005f005300650072007600690063006500430061006c006c0065007200570069006400670065007401000002bc000002b60000000000000000000003d80000000000000004000000040000000800000008fc00000001000000030000000100000036004d0069006e0069006d0069007a006500640044006f0063006b00570069006400670065007400730054006f006f006c0062006100720000000000ffffffff0000000000000000')",
+          "pretty-print": "                                                                                                                                                    q                                                                                                                                                                                                                                                                                    Zrqt_image_view__ImageView__1__ImageViewWidget          Zrqt_image_view__ImageView__2__ImageViewWidget          &rqt_rviz__RViz__1__          k u                                                                                                                                                                                                       "
         }
       },
       "groups": {

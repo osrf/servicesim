@@ -120,8 +120,10 @@
   <link name="link">
 
     <%
-      width = max_x * $o + door_side
-      if width != 0.0
+      # Wall collisions if door is open
+      if $door_angle != 0.0
+        width = max_x * $o + door_side
+        if width != 0.0
     %>
     <collision name="right_of_door">
 
@@ -273,6 +275,38 @@
         </box>
       </geometry>
     </collision>
+    <%
+      # A single collision if door is closed
+      else
+        box_size =
+        [
+          (max_x - min_x + 1) * $o,
+          (max_y - min_y + 1) * $o,
+          height
+        ]
+    %>
+    <collision name="box_collision">
+
+      <pose>
+        <%= box_size[0] * 0.5 + (min_x - 1) * $o %>
+        <%= -box_size[1] * 0.5 %>
+        <%= box_size[2] * 0.5 %>
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            <%= box_size[0] %>
+            <%= box_size[1] %>
+            <%= box_size[2] %>
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    <% end %>
 
     <visual name="visual">
       <geometry>

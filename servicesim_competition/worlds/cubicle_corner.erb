@@ -42,12 +42,42 @@
       <%= $pose[5] %>
     </pose>
     <link name="link">
-      <collision name="collision">
+      <%
+        a = 3.7 * 0.5
+        b = 1.5 * 0.5
+      %>
+      <collision name="collision_x">
+        <pose>
+          <%= -a * 0.5 %>
+          <%= -b * 0.5 %>
+          <%= top * 0.5 %>
+          0 0 0
+        </pose>
         <geometry>
-          <mesh>
-            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
+          <box>
+            <size>
+              <%= a %>
+              <%= b %>
+              <%= top %>
+            </size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name="collision_y">
+        <pose>
+          <%= -b * 0.5 %>
+          <%= -a * 0.5 %>
+          <%= top * 0.5 %>
+          0 0 0
+        </pose>
+        <geometry>
+          <box>
+            <size>
+              <%= b %>
+              <%= a %>
+              <%= top %>
+            </size>
+          </box>
         </geometry>
       </collision>
       <visual name="visual">
