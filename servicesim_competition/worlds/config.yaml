@@ -10,7 +10,7 @@
 targets:
 
     # Room where robot starts and must return to
-    robot_start: PublicCafe
+    robot_start: PublicBathroomB
 
     # Room where guest starts
     pick_up: FrontElevator
@@ -40,6 +40,7 @@ drift:
   # Total number of drift times
   count: 30
 
+# Scoring
 scoring:
 
   # Penalties when the robot is actually touching the human/object
@@ -73,6 +74,13 @@ scoring:
 
   # Falied drop_off attempts
   weight_failed_drop_off: 50
-  
+
   # Robot has gone too fast
   weight_too_fast: 25
+
+# Non-guest humans
+humans:
+
+  # Number of walking humans
+  walking_count: 10
+

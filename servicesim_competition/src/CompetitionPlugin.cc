@@ -42,6 +42,9 @@ class servicesim::CompetitionPluginPrivate
   /// \brief Guest name
   public: std::string guestName;
 
+  /// \brief Keep robot start pose
+  public: ignition::math::Pose3d robotStartPose;
+
   /// \brief Connection to world update
   public: gazebo::event::ConnectionPtr updateConnection{nullptr};
 
@@ -117,6 +120,15 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr _world,
     return;
   }
   this->dataPtr->dropOffLocation = _sdf->Get<std::string>("drop_off_location");
+
+  if (!_sdf->HasElement("robot_start_pose"))
+  {
+    gzerr << "Missing <robot_start_pose>, competition not initialized"
+          << std::endl;
+    return;
+  }
+  this->dataPtr->robotStartPose = 
+      _sdf->Get<ignition::math::Pose3d>("robot_start_pose");
 
   this->dataPtr->guestName = _sdf->Get<std::string>("guest_name");
 
@@ -217,6 +229,7 @@ bool CompetitionPlugin::OnNewTaskRosService(
   _res.pick_up_location = this->dataPtr->pickUpLocation;
   _res.drop_off_location = this->dataPtr->dropOffLocation;
   _res.guest_name = this->dataPtr->guestName;
+  _res.robot_start_pose = convert(this->dataPtr->robotStartPose);
 
   return true;
 }
