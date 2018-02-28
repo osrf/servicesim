@@ -657,7 +657,9 @@
         # unique name
         $count = $count + 1
         $actor_name = human_name + '_' + rand(10000..99999).to_s()
-        $enable_collisions = true
+
+        # TODO: collisions for actors with custom trajectories are collapsed in the world origin
+        $enable_collisions = false
 
         # skin
         $actor_skin = nil
@@ -1168,7 +1170,10 @@
 
       </plugin>
 
-      <%= fromFile(DIR + "/actor_collisions.erb") %>
+      <%=
+        # TODO: Fix collision for actors with custom trajectories
+        #fromFile(DIR + "/actor_collisions.erb")
+      %>
 
     </actor>
 <%
