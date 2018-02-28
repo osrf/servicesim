@@ -9,7 +9,6 @@
   # * $actor_trajectory (array[array[6]]) Array or waypoint poses
   # * $enable_collisions (boolean) True to enable actor collisions
   # * $robot_name (string) Robot name
-  # * $guest_name (string) Guest name
   # * $traj_offset (number) Offset the trajectory points
 
   # TODO: set from servicesim world
@@ -92,9 +91,8 @@
     <% end %>
 
     <velocity><%= $actor_velocity %></velocity>
-    <obstacle_margin>0.3</obstacle_margin>
+    <obstacle_margin>1.5</obstacle_margin>
     <obstacle><%= $robot_name %></obstacle>
-    <obstacle><%= $guest_name %></obstacle>
 
   </plugin>
 
