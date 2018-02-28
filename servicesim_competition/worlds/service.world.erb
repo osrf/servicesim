@@ -1192,6 +1192,13 @@
   # Launch file to spawn URDF
   if $urdf_launch != ''
 
+    $robot_start_yaw = rand(-$pi..$pi)
+    if config and config.key?('targets')
+      if config['targets'].key?('robot_start_yaw')
+        $robot_start_yaw = config['targets']['robot_start_yaw']
+      end
+    end
+
     File.open($urdf_launch, "w") do |f|
       f.write(fromFile(DIR + "/spawn_urdf.launch.erb"))
     end

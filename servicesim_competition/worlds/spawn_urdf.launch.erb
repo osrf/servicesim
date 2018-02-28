@@ -3,6 +3,7 @@
   #
   # Requires:
   # $start_location {} Contains information about start location
+  # $robot_start_yaw (number) Robot's start yaw
 %>
 <!--
   Generated from spawn_urdf.launch.erb
@@ -15,7 +16,7 @@
     -x <%= $start_location[:pivot][0] %>
     -y <%= $start_location[:pivot][1] %>
     -z 0.75
-    -Y <%= rand(-$pi..$pi) %>"
+    -Y <%= $robot_start_yaw %>"
   />
 </launch>
 
