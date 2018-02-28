@@ -856,6 +856,13 @@
   center_x = location[:min][0] + size_x * 0.5
   center_y = location[:min][1] + size_y * 0.5
 
+  robot_start_yaw = rand(-$pi..$pi)
+  if config and config.key?('targets')
+    if config['targets'].key?('robot_start_yaw')
+      robot_start_yaw = config['targets']['robot_start_yaw']
+    end
+  end
+
   $start_location =
   {
     :name => location[:name],
@@ -868,7 +875,7 @@
       0.75,
       0.0,
       0.0,
-      rand(-$pi..$pi)
+      robot_start_yaw
     ]
   }
 %>
