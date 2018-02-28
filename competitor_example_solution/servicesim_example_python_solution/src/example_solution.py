@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import copy
 import random
 from enum import Enum
 
@@ -33,6 +34,7 @@ from servicesim_competition.msg import ActorNames
 from servicesim_competition.srv import DropOffGuest, DropOffGuestRequest, NewTask
 from servicesim_competition.srv import PickUpGuest, PickUpGuestRequest, RoomInfo, RoomInfoRequest
 
+from std_srvs.srv import Empty, EmptyRequest
 
 class CompetitionState(Enum):
     BeginTask = 0
@@ -123,8 +125,9 @@ class ExampleNode(object):
         return mid_pose
 
     def construct_goal_from_pose(self, pose):
+        posecopy = copy.deepcopy(pose)
         goal = MoveBaseGoal()
-        goal.target_pose.pose = pose
+        goal.target_pose.pose = posecopy
         goal.target_pose.pose.position.x -= 1
         goal.target_pose.header.frame_id = 'map'
         goal.target_pose.header.stamp = rospy.Time.now()
@@ -153,6 +156,10 @@ class ExampleNode(object):
                 self.initial_pose_pub.publish(init_pose_msg)
                 rospy.loginfo('published initial pose')
                 rate.sleep()
+
+                clear_costmaps_srv = rospy.ServiceProxy(
+                    '/servicebot/move_base/clear_costmaps', Empty)
+                clear_costmaps_srv(EmptyRequest())
                 state = CompetitionState.Pickup
 
             elif state == CompetitionState.Pickup:
