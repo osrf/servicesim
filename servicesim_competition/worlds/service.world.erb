@@ -440,13 +440,6 @@
   end # if not $floorplan
 %>
 
-    <!-- GUI -->
-    <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose>-3.664 1 1.94 0 0.31 0.177</pose>
-      </camera>
-    </gui>
-
     <!-- Scene -->
     <scene>
       <ambient>0.8 0.8 0.8 1.0</ambient>
@@ -852,7 +845,15 @@
     :name => location[:name],
     :pose => [center_x, center_y, 0, 0, 0, 0],
     :size => [size_x, size_y, 10],
-    :pivot => location[:pivot]
+    :pivot =>
+    [
+      location[:pivot][0],
+      location[:pivot][1],
+      0.75,
+      0.0,
+      0.0,
+      rand(-$pi..$pi)
+    ]
   }
 %>
 
@@ -959,6 +960,15 @@
       <drop_off_location>
         <%= $drop_off_location[:name] %>
       </drop_off_location>
+
+      <robot_start_pose>
+        <%= $start_location[:pivot][0] %>
+        <%= $start_location[:pivot][1] %>
+        <%= $start_location[:pivot][2] %>
+        <%= $start_location[:pivot][3] %>
+        <%= $start_location[:pivot][4] %>
+        <%= $start_location[:pivot][5] %>
+      </robot_start_pose>
 
       <guest_name><%= $guest_name %></guest_name>
       <robot_name><%= $robot_name %></robot_name>
@@ -1176,6 +1186,20 @@
       %>
 
     </actor>
+
+    <!-- GUI -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>
+        <%= $start_location[:pivot][0] + 1.0 %>
+        <%= $start_location[:pivot][1] + 1.0 %>
+        <%= $start_location[:pivot][2] + 0.75 %>
+        0.0
+        0.6
+        <%= -$pi*0.75 %>
+        </pose>
+      </camera>
+    </gui>
 <%
   end # if not $floorplan
 %>
