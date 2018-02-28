@@ -295,6 +295,20 @@
     "ANIMATION_running.dae"
   ]
 
+  # Trajectories
+  trajectories =
+  [
+    "trajectory_private_a.erb",
+    "trajectory_private_b.erb",
+    "trajectory_private_c.erb",
+    "trajectory_private_d.erb",
+    "trajectory_private_e.erb",
+    "trajectory_private_f.erb",
+    "trajectory_public_a.erb",
+    "trajectory_public_b.erb",
+    "trajectory_middle.erb"
+  ]
+
   # List of idle actors to be inserted
   actors_idle =
   [
@@ -307,14 +321,28 @@
   ]
 
   # List of trajectory actors to be inserted
-  # TODO: Recalculate trajectories for new world and investigate obstacle detection
-  actors_trajectory =
-  [
-    # Example randomizing skin
-    # {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
-    # Example setting velocity
-    # {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
-  ]
+  actors_trajectory = []
+  $traj_start_poses = []
+
+  # Total number of trajectory actors
+  traj_actor_count = 10
+  if config and config.key?('humans')
+
+    if config['humans'].key?('walking_count')
+      traj_actor_count = config['humans']['walking_count']
+    end
+  end
+
+  for i in (1..traj_actor_count)
+
+    actors_trajectory.push(
+    {
+      :skin => skins.sample,
+      :velocity => rand(0.9..1.2),
+      :config_file => trajectories.sample,
+      :offset => rand(0..20)
+    })
+  end
 
   ###############################################
   #                                             #
@@ -328,7 +356,7 @@
     guest_skin = skins.sample
   end
 
-  guest_name = human_name + '_' + rand(10000..99999).to_s()
+  $guest_name = human_name + '_' + rand(10000..99999).to_s()
   guest_anim = animations_trajectory[0]
   drift_times = []
 
@@ -630,6 +658,9 @@
         $count = $count + 1
         $actor_name = human_name + '_' + rand(10000..99999).to_s()
 
+        # TODO: collisions for actors with custom trajectories are collapsed in the world origin
+        $enable_collisions = false
+
         # skin
         $actor_skin = nil
         if actor.has_key? :skin
@@ -652,6 +683,12 @@
         $actor_trajectory = nil
         if actor.has_key? :trajectory
           $actor_trajectory = actor[:trajectory]
+        end
+
+        # trajectory offset
+        $traj_offset = nil
+        if actor.has_key? :offset
+          $traj_offset = actor[:offset]
         end
 
         # Set undefined values from the config file if one was given
@@ -923,7 +960,7 @@
         <%= $drop_off_location[:name] %>
       </drop_off_location>
 
-      <guest_name><%= guest_name %></guest_name>
+      <guest_name><%= $guest_name %></guest_name>
       <robot_name><%= $robot_name %></robot_name>
       <ground_name><%= ground_name %></ground_name>
       <human_name><%= human_name %></human_name>
@@ -965,7 +1002,7 @@
           <too_fast><%= weight_too_fast %></too_fast>
           <failed_attempt><%= weight_failed_drop_off %></failed_attempt>
         </weight>
-        <guest_name><%= guest_name %></guest_name>
+        <guest_name><%= $guest_name %></guest_name>
         <!-- for contain plugin -->
         <namespace>/servicesim/drop_off</namespace>
       </drop_off>
@@ -1019,7 +1056,7 @@
     <!-- Drop-off area contain plugin -->
     <!-- Location: <%= $drop_off_location[:name] %> -->
     <plugin name="drop_off" filename="libContainPlugin.so">
-      <entity><%= guest_name %></entity>
+      <entity><%= $guest_name %></entity>
       <namespace>servicesim/drop_off</namespace>
       <enabled>false</enabled>
       <pose>
@@ -1079,7 +1116,7 @@
     %>
 
     <!-- Guest -->
-    <actor name="<%= guest_name %>">
+    <actor name="<%= $guest_name %>">
 
       <!-- Starting pose, nice for when the world is reset -->
       <pose>
@@ -1133,7 +1170,10 @@
 
       </plugin>
 
-      <%= fromFile(DIR + "/actor_collisions.erb") %>
+      <%=
+        # TODO: Fix collision for actors with custom trajectories
+        #fromFile(DIR + "/actor_collisions.erb")
+      %>
 
     </actor>
 <%

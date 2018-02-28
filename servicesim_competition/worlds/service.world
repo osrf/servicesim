@@ -2,11 +2,11 @@
 <?xml version="1.0" ?>
 <!--
   Generated from service.world.erb
-  Seed: 100
+  Seed: 200
   Floorplan: false
   Debug: false
   URDF launch file: ../../servicesim/launch/spawn_urdf.launch
-  Config: {"targets"=>{"robot_start"=>"PrivateCafe", "pick_up"=>"FrontElevator", "drop_off"=>"PrivateCubicle_31_3"}, "guest"=>{"skin"=>"SKIN_man_blue_shirt.dae"}, "drift"=>{"min_interval"=>15, "max_interval"=>300, "start_time"=>0, "count"=>30}, "scoring"=>{"weight_human_contact"=>40000, "weight_object_contact"=>20000, "weight_human_approximation"=>1, "weight_object_approximation"=>0.25, "weight_pickup_location"=>1, "weight_pickup_guest"=>2, "weight_drop_off_guest"=>2, "weight_return_start"=>1, "weight_failed_pickup"=>40, "weight_failed_drop_off"=>50, "weight_too_fast"=>25}}
+  Config: {"targets"=>{"robot_start"=>"PrivateCafe", "pick_up"=>"FrontElevator", "drop_off"=>"PrivateCubicle_31_3"}, "guest"=>{"skin"=>"SKIN_man_blue_shirt.dae"}, "drift"=>{"min_interval"=>15, "max_interval"=>300, "start_time"=>0, "count"=>30}, "scoring"=>{"weight_human_contact"=>40000, "weight_object_contact"=>20000, "weight_human_approximation"=>1, "weight_object_approximation"=>0.25, "weight_pickup_location"=>1, "weight_pickup_guest"=>2, "weight_drop_off_guest"=>2, "weight_return_start"=>1, "weight_failed_pickup"=>40, "weight_failed_drop_off"=>50, "weight_too_fast"=>25}, "humans"=>{"walking_count"=>10}}
 -->
 <sdf version="1.6">
   <world name="default">
@@ -8483,7 +8483,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 6.076566300307037</pose>
+      <pose>-0.3 -0.05 0 0 0 5.965346375858605</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -8557,10 +8557,82 @@
   <link name="link">
 
     
-    <collision name="box_collision">
+    <collision name="right_of_door">
 
       <pose>
-        0.0
+        0.63
+        0.05
+        1.5
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            1.74
+            0.1
+            3.0
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    
+
+    
+    <collision name="left_of_door">
+
+      <pose>
+        -1.3800000000000001
+        0.05
+        1.5
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            0.24
+            0.1
+            3.0
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    
+
+    
+    <collision name="top_of_door">
+
+      <pose>
+        -0.75
+        0.05
+        2.55
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            1.5
+            0.1
+            0.9
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    
+
+    
+    <collision name="right">
+
+      <pose>
+        1.55
         -1.5
         1.5
         0
@@ -8571,8 +8643,53 @@
       <geometry>
         <box>
           <size>
+            0.1
             3.0
             3.0
+          </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name="left">
+
+      <pose>
+        -1.55
+        -1.5
+        1.5
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            0.1
+            3.0
+            3.0
+          </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+    <collision name="back">
+
+      <pose>
+        0.0
+        -3.05
+        1.5
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            3.0
+            0.1
             3.0
           </size>
         </box>
@@ -8672,12 +8789,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -8685,12 +8803,62 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 6.028351968509266</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+<include>
+  <pose>
+    -0.6
+    -2.1
+    0
+    0
+    0
+    3.141592653589793
+  </pose>
+  <uri>model://toilet</uri>
+</include>
+
+<include>
+  <pose>
+    0.9
+    -2.35
+    0
+    0
+    0
+    -0.7853981633974483
+  </pose>
+  <uri>model://wastebasket</uri>
+</include>
+
 
   
 
@@ -9560,7 +9728,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.921599046322593</pose>
+      <pose>-0.3 -0.05 0 0 0 5.92398105922309</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -9820,8 +9988,8 @@
   <include>
     <name>table_1</name>
     <pose>
-      -3.161916072320774
-      -6.068581099560315
+      -2.951292802332995
+      -5.920744467759562
       0
       0
       0
@@ -9840,12 +10008,12 @@
   <static>true</static>
 
   <pose>
-    -3.661916072320774
-    -6.568581099560315
+    -3.451292802332995
+    -6.420744467759562
     0.85
     0
     0
-    -2.190501115292312
+    -2.628100304474844
   </pose>
 
   <link name='colision'>
@@ -9882,9 +10050,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -9914,9 +10082,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -9946,9 +10114,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -9978,9 +10146,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10010,9 +10178,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10042,9 +10210,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10074,9 +10242,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10106,9 +10274,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10138,9 +10306,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10170,9 +10338,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10201,9 +10369,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10232,9 +10400,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10263,9 +10431,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10294,9 +10462,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10325,9 +10493,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -10348,12 +10516,12 @@
   <static>true</static>
 
   <pose>
-    -3.661916072320774
-    -5.568581099560315
+    -3.451292802332995
+    -5.420744467759562
     0.85
     0
     0
-    2.4550534387816283
+    1.8654886154781036
   </pose>
 
   <link name='colision'>
@@ -10857,12 +11025,12 @@
   <static>true</static>
 
   <pose>
-    -2.661916072320774
-    -6.568581099560315
+    -2.451292802332995
+    -6.420744467759562
     0.85
     0
     0
-    -0.38438506256563454
+    -0.3835193558270681
   </pose>
 
   <link name='colision'>
@@ -11365,12 +11533,12 @@
   <static>true</static>
 
   <pose>
-    -2.661916072320774
-    -5.568581099560315
+    -2.451292802332995
+    -5.420744467759562
     0.85
     0
     0
-    0.46347914960746783
+    0.31703639771883774
   </pose>
 
   <link name='colision'>
@@ -11870,8 +12038,8 @@
   <include>
     <name>table_2</name>
     <pose>
-      -3.080554798736348
-      -3.540105833876271
+      -2.980055680494023
+      -3.4258483733034537
       0
       0
       0
@@ -11890,12 +12058,12 @@
   <static>true</static>
 
   <pose>
-    -3.580554798736348
-    -4.040105833876272
+    -3.480055680494023
+    -3.9258483733034537
     0.85
     0
     0
-    -2.710686982612885
+    -2.5623166297674618
   </pose>
 
   <link name='colision'>
@@ -11932,9 +12100,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -11964,9 +12132,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -11996,9 +12164,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12028,9 +12196,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12060,9 +12228,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12092,9 +12260,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12124,9 +12292,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12156,9 +12324,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12188,9 +12356,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12220,9 +12388,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12251,9 +12419,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12282,9 +12450,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12313,9 +12481,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12344,9 +12512,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12375,9 +12543,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -12398,12 +12566,12 @@
   <static>true</static>
 
   <pose>
-    -3.580554798736348
-    -3.040105833876271
+    -3.480055680494023
+    -2.9258483733034537
     0.85
     0
     0
-    2.448999897916016
+    2.4094466717637752
   </pose>
 
   <link name='colision'>
@@ -12907,12 +13075,12 @@
   <static>true</static>
 
   <pose>
-    -2.580554798736348
-    -4.040105833876272
+    -2.480055680494023
+    -3.9258483733034537
     0.85
     0
     0
-    -0.9719855885458888
+    -0.7367628792331559
   </pose>
 
   <link name='colision'>
@@ -12949,9 +13117,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -12981,9 +13149,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13013,9 +13181,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13045,9 +13213,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13077,9 +13245,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13109,9 +13277,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13141,9 +13309,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13173,9 +13341,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13205,9 +13373,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13237,9 +13405,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13268,9 +13436,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13299,9 +13467,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13330,9 +13498,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13361,9 +13529,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13392,9 +13560,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -13415,12 +13583,12 @@
   <static>true</static>
 
   <pose>
-    -2.580554798736348
-    -3.040105833876271
+    -2.480055680494023
+    -2.9258483733034537
     0.85
     0
     0
-    1.219239465114068
+    0.5300909605798793
   </pose>
 
   <link name='colision'>
@@ -13457,9 +13625,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13489,9 +13657,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13521,9 +13689,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13553,9 +13721,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13585,9 +13753,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13617,9 +13785,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13649,9 +13817,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13681,9 +13849,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13713,9 +13881,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13745,9 +13913,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13776,9 +13944,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13807,9 +13975,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13838,9 +14006,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13869,9 +14037,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13900,9 +14068,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -13921,8 +14089,8 @@
   <include>
     <name>table_3</name>
     <pose>
-      -0.04227713816116285
-      -5.768337393434223
+      -0.25954964245678314
+      -5.829902093776717
       0
       0
       0
@@ -13941,12 +14109,12 @@
   <static>true</static>
 
   <pose>
-    -0.5422771381611629
-    -6.268337393434223
+    -0.7595496424567831
+    -6.329902093776717
     0.85
     0
     0
-    -2.715743006213644
+    -2.2686785399203466
   </pose>
 
   <link name='colision'>
@@ -13983,9 +14151,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14015,9 +14183,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14047,9 +14215,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14079,9 +14247,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14111,9 +14279,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14143,9 +14311,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14175,9 +14343,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14207,9 +14375,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14239,9 +14407,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14271,9 +14439,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14302,9 +14470,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14333,9 +14501,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14364,9 +14532,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14395,9 +14563,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14426,9 +14594,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -14449,12 +14617,12 @@
   <static>true</static>
 
   <pose>
-    -0.5422771381611629
-    -5.268337393434223
+    -0.7595496424567831
+    -5.329902093776717
     0.85
     0
     0
-    2.060539762298659
+    2.3848338912844085
   </pose>
 
   <link name='colision'>
@@ -14958,12 +15126,12 @@
   <static>true</static>
 
   <pose>
-    0.45772286183883715
-    -6.268337393434223
+    0.24045035754321686
+    -6.329902093776717
     0.85
     0
     0
-    -0.555001548930064
+    -0.41315824648871413
   </pose>
 
   <link name='colision'>
@@ -15466,12 +15634,12 @@
   <static>true</static>
 
   <pose>
-    0.45772286183883715
-    -5.268337393434223
+    0.24045035754321686
+    -5.329902093776717
     0.85
     0
     0
-    0.4590061678752989
+    0.290892824289243
   </pose>
 
   <link name='colision'>
@@ -15971,8 +16139,8 @@
   <include>
     <name>table_4</name>
     <pose>
-      -0.2992967672868634
-      -3.414372207641828
+      -0.16504738237613825
+      -3.6069485006649344
       0
       0
       0
@@ -15991,12 +16159,12 @@
   <static>true</static>
 
   <pose>
-    -0.7992967672868634
-    -3.914372207641828
+    -0.6650473823761383
+    -4.106948500664934
     0.85
     0
     0
-    -2.5417775436444705
+    -2.0248651524802845
   </pose>
 
   <link name='colision'>
@@ -16499,12 +16667,12 @@
   <static>true</static>
 
   <pose>
-    -0.7992967672868634
-    -2.914372207641828
+    -0.6650473823761383
+    -3.1069485006649344
     0.85
     0
     0
-    2.1965797172499655
+    1.9247130841740887
   </pose>
 
   <link name='colision'>
@@ -17008,12 +17176,12 @@
   <static>true</static>
 
   <pose>
-    0.20070323271313661
-    -3.914372207641828
+    0.33495261762386175
+    -4.106948500664934
     0.85
     0
     0
-    -0.35043606037902797
+    -0.5831333619406425
   </pose>
 
   <link name='colision'>
@@ -17050,9 +17218,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17082,9 +17250,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17114,9 +17282,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17146,9 +17314,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17178,9 +17346,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17210,9 +17378,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17242,9 +17410,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17274,9 +17442,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17306,9 +17474,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17338,9 +17506,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17369,9 +17537,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17400,9 +17568,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17431,9 +17599,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17462,9 +17630,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17493,9 +17661,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -17516,12 +17684,12 @@
   <static>true</static>
 
   <pose>
-    0.20070323271313661
-    -2.914372207641828
+    0.33495261762386175
+    -3.1069485006649344
     0.85
     0
     0
-    0.7940970561041146
+    0.34150039389344167
   </pose>
 
   <link name='colision'>
@@ -18022,8 +18190,8 @@
   <include>
     <name>table_5</name>
     <pose>
-      2.8645822638706915
-      -5.770693943091613
+      3.058248105290152
+      -5.804473448673799
       0
       0
       0
@@ -18042,12 +18210,12 @@
   <static>true</static>
 
   <pose>
-    2.3645822638706915
-    -6.270693943091613
+    2.558248105290152
+    -6.304473448673799
     0.85
     0
     0
-    -2.378810336114019
+    -2.306290345351488
   </pose>
 
   <link name='colision'>
@@ -18084,9 +18252,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18116,9 +18284,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18148,9 +18316,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18180,9 +18348,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18212,9 +18380,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18244,9 +18412,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18276,9 +18444,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18308,9 +18476,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18340,9 +18508,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18372,9 +18540,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18403,9 +18571,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18434,9 +18602,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18465,9 +18633,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18496,9 +18664,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18527,9 +18695,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18550,12 +18718,12 @@
   <static>true</static>
 
   <pose>
-    2.3645822638706915
-    -5.270693943091613
+    2.558248105290152
+    -5.304473448673799
     0.85
     0
     0
-    2.1917909263455924
+    2.6952459996013713
   </pose>
 
   <link name='colision'>
@@ -18592,9 +18760,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18624,9 +18792,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18656,9 +18824,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18688,9 +18856,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18720,9 +18888,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18752,9 +18920,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18784,9 +18952,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18816,9 +18984,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18848,9 +19016,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18880,9 +19048,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18911,9 +19079,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18942,9 +19110,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -18973,9 +19141,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19004,9 +19172,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19035,9 +19203,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19059,12 +19227,12 @@
   <static>true</static>
 
   <pose>
-    3.3645822638706915
-    -6.270693943091613
+    3.558248105290152
+    -6.304473448673799
     0.85
     0
     0
-    -1.1486830409560715
+    -0.6875147063222614
   </pose>
 
   <link name='colision'>
@@ -19567,12 +19735,12 @@
   <static>true</static>
 
   <pose>
-    3.3645822638706915
-    -5.270693943091613
+    3.558248105290152
+    -5.304473448673799
     0.85
     0
     0
-    0.5984646064773107
+    0.31439193477328453
   </pose>
 
   <link name='colision'>
@@ -19609,9 +19777,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19641,9 +19809,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19673,9 +19841,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19705,9 +19873,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19737,9 +19905,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19769,9 +19937,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19801,9 +19969,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19833,9 +20001,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19865,9 +20033,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19897,9 +20065,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19928,9 +20096,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19959,9 +20127,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -19990,9 +20158,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -20021,9 +20189,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -20052,9 +20220,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -20072,8 +20240,8 @@
   <include>
     <name>table_6</name>
     <pose>
-      2.606976937451329
-      -3.6971198026504224
+      3.243195084489288
+      -3.7649047232058335
       0
       0
       0
@@ -20092,12 +20260,12 @@
   <static>true</static>
 
   <pose>
-    2.106976937451329
-    -4.197119802650422
+    2.743195084489288
+    -4.2649047232058335
     0.85
     0
     0
-    -1.9284809125309637
+    -2.0001219511945854
   </pose>
 
   <link name='colision'>
@@ -20134,9 +20302,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20166,9 +20334,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20198,9 +20366,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20230,9 +20398,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20262,9 +20430,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20294,9 +20462,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20326,9 +20494,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20358,9 +20526,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20390,9 +20558,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20422,9 +20590,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20453,9 +20621,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20484,9 +20652,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20515,9 +20683,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20546,9 +20714,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20577,9 +20745,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -20600,12 +20768,12 @@
   <static>true</static>
 
   <pose>
-    2.106976937451329
-    -3.1971198026504224
+    2.743195084489288
+    -3.2649047232058335
     0.85
     0
     0
-    2.168834790553348
+    2.4122921889324207
   </pose>
 
   <link name='colision'>
@@ -21109,12 +21277,12 @@
   <static>true</static>
 
   <pose>
-    3.106976937451329
-    -4.197119802650422
+    3.743195084489288
+    -4.2649047232058335
     0.85
     0
     0
-    -0.7067691733761607
+    -0.7858268066274898
   </pose>
 
   <link name='colision'>
@@ -21617,12 +21785,12 @@
   <static>true</static>
 
   <pose>
-    3.106976937451329
-    -3.1971198026504224
+    3.743195084489288
+    -3.2649047232058335
     0.85
     0
     0
-    0.5396556853081375
+    1.1723390596055037
   </pose>
 
   <link name='colision'>
@@ -21659,9 +21827,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21691,9 +21859,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21723,9 +21891,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21755,9 +21923,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21787,9 +21955,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21819,9 +21987,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21851,9 +22019,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21883,9 +22051,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21915,9 +22083,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21947,9 +22115,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -21978,9 +22146,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -22009,9 +22177,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -22040,9 +22208,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -22071,9 +22239,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -22102,9 +22270,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -22779,7 +22947,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 6.1856552763732084</pose>
+      <pose>-0.3 -0.05 0 0 0 6.1349905298301755</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -22822,135 +22990,135 @@
 
   
     <include>
-      <name>chair_-2.0_-0.8607484205160577</name>
+      <name>chair_-2.0_-1.1672322184705353</name>
       <pose>
         -2.0
-        -0.8607484205160577
+        -1.1672322184705353
         0
         0
         0
-        2.961226280672627
+        3.3795009744525855
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
     <include>
-      <name>chair_-2.0_1.3800184860959708</name>
+      <name>chair_-2.0_1.1310418922700236</name>
       <pose>
         -2.0
-        1.3800184860959708
+        1.1310418922700236
         0
         0
         0
-        -0.22033505872271988
+        -0.2745186666279994
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
   
     <include>
-      <name>chair_-1.1_-1.3139731801604686</name>
+      <name>chair_-1.1_-1.2470368942893275</name>
       <pose>
         -1.1
-        -1.3139731801604686
+        -1.2470368942893275
         0
         0
         0
-        3.3257153925206993
+        3.2406546949877906
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
     <include>
-      <name>chair_-1.1_0.5582007505719084</name>
+      <name>chair_-1.1_1.1295639928821344</name>
       <pose>
         -1.1
-        0.5582007505719084
+        1.1295639928821344
         0
         0
         0
-        -0.3738567287363823
+        0.39297392450432633
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
   
     <include>
-      <name>chair_-0.19999999999999996_-1.0999872308749064</name>
+      <name>chair_-0.19999999999999996_-0.6414118290413907</name>
       <pose>
         -0.19999999999999996
-        -1.0999872308749064
+        -0.6414118290413907
         0
         0
         0
-        3.429276561667961
+        3.227146686267111
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
     <include>
-      <name>chair_-0.19999999999999996_0.5305411049589532</name>
+      <name>chair_-0.19999999999999996_1.3734906232396622</name>
       <pose>
         -0.19999999999999996
-        0.5305411049589532
+        1.3734906232396622
         0
         0
         0
-        -0.04817638133341556
+        0.024459753724179023
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
   
     <include>
-      <name>chair_0.7000000000000002_-1.060444660723018</name>
+      <name>chair_0.7000000000000002_-0.5339517396878716</name>
       <pose>
         0.7000000000000002
-        -1.060444660723018
+        -0.5339517396878716
         0
         0
         0
-        2.812797691035274
+        2.817577211114172
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
     <include>
-      <name>chair_0.7000000000000002_1.31740526299941</name>
+      <name>chair_0.7000000000000002_0.9919549244119387</name>
       <pose>
         0.7000000000000002
-        1.31740526299941
+        0.9919549244119387
         0
         0
         0
-        0.16119018140315078
+        0.31192670547509016
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
   
     <include>
-      <name>chair_1.6_-0.8855721247873685</name>
+      <name>chair_1.6_-1.093210245121174</name>
       <pose>
         1.6
-        -0.8855721247873685
+        -1.093210245121174
         0
         0
         0
-        2.782366152517851
+        3.43503580034045
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
     <include>
-      <name>chair_1.6_0.5174225490448356</name>
+      <name>chair_1.6_0.7727312334687605</name>
       <pose>
         1.6
-        0.5174225490448356
+        0.7727312334687605
         0
         0
         0
-        -0.05194261031750014
+        -0.35719719961700475
       </pose>
       <uri>model://desk_chair</uri>
     </include>
@@ -22967,7 +23135,7 @@
     0
     0
     0
-    2.546932037308755
+    2.3796810739897665
   </pose>
   <uri>model://whiteboard</uri>
 </include>
@@ -22998,128 +23166,11 @@
   <link name="link">
 
     
-    <collision name="right_of_door">
-
-      <pose>
-        1.3800000000000001
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            3.24
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="left_of_door">
-
-      <pose>
-        -2.13
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.74
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="right">
-
-      <pose>
-        3.05
-        -2.25
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            4.5
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    <collision name="left">
-
-      <pose>
-        -3.05
-        -2.25
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            4.5
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    
-    <collision name="back">
+    <collision name="box_collision">
 
       <pose>
         0.0
-        -4.55
+        -2.25
         1.5
         0
         0
@@ -23130,7 +23181,7 @@
         <box>
           <size>
             6.0
-            0.1
+            4.5
             3.0
           </size>
         </box>
@@ -23382,13 +23433,12 @@
 
 
   
-
-    <link name="door_frame">
+    <link name="closed_door">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -23396,153 +23446,12 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.753331254423003</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <!-- Furniture if door is open -->
-    
-
-
-
-<model name="table_and_chairs">
-
-  <pose>
-    1.0499999999999998
-    -2.4000000000000004
-    0
-    0
-    0
-    0
-  </pose>
-
-  <include>
-    <uri>model://conference_table_small</uri>
-  </include>
-
-  
-    <include>
-      <name>chair_-0.9_-0.5281349930932858</name>
-      <pose>
-        -0.9
-        -0.5281349930932858
-        0
-        0
-        0
-        3.256075165675691
-      </pose>
-      <uri>model://desk_chair</uri>
-    </include>
-    
-    <include>
-      <name>chair_-0.9_0.6654558515292841</name>
-      <pose>
-        -0.9
-        0.6654558515292841
-        0
-        0
-        0
-        -0.04779629138746194
-      </pose>
-      <uri>model://desk_chair</uri>
-    </include>
-    
-  
-    <include>
-      <name>chair_0.0_-0.7366621484049642</name>
-      <pose>
-        0.0
-        -0.7366621484049642
-        0
-        0
-        0
-        3.3179593436689467
-      </pose>
-      <uri>model://desk_chair</uri>
-    </include>
-    
-    <include>
-      <name>chair_0.0_0.711337262186783</name>
-      <pose>
-        0.0
-        0.711337262186783
-        0
-        0
-        0
-        -0.002578613645791983
-      </pose>
-      <uri>model://desk_chair</uri>
-    </include>
-    
-  
-    <include>
-      <name>chair_0.9_-0.7200786732151847</name>
-      <pose>
-        0.9
-        -0.7200786732151847
-        0
-        0
-        0
-        3.1895121855843254
-      </pose>
-      <uri>model://desk_chair</uri>
-    </include>
-    
-    <include>
-      <name>chair_0.9_0.7623597519356256</name>
-      <pose>
-        0.9
-        0.7623597519356256
-        0
-        0
-        0
-        0.14433174339876187
-      </pose>
-      <uri>model://desk_chair</uri>
-    </include>
-    
-  
-
-</model>
-
-
-<include>
-  <pose>
-    -1.9
-    -3.68
-    0
-    0
-    0
-    2.66
-  </pose>
-  <uri>model://whiteboard</uri>
-</include>
-
 
   
 
@@ -23881,128 +23790,11 @@
   <link name="link">
 
     
-    <collision name="right_of_door">
-
-      <pose>
-        0.63
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.74
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="left_of_door">
-
-      <pose>
-        -2.13
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.74
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="top_of_door">
+    <collision name="box_collision">
 
       <pose>
         -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="right">
-
-      <pose>
-        1.55
         -1.5
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            3.0
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    <collision name="left">
-
-      <pose>
-        -3.05
-        -1.5
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            3.0
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    
-    <collision name="back">
-
-      <pose>
-        -0.75
-        -3.05
         1.5
         0
         0
@@ -24013,7 +23805,7 @@
         <box>
           <size>
             4.5
-            0.1
+            3.0
             3.0
           </size>
         </box>
@@ -24151,13 +23943,12 @@
 
 
   
-
-    <link name="door_frame">
+    <link name="closed_door">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -24165,138 +23956,12 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.786881361032922</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <!-- Furniture if door is open -->
-    
-
-
-
-  <model name="corner_1">
-    <static>true</static>
-    <pose>
-      1.5
-      -3.0
-      0
-      0
-      0
-      -1.5707963267948966
-    </pose>
-    <link name="link">
-      
-      <collision name="collision_x">
-        <pose>
-          -0.925
-          -0.375
-          0.38
-          0 0 0
-        </pose>
-        <geometry>
-          <box>
-            <size>
-              1.85
-              0.75
-              0.76
-            </size>
-          </box>
-        </geometry>
-      </collision>
-      <collision name="collision_y">
-        <pose>
-          -0.375
-          -0.925
-          0.38
-          0 0 0
-        </pose>
-        <geometry>
-          <box>
-            <size>
-              0.75
-              1.85
-              0.76
-            </size>
-          </box>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-  <include>
-    <pose>
-      -1.22
-      -0.45
-      0.76
-      0
-      0
-      0.0
-    </pose>
-    <uri>model://computer</uri>
-  </include>
-
-  
-  <include>
-    <pose>
-      -1.203861987632607
-      -1.9508250764843043
-      0
-      0
-      0
-      1.6933569916575442
-    </pose>
-    <uri>model://office_chair</uri>
-  </include>
-
-  </model>
-
-
-
-<include>
-  <pose>
-    1.1
-    -0.5
-    0
-    0
-    0
-    3.141592653589793
-  </pose>
-  <uri>model://office_box</uri>
-</include>
-
 
   
 
@@ -24323,128 +23988,11 @@
   <link name="link">
 
     
-    <collision name="right_of_door">
-
-      <pose>
-        0.63
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.74
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="left_of_door">
-
-      <pose>
-        -2.13
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.74
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="top_of_door">
+    <collision name="box_collision">
 
       <pose>
         -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="right">
-
-      <pose>
-        1.55
         -1.5
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            3.0
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    <collision name="left">
-
-      <pose>
-        -3.05
-        -1.5
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            3.0
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    
-    <collision name="back">
-
-      <pose>
-        -0.75
-        -3.05
         1.5
         0
         0
@@ -24455,7 +24003,7 @@
         <box>
           <size>
             4.5
-            0.1
+            3.0
             3.0
           </size>
         </box>
@@ -24593,13 +24141,12 @@
 
 
   
-
-    <link name="door_frame">
+    <link name="closed_door">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -24607,138 +24154,12 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.740762058572765</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <!-- Furniture if door is open -->
-    
-
-
-
-  <model name="corner_1">
-    <static>true</static>
-    <pose>
-      1.5
-      -3.0
-      0
-      0
-      0
-      -1.5707963267948966
-    </pose>
-    <link name="link">
-      
-      <collision name="collision_x">
-        <pose>
-          -0.925
-          -0.375
-          0.38
-          0 0 0
-        </pose>
-        <geometry>
-          <box>
-            <size>
-              1.85
-              0.75
-              0.76
-            </size>
-          </box>
-        </geometry>
-      </collision>
-      <collision name="collision_y">
-        <pose>
-          -0.375
-          -0.925
-          0.38
-          0 0 0
-        </pose>
-        <geometry>
-          <box>
-            <size>
-              0.75
-              1.85
-              0.76
-            </size>
-          </box>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-  <include>
-    <pose>
-      -1.22
-      -0.45
-      0.76
-      0
-      0
-      0.0
-    </pose>
-    <uri>model://computer</uri>
-  </include>
-
-  
-  <include>
-    <pose>
-      -1.2064478967227992
-      -1.6366394305888725
-      0
-      0
-      0
-      3.043444412753844
-    </pose>
-    <uri>model://office_chair</uri>
-  </include>
-
-  </model>
-
-
-
-<include>
-  <pose>
-    1.1
-    -0.5
-    0
-    0
-    0
-    3.141592653589793
-  </pose>
-  <uri>model://wastebasket</uri>
-</include>
-
 
   
 
@@ -25171,7 +24592,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.69487875390748</pose>
+      <pose>-0.3 -0.05 0 0 0 6.111672928854741</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -25214,81 +24635,81 @@
 
   
     <include>
-      <name>chair_-0.9_-0.7463189011900535</name>
+      <name>chair_-0.9_-0.6476006099796776</name>
       <pose>
         -0.9
-        -0.7463189011900535
+        -0.6476006099796776
         0
         0
         0
-        3.503611963673868
+        3.478116652385517
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
     <include>
-      <name>chair_-0.9_0.6115206717823201</name>
+      <name>chair_-0.9_0.680037858982045</name>
       <pose>
         -0.9
-        0.6115206717823201
+        0.680037858982045
         0
         0
         0
-        0.3803478582806862
+        -0.08709705547593216
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
   
     <include>
-      <name>chair_0.0_-0.628080021648655</name>
+      <name>chair_0.0_-0.6768446047471183</name>
       <pose>
         0.0
-        -0.628080021648655
+        -0.6768446047471183
         0
         0
         0
-        3.275047308745679
+        3.5305582769423793
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
     <include>
-      <name>chair_0.0_0.6493798405125011</name>
+      <name>chair_0.0_0.6908663381309543</name>
       <pose>
         0.0
-        0.6493798405125011
+        0.6908663381309543
         0
         0
         0
-        -0.21310619600137093
+        0.17234861026468562
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
   
     <include>
-      <name>chair_0.9_-0.6650063302774933</name>
+      <name>chair_0.9_-0.6299413503671676</name>
       <pose>
         0.9
-        -0.6650063302774933
+        -0.6299413503671676
         0
         0
         0
-        2.7853898132293238
+        3.481666967859078
       </pose>
       <uri>model://desk_chair</uri>
     </include>
     
     <include>
-      <name>chair_0.9_0.7967214186571036</name>
+      <name>chair_0.9_0.7286977689000245</name>
       <pose>
         0.9
-        0.7967214186571036
+        0.7286977689000245
         0
         0
         0
-        0.09360577523515995
+        -0.0016377254244224204
       </pose>
       <uri>model://desk_chair</uri>
     </include>
@@ -25648,128 +25069,11 @@
   <link name="link">
 
     
-    <collision name="right_of_door">
-
-      <pose>
-        0.63
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.74
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="left_of_door">
-
-      <pose>
-        -1.3800000000000001
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.24
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="top_of_door">
-
-      <pose>
-        -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="right">
-
-      <pose>
-        1.55
-        -1.5
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            3.0
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    <collision name="left">
-
-      <pose>
-        -1.55
-        -1.5
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            3.0
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    
-    <collision name="back">
+    <collision name="box_collision">
 
       <pose>
         0.0
-        -3.05
+        -1.5
         1.5
         0
         0
@@ -25780,7 +25084,7 @@
         <box>
           <size>
             3.0
-            0.1
+            3.0
             3.0
           </size>
         </box>
@@ -25880,13 +25184,12 @@
 
 
   
-
-    <link name="door_frame">
+    <link name="closed_door">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -25894,62 +25197,12 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.983695865137885</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <!-- Furniture if door is open -->
-    
-
-<include>
-  <pose>
-    -0.6
-    -2.1
-    0
-    0
-    0
-    3.141592653589793
-  </pose>
-  <uri>model://toilet</uri>
-</include>
-
-<include>
-  <pose>
-    0.9
-    -2.35
-    0
-    0
-    0
-    -0.7853981633974483
-  </pose>
-  <uri>model://wastebasket</uri>
-</include>
-
 
   
 
@@ -26532,128 +25785,11 @@
   <link name="link">
 
     
-    <collision name="right_of_door">
-
-      <pose>
-        0.63
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.74
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="left_of_door">
-
-      <pose>
-        -2.13
-        0.05
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.74
-            0.1
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="top_of_door">
+    <collision name="box_collision">
 
       <pose>
         -0.75
-        0.05
-        2.55
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            1.5
-            0.1
-            0.9
-          </size>
-        </box>
-      </geometry>
-    </collision>
-    
-
-    
-    <collision name="right">
-
-      <pose>
-        1.55
         -1.5
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            3.0
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    <collision name="left">
-
-      <pose>
-        -3.05
-        -1.5
-        1.5
-        0
-        0
-        0
-      </pose>
-
-      <geometry>
-        <box>
-          <size>
-            0.1
-            3.0
-            3.0
-          </size>
-        </box>
-      </geometry>
-    </collision>
-
-    
-    <collision name="back">
-
-      <pose>
-        -0.75
-        -3.05
         1.5
         0
         0
@@ -26664,7 +25800,7 @@
         <box>
           <size>
             4.5
-            0.1
+            3.0
             3.0
           </size>
         </box>
@@ -26802,13 +25938,12 @@
 
 
   
-
-    <link name="door_frame">
+    <link name="closed_door">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -26816,138 +25951,12 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door_frame.obj</uri>
+            <uri>model://door/meshes/door.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
-
-    <link name="door">
-      <pose>-0.3 -0.05 0 0 0 5.848026472858609</pose>
-      <collision name="collision">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <pose>0.45 -0.15 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <uri>model://door/meshes/door_door.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-    <!-- Furniture if door is open -->
-    
-
-
-
-  <model name="corner_1">
-    <static>true</static>
-    <pose>
-      1.5
-      -3.0
-      0
-      0
-      0
-      -1.5707963267948966
-    </pose>
-    <link name="link">
-      
-      <collision name="collision_x">
-        <pose>
-          -0.925
-          -0.375
-          0.38
-          0 0 0
-        </pose>
-        <geometry>
-          <box>
-            <size>
-              1.85
-              0.75
-              0.76
-            </size>
-          </box>
-        </geometry>
-      </collision>
-      <collision name="collision_y">
-        <pose>
-          -0.375
-          -0.925
-          0.38
-          0 0 0
-        </pose>
-        <geometry>
-          <box>
-            <size>
-              0.75
-              1.85
-              0.76
-            </size>
-          </box>
-        </geometry>
-      </collision>
-      <visual name="visual">
-        <geometry>
-          <mesh>
-            <uri>model://cubicle_corner/meshes/cubicle_corner.obj</uri>
-            <scale>0.01 0.01 0.01</scale>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-
-  
-  <include>
-    <pose>
-      -1.22
-      -0.45
-      0.76
-      0
-      0
-      0.0
-    </pose>
-    <uri>model://computer</uri>
-  </include>
-
-  
-  <include>
-    <pose>
-      -1.2409080811927262
-      -1.6473716557350329
-      0
-      0
-      0
-      2.6594150220654043
-    </pose>
-    <uri>model://office_chair</uri>
-  </include>
-
-  </model>
-
-
-
-<include>
-  <pose>
-    1.1
-    -0.5
-    0
-    0
-    0
-    3.141592653589793
-  </pose>
-  <uri>model://mini_fridge</uri>
-</include>
-
 
   
 
@@ -27380,7 +26389,7 @@
     </link>
 
     <link name="door">
-      <pose>-0.3 -0.05 0 0 0 6.251885186644953</pose>
+      <pose>-0.3 -0.05 0 0 0 5.8596251426239485</pose>
       <collision name="collision">
         <pose>0.45 -0.15 0 0 0 0</pose>
         <geometry>
@@ -27414,7 +26423,7 @@
     0
     0
   </pose>
-  <uri>model://mini_fridge</uri>
+  <uri>model://wastebasket</uri>
 </include>
 
 
@@ -27478,12 +26487,12 @@
   
   <include>
     <pose>
-      -0.45
       -1.22
+      -0.45
       0.76
       0
       0
-      -1.5707963267948966
+      0.0
     </pose>
     <uri>model://computer</uri>
   </include>
@@ -27491,12 +26500,12 @@
   
   <include>
     <pose>
-      -1.3871969060706695
-      -1.2293145088372486
+      -1.2964087859018707
+      -1.4843405343938576
       0
       0
       0
-      3.031485358601218
+      2.6671075110963773
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -27565,12 +26574,12 @@
   
   <include>
     <pose>
-      -0.45
       -1.22
+      -0.45
       0.76
       0
       0
-      -1.5707963267948966
+      0.0
     </pose>
     <uri>model://computer</uri>
   </include>
@@ -27578,12 +26587,12 @@
   
   <include>
     <pose>
-      -1.2167596202411175
-      -1.3111402949800404
+      -1.3444248447771245
+      -1.414132080682002
       0
       0
       0
-      2.287956566772958
+      2.9922826712927013
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -28241,10 +27250,82 @@
   <link name="link">
 
     
-    <collision name="box_collision">
+    <collision name="right_of_door">
 
       <pose>
-        0.0
+        1.3800000000000001
+        0.05
+        1.5
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            3.24
+            0.1
+            3.0
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    
+
+    
+    <collision name="left_of_door">
+
+      <pose>
+        -2.13
+        0.05
+        1.5
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            1.74
+            0.1
+            3.0
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    
+
+    
+    <collision name="top_of_door">
+
+      <pose>
+        -0.75
+        0.05
+        2.55
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            1.5
+            0.1
+            0.9
+          </size>
+        </box>
+      </geometry>
+    </collision>
+    
+
+    
+    <collision name="right">
+
+      <pose>
+        3.05
         -2.25
         1.5
         0
@@ -28255,8 +27336,53 @@
       <geometry>
         <box>
           <size>
-            6.0
+            0.1
             4.5
+            3.0
+          </size>
+        </box>
+      </geometry>
+    </collision>
+
+    <collision name="left">
+
+      <pose>
+        -3.05
+        -2.25
+        1.5
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            0.1
+            4.5
+            3.0
+          </size>
+        </box>
+      </geometry>
+    </collision>
+
+    
+    <collision name="back">
+
+      <pose>
+        0.0
+        -4.55
+        1.5
+        0
+        0
+        0
+      </pose>
+
+      <geometry>
+        <box>
+          <size>
+            6.0
+            0.1
             3.0
           </size>
         </box>
@@ -28508,12 +27634,13 @@
 
 
   
-    <link name="closed_door">
+
+    <link name="door_frame">
       <pose>-0.75 0.1 0 0 0 3.141592653589793</pose>
       <collision name="collision">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
@@ -28521,12 +27648,153 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://door/meshes/door.obj</uri>
+            <uri>model://door/meshes/door_frame.obj</uri>
             <scale>0.01 0.01 0.01</scale>
           </mesh>
         </geometry>
       </visual>
     </link>
+
+    <link name="door">
+      <pose>-0.3 -0.05 0 0 0 6.186489278798197</pose>
+      <collision name="collision">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0.45 -0.15 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://door/meshes/door_door.obj</uri>
+            <scale>0.01 0.01 0.01</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Furniture if door is open -->
+    
+
+
+
+<model name="table_and_chairs">
+
+  <pose>
+    1.0499999999999998
+    -2.4000000000000004
+    0
+    0
+    0
+    0
+  </pose>
+
+  <include>
+    <uri>model://conference_table_small</uri>
+  </include>
+
+  
+    <include>
+      <name>chair_-0.9_-0.572787339953269</name>
+      <pose>
+        -0.9
+        -0.572787339953269
+        0
+        0
+        0
+        2.9788777690096775
+      </pose>
+      <uri>model://desk_chair</uri>
+    </include>
+    
+    <include>
+      <name>chair_-0.9_0.7017835772897031</name>
+      <pose>
+        -0.9
+        0.7017835772897031
+        0
+        0
+        0
+        -0.35563866904487096
+      </pose>
+      <uri>model://desk_chair</uri>
+    </include>
+    
+  
+    <include>
+      <name>chair_0.0_-0.5640663546935198</name>
+      <pose>
+        0.0
+        -0.5640663546935198
+        0
+        0
+        0
+        3.369635888945652
+      </pose>
+      <uri>model://desk_chair</uri>
+    </include>
+    
+    <include>
+      <name>chair_0.0_0.779506272939945</name>
+      <pose>
+        0.0
+        0.779506272939945
+        0
+        0
+        0
+        0.12342068241710236
+      </pose>
+      <uri>model://desk_chair</uri>
+    </include>
+    
+  
+    <include>
+      <name>chair_0.9_-0.7750644399029727</name>
+      <pose>
+        0.9
+        -0.7750644399029727
+        0
+        0
+        0
+        3.4403015403474697
+      </pose>
+      <uri>model://desk_chair</uri>
+    </include>
+    
+    <include>
+      <name>chair_0.9_0.7543566525192609</name>
+      <pose>
+        0.9
+        0.7543566525192609
+        0
+        0
+        0
+        0.20391267536458602
+      </pose>
+      <uri>model://desk_chair</uri>
+    </include>
+    
+  
+
+</model>
+
+
+<include>
+  <pose>
+    -1.9
+    -3.68
+    0
+    0
+    0
+    2.66
+  </pose>
+  <uri>model://whiteboard</uri>
+</include>
+
 
   
 
@@ -28605,12 +27873,12 @@
       <include>
         <name>chair_-1_-1</name>
         <pose>
-          -1.196041572569547
-          -1.205911629329791
+          -1.236070178776928
+          -1.144725880021669
           0
           0
           0
-          1.923811607112909
+          2.48761141394513
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -28632,12 +27900,12 @@
       <include>
         <name>chair_-1_1</name>
         <pose>
-          -1.2934791237326848
-          1.2723946775137691
+          -1.1528831409972136
+          1.1678271915000458
           0
           0
           0
-          0.8136231210509579
+          0.5743252277904498
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -28660,12 +27928,12 @@
       <include>
         <name>chair_1_-1</name>
         <pose>
-          1.2180095666444246
-          -1.198503366691629
+          1.26370234988638
+          -1.2366871047606516
           0
           0
           0
-          -2.6039665655702477
+          -2.5454442825919905
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -28687,12 +27955,12 @@
       <include>
         <name>chair_1_1</name>
         <pose>
-          1.2761958446786956
-          1.1958193466525202
+          1.2871315977845879
+          1.2008207663456936
           0
           0
           0
-          -1.1342305338906158
+          -1.39177740842196
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -28769,12 +28037,12 @@
       <include>
         <name>chair_-1_-1</name>
         <pose>
-          -1.1530290583595975
-          -1.1938567041124648
+          -1.1301182590275678
+          -1.1977316566181428
           0
           0
           0
-          2.1182100842419507
+          2.8598364546593054
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -28782,12 +28050,12 @@
       <include>
         <name>computer_-1_1</name>
         <pose>
-          -1.22
-          0.45
+          -0.45
+          1.22
           0.76
           0
           0
-          3.141592653589793
+          -1.5707963267948966
         </pose>
         <uri>model://computer</uri>
       </include>
@@ -28796,12 +28064,12 @@
       <include>
         <name>chair_-1_1</name>
         <pose>
-          -1.2546091537232638
-          1.2834096160351214
+          -1.180272007562802
+          1.2197937882153316
           0
           0
           0
-          0.31254384570374205
+          0.32723710492614144
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -28824,12 +28092,12 @@
       <include>
         <name>chair_1_-1</name>
         <pose>
-          1.2873876414636396
-          -1.2829809117755504
+          1.2338696201337012
+          -1.283498385044175
           0
           0
           0
-          -2.4478302463881505
+          -2.0727315920383544
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -28851,12 +28119,12 @@
       <include>
         <name>chair_1_1</name>
         <pose>
-          1.2758794177820598
-          1.2739785219032873
+          1.1758227315216243
+          1.2213085007832964
           0
           0
           0
-          -1.3871194055125797
+          -0.6907655321174615
         </pose>
         <uri>model://office_chair</uri>
       </include>
@@ -28943,12 +28211,12 @@
   
   <include>
     <pose>
-      -1.2738592855499464
-      -1.4467284736918675
+      -1.2879079922622183
+      -1.8105337253311538
       0
       0
       0
-      2.2319698987822787
+      2.3817419948346363
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -29016,12 +28284,12 @@
   
   <include>
     <pose>
-      -0.45
       -1.22
+      -0.45
       0.76
       0
       0
-      -1.5707963267948966
+      0.0
     </pose>
     <uri>model://computer</uri>
   </include>
@@ -29029,12 +28297,12 @@
   
   <include>
     <pose>
-      -1.2464180201405866
-      -1.6453858238234949
+      -1.1361437462591255
+      -1.172723686209696
       0
       0
       0
-      2.9074474313851875
+      2.9477747475444387
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -29115,12 +28383,12 @@
   
   <include>
     <pose>
-      -1.2330039522310505
-      -1.1595879049021247
+      -1.3444240496654545
+      -1.8793373638409405
       0
       0
       0
-      2.8983032763252696
+      1.9932360104613802
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -29201,12 +28469,12 @@
   
   <include>
     <pose>
-      -1.3877818262293
-      -1.7256231158282183
+      -1.3354235860293524
+      -1.7804459102517871
       0
       0
       0
-      2.339804925726871
+      2.8951474654481073
     </pose>
     <uri>model://office_chair</uri>
   </include>
@@ -29888,12 +29156,12 @@
 
 <link name="chair_31">
   <pose>
-    0.8481763456273849
-    0.6779418796866588
+    0.8012398927637533
+    0.5452899478153691
     0
     0
     0
-    -0.6147616114803531
+    -0.1036469535277299
   </pose>
 
   
@@ -29949,12 +29217,12 @@
 
 <link name="chair_32">
   <pose>
-    0.8062812628705458
-    -0.6492193277967869
+    0.9710099926208156
+    -0.5754166786944175
     0
     0
     0
-    3.3203534415424767
+    3.009089220581045
   </pose>
 
   
@@ -30011,12 +29279,12 @@
 
 <link name="chair_33">
   <pose>
-    2.671678619992614
-    0.45072886968461384
+    2.6868478014292556
+    0.6850343109297822
     0
     0
     0
-    -0.36429094247853283
+    0.3729528725735052
   </pose>
 
   
@@ -30072,12 +29340,12 @@
 
 <link name="chair_34">
   <pose>
-    2.622010541333688
-    -0.48643010276796006
+    2.7001393865775913
+    -0.4006346606739982
     0
     0
     0
-    3.6432055455366674
+    3.330660665924195
   </pose>
 
   
@@ -30134,12 +29402,12 @@
 
 <link name="chair_35">
   <pose>
-    4.495811176491422
-    0.4886738774768987
+    4.512798800950676
+    0.6429206950675642
     0
     0
     0
-    0.14715684927762196
+    -0.11416431507799507
   </pose>
 
   
@@ -30195,12 +29463,12 @@
 
 <link name="chair_36">
   <pose>
-    4.495843456664056
-    -0.4418817433653389
+    4.568784363522668
+    -0.6750021934034581
     0
     0
     0
-    3.7292501579484307
+    3.18679240862974
   </pose>
 
   
@@ -30257,12 +29525,12 @@
 
 <link name="chair_37">
   <pose>
-    6.353921465029731
-    0.6236600398845437
+    6.23890300925438
+    0.6174245074751161
     0
     0
     0
-    0.5285777626352741
+    -0.6150643273968639
   </pose>
 
   
@@ -30318,12 +29586,12 @@
 
 <link name="chair_38">
   <pose>
-    6.271026037485263
-    -0.4811516976843751
+    6.198483685256766
+    -0.64926881673029
     0
     0
     0
-    3.019289732291583
+    3.069471155566751
   </pose>
 
   
@@ -31018,12 +30286,12 @@
 
 <link name="chair_31">
   <pose>
-    0.8115047239912336
-    0.4575188780140473
+    0.7999525569195434
+    0.513693913397774
     0
     0
     0
-    0.6521561379060632
+    -0.06614419727032317
   </pose>
 
   
@@ -31079,12 +30347,12 @@
 
 <link name="chair_32">
   <pose>
-    0.9399591614710203
-    -0.628199476519395
+    0.983963026395038
+    -0.46291509136833386
     0
     0
     0
-    3.6557572335113013
+    2.818782508411175
   </pose>
 
   
@@ -31141,12 +30409,12 @@
 
 <link name="chair_33">
   <pose>
-    2.7456230012380183
-    0.6808956637180393
+    2.6596870652356737
+    0.5148270768331309
     0
     0
     0
-    -0.37628037145682314
+    0.374216420410024
   </pose>
 
   
@@ -31202,12 +30470,12 @@
 
 <link name="chair_34">
   <pose>
-    2.701937089649944
-    -0.6587539157047473
+    2.723392198722831
+    -0.44851691079882583
     0
     0
     0
-    3.3914096404832934
+    3.836918678833552
   </pose>
 
   
@@ -31264,12 +30532,12 @@
 
 <link name="chair_35">
   <pose>
-    4.582438138938019
-    0.6142744027655499
+    4.3928784899592515
+    0.4312078499982134
     0
     0
     0
-    0.3652778631802367
+    -0.4114363072450252
   </pose>
 
   
@@ -31325,12 +30593,12 @@
 
 <link name="chair_36">
   <pose>
-    4.39330543331124
-    -0.6002392279320514
+    4.531341000805368
+    -0.5380630694878794
     0
     0
     0
-    3.763966555414911
+    3.1553586731215444
   </pose>
 
   
@@ -31387,12 +30655,12 @@
 
 <link name="chair_37">
   <pose>
-    6.311303408603672
-    0.5194454180182664
+    6.376529059043022
+    0.4774447933804551
     0
     0
     0
-    0.5994585568445354
+    0.31222066058736275
   </pose>
 
   
@@ -31448,12 +30716,12 @@
 
 <link name="chair_38">
   <pose>
-    6.220335881275194
-    -0.6946530441800761
+    6.310752133265641
+    -0.6147737402133195
     0
     0
     0
-    2.707693695373242
+    3.497902416904245
   </pose>
 
   
@@ -32148,12 +31416,12 @@
 
 <link name="chair_31">
   <pose>
-    0.785986738051994
-    0.46307029627732543
+    0.8756328704311637
+    0.6490041711892454
     0
     0
     0
-    -0.3145614966747757
+    -0.08914463089494706
   </pose>
 
   
@@ -32209,12 +31477,12 @@
 
 <link name="chair_32">
   <pose>
-    0.9275480007298531
-    -0.5735932229437741
+    0.9119127651500786
+    -0.47168053270537236
     0
     0
     0
-    2.6422628823823313
+    2.6148865750966914
   </pose>
 
   
@@ -32271,12 +31539,12 @@
 
 <link name="chair_33">
   <pose>
-    2.622504336286064
-    0.6058554305955057
+    2.7086434201236287
+    0.5170014977657851
     0
     0
     0
-    0.42723823886466805
+    0.27610605590521897
   </pose>
 
   
@@ -32332,12 +31600,12 @@
 
 <link name="chair_34">
   <pose>
-    2.5865251669466818
-    -0.6852682068417759
+    2.6948546632481687
+    -0.666390628014889
     0
     0
     0
-    3.233993190510611
+    3.643374589042968
   </pose>
 
   
@@ -32394,12 +31662,12 @@
 
 <link name="chair_35">
   <pose>
-    4.521362139634971
-    0.4819567286389649
+    4.402225331676515
+    0.4878548173449666
     0
     0
     0
-    -0.028428740406232
+    0.6264111982066314
   </pose>
 
   
@@ -32455,12 +31723,12 @@
 
 <link name="chair_36">
   <pose>
-    4.457531344480861
-    -0.44800897040617693
+    4.481412832210593
+    -0.49045375139575
     0
     0
     0
-    3.0774216300650856
+    2.627088452101557
   </pose>
 
   
@@ -32517,12 +31785,12 @@
 
 <link name="chair_37">
   <pose>
-    6.248273166737433
-    0.6721840396584832
+    6.378008308248603
+    0.698190085902948
     0
     0
     0
-    -0.615386899581468
+    -0.2914926624907534
   </pose>
 
   
@@ -32578,12 +31846,12 @@
 
 <link name="chair_38">
   <pose>
-    6.202190233782895
-    -0.4951880623489103
+    6.223027762116452
+    -0.5878210265140902
     0
     0
     0
-    3.3946227357225642
+    2.8152272333368566
   </pose>
 
   
@@ -33144,12 +32412,12 @@
 
 <link name="chair_24">
   <pose>
-    0.877475598289119
-    0.46721523413865174
+    0.9347089464328943
+    0.4704646209504162
     0
     0
     0
-    0.4962223175540543
+    -0.2817226070418197
   </pose>
 
   
@@ -33205,12 +32473,12 @@
 
 <link name="chair_25">
   <pose>
-    0.8260772888054441
-    -0.6770074400890423
+    0.9722508475363425
+    -0.5002279844471036
     0
     0
     0
-    3.546073371739104
+    2.721249365052939
   </pose>
 
   
@@ -33267,12 +32535,12 @@
 
 <link name="chair_26">
   <pose>
-    2.6935000000313973
-    0.4641235418396976
+    2.6532125814193943
+    0.559085964313373
     0
     0
     0
-    0.5880658550755729
+    0.1757943980541411
   </pose>
 
   
@@ -33328,12 +32596,12 @@
 
 <link name="chair_27">
   <pose>
-    2.6801945522982957
-    -0.5621338983660451
+    2.6768428076676796
+    -0.4872700734811638
     0
     0
     0
-    3.280163469500196
+    2.783259532140362
   </pose>
 
   
@@ -33390,12 +32658,12 @@
 
 <link name="chair_28">
   <pose>
-    4.503863756797115
-    0.5486879642339344
+    4.398679274301609
+    0.5053896238139861
     0
     0
     0
-    -0.2703700544666953
+    -0.3586541165934676
   </pose>
 
   
@@ -33451,12 +32719,12 @@
 
 <link name="chair_29">
   <pose>
-    4.492270597228244
-    -0.4225219179706527
+    4.529513670558025
+    -0.5218539389214628
     0
     0
     0
-    3.800363770802953
+    2.8623068265246645
   </pose>
 
   
@@ -34016,12 +33284,12 @@
 
 <link name="chair_24">
   <pose>
-    0.8085695509552225
-    0.6339362460080913
+    0.9769982466466981
+    0.6357862537565852
     0
     0
     0
-    0.46063185214224256
+    0.5141251855549651
   </pose>
 
   
@@ -34077,12 +33345,12 @@
 
 <link name="chair_25">
   <pose>
-    0.8410983650384688
-    -0.4656807763553353
+    0.982279343388268
+    -0.6966917470521837
     0
     0
     0
-    3.1481247906560124
+    2.7916290326012447
   </pose>
 
   
@@ -34139,12 +33407,12 @@
 
 <link name="chair_26">
   <pose>
-    2.6116897834145156
-    0.46658903374183786
+    2.686977621248122
+    0.6177873814912396
     0
     0
     0
-    0.5898645139030987
+    -0.5602044060573267
   </pose>
 
   
@@ -34200,12 +33468,12 @@
 
 <link name="chair_27">
   <pose>
-    2.7726037267396952
-    -0.4886692606915742
+    2.6407309918624247
+    -0.5587202998135997
     0
     0
     0
-    3.4130756734286147
+    3.072963436041986
   </pose>
 
   
@@ -34262,12 +33530,12 @@
 
 <link name="chair_28">
   <pose>
-    4.493310362004882
-    0.5892348312972668
+    4.551754037528622
+    0.6180534425879086
     0
     0
     0
-    0.6754546049048515
+    0.338384785246725
   </pose>
 
   
@@ -34323,12 +33591,12 @@
 
 <link name="chair_29">
   <pose>
-    4.397121845069002
-    -0.4306965064018007
+    4.412532122231132
+    -0.4849394361345504
     0
     0
     0
-    2.81109603250147
+    3.0018858043364904
   </pose>
 
   
@@ -34888,12 +34156,12 @@
 
 <link name="chair_24">
   <pose>
-    0.813687732429691
-    0.6909087494998631
+    0.9429751034137911
+    0.5115046908983486
     0
     0
     0
-    0.6149578155304067
+    -0.46761626365369835
   </pose>
 
   
@@ -34949,12 +34217,12 @@
 
 <link name="chair_25">
   <pose>
-    0.8533508258334764
-    -0.6671306175231618
+    0.858706241003466
+    -0.6366454831659217
     0
     0
     0
-    2.9712504410744334
+    3.7865351855064135
   </pose>
 
   
@@ -35011,12 +34279,12 @@
 
 <link name="chair_26">
   <pose>
-    2.660815892493539
-    0.5003728939069018
+    2.644677822625219
+    0.44748415803523756
     0
     0
     0
-    -0.3577126926120105
+    -0.0965903708745155
   </pose>
 
   
@@ -35072,12 +34340,12 @@
 
 <link name="chair_27">
   <pose>
-    2.7162961948539657
-    -0.6704521338627643
+    2.768540130092264
+    -0.6432125652314687
     0
     0
     0
-    3.254800502141559
+    3.365954948324736
   </pose>
 
   
@@ -35134,12 +34402,12 @@
 
 <link name="chair_28">
   <pose>
-    4.40537310114867
-    0.5355236465094442
+    4.432977943280407
+    0.6484191071751496
     0
     0
     0
-    0.027652394274800485
+    -0.07679509341116608
   </pose>
 
   
@@ -35195,12 +34463,12 @@
 
 <link name="chair_29">
   <pose>
-    4.443246823203564
-    -0.5632812863116692
+    4.577606256343142
+    -0.4149559421259912
     0
     0
     0
-    2.4957257808176934
+    3.4878967253710633
   </pose>
 
   
@@ -35458,7 +34726,7 @@
     0.85
     0
     0
-    0.09900302488022994
+    0.10026517766317966
   </pose>
 
   <link name='colision'>
@@ -35495,9 +34763,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35527,9 +34795,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35559,9 +34827,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35591,9 +34859,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35623,9 +34891,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35655,9 +34923,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35687,9 +34955,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35719,9 +34987,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35751,9 +35019,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35783,9 +35051,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35814,9 +35082,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35845,9 +35113,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35876,9 +35144,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35907,9 +35175,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35938,9 +35206,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -35966,7 +35234,7 @@
     0.85
     0
     0
-    0.25085186224938694
+    -0.02047606789164802
   </pose>
 
   <link name='colision'>
@@ -36474,7 +35742,7 @@
     0.85
     0
     0
-    0.0017261235350044535
+    0.44577041440641607
   </pose>
 
   <link name='colision'>
@@ -36511,9 +35779,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36543,9 +35811,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36575,9 +35843,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36607,9 +35875,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36639,9 +35907,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36671,9 +35939,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36703,9 +35971,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36735,9 +36003,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36767,9 +36035,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36799,9 +36067,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36830,9 +36098,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36861,9 +36129,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36892,9 +36160,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36923,9 +36191,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36954,9 +36222,9 @@
     1
   </specular>
   <ambient>
+  0.47
   0.36
-  0.26
-  0.13
+  0.19
     1
   </ambient>
 </material>
@@ -36982,7 +36250,7 @@
     0.85
     0
     0
-    0.2441564360516698
+    0.44691983021120596
   </pose>
 
   <link name='colision'>
@@ -37491,7 +36759,7 @@
     0.85
     0
     0
-    3.2502517010288625
+    2.790694441582822
   </pose>
 
   <link name='colision'>
@@ -37999,7 +37267,7 @@
     0.85
     0
     0
-    3.070076599713599
+    2.8986654258810036
   </pose>
 
   <link name='colision'>
@@ -38036,9 +37304,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38068,9 +37336,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38100,9 +37368,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38132,9 +37400,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38164,9 +37432,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38196,9 +37464,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38228,9 +37496,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38260,9 +37528,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38292,9 +37560,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38324,9 +37592,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38355,9 +37623,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38386,9 +37654,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38417,9 +37685,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38448,9 +37716,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38479,9 +37747,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38507,7 +37775,7 @@
     0.85
     0
     0
-    3.3458657498136124
+    3.139445163961712
   </pose>
 
   <link name='colision'>
@@ -38544,9 +37812,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38576,9 +37844,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38608,9 +37876,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38640,9 +37908,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38672,9 +37940,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38704,9 +37972,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38736,9 +38004,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38768,9 +38036,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38800,9 +38068,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38832,9 +38100,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38863,9 +38131,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38894,9 +38162,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38925,9 +38193,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38956,9 +38224,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -38987,9 +38255,9 @@
     1
   </specular>
   <ambient>
-  0.47
   0.36
-  0.19
+  0.26
+  0.13
     1
   </ambient>
 </material>
@@ -39015,7 +38283,7 @@
     0.85
     0
     0
-    2.944362848803774
+    3.253816115736705
   </pose>
 
   <link name='colision'>
@@ -39547,12 +38815,12 @@
   <include>
     <name>chair_1</name>
     <pose>
-      1.4436217464063277
-      21.690827662859792
+      1.4856411404233976
+      21.617585468078875
       0
       0
       0
-      -1.6319858564274712
+      -1.779498252210359
     </pose>
     <uri>model://hangout_chair</uri>
   </include>
@@ -39560,12 +38828,12 @@
   <include>
     <name>chair_2</name>
     <pose>
-      1.9570620796775717
-      19.991070993808755
+      2.029816561688886
+      19.948217429685002
       0
       0
       0
-      2.7430709180886943
+      2.842158255387088
     </pose>
     <uri>model://hangout_chair</uri>
   </include>
@@ -39707,12 +38975,1202 @@
 
     <!-- Trajectory actors -->
     
+      
+
+<actor name="human_97676">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    18.885065
+    15.7129
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        18.885065
+        15.7129
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        11.0484
+        15.652
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        10.0429
+        17.692699
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        7.8387
+        17.7792
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        6.33662
+        16.371099
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        6.51252
+        11.1019
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        10.4842
+        11.0926
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        12.5155
+        13.2793
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        18.30191
+        13.4166
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        18.512613
+        15.7464
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        18.568001
+        20.0874
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        20.506599
+        19.421101
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        20.538099
+        17.3319
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        19.028212
+        17.399599
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>0.9629386416112892</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_85727">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -12.4968
+    18.6143
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -12.4968
+        18.6143
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -12.4028
+        14.6816
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.1741
+        14.5956
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.16816
+        18.587
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>1.1830473116860567</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_66161">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -12.52011
+    5.16458
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -12.52011
+        5.16458
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -10.9879
+        5.74511
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -8.9867
+        5.11785
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.08475
+        5.70235
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.15453
+        9.26386
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -12.6079
+        9.35446
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>1.1620501263359815</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_71067">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    14.1699
+    1.91747
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        14.1699
+        1.91747
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        14.0976
+        4.99113
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        12.1254
+        4.95578
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        10.3737
+        3.89311
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        7.96763
+        4.71297
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        6.41362
+        5.11439
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        6.32939
+        8.46126
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        7.37067
+        9.849683
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        10.5193
+        9.81355
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        12.1611
+        8.39257
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        13.1988
+        5.55379
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        14.704
+        5.59108
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        14.846853
+        7.988438
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        16.0257
+        8.12129
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        16.195299
+        1.99335
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>1.104047092829149</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_52005">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -22.680201
+    13.8011
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -22.680201
+        13.8011
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -13.3706
+        13.7295
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -13.2745
+        10.315
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -21.4146
+        10.113
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -23.207399
+        10.4149
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -25.7551
+        10.2685
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -25.962799
+        13.9653
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>0.9316302320221292</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_22758">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -13.2745
+    10.315
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -13.2745
+        10.315
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -21.4146
+        10.113
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -23.207399
+        10.4149
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -25.7551
+        10.2685
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -25.962799
+        13.9653
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -22.680201
+        13.8011
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -13.3706
+        13.7295
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>1.1530792663336742</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_15370">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -10.9879
+    5.74511
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -10.9879
+        5.74511
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -8.9867
+        5.11785
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.08475
+        5.70235
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.15453
+        9.26386
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -12.6079
+        9.35446
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -12.52011
+        5.16458
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>1.1918487566458134</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_66665">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -25.7551
+    10.2685
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_blue_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -25.7551
+        10.2685
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -25.962799
+        13.9653
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -22.680201
+        13.8011
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -13.3706
+        13.7295
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -13.2745
+        10.315
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -21.4146
+        10.113
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -23.207399
+        10.4149
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>1.0506999626886815</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_30098">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    0.880134
+    19.172422
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        0.880134
+        19.172422
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        0.629188
+        20.632648
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -1.98216
+        21.1175
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -1.29948
+        19.322399
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -3.52062
+        17.694099
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -5.25849
+        17.376499
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -5.2171
+        4.85426
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.80757
+        2.21765
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -5.42005
+        0.928583
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -3.5244
+        0.95478
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        0.133735
+        2.10273
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        3.57247
+        2.54955
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        4.24307
+        1.33246
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        5.73804
+        0.57919
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        4.92099
+        1.79494
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        3.97233
+        2.61649
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        3.80775
+        3.75994
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        5.260433
+        3.78449
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        5.164691
+        17.968399
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        2.06448
+        18.5096
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>1.0997996711640396</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
+      
+
+<actor name="human_49213">
+
+  <!-- Starting pose, nice for when the world is reset -->
+  <pose>
+    -12.5163
+    10.117987
+    1.2138
+    1.570796
+    -0.0
+    3.141593
+  </pose>
+
+  <skin>
+    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+  </skin>
+
+  <animation name="animation">
+    <filename>model://actor/meshes/ANIMATION_walking.dae</filename>
+    <interpolate_x>true</interpolate_x>
+  </animation>
+
+  <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
+    
+      <target>
+        -12.5163
+        10.117987
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.171264
+        10.116618
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -6.2575
+        13.6915
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+      <target>
+        -12.4711
+        13.7521
+        1.2138
+        1.570796
+        -0.0
+        3.141593
+      </target>
+    
+
+    <velocity>0.9872176340998726</velocity>
+    <obstacle_margin>1.5</obstacle_margin>
+    <obstacle>servicebot</obstacle>
+
+  </plugin>
+
+  <!-- Enable collisions -->
+  
+
+</actor>
+
+    
 
     <!-- Idling actors -->
     
       
 
-<actor name="human_56948">
+<actor name="human_82384">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -39725,11 +40183,11 @@
   </pose>
 
   <skin>
-    <filename>model://actor/meshes/SKIN_man_green_shirt.dae</filename>
+    <filename>model://actor/meshes/SKIN_man_red_shirt.dae</filename>
   </skin>
 
   <animation name="animation">
-    <filename>model://actor/meshes/ANIMATION_standing.dae</filename>
+    <filename>model://actor/meshes/ANIMATION_talking_a.dae</filename>
   </animation>
 
   <!-- Need one waypoint to idle at -->
@@ -39862,16 +40320,16 @@
     
       
 
-<actor name="human_54467">
+<actor name="human_20448">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
-    16.3
+    18.6
     1.0
     0.0
     0.0
     0.0
-    -0.22373
+    -0.3
   </pose>
 
   <skin>
@@ -39888,12 +40346,12 @@
       <waypoint>
         <time>100</time>
           <pose>
-            16.3
+            18.6
             1.0
             0.0
             0.0
             0.0
-            -0.22373
+            -0.3
           </pose>
       </waypoint>
     </trajectory>
@@ -40012,7 +40470,7 @@
     
       
 
-<actor name="human_72546">
+<actor name="human_64071">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
@@ -40162,16 +40620,16 @@
     
       
 
-<actor name="human_84409">
+<actor name="human_65397">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
-    -0.46
-    20.8
+    1.9
+    20.73
     0.0
     0.0
     0.0
-    1.18
+    2.7
   </pose>
 
   <skin>
@@ -40188,12 +40646,12 @@
       <waypoint>
         <time>100</time>
           <pose>
-            -0.46
-            20.8
+            1.9
+            20.73
             0.0
             0.0
             0.0
-            1.18
+            2.7
           </pose>
       </waypoint>
     </trajectory>
@@ -40327,7 +40785,7 @@
         PrivateCubicle_31_3
       </drop_off_location>
 
-      <guest_name>human_20843</guest_name>
+      <guest_name>human_91178</guest_name>
       <robot_name>servicebot</robot_name>
       <ground_name>floor</ground_name>
       <human_name>human</human_name>
@@ -40369,7 +40827,7 @@
           <too_fast>25</too_fast>
           <failed_attempt>50</failed_attempt>
         </weight>
-        <guest_name>human_20843</guest_name>
+        <guest_name>human_91178</guest_name>
         <!-- for contain plugin -->
         <namespace>/servicesim/drop_off</namespace>
       </drop_off>
@@ -40391,6 +40849,12 @@
         />
       
         <room_info
+          name="PublicBathroomB"
+          min="9.85 3.0 0"
+          max="12.85 4.5 0"
+        />
+      
+        <room_info
           name="PublicCafe"
           min="13.7 3.0 0"
           max="16.7 6.0 0"
@@ -40403,45 +40867,21 @@
         />
       
         <room_info
-          name="PublicMeetingRoomB"
-          min="1.5 7.5 0"
-          max="4.5 10.5 0"
-        />
-      
-        <room_info
-          name="PublicMeetingRoomD"
-          min="8.9 19.5 0"
-          max="11.9 22.5 0"
-        />
-      
-        <room_info
-          name="PublicMeetingRoomE"
-          min="4.3 19.5 0"
-          max="7.300000000000001 22.5 0"
-        />
-      
-        <room_info
           name="PrivateMeetingRoomA"
           min="-4.6 4.5 0"
           max="-1.5999999999999996 7.5 0"
         />
       
         <room_info
-          name="PrivateBathroomA"
-          min="-5.25 18.0 0"
-          max="-2.25 19.5 0"
-        />
-      
-        <room_info
-          name="PrivateOfficeC"
-          min="-21.4 19.5 0"
-          max="-18.4 22.5 0"
-        />
-      
-        <room_info
           name="PrivateOfficeD"
           min="-26.0 18.0 0"
           max="-23.0 21.0 0"
+        />
+      
+        <room_info
+          name="PrivateMeetingRoomE"
+          min="-27.2 1.5 0"
+          max="-24.2 4.5 0"
         />
       
         <room_info
@@ -40829,7 +41269,7 @@
     <!-- Drop-off area contain plugin -->
     <!-- Location: PrivateCubicle_31_3 -->
     <plugin name="drop_off" filename="libContainPlugin.so">
-      <entity>human_20843</entity>
+      <entity>human_91178</entity>
       <namespace>servicesim/drop_off</namespace>
       <enabled>false</enabled>
       <pose>
@@ -40879,16 +41319,16 @@
     
 
     <!-- Guest -->
-    <actor name="human_20843">
+    <actor name="human_91178">
 
       <!-- Starting pose, nice for when the world is reset -->
       <pose>
-        0.15259622674015927
-        1.1008643595819287
+        -0.16002643689817397
+        1.5902534800655643
         1.0
         1.54
         0
-        -0.10942099674607197
+        2.108486831239765
       </pose>
 
       <skin>
@@ -40905,12 +41345,12 @@
           <waypoint>
             <time>100</time>
               <pose>
-                0.15259622674015927
-                1.1008643595819287
+                -0.16002643689817397
+                1.5902534800655643
                 1.0
                 1.54
                 0
-                -0.10942099674607197
+                2.108486831239765
               </pose>
           </waypoint>
         </trajectory>
@@ -40928,173 +41368,70 @@
         <ignore_obstacle>servicebot</ignore_obstacle>
 
         
-          <drift_time>150</drift_time>
+          <drift_time>208</drift_time>
         
-          <drift_time>214</drift_time>
+          <drift_time>304</drift_time>
         
-          <drift_time>422</drift_time>
+          <drift_time>537</drift_time>
         
-          <drift_time>707</drift_time>
+          <drift_time>552</drift_time>
         
-          <drift_time>905</drift_time>
+          <drift_time>740</drift_time>
         
-          <drift_time>1171</drift_time>
+          <drift_time>837</drift_time>
         
-          <drift_time>1188</drift_time>
+          <drift_time>890</drift_time>
         
-          <drift_time>1308</drift_time>
+          <drift_time>1060</drift_time>
         
-          <drift_time>1386</drift_time>
+          <drift_time>1295</drift_time>
         
-          <drift_time>1582</drift_time>
+          <drift_time>1544</drift_time>
         
-          <drift_time>1880</drift_time>
+          <drift_time>1702</drift_time>
         
-          <drift_time>2133</drift_time>
+          <drift_time>1746</drift_time>
         
-          <drift_time>2315</drift_time>
+          <drift_time>1874</drift_time>
         
-          <drift_time>2502</drift_time>
+          <drift_time>2089</drift_time>
         
-          <drift_time>2791</drift_time>
+          <drift_time>2347</drift_time>
         
-          <drift_time>2998</drift_time>
+          <drift_time>2554</drift_time>
         
-          <drift_time>3215</drift_time>
+          <drift_time>2596</drift_time>
         
-          <drift_time>3503</drift_time>
+          <drift_time>2810</drift_time>
         
-          <drift_time>3590</drift_time>
+          <drift_time>3073</drift_time>
+        
+          <drift_time>3316</drift_time>
+        
+          <drift_time>3574</drift_time>
         
           <drift_time>3618</drift_time>
         
-          <drift_time>3739</drift_time>
+          <drift_time>3863</drift_time>
         
-          <drift_time>3784</drift_time>
-        
-          <drift_time>3816</drift_time>
-        
-          <drift_time>3884</drift_time>
-        
-          <drift_time>3967</drift_time>
+          <drift_time>3988</drift_time>
         
           <drift_time>4163</drift_time>
         
-          <drift_time>4178</drift_time>
+          <drift_time>4369</drift_time>
         
-          <drift_time>4206</drift_time>
+          <drift_time>4427</drift_time>
         
-          <drift_time>4406</drift_time>
+          <drift_time>4568</drift_time>
         
-          <drift_time>4552</drift_time>
+          <drift_time>4864</drift_time>
+        
+          <drift_time>4996</drift_time>
         
 
       </plugin>
 
       
-<plugin name="actor_collisions_plugin" filename="libCollisionActorPlugin.so">
-  <scaling collision="LHipJoint_LeftUpLeg_collision" scale="
-    0.01
-    0.001
-    0.001
-  "/>
-  <scaling collision="LeftUpLeg_LeftLeg_collision" scale="
-    8.0
-    8.0
-    1.0
-  "/>
-  <scaling collision="LeftLeg_LeftFoot_collision" scale="
-    8.0
-    8.0
-    1.0
-  "/>
-  <scaling collision="LeftFoot_LeftToeBase_collision" scale="
-    4.0
-    4.0
-    1.5
-  "/>
-  <scaling collision="RHipJoint_RightUpLeg_collision" scale="
-    0.01
-    0.001
-    0.001
-  "/>
-  <scaling collision="RightUpLeg_RightLeg_collision" scale="
-    8.0
-    8.0
-    1.0
-  "/>
-  <scaling collision="RightLeg_RightFoot_collision" scale="
-    8.0
-    8.0
-    1.0
-  "/>
-  <scaling collision="RightFoot_RightToeBase_collision" scale="
-    4.0
-    4.0
-    1.5
-  "/>
-  <scaling collision="LowerBack_Spine_collision" scale="
-    12.0
-    20.0
-    5.0
-  " pose="0.05 0 0 0 -0.2 0"/>
-  <scaling collision="Spine_Spine1_collision" scale="
-    0.01
-    0.001
-    0.001
-  "/>
-  <scaling collision="Neck_Neck1_collision" scale="
-    0.01
-    0.001
-    0.001
-  "/>
-  <scaling collision="Neck1_Head_collision" scale="
-    5.0
-    5.0
-    3.0
-  "/>
-  <scaling collision="LeftShoulder_LeftArm_collision" scale="
-    0.01
-    0.001
-    0.001
-  "/>
-  <scaling collision="LeftArm_LeftForeArm_collision" scale="
-    5.0
-    5.0
-    1.0
-  "/>
-  <scaling collision="LeftForeArm_LeftHand_collision" scale="
-    5.0
-    5.0
-    1.0
-  "/>
-  <scaling collision="LeftFingerBase_LeftHandIndex1_collision" scale="
-    4.0
-    4.0
-    3.0
-  "/>
-  <scaling collision="RightShoulder_RightArm_collision" scale="
-    0.01
-    0.001
-    0.001
-  "/>
-  <scaling collision="RightArm_RightForeArm_collision" scale="
-    5.0
-    5.0
-    1.0
-  "/>
-  <scaling collision="RightForeArm_RightHand_collision" scale="
-    5.0
-    5.0
-    1.0
-  "/>
-  <scaling collision="RightFingerBase_RightHandIndex1_collision" scale="
-    4.0
-    4.0
-    3.0
-  "/>
-</plugin>
-
 
     </actor>
 
