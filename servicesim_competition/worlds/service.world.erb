@@ -321,14 +321,20 @@
   ]
 
   # List of trajectory actors to be inserted
-  traj_actor_count = 10
   actors_trajectory = []
+  $traj_start_poses = []
+
+  # Total number of trajectory actors
+  traj_actor_count = 10
+
   for i in (1..traj_actor_count)
+
     actors_trajectory.push(
     {
       :skin => skins.sample,
       :velocity => rand(0.9..1.2),
-      :config_file => trajectories.sample
+      :config_file => trajectories.sample,
+      :offset => rand(0..20)
     })
   end
 
@@ -344,7 +350,7 @@
     guest_skin = skins.sample
   end
 
-  guest_name = human_name + '_' + rand(10000..99999).to_s()
+  $guest_name = human_name + '_' + rand(10000..99999).to_s()
   guest_anim = animations_trajectory[0]
   drift_times = []
 
@@ -670,6 +676,12 @@
           $actor_trajectory = actor[:trajectory]
         end
 
+        # trajectory offset
+        $traj_offset = nil
+        if actor.has_key? :offset
+          $traj_offset = actor[:offset]
+        end
+
         # Set undefined values from the config file if one was given
         if actor.has_key? :config_file
           fromFile(DIR + "/" + actor[:config_file])
@@ -939,7 +951,7 @@
         <%= $drop_off_location[:name] %>
       </drop_off_location>
 
-      <guest_name><%= guest_name %></guest_name>
+      <guest_name><%= $guest_name %></guest_name>
       <robot_name><%= $robot_name %></robot_name>
       <ground_name><%= ground_name %></ground_name>
       <human_name><%= human_name %></human_name>
@@ -981,7 +993,7 @@
           <too_fast><%= weight_too_fast %></too_fast>
           <failed_attempt><%= weight_failed_drop_off %></failed_attempt>
         </weight>
-        <guest_name><%= guest_name %></guest_name>
+        <guest_name><%= $guest_name %></guest_name>
         <!-- for contain plugin -->
         <namespace>/servicesim/drop_off</namespace>
       </drop_off>
@@ -1035,7 +1047,7 @@
     <!-- Drop-off area contain plugin -->
     <!-- Location: <%= $drop_off_location[:name] %> -->
     <plugin name="drop_off" filename="libContainPlugin.so">
-      <entity><%= guest_name %></entity>
+      <entity><%= $guest_name %></entity>
       <namespace>servicesim/drop_off</namespace>
       <enabled>false</enabled>
       <pose>
@@ -1095,7 +1107,7 @@
     %>
 
     <!-- Guest -->
-    <actor name="<%= guest_name %>">
+    <actor name="<%= $guest_name %>">
 
       <!-- Starting pose, nice for when the world is reset -->
       <pose>

@@ -8,21 +8,64 @@
   # * $actor_velocity (double) Velocity for trajectory actors, in m/s
   # * $actor_trajectory (array[array[6]]) Array or waypoint poses
   # * $enable_collisions (boolean) True to enable actor collisions
+  # * $robot_name (string) Robot name
+  # * $guest_name (string) Guest name
+  # * $traj_offset (number) Offset the trajectory points
 
   # TODO: set from servicesim world
   $enable_collisions = true
+
+  # Cap given offset
+  desired_index = $traj_offset
+  while desired_index >= $actor_trajectory.length
+    desired_index -= $actor_trajectory.length
+  end
+
+  # Check that this trajectory + offset combination hasn't been used
+  index = desired_index
+  start_pose = $actor_trajectory[index]
+  while $traj_start_poses.include?(start_pose)
+
+    # If it has been used, keep getting new indices
+    index += 1
+    if index == ($actor_trajectory.length - 1)
+      index = 0
+    end
+
+    # If this trajectory is used up, fail generation
+    if index == desired_index
+      fail("Start pose " + start_pose[0].to_s + "  Index: " + index.to_s)
+    end
+
+    start_pose = $actor_trajectory[index]
+  end
+  $traj_start_poses.push(start_pose)
+
+  # Rearrange trajectory according to offset
+  traj = []
+
+  while traj.length < $actor_trajectory.length
+
+    while index >= $actor_trajectory.length
+      index -= $actor_trajectory.length
+    end
+
+    traj.push($actor_trajectory[index])
+
+    index += 1
+  end
 %>
 
 <actor name="<%= $actor_name %>">
 
   <!-- Starting pose, nice for when the world is reset -->
   <pose>
-    <%= $actor_trajectory[0][0] %>
-    <%= $actor_trajectory[0][1] %>
-    <%= $actor_trajectory[0][2] %>
-    <%= $actor_trajectory[0][3] %>
-    <%= $actor_trajectory[0][4] %>
-    <%= $actor_trajectory[0][5] %>
+    <%= traj[0][0] %>
+    <%= traj[0][1] %>
+    <%= traj[0][2] %>
+    <%= traj[0][3] %>
+    <%= traj[0][4] %>
+    <%= traj[0][5] %>
   </pose>
 
   <skin>
@@ -36,7 +79,7 @@
 
   <plugin name="trajectory" filename="libTrajectoryActorPlugin.so">
     <%
-      for pose in $actor_trajectory
+      for pose in traj
     %>
       <target>
         <%= pose[0] %>
@@ -49,11 +92,9 @@
     <% end %>
 
     <velocity><%= $actor_velocity %></velocity>
-    <obstacle_margin>0.0</obstacle_margin>
-    <ignore_obstacle>walls</ignore_obstacle>
-    <ignore_obstacle>floor</ignore_obstacle>
-    <!-- FIXME: servicebot's bounding box is huge and always colliding -->
-    <ignore_obstacle>servicebot</ignore_obstacle>
+    <obstacle_margin>0.3</obstacle_margin>
+    <obstacle><%= $robot_name %></obstacle>
+    <obstacle><%= $guest_name %></obstacle>
 
   </plugin>
 
