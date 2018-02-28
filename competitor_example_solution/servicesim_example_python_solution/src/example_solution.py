@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import copy
 import random
 from enum import Enum
 
@@ -124,8 +125,9 @@ class ExampleNode(object):
         return mid_pose
 
     def construct_goal_from_pose(self, pose):
+        posecopy = copy.deepcopy(pose)
         goal = MoveBaseGoal()
-        goal.target_pose.pose = pose
+        goal.target_pose.pose = posecopy
         goal.target_pose.pose.position.x -= 1
         goal.target_pose.header.frame_id = 'map'
         goal.target_pose.header.stamp = rospy.Time.now()
