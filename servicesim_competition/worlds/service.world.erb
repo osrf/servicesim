@@ -295,6 +295,20 @@
     "ANIMATION_running.dae"
   ]
 
+  # Trajectories
+  trajectories =
+  [
+    "trajectory_private_a.erb",
+    "trajectory_private_b.erb",
+    "trajectory_private_c.erb",
+    "trajectory_private_d.erb",
+    "trajectory_private_e.erb",
+    "trajectory_private_f.erb",
+    "trajectory_public_a.erb",
+    "trajectory_public_b.erb",
+    "trajectory_middle.erb"
+  ]
+
   # List of idle actors to be inserted
   actors_idle =
   [
@@ -307,14 +321,16 @@
   ]
 
   # List of trajectory actors to be inserted
-  # TODO: Recalculate trajectories for new world and investigate obstacle detection
-  actors_trajectory =
-  [
-    # Example randomizing skin
-    # {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
-    # Example setting velocity
-    # {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
-  ]
+  traj_actor_count = 10
+  actors_trajectory = []
+  for i in (1..traj_actor_count)
+    actors_trajectory.push(
+    {
+      :skin => skins.sample,
+      :velocity => rand(0.9..1.2),
+      :config_file => trajectories.sample
+    })
+  end
 
   ###############################################
   #                                             #
