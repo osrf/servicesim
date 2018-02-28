@@ -326,6 +326,12 @@
 
   # Total number of trajectory actors
   traj_actor_count = 10
+  if config and config.key?('humans')
+
+    if config['humans'].key?('walking_count')
+      traj_actor_count = config['humans']['walking_count']
+    end
+  end
 
   for i in (1..traj_actor_count)
 
@@ -651,6 +657,7 @@
         # unique name
         $count = $count + 1
         $actor_name = human_name + '_' + rand(10000..99999).to_s()
+        $enable_collisions = true
 
         # skin
         $actor_skin = nil

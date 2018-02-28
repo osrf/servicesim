@@ -196,7 +196,6 @@ bool TrajectoryActorPlugin::ObstacleOnTheWay() const
     // Check not only if near, but also if in front of the actor
     if (modelPos.Length() < this->dataPtr->obstacleMargin &&
         std::abs(modelActor(0, 3)) < this->dataPtr->obstacleMargin * 0.3 &&
-        std::abs(modelActor(1, 3)) < this->dataPtr->obstacleMargin * 0.3 &&
         modelActor(2, 3) > 0)
     {
       return true;
