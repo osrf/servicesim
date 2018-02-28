@@ -79,6 +79,18 @@ bool CP_PickUp::OnPickUpRosRequest(
     servicesim_competition::PickUpGuest::Request &_req,
     servicesim_competition::PickUpGuest::Response &_res)
 {
+  if (!this->Started())
+  {
+    gzmsg  << "[ServiceSim] " << this->weightFailedAttempt
+           << " penalty: pick-up attempt before reaching checkpoint"
+           << std::endl;
+
+    this->penalty += this->weightFailedAttempt;
+
+    _res.success = false;
+    return true;
+  }
+
   // Get info from ROS request
   auto guestName = _req.guest_name;
   auto robotName = _req.robot_name;
