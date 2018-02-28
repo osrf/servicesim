@@ -13,13 +13,13 @@ targets:
     pick_up: FrontElevator
 
     # Room where guest should be taken
-    drop_off: PrivateCubicle_31_3
+    drop_off: PrivateCubicle_32_1
 
     # Room where robot starts and must return to
-    robot_start: PrivateCafe
+    robot_start: PublicBathroomB
 
     # Robot start yaw direction (zero is looking at +X)
-    robot_start_yaw: 0.0
+    robot_start_yaw: 3.14
 
 # Guest
 guest:
@@ -32,13 +32,13 @@ guest:
 drift:
 
   # Minimum time in seconds between drifts
-  min_interval: 15
+  min_interval: 100
 
   # Maximum time in seconds between drifts
   max_interval: 300
 
   # No drifts before this time
-  start_time: 0
+  start_time: 200
 
   # Total number of drift times
   count: 30
