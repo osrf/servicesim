@@ -66,11 +66,14 @@ class servicesim::TrajectoryActorPluginPrivate
   /// \brief Time when the corner starts
   public: common::Time firstCornerUpdate;
 
-  /// \brief List of models to ignore when checking collisions.
-  public: std::vector<std::string> ignoreModels;
+  /// \brief List of models to avoid
+  public: std::vector<std::string> obstacles;
 
   /// \brief Animation for corners
   public: common::PoseAnimation *cornerAnimation{nullptr};
+
+  /// \brief Frequency in Hz to update
+  public: double updateFreq{60};
 };
 
 /////////////////////////////////////////////////
@@ -86,6 +89,10 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 
   this->dataPtr->connections.push_back(event::Events::ConnectWorldUpdateBegin(
       std::bind(&TrajectoryActorPlugin::OnUpdate, this, std::placeholders::_1)));
+
+  // Update frequency
+  if (_sdf->HasElement("update_frequency"))
+    this->dataPtr->updateFreq = _sdf->Get<double>("update_frequency");
 
   // Read in the velocity
   if (_sdf->HasElement("velocity"))
@@ -111,18 +118,15 @@ void TrajectoryActorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   if (_sdf->HasElement("animation_factor"))
     this->dataPtr->animationFactor = _sdf->Get<double>("animation_factor");
 
-  // Add our own name to models we should ignore when avoiding obstacles.
-  this->dataPtr->ignoreModels.push_back(this->dataPtr->actor->GetName());
-
-  // Read in the other obstacles to ignore
-  if (_sdf->HasElement("ignore_obstacle"))
+  // Read in the obstacles
+  if (_sdf->HasElement("obstacle"))
   {
-    auto ignoreElem = _sdf->GetElement("ignore_obstacle");
-    while (ignoreElem)
+    auto obstacleElem = _sdf->GetElement("obstacle");
+    while (obstacleElem)
     {
-      auto name = ignoreElem->Get<std::string>();
-      this->dataPtr->ignoreModels.push_back(name);
-      ignoreElem = ignoreElem->GetNextElement("ignore_obstacle");
+      auto name = obstacleElem->Get<std::string>();
+      this->dataPtr->obstacles.push_back(name);
+      obstacleElem = obstacleElem->GetNextElement("obstacle");
     }
   }
 
@@ -159,40 +163,49 @@ void TrajectoryActorPlugin::Reset()
 /////////////////////////////////////////////////
 bool TrajectoryActorPlugin::ObstacleOnTheWay() const
 {
-  auto actorPose = this->dataPtr->actor->WorldPose().Pos();
+  auto actorWorld = ignition::math::Matrix4d(this->dataPtr->actor->WorldPose());
   auto world = this->dataPtr->actor->GetWorld();
 
   // Iterate over all models in the world
   for (unsigned int i = 0; i < world->ModelCount(); ++i)
   {
-    // Skip models we're ignoring
+    // Skip if it's not an obstacle
+    // Fixme: automatically adding all actors to obstacles
     auto model = world->ModelByIndex(i);
-    if (std::find(this->dataPtr->ignoreModels.begin(),
-                  this->dataPtr->ignoreModels.end(), model->GetName()) !=
-                  this->dataPtr->ignoreModels.end())
+    auto act = boost::dynamic_pointer_cast<gazebo::physics::Actor>(model);
+    if (!act &&
+        std::find(this->dataPtr->obstacles.begin(),
+                  this->dataPtr->obstacles.end(), model->GetName()) ==
+                  this->dataPtr->obstacles.end())
     {
       continue;
     }
+    if (act && act == this->dataPtr->actor)
+      continue;
 
-    // Obstacle's bounding box
-    auto bb = model->BoundingBox();
+    auto modelWorld = ignition::math::Matrix4d(model->WorldPose());
 
-    // Increase box by margin
-    bb.Min() -= ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
-    bb.Max() += ignition::math::Vector3d::One * this->dataPtr->obstacleMargin;
+    // Model in actor's frame
+    auto modelActor = actorWorld.Inverse() * modelWorld;
 
-    // Increase vertically
-    bb.Min().Z() -= 5;
-    bb.Max().Z() += 5;
+    auto modelPos = ignition::math::Vector3d(
+        modelActor(0, 3),
+        modelActor(1, 3),
+        modelActor(2, 3));
 
-    // Check
-    if (bb.Contains(actorPose))
+    // Check not only if near, but also if in front of the actor
+    if (modelPos.Length() < this->dataPtr->obstacleMargin &&
+        std::abs(modelActor(0, 3)) < this->dataPtr->obstacleMargin * 0.3 &&
+        modelActor(2, 3) > 0)
     {
       return true;
     }
 
     // TODO: Improve obstacle avoidance. Some ideas: check contacts, ray-query
     // the path forward, check against bounding box of each collision shape...
+
+    // Note: Used to check against model bounding box, but that was unreliable
+    // for URDF and actors (our 2 use cases :))
   }
   return false;
 }
@@ -227,6 +240,9 @@ void TrajectoryActorPlugin::OnUpdate(const common::UpdateInfo &_info)
 {
   // Time delta
   double dt = (_info.simTime - this->dataPtr->lastUpdate).Double();
+
+  if (dt < 1/this->dataPtr->updateFreq)
+    return;
 
   this->dataPtr->lastUpdate = _info.simTime;
 

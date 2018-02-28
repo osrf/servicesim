@@ -92,8 +92,15 @@ if $DOWNLOAD; then
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/room.erb
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/service.world.erb
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/spawn_urdf.launch.erb
-  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_back.erb
-  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_front.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_middle.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_private_a.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_private_b.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_private_c.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_private_d.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_private_e.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_private_f.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_public_a.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/trajectory_public_b.erb
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/walls.erb
 
   echo -e "\e[92m... finished downloading\e[39m"

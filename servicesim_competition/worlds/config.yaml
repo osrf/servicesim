@@ -10,13 +10,13 @@
 targets:
 
     # Room where robot starts and must return to
-    robot_start: PrivateCafe
+    robot_start: PublicBathroomB
 
     # Room where guest starts
     pick_up: FrontElevator
 
     # Room where guest should be taken
-    drop_off: PrivateCubicle_31_3
+    drop_off: PrivateCubicle_32_1
 
 # Guest
 guest:
@@ -35,11 +35,12 @@ drift:
   max_interval: 300
 
   # No drifts before this time
-  start_time: 0
+  start_time: 200
 
   # Total number of drift times
   count: 30
 
+# Scoring
 scoring:
 
   # Penalties when the robot is actually touching the human/object
@@ -76,3 +77,10 @@ scoring:
 
   # Robot has gone too fast
   weight_too_fast: 25
+
+# Non-guest humans
+humans:
+
+  # Number of walking humans
+  walking_count: 10
+
