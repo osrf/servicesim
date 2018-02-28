@@ -1,7 +1,4 @@
-# Request empty for now, these could be useful information to manage
-# multi-robot situations but are not relevant right now
-# string robot_name
-# geometry_msgs/Pose robot_current_pose
+# Request empty for now
 ---
 # Name of room to pick-up guest
 string pick_up_location
@@ -9,5 +6,8 @@ string pick_up_location
 # Name of room to drop-off guest
 string drop_off_location
 
-# Placeholder: this will be changed to RFID
+# Guest name, which matches their RFID tag
 string guest_name
+
+# Robot start pose
+geometry_msgs/Pose robot_start_pose

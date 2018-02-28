@@ -3,7 +3,6 @@
   #
   # Requires:
   # $start_location {} Contains information about start location
-  # $robot_start_yaw (number) Robot's start yaw
 %>
 <!--
   Generated from spawn_urdf.launch.erb
@@ -15,8 +14,10 @@
     -model servicebot
     -x <%= $start_location[:pivot][0] %>
     -y <%= $start_location[:pivot][1] %>
-    -z 0.75
-    -Y <%= $robot_start_yaw %>"
+    -z <%= $start_location[:pivot][2] %>
+    -R <%= $start_location[:pivot][3] %>
+    -P <%= $start_location[:pivot][4] %>
+    -Y <%= $start_location[:pivot][5] %>"
   />
 </launch>
 
