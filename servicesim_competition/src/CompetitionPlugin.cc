@@ -16,6 +16,7 @@
 */
 
 #include <gazebo/common/Console.hh>
+#include <gazebo/physics/PhysicsEngine.hh>
 #include <gazebo/physics/World.hh>
 
 #include <ros/ros.h>
@@ -86,9 +87,17 @@ CompetitionPlugin::CompetitionPlugin() : WorldPlugin(),
 }
 
 /////////////////////////////////////////////////
-void CompetitionPlugin::Load(gazebo::physics::WorldPtr /*_world*/,
+void CompetitionPlugin::Load(gazebo::physics::WorldPtr _world,
     sdf::ElementPtr _sdf)
 {
+  // Set solver tolerance
+  if (_sdf->HasElement("sor_lcp_tolerance"))
+  {
+    double sorLcpTolerance = _sdf->Get<double>("sor_lcp_tolerance");
+    auto physics = _world->Physics();
+    physics->SetParam("sor_lcp_tolerance", sorLcpTolerance);
+  }
+
   // Load general competition parameters
   if (_sdf->HasElement("score_frequency"))
     this->dataPtr->scoreFreq = _sdf->Get<double>("score_frequency");

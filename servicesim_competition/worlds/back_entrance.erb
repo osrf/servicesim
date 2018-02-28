@@ -5,12 +5,11 @@
   # * $pi (number)
   # * $o (number)
   # * $g (number)
-  # * $drop_areas ([]) Dictionary with drop area info
+  # * $target_areas ([]) Dictionary with target area info
 
-  $drop_areas.push({:name => 'BackEntrance',
-                    :min => [-2*$o, 11*$o, 0],
-                    :max => [2*$o - $g, 15*$o, 0],
-                    :pivot => [rand(-1.77..-0.89), rand(19.0..20.42), 0]})
+  $target_areas.push({:name => 'BackEntrance',
+                    :min => [-2*$o, 12.2*$o, 0],
+                    :max => [1*$o, 14.2*$o, 0]})
 %>
 
 <model name="BackEntrance">
@@ -38,19 +37,6 @@
       0
       0
       <%= 2.6 + rand(-0.3..0.3) %>
-    </pose>
-    <uri>model://hangout_chair</uri>
-  </include>
-
-  <include>
-    <name>chair_3</name>
-    <pose>
-      <%= 0.51 + rand(-0.1..0.1) %>
-      <%= 20.38 + rand(-0.1..0.1) %>
-      0
-      0
-      0
-      <%= 0.31 + rand(-0.3..0.3) %>
     </pose>
     <uri>model://hangout_chair</uri>
   </include>
