@@ -1,0 +1,109 @@
+<%
+  # Generate idling humans
+  #
+  # Required variables
+  # * $human_name (string)
+  # * $idle_human_count (number)
+
+  # Human model names
+  types =
+  [
+    'casual_female',
+    'casual_male',
+    'casual_male2',
+    'elegant_female',
+    'elegant_female2',
+    'elegant_male',
+  ]
+
+  # Areas
+  $idling_areas =
+  [
+    {:min => [-3.97, 0.26], :max => [-2.12, 0.40], :yaw => $pi},
+    {:min => [-3.16, 3.32], :max => [-2.52, 3.88], :yaw => 0.0},
+    {:min => [-0.39, 17.0], :max => [0.26, 17.61], :yaw => $pi},
+    {:min => [1.69, 20.54], :max => [2.31, 20.96], :yaw => -$pi*0.5},
+    {:min => [19.82, 14.23], :max => [20.49, 15.84], :yaw => -$pi*0.5},
+    {:min => [17.11, 7.15], :max => [18.98, 7.86], :yaw => -$pi*0.25},
+    {:min => [17.5, 4.07], :max => [18.73, 4.70], :yaw => 0.0},
+    {:min => [16.81, 1.11], :max => [20.42, 1.74], :yaw => 0.0},
+    {:min => [5.55, 2.48], :max => [5.92, 2.88], :yaw => 0.0},
+    {:min => [1.82, 0.29], :max => [2.35, 1.62], :yaw => -$pi*0.5},
+    {:min => [-26.2, 5.01], :max => [-25.74, 6.85], :yaw => $pi*0.5},
+    {:min => [-26.6, 11.17], :max => [-26.4, 14.49], :yaw => -$pi*0.5},
+    {:min => [-25.3, 15.28], :max => [-25.1, 15.56], :yaw => $pi},
+    {:min => [-27.24, 17.31], :max => [-27.26, 19.59], :yaw => $pi*0.5},
+    {:min => [-2.56, 21.54], :max => [-1.68, 22.16], :yaw => 0},
+    {:min => [5.98, 18.18], :max => [8.7, 19.2], :yaw => 0},
+    {:min => [10.63, 18.36], :max => [11.45, 19.14], :yaw => -$pi*0.25},
+    {:min => [12.57, 16.88], :max => [16.95, 17.64], :yaw => $pi},
+    {:min => [12.46, 21.22], :max => [17.82, 22.25], :yaw => 0},
+  ]
+
+  used_poses = []
+  tolerance = 1.0
+  for i in (1..$idle_human_count)
+
+    name = $human_name + '_' + rand(10000..99999).to_s()
+    type = types.sample()
+
+    pose = Vector[]
+    loop do
+      area = $idling_areas.sample()
+
+      pose = Vector[
+        area[:min][0] + (area[:max][0] - area[:min][0]) * rand(0.0..1.0),
+        area[:min][1] + (area[:max][1] - area[:min][1]) * rand(0.0..1.0),
+        0,
+        0,
+        0,
+        area[:yaw] + rand(-0.5..0.5),
+      ]
+
+      used = false
+      for used_pose in used_poses
+        if (pose - used_pose).magnitude() < tolerance
+          used = true
+          break
+        end
+      end
+
+      break if not used
+    end
+
+    # Store pose so we don't repeat it
+    used_poses.push(pose)
+%>
+
+<actor name="<%= name %>">
+  <pose>
+    <%= pose[0] %>
+    <%= pose[1] %>
+    <%= pose[2] %>
+    <%= pose[3] %>
+    <%= pose[4] %>
+    <%= pose[5] %>
+  </pose>
+
+  <link name="link">
+    <collision name="box">
+      <pose>0 0 0.9 0 0 0</pose>
+      <geometry>
+        <box>
+          <size>0.76 0.33 1.77</size>
+        </box>
+      </geometry>
+    </collision>
+    <visual name="visual">
+      <pose>0 0 0.02 0.04 0 0</pose>
+      <geometry>
+        <mesh>
+          <uri>model://<%= type %>/meshes/<%= type %>.dae</uri>
+        </mesh>
+      </geometry>
+    </visual>
+  </link>
+
+</actor>
+
+<% end %>

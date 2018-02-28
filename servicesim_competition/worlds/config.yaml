@@ -9,14 +9,17 @@
 # https://bitbucket.org/osrf/servicesim/wiki/Room%20names
 targets:
 
-    # Room where robot starts and must return to
-    robot_start: PublicBathroomB
-
     # Room where guest starts
     pick_up: FrontElevator
 
     # Room where guest should be taken
     drop_off: PrivateCubicle_32_1
+
+    # Room where robot starts and must return to
+    robot_start: PublicBathroomB
+
+    # Robot start yaw direction (zero is looking at +X)
+    robot_start_yaw: 3.14
 
 # Guest
 guest:
@@ -29,13 +32,13 @@ guest:
 drift:
 
   # Minimum time in seconds between drifts
-  min_interval: 200
+  min_interval: 100
 
   # Maximum time in seconds between drifts
   max_interval: 300
 
   # No drifts before this time
-  start_time: 0
+  start_time: 200
 
   # Total number of drift times
   count: 30
@@ -83,4 +86,7 @@ humans:
 
   # Number of walking humans
   walking_count: 10
+
+  # Number of static idling humans
+  idling_count: 30
 

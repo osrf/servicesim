@@ -265,7 +265,7 @@
   ###############################################
 
   # Prefix for all human names (guest and non-guest)
-  human_name = 'human'
+  $human_name = 'human'
 
   # Skin files under model://actor/meshes
   skins =
@@ -306,18 +306,22 @@
     "trajectory_private_f.erb",
     "trajectory_public_a.erb",
     "trajectory_public_b.erb",
+    "trajectory_middle.erb",
+    "trajectory_public_a.erb",
+    "trajectory_public_b.erb",
     "trajectory_middle.erb"
   ]
 
   # List of idle actors to be inserted
+  # Using static humans instead of idle actors for performance
   actors_idle =
   [
     # Example randomizing skin and animation
-    {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
+    # {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
     # Example using skin and animation from config
-    {:config_file => 'idle_near_fridge.erb'},
-    {:config_file => 'idle_sitting_couch.erb'},
-    {:config_file => 'idle_back.erb'}
+    # {:config_file => 'idle_near_fridge.erb'},
+    # {:config_file => 'idle_sitting_couch.erb'},
+    # {:config_file => 'idle_back.erb'}
   ]
 
   # List of trajectory actors to be inserted
@@ -356,7 +360,7 @@
     guest_skin = skins.sample
   end
 
-  $guest_name = human_name + '_' + rand(10000..99999).to_s()
+  $guest_name = $human_name + '_' + rand(10000..99999).to_s()
   guest_anim = animations_trajectory[0]
   drift_times = []
 
@@ -649,7 +653,7 @@
 
         # unique name
         $count = $count + 1
-        $actor_name = human_name + '_' + rand(10000..99999).to_s()
+        $actor_name = $human_name + '_' + rand(10000..99999).to_s()
 
         # TODO: collisions for actors with custom trajectories are collapsed in the world origin
         $enable_collisions = false
@@ -698,7 +702,7 @@
 
         # unique name
         $count = $count + 1
-        $actor_name = human_name + '_' + rand(10000..99999).to_s()
+        $actor_name = $human_name + '_' + rand(10000..99999).to_s()
 
         # skin
         $actor_skin = nil
@@ -725,6 +729,18 @@
     %>
       <%= fromFile(DIR + "/actor_idle.erb") %>
     <% end %>
+
+    <%
+      # Idling static humans
+      $idle_human_count = 10
+      if config and config.key?('humans')
+
+        if config['humans'].key?('idling_count')
+          $idle_human_count = config['humans']['idling_count']
+        end
+      end
+    %>
+    <%= fromFile(DIR + "/idling_humans.erb") %>
 
 <%
   ###############################################
@@ -840,6 +856,13 @@
   center_x = location[:min][0] + size_x * 0.5
   center_y = location[:min][1] + size_y * 0.5
 
+  robot_start_yaw = rand(-$pi..$pi)
+  if config and config.key?('targets')
+    if config['targets'].key?('robot_start_yaw')
+      robot_start_yaw = config['targets']['robot_start_yaw']
+    end
+  end
+
   $start_location =
   {
     :name => location[:name],
@@ -852,7 +875,7 @@
       0.75,
       0.0,
       0.0,
-      rand(-$pi..$pi)
+      robot_start_yaw
     ]
   }
 %>
@@ -973,7 +996,7 @@
       <guest_name><%= $guest_name %></guest_name>
       <robot_name><%= $robot_name %></robot_name>
       <ground_name><%= ground_name %></ground_name>
-      <human_name><%= human_name %></human_name>
+      <human_name><%= $human_name %></human_name>
 
       <weight>
         <!-- Contact and approximation weights are multiplied by contact depth -->
