@@ -14,17 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import random
 from enum import Enum
 
 import actionlib
 
 from actionlib_msgs.msg import GoalStatus
 
-from geometry_msgs.msg import Point, Pose, Quaternion
+from geometry_msgs.msg import Point, Pose, PoseWithCovarianceStamped, Quaternion
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-
-import random
 
 import rospy
 
@@ -33,10 +32,6 @@ from sensor_msgs.msg import Image
 from servicesim_competition.msg import ActorNames
 from servicesim_competition.srv import DropOffGuest, DropOffGuestRequest, NewTask
 from servicesim_competition.srv import PickUpGuest, PickUpGuestRequest, RoomInfo, RoomInfoRequest
-
-import tf
-
-import tf2_ros
 
 
 class CompetitionState(Enum):
@@ -75,6 +70,8 @@ class ExampleNode(object):
         rospy.Subscriber('/servicebot/camera_front/image_raw', Image, self.image_callback)
         rospy.loginfo('done creating subs')
 
+        self.initial_pose_pub = rospy.Publisher(
+            '/servicebot/initialpose', PoseWithCovarianceStamped, latch=True)
         # create action client
         self.move_base = actionlib.SimpleActionClient('/servicebot/move_base', MoveBaseAction)
         self.move_base.wait_for_server(rospy.Duration(self.action_timeout))
@@ -93,7 +90,8 @@ class ExampleNode(object):
     def request_new_task(self):
         resp = self.new_task_srv()
         rospy.loginfo(resp)
-        return [resp.pick_up_location, resp.drop_off_location, resp.guest_name]
+        return [
+            resp.pick_up_location, resp.drop_off_location, resp.guest_name, resp.robot_start_pose]
 
     def request_follow(self):
         req = PickUpGuestRequest()
@@ -139,33 +137,6 @@ class ExampleNode(object):
         return goal
 
     def example_solution(self):
-        # TODO(mikaelarguedas) get the transform to base_footprint instead once
-        # https://bitbucket.org/osrf/servicesim/pull-requests/65 is merged
-        # get the robot starting position by getting the transform from map to base_link
-
-        # Figure out how to do the same in pure tf2
-        # tf_buffer = tf2_ros.Buffer()
-        # tflistener = tf2_ros.TransformListener(tf_buffer)
-        tflistener = tf.TransformListener()
-        while True:
-            now = rospy.Time.now()
-            rospy.loginfo('waiting for transform transform')
-            try:
-                tflistener.waitForTransform('/map', '/base_link', now, rospy.Duration(1.0))
-                (trans, rot) = tflistener.lookupTransform(
-                    'map', 'base_link', now)
-                # (trans, rot) = tf_buffer.lookup_transform(
-                #     'map', 'base_link', now, rospy.Duration(1.0))
-                self.start_pose = Pose(trans, rot)
-                rospy.loginfo(self.start_pose)
-                break
-            except tf2_ros.TransformException as e:
-                rospy.loginfo(e.message)
-                pass
-        self.start_pose = Pose(Point(
-                12.852, 4.359, 0),
-                Quaternion(0, 0, 0, 1))
-        rospy.loginfo('done waiting for transform')
         state = CompetitionState.BeginTask
 
         rate = rospy.Rate(1)
@@ -173,16 +144,19 @@ class ExampleNode(object):
         while not rospy.is_shutdown():
             if state == CompetitionState.BeginTask:
                 rospy.loginfo('In BeginTask state')
-                [pick_up_room, drop_off_room, self.guest_name] = self.request_new_task()
+                [pick_up_room, drop_off_room, self.guest_name, self.start_pose] = \
+                    self.request_new_task()
+                self.start_pose.position.z = 0
+                init_pose_msg = PoseWithCovarianceStamped()
+                init_pose_msg.header.frame_id = 'map'
+                init_pose_msg.pose.pose = self.start_pose
+                self.initial_pose_pub.publish(init_pose_msg)
+                rospy.loginfo('published initial pose')
+                rate.sleep()
                 state = CompetitionState.Pickup
 
             elif state == CompetitionState.Pickup:
                 rospy.loginfo('In Pickup state')
-                # pickupgoal = MoveBaseGoal()
-                # rospy.loginfo(self.pose_from_room_name(pick_up_room))
-                # pickupgoal.target_pose.pose = self.pose_from_room_name(pick_up_room)
-                # pickupgoal.target_pose.header.frame_id = 'map'
-                # pickupgoal.target_pose.header.stamp = rospy.Time.now()
                 pickup_goal = self.construct_goal_from_pose(self.pose_from_room_name(pick_up_room))
                 self.move_base.send_goal(pickup_goal)
                 rospy.loginfo('sent goal')
@@ -203,15 +177,11 @@ class ExampleNode(object):
                         rospy.logwarn('robot reached pickup point but guest is not in range!')
                 else:
                     rospy.logwarn('action failed!')
-                    
+
             elif state == CompetitionState.DropOff:
                 rospy.loginfo('In DropOff state')
                 dropoff_goal = self.construct_goal_from_pose(
                     self.pose_from_room_name(drop_off_room))
-                # dropoff_goal = MoveBaseGoal()
-                # dropoff_goal.target_pose.pose = self.pose_from_room_name(drop_off_room)
-                # dropoff_goal.target_pose.header.frame_id = 'map'
-                # dropoff_goal.target_pose.header.stamp = rospy.Time.now()
                 self.move_base.send_goal(dropoff_goal)
                 self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
                 if self.move_base.get_state() == GoalStatus.SUCCEEDED:
@@ -223,10 +193,6 @@ class ExampleNode(object):
             elif state == CompetitionState.ReturnToStart:
                 rospy.loginfo('In ReturnToStart state')
                 startgoal = self.construct_goal_from_pose(self.start_pose)
-                # startgoal = MoveBaseGoal()
-                # startgoal.target_pose.pose = self.start_pose
-                # startgoal.target_pose.header.frame_id = 'map'
-                # startgoal.target_pose.header.stamp = rospy.Time.now()
                 self.move_base.send_goal(startgoal)
                 self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
                 if self.move_base.get_state() == GoalStatus.SUCCEEDED:
