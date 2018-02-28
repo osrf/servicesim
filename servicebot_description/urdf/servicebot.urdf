@@ -3,6 +3,19 @@
 
   <!-- Note: this doesnt follow REP 120 as this robot, while having a humanoid shape, will behave like a mobile base -->
 
+  <link name="base_footprint">
+  </link>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent
+      link="base_footprint"
+    />
+    <child
+      link="base_link"
+    />
+    <origin rpy="0 0 0" xyz="0 0 0.749"/>
+  </joint>
+
   <!-- setting the base_link as the center of mass of the torso -->
   <link name="base_link">
     <visual>
@@ -768,13 +781,14 @@
       <publishWheelTF>true</publishWheelTF>
       <leftJoint>left_wheel_joint</leftJoint>
       <rightJoint>right_wheel_joint</rightJoint>
-      <robotBaseFrame>base_link</robotBaseFrame>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
       <wheelSeparation>0.25</wheelSeparation>
       <wheelDiameter>0.206</wheelDiameter>
       <!--wheelAcceleration>0.3</wheelAcceleration-->
       <publishWheelJointState>true</publishWheelJointState>
       <odometryTopic>/servicebot/odom</odometryTopic>
       <commandTopic>/servicebot/cmd_vel</commandTopic>
+      <odometrySource>encoder</odometrySource>
     </plugin>
   </gazebo>
 
