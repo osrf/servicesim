@@ -24,6 +24,8 @@ from geometry_msgs.msg import Point, Pose, Quaternion
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
+import random
+
 import rospy
 
 from sensor_msgs.msg import Image
@@ -48,7 +50,7 @@ class ExampleNode(object):
     def __init__(self):
         self.robot_name = 'servicebot'
         self.guest_name = ''
-        self.action_timeout = 60
+        self.action_timeout = 10
         self.actors_in_range = []
 
         rospy.init_node('example_solution')
@@ -119,14 +121,21 @@ class ExampleNode(object):
         mid_pose = Pose(
             Point(
                 (resp.min.x + resp.max.x) / 2., (resp.min.y + resp.max.y) / 2., 0),
-            Quaternion(0, 0, 0, 1.0))
+            Quaternion(0, 0, 1.0, 0.0))
         return mid_pose
 
     def construct_goal_from_pose(self, pose):
         goal = MoveBaseGoal()
         goal.target_pose.pose = pose
+        goal.target_pose.pose.position.x -= 1
         goal.target_pose.header.frame_id = 'map'
         goal.target_pose.header.stamp = rospy.Time.now()
+
+        # add randomness (square of 10cm) around the goal
+        dx = random.randrange(0, 20, 1) - 10
+        dy = random.randrange(0, 20, 1) - 10
+        goal.target_pose.pose.position.x += dx / 100.
+        goal.target_pose.pose.position.y += dy / 100.
         return goal
 
     def example_solution(self):
@@ -148,10 +157,14 @@ class ExampleNode(object):
                 # (trans, rot) = tf_buffer.lookup_transform(
                 #     'map', 'base_link', now, rospy.Duration(1.0))
                 self.start_pose = Pose(trans, rot)
+                rospy.loginfo(self.start_pose)
                 break
             except tf2_ros.TransformException as e:
                 rospy.loginfo(e.message)
                 pass
+        self.start_pose = Pose(Point(
+                12.852, 4.359, 0),
+                Quaternion(0, 0, 0, 1))
         rospy.loginfo('done waiting for transform')
         state = CompetitionState.BeginTask
 
@@ -190,6 +203,7 @@ class ExampleNode(object):
                         rospy.logwarn('robot reached pickup point but guest is not in range!')
                 else:
                     rospy.logwarn('action failed!')
+                    
             elif state == CompetitionState.DropOff:
                 rospy.loginfo('In DropOff state')
                 dropoff_goal = self.construct_goal_from_pose(
