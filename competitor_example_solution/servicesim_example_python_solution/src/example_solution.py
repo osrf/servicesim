@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import random
 from enum import Enum
 
 import actionlib
@@ -23,8 +24,6 @@ from actionlib_msgs.msg import GoalStatus
 from geometry_msgs.msg import Point, Pose, PoseWithCovarianceStamped, Quaternion
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
-
-import random
 
 import rospy
 
@@ -71,7 +70,8 @@ class ExampleNode(object):
         rospy.Subscriber('/servicebot/camera_front/image_raw', Image, self.image_callback)
         rospy.loginfo('done creating subs')
 
-        self.initial_pose_pub = rospy.Publisher('/servicebot/initialpose', PoseWithCovarianceStamped)
+        self.initial_pose_pub = rospy.Publisher(
+            '/servicebot/initialpose', PoseWithCovarianceStamped, latch=True)
         # create action client
         self.move_base = actionlib.SimpleActionClient('/servicebot/move_base', MoveBaseAction)
         self.move_base.wait_for_server(rospy.Duration(self.action_timeout))
@@ -152,6 +152,7 @@ class ExampleNode(object):
                 init_pose_msg.pose.pose = self.start_pose
                 self.initial_pose_pub.publish(init_pose_msg)
                 rospy.loginfo('published initial pose')
+                rate.sleep()
                 state = CompetitionState.Pickup
 
             elif state == CompetitionState.Pickup:
@@ -176,7 +177,7 @@ class ExampleNode(object):
                         rospy.logwarn('robot reached pickup point but guest is not in range!')
                 else:
                     rospy.logwarn('action failed!')
-                    
+
             elif state == CompetitionState.DropOff:
                 rospy.loginfo('In DropOff state')
                 dropoff_goal = self.construct_goal_from_pose(
