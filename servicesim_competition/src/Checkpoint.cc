@@ -154,6 +154,12 @@ bool Checkpoint::Paused() const
 }
 
 /////////////////////////////////////////////////
+bool Checkpoint::Started() const
+{
+  return !this->intervals.empty();
+}
+
+/////////////////////////////////////////////////
 std::string Checkpoint::Name() const
 {
   return this->name;

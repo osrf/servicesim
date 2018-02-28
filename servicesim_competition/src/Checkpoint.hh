@@ -46,6 +46,10 @@ namespace servicesim
     /// \return True if it should pause.
     public: bool Paused() const;
 
+    /// \brief Check whether the checkpoint has started at least once
+    /// \return True if it has started.
+    public: bool Started() const;
+
     /// \brief Call this the first time the checkpoint is checked.
     public: void Start();
 
