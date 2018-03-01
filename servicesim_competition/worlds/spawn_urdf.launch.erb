@@ -14,8 +14,10 @@
     -model servicebot
     -x <%= $start_location[:pivot][0] %>
     -y <%= $start_location[:pivot][1] %>
-    -z 0.75
-    -Y <%= rand(-$pi..$pi) %>"
+    -z <%= $start_location[:pivot][2] %>
+    -R <%= $start_location[:pivot][3] %>
+    -P <%= $start_location[:pivot][4] %>
+    -Y <%= $start_location[:pivot][5] %>"
   />
 </launch>
 

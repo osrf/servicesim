@@ -126,7 +126,7 @@
     if not open
       return 0.0
     else
-      return rand($pi*0.7..$pi)
+      return rand($pi*0.8..$pi)
     end
   end
 
@@ -256,7 +256,7 @@
   end
 
   # Array is filled as rooms are created
-  $drop_areas = []
+  $target_areas = []
 
   ###############################################
   #                                             #
@@ -265,7 +265,7 @@
   ###############################################
 
   # Prefix for all human names (guest and non-guest)
-  human_name = 'human'
+  $human_name = 'human'
 
   # Skin files under model://actor/meshes
   skins =
@@ -295,26 +295,58 @@
     "ANIMATION_running.dae"
   ]
 
+  # Trajectories
+  trajectories =
+  [
+    "trajectory_private_a.erb",
+    "trajectory_private_b.erb",
+    "trajectory_private_c.erb",
+    "trajectory_private_d.erb",
+    "trajectory_private_e.erb",
+    "trajectory_private_f.erb",
+    "trajectory_public_a.erb",
+    "trajectory_public_b.erb",
+    "trajectory_middle.erb",
+    "trajectory_public_a.erb",
+    "trajectory_public_b.erb",
+    "trajectory_middle.erb"
+  ]
+
   # List of idle actors to be inserted
+  # Using static humans instead of idle actors for performance
   actors_idle =
   [
     # Example randomizing skin and animation
-    {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
+    # {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
     # Example using skin and animation from config
-    {:config_file => 'idle_near_fridge.erb'},
-    {:config_file => 'idle_sitting_couch.erb'},
-    {:config_file => 'idle_back.erb'}
+    # {:config_file => 'idle_near_fridge.erb'},
+    # {:config_file => 'idle_sitting_couch.erb'},
+    # {:config_file => 'idle_back.erb'}
   ]
 
   # List of trajectory actors to be inserted
-  # TODO: Recalculate trajectories for new world and investigate obstacle detection
-  actors_trajectory =
-  [
-    # Example randomizing skin
-    # {:skin => skins.sample, :config_file => 'trajectory_front.erb'},
-    # Example setting velocity
-    # {:velocity => rand(0.9..1.2), :config_file => 'trajectory_back.erb'},
-  ]
+  actors_trajectory = []
+  $traj_start_poses = []
+
+  # Total number of trajectory actors
+  traj_actor_count = 10
+  if config and config.key?('humans')
+
+    if config['humans'].key?('walking_count')
+      traj_actor_count = config['humans']['walking_count']
+    end
+  end
+
+  for i in (1..traj_actor_count)
+
+    actors_trajectory.push(
+    {
+      :skin => skins.sample,
+      :velocity => rand(0.9..1.2),
+      :config_file => trajectories.sample,
+      :offset => rand(0..20)
+    })
+  end
 
   ###############################################
   #                                             #
@@ -328,7 +360,7 @@
     guest_skin = skins.sample
   end
 
-  guest_name = human_name + '_' + rand(10000..99999).to_s()
+  $guest_name = $human_name + '_' + rand(10000..99999).to_s()
   guest_anim = animations_trajectory[0]
   drift_times = []
 
@@ -411,13 +443,6 @@
 <%
   end # if not $floorplan
 %>
-
-    <!-- GUI -->
-    <gui fullscreen='0'>
-      <camera name='user_camera'>
-        <pose>-3.664 1 1.94 0 0.31 0.177</pose>
-      </camera>
-    </gui>
 
     <!-- Scene -->
     <scene>
@@ -573,7 +598,7 @@
       for x in (s..e).step(1.9)
         $count += 1
         $cubicle_name = 'PublicCubicle_' + $count.to_s()
-        $dropable = true
+        $targetable = true
         $pose =
         [
           x - 1 * $g,
@@ -628,7 +653,10 @@
 
         # unique name
         $count = $count + 1
-        $actor_name = human_name + '_' + rand(10000..99999).to_s()
+        $actor_name = $human_name + '_' + rand(10000..99999).to_s()
+
+        # TODO: collisions for actors with custom trajectories are collapsed in the world origin
+        $enable_collisions = false
 
         # skin
         $actor_skin = nil
@@ -654,6 +682,12 @@
           $actor_trajectory = actor[:trajectory]
         end
 
+        # trajectory offset
+        $traj_offset = nil
+        if actor.has_key? :offset
+          $traj_offset = actor[:offset]
+        end
+
         # Set undefined values from the config file if one was given
         if actor.has_key? :config_file
           fromFile(DIR + "/" + actor[:config_file])
@@ -668,7 +702,7 @@
 
         # unique name
         $count = $count + 1
-        $actor_name = human_name + '_' + rand(10000..99999).to_s()
+        $actor_name = $human_name + '_' + rand(10000..99999).to_s()
 
         # skin
         $actor_skin = nil
@@ -696,6 +730,18 @@
       <%= fromFile(DIR + "/actor_idle.erb") %>
     <% end %>
 
+    <%
+      # Idling static humans
+      $idle_human_count = 10
+      if config and config.key?('humans')
+
+        if config['humans'].key?('idling_count')
+          $idle_human_count = config['humans']['idling_count']
+        end
+      end
+    %>
+    <%= fromFile(DIR + "/idling_humans.erb") %>
+
 <%
   ###############################################
   #                                             #
@@ -703,9 +749,38 @@
   #                                             #
   ###############################################
 
+  # Add pivots to target areas which don't have it yet
+  padding = 1.0
+
+  for area in $target_areas
+    if area.key?(:pivot)
+      next
+    end
+
+    min_x = area[:min][0]
+    max_x = area[:max][0]
+
+    if (max_x - min_x) > padding * 2.0
+      x = rand((min_x+padding)..(max_x-padding))
+    else
+      x = min_x + (max_x - min_x) * 0.5
+    end
+
+    min_y = area[:min][1]
+    max_y = area[:max][1]
+
+    if (max_y - min_y) > padding * 2.0
+      y = rand((min_y+padding)..(max_y-padding))
+    else
+      y = min_y + (max_y - min_y) * 0.5
+    end
+
+    area[:pivot] = [x, y, 0.0]
+  end
+
   # Pick-up (guest's start point)
   if config and config.key?('targets') and config['targets'].key?('pick_up')
-    for area in $drop_areas
+    for area in $target_areas
       if area[:name] == config['targets']['pick_up']
         location = area
         break
@@ -732,7 +807,7 @@
   # Drop-off (guest's end point)
   location = {}
   if config and config.key?('targets') and config['targets'].key?('drop_off')
-    for area in $drop_areas
+    for area in $target_areas
       if area[:name] == config['targets']['drop_off']
         location = area
         break
@@ -761,7 +836,7 @@
   # Start (robot's start/end point)
   location = {}
   if config and config.key?('targets') and config['targets'].key?('robot_start')
-    for area in $drop_areas
+    for area in $target_areas
       if area[:name] == config['targets']['robot_start']
         location = area
         break
@@ -781,13 +856,120 @@
   center_x = location[:min][0] + size_x * 0.5
   center_y = location[:min][1] + size_y * 0.5
 
+  robot_start_yaw = rand(-$pi..$pi)
+  if config and config.key?('targets')
+    if config['targets'].key?('robot_start_yaw')
+      robot_start_yaw = config['targets']['robot_start_yaw']
+    end
+  end
+
   $start_location =
   {
     :name => location[:name],
     :pose => [center_x, center_y, 0, 0, 0, 0],
     :size => [size_x, size_y, 10],
-    :pivot => location[:pivot]
+    :pivot =>
+    [
+      location[:pivot][0],
+      location[:pivot][1],
+      0.75,
+      0.0,
+      0.0,
+      robot_start_yaw
+    ]
   }
+%>
+
+<%
+  ###############################################
+  #                                             #
+  #               SCORING                       #
+  #                                             #
+  ###############################################
+
+  # Default penalty and scoring weights:
+  # Human contact penalty
+  weight_human_contact = 30000
+
+  # Object contact penalty
+  weight_object_contact = 10000
+
+  # Human approximation penalty
+  weight_human_approximation = 1
+
+  # Object approximation penalty
+  weight_object_approximation = 0.25
+
+  # Time for robot to reach pickup location
+  weight_pickup_location = 1
+
+  # Time for robot to pickup guest
+  weight_pickup_guest = 1
+
+  # Time to drop off guest
+  weight_drop_off_guest = 1
+
+  # Time to return to the start
+  weight_return_start = 1
+
+  # Failed pickup attempts
+  weight_failed_pickup = 30
+
+  # Failed drop_off attempts
+  weight_failed_drop_off = 30
+
+  # Robot has gone too fast
+  weight_too_fast = 20
+
+  if config and config.key?('scoring')
+
+    s = config['scoring']
+
+    if s.key?('weight_human_contact')
+      weight_human_contact = s['weight_human_contact']
+    end
+
+    if s.key?('weight_object_contact')
+      weight_object_contact = s['weight_object_contact']
+    end
+
+    if s.key?('weight_human_approximation')
+      weight_human_approximation = s['weight_human_approximation']
+    end
+
+    if s.key?('weight_object_approximation')
+      weight_object_approximation = s['weight_object_approximation']
+    end
+
+    if s.key?('weight_pickup_location')
+      weight_pickup_location = s['weight_pickup_location']
+    end
+
+    if s.key?('weight_pickup_guest')
+      weight_pickup_guest = s['weight_pickup_guest']
+    end
+
+    if s.key?('weight_drop_off_guest')
+      weight_drop_off_guest  = s['weight_drop_off_guest']
+    end
+
+    if s.key?('weight_return_start')
+      weight_return_start = s['weight_return_start']
+    end
+
+    if s.key?('weight_failed_pickup')
+      weight_failed_pickup = s['weight_failed_pickup']
+    end
+
+    if s.key?('weight_failed_drop_off')
+      weight_failed_drop_off = s['weight_failed_drop_off']
+    end
+
+    if s.key?('weight_too_fast')
+      weight_too_fast = s['weight_too_fast']
+    end
+
+  end
 %>
     <!-- Competition plugin -->
     <plugin name="competition" filename="libCompetitionPlugin.so">
@@ -802,28 +984,37 @@
         <%= $drop_off_location[:name] %>
       </drop_off_location>
 
-      <guest_name><%= guest_name %></guest_name>
+      <robot_start_pose>
+        <%= $start_location[:pivot][0] %>
+        <%= $start_location[:pivot][1] %>
+        <%= $start_location[:pivot][2] %>
+        <%= $start_location[:pivot][3] %>
+        <%= $start_location[:pivot][4] %>
+        <%= $start_location[:pivot][5] %>
+      </robot_start_pose>
+
+      <guest_name><%= $guest_name %></guest_name>
       <robot_name><%= $robot_name %></robot_name>
       <ground_name><%= ground_name %></ground_name>
-      <human_name><%= human_name %></human_name>
+      <human_name><%= $human_name %></human_name>
 
       <weight>
         <!-- Contact and approximation weights are multiplied by contact depth -->
 
         <!-- Collision is usually very brief and millimiters deep, so we compensate with high weights -->
-        <human_contact>30000.0</human_contact>
-        <obj_contact>10000.0</obj_contact>
+        <human_contact><%= weight_human_contact %></human_contact>
+        <obj_contact><%= weight_object_contact %></obj_contact>
 
         <!-- Approximation usually lasts longer and may get very deep, so we compensate with low weights -->
-        <human_approximation>1.0</human_approximation>
-        <obj_approximation>0.25</obj_approximation>
+        <human_approximation><%= weight_human_approximation %></human_approximation>
+        <obj_approximation><%= weight_object_approximation %></obj_approximation>
 
       </weight>
 
       <go_to_pick_up>
         <name>Go to pick-up location</name>
         <weight>
-          <time>1.0</time>
+          <time><%= weight_pickup_location %></time>
         </weight>
         <!-- for contain plugin -->
         <namespace>/servicesim/go_to_pick_up</namespace>
@@ -832,19 +1023,19 @@
       <pick_up>
         <name>Pick-up guest</name>
         <weight>
-          <time>1.0</time>
-          <failed_attempt>30.0</failed_attempt>
+          <time><%= weight_pickup_guest %></time>
+          <failed_attempt><%= weight_failed_pickup %></failed_attempt>
         </weight>
       </pick_up>
 
       <drop_off>
         <name>Drop-off guest</name>
         <weight>
-          <time>1.0</time>
-          <too_fast>20.0</too_fast>
-          <failed_attempt>30.0</failed_attempt>
+          <time><%= weight_drop_off_guest %></time>
+          <too_fast><%= weight_too_fast %></too_fast>
+          <failed_attempt><%= weight_failed_drop_off %></failed_attempt>
         </weight>
-        <guest_name><%= guest_name %></guest_name>
+        <guest_name><%= $guest_name %></guest_name>
         <!-- for contain plugin -->
         <namespace>/servicesim/drop_off</namespace>
       </drop_off>
@@ -852,19 +1043,19 @@
       <return_to_start>
         <name>Return to start</name>
         <weight>
-          <time>1.0</time>
+          <time><%= weight_return_start %></time>
         </weight>
         <!-- for contain plugin -->
         <namespace>/servicesim/return_to_start</namespace>
       </return_to_start>
 
       <%
-        for drop in $drop_areas
+        for target in $target_areas
       %>
         <room_info
-          name="<%= drop[:name] %>"
-          min="<%= drop[:min][0] %> <%= drop[:min][1] %> <%= drop[:min][2] %>"
-          max="<%= drop[:max][0] %> <%= drop[:max][1] %> <%= drop[:max][2] %>"
+          name="<%= target[:name] %>"
+          min="<%= target[:min][0] %> <%= target[:min][1] %> <%= target[:min][2] %>"
+          max="<%= target[:max][0] %> <%= target[:max][1] %> <%= target[:max][2] %>"
         />
       <% end %>
 
@@ -898,7 +1089,7 @@
     <!-- Drop-off area contain plugin -->
     <!-- Location: <%= $drop_off_location[:name] %> -->
     <plugin name="drop_off" filename="libContainPlugin.so">
-      <entity><%= guest_name %></entity>
+      <entity><%= $guest_name %></entity>
       <namespace>servicesim/drop_off</namespace>
       <enabled>false</enabled>
       <pose>
@@ -958,7 +1149,7 @@
     %>
 
     <!-- Guest -->
-    <actor name="<%= guest_name %>">
+    <actor name="<%= $guest_name %>">
 
       <!-- Starting pose, nice for when the world is reset -->
       <pose>
@@ -1012,9 +1203,26 @@
 
       </plugin>
 
-      <%= fromFile(DIR + "/actor_collisions.erb") %>
+      <%=
+        # TODO: Fix collision for actors with custom trajectories
+        #fromFile(DIR + "/actor_collisions.erb")
+      %>
 
     </actor>
+
+    <!-- GUI -->
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>
+        <%= $start_location[:pivot][0] + 1.0 %>
+        <%= $start_location[:pivot][1] + 1.0 %>
+        <%= $start_location[:pivot][2] + 0.75 %>
+        0.0
+        0.6
+        <%= -$pi*0.75 %>
+        </pose>
+      </camera>
+    </gui>
 <%
   end # if not $floorplan
 %>

@@ -9,14 +9,17 @@
 # https://bitbucket.org/osrf/servicesim/wiki/Room%20names
 targets:
 
-    # Room where robot starts and must return to
-    robot_start: PublicCafe
-
     # Room where guest starts
     pick_up: FrontElevator
 
     # Room where guest should be taken
-    drop_off: PrivateOfficeA
+    drop_off: PrivateCubicle_32_1
+
+    # Room where robot starts and must return to
+    robot_start: PublicBathroomB
+
+    # Robot start yaw direction (zero is looking at +X)
+    robot_start_yaw: 3.14
 
 # Guest
 guest:
@@ -29,15 +32,61 @@ guest:
 drift:
 
   # Minimum time in seconds between drifts
-  min_interval: 15
+  min_interval: 100
 
   # Maximum time in seconds between drifts
   max_interval: 300
 
   # No drifts before this time
-  start_time: 0
+  start_time: 200
 
   # Total number of drift times
   count: 30
 
+# Scoring
+scoring:
+
+  # Penalties when the robot is actually touching the human/object
+  # Human contact penalty
+  weight_human_contact: 40000
+
+  # Object contact penalty
+  weight_object_contact: 20000
+
+  # Penalties when the robot is very close to the human/object but not in contact
+  # Human approximation penalty
+  weight_human_approximation: 1
+
+  # Object approximation penalty
+  weight_object_approximation: 0.25
+
+  # Time for robot to reach pickup location
+  weight_pickup_location: 1
+
+  # Time for robot to pickup guest
+  weight_pickup_guest: 2
+
+  # Time to drop off guest
+  weight_drop_off_guest: 2
+
+  # Time to return to the start
+  weight_return_start: 1
+
+  # Failed pickup attempts
+  weight_failed_pickup: 40
+
+  # Falied drop_off attempts
+  weight_failed_drop_off: 50
+
+  # Robot has gone too fast
+  weight_too_fast: 25
+
+# Non-guest humans
+humans:
+
+  # Number of walking humans
+  walking_count: 10
+
+  # Number of static idling humans
+  idling_count: 30
 

@@ -2,27 +2,27 @@
   # Creates visuals for debugging purposes
   #
   # Required variables
-  # * $drop_areas
+  # * $target_areas
 
   height = 5.0
 
-  for drop in $drop_areas
+  for target in $target_areas
 
-    size_x = drop[:max][0] - drop[:min][0]
-    size_y = drop[:max][1] - drop[:min][1]
+    size_x = target[:max][0] - target[:min][0]
+    size_y = target[:max][1] - target[:min][1]
 
-    center_x = drop[:min][0] + size_x * 0.5
-    center_y = drop[:min][1] + size_y * 0.5
+    center_x = target[:min][0] + size_x * 0.5
+    center_y = target[:min][1] + size_y * 0.5
 %>
 
-<model name="<%= drop[:name] %>_min">
+<model name="<%= target[:name] %>_min">
 
   <static>true</static>
 
   <pose>
-    <%= drop[:min][0] %>
-    <%= drop[:min][1] %>
-    <%= drop[:min][2] + height * 0.5 %>
+    <%= target[:min][0] %>
+    <%= target[:min][1] %>
+    <%= target[:min][2] + height * 0.5 %>
     0
     0
     0
@@ -51,14 +51,14 @@
 
 </model>
 
-<model name="<%= drop[:name] %>_max">
+<model name="<%= target[:name] %>_max">
 
   <static>true</static>
 
   <pose>
-    <%= drop[:max][0] %>
-    <%= drop[:max][1] %>
-    <%= drop[:max][2] + height * 0.5 %>
+    <%= target[:max][0] %>
+    <%= target[:max][1] %>
+    <%= target[:max][2] + height * 0.5 %>
     0
     0
     0
@@ -87,14 +87,14 @@
 
 </model>
 
-<model name="<%= drop[:name] %>_pivot">
+<model name="<%= target[:name] %>_pivot">
 
   <static>true</static>
 
   <pose>
-    <%= drop[:pivot][0] %>
-    <%= drop[:pivot][1] %>
-    <%= drop[:pivot][2] + height * 0.5 %>
+    <%= target[:pivot][0] %>
+    <%= target[:pivot][1] %>
+    <%= target[:pivot][2] + height * 0.5 %>
     0
     0
     0
@@ -123,14 +123,14 @@
 
 </model>
 
-<model name="<%= drop[:name] %>_box">
+<model name="<%= target[:name] %>_box">
 
   <static>true</static>
 
   <pose>
     <%= center_x %>
     <%= center_y %>
-    <%= drop[:max][2] + height * 0.5 %>
+    <%= target[:max][2] + height * 0.5 %>
     0
     0
     0
@@ -200,7 +200,7 @@
 
 </model>
 
-<model name="drop_off_location">
+<model name="target_off_location">
 
   <static>true</static>
 
@@ -271,3 +271,58 @@
   </link>
 
 </model>
+
+
+<%
+  count = 0
+  for area in $idling_areas
+
+    count += 1
+
+    size_x = area[:max][0] - area[:min][0]
+    size_y = area[:max][1] - area[:min][1]
+
+    center_x = area[:min][0] + size_x * 0.5
+    center_y = area[:min][1] + size_y * 0.5
+%>
+
+<model name="idling_box_<%= count %>">
+
+  <static>true</static>
+
+  <pose>
+    <%= center_x %>
+    <%= center_y %>
+    <%= height * 0.5 %>
+    0
+    0
+    0
+  </pose>
+
+  <link name="link">
+
+    <visual name="visual">
+      <meta>
+        <layer>4</layer>
+      </meta>
+      <geometry>
+        <box>
+          <size>
+            <%= size_x %>
+            <%= size_y %>
+            <%= height %>
+          </size>
+        </box>
+      </geometry>
+      <material>
+        <script>
+          <uri>file://media/materials/scripts/gazebo.material</uri>
+          <name>Gazebo/DarkMagentaTransparent</name>
+        </script>
+      </material>
+    </visual>
+  </link>
+
+</model>
+
+<% end %>

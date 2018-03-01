@@ -15,7 +15,7 @@
   #                        If the door is closed, the room is not furnished.
   # * $floorplan (boolean) True if only showing floorplan, so doors, furniture and
   #                        the collision above the door are hidden.
-  # * $drop_areas ([]) Dictionary with drop area info
+  # * $target_areas ([]) Dictionary with target area info
 
   # Wall height
   height = 2 * $o
@@ -38,67 +38,30 @@
   # If door is closed, room can't be target
   if $door_angle != 0.0
 
-    # Local min / max coords in meters
+    # Drop in a 3.0 X 1.5 m area in front of room
+    drop_width = 3.0
+    drop_depth = 1.5
     if $room_type == 'bathroom'
-      # Drop in front of door
-      min_local_frame = TMatrix(-$o, 0, 0)
-      max_local_frame = TMatrix(0, $o, 0)
+      min_local_frame = TMatrix(-0.5*$o - drop_width * 0.5, 0, 0)
+      max_local_frame = TMatrix(-0.5*$o + drop_width * 0.5, drop_depth, 0)
+    # Drop in a 3.0 X 3.0 m area inside room
     else
-      min_local_frame = TMatrix(
-        ($room_size[0] - 1) * $o,
-        ($room_size[2] - 1) * $o,
-        0)
-
-      max_local_frame = TMatrix(
-        $room_size[1] * $o,
-        $room_size[3] * $o,
-        0)
-    end
-
-    # Local pivot
-    if $room_type == 'bathroom'
-      pivot_local_frame = TMatrix(
-        rand(-0.6..-0.4) * $o,
-        rand(0.4..0.6) * $o,
-        0)
-    elsif $room_type == 'refreshment_area'
-      pivot_local_frame = TMatrix(
-        rand(-4.14..-0.9),
-        -0.65,
-        0)
-    elsif $room_type == 'meeting_room_large'
-      pivot_local_frame = TMatrix(
-        rand(-2.42..-1),
-        rand(-3.3..-1.32),
-        0)
-    elsif $room_type == 'meeting_room_small'
-      pivot_local_frame = TMatrix(
-        -1.43,
-        rand(-3.45..-1.32),
-        0)
-    elsif $room_type == 'office_small'
-      pivot_local_frame = TMatrix(
-        -0.74,
-        rand(-1.0..-0.58),
-        0)
-    elsif $room_type == 'office_large'
-      pivot_local_frame = TMatrix(
-        -0.74,
-        rand(-1.83..-0.58),
-        0)
+      min_local_frame = TMatrix(- drop_width, -drop_width, 0)
+      max_local_frame = TMatrix(0.0, 0.0, 0)
     end
 
     # Adjust for room rotation
     min_world_frame = room_frame * min_local_frame
     max_world_frame = room_frame * max_local_frame
-    pivot_world_frame = room_frame * pivot_local_frame
+
+    xs = [min_world_frame[0, 2], max_world_frame[0, 2]]
+    ys = [min_world_frame[1, 2], max_world_frame[1, 2]]
 
     # Fill vectors
-    min = [min_world_frame[0, 2], min_world_frame[1, 2], $room_pose[2]]
-    max = [max_world_frame[0, 2], max_world_frame[1, 2], $room_pose[2]]
-    pivot = [pivot_world_frame[0, 2], pivot_world_frame[1, 2], $room_pose[2]]
+    min = [xs.min, ys.min, $room_pose[2]]
+    max = [xs.max, ys.max, $room_pose[2]]
 
-    $drop_areas.push({:name => $room_name, :min => min, :max => max, :pivot => pivot})
+    $target_areas.push({:name => $room_name, :min => min, :max => max})
 
   end
 
