@@ -16,6 +16,7 @@ catkin_package()
 ## in contrast to setup.py, you can choose the destination
 install(PROGRAMS
   src/example_solution.py
+  src/image_processing_example.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
