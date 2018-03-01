@@ -82,6 +82,7 @@ if $DOWNLOAD; then
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/front_entrance.erb
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/idle_near_entrance.erb
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/idle_near_fridge.erb
+  wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/idling_humans.erb
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/meeting_room_large_furniture.erb
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/meeting_room_small_furniture.erb
   wget https://bitbucket.org/osrf/servicesim/raw/default/servicesim_competition/worlds/office_chair.erb
