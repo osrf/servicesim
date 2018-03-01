@@ -197,7 +197,10 @@ bool CP_DropOff::OnDropOffRosRequest(
   // Send synchronous request so we can tell the robot if it succeeded
   bool executed = this->ignNode.Request(ignService, 500, rep, result);
   if (!executed)
-    gzerr << "Unfollow request timed out" << std::endl;
+  {
+    gzerr << "Unfollow request timed out. Are you using the correct guest name?"
+          << std::endl;
+  }
 
   this->SetDone(result && rep.data());
 
