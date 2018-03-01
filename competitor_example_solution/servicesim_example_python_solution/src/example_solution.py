@@ -49,7 +49,6 @@ class ExampleNode(object):
         self.robot_name = 'servicebot'
         self.guest_name = ''
         self.action_timeout = 10
-        self.retry_threshold = 5
         self.actors_in_range = []
 
         rospy.init_node('example_solution')
@@ -148,7 +147,6 @@ class ExampleNode(object):
         state = CompetitionState.BeginTask
 
         rate = rospy.Rate(1)
-        retry_count = 0
 
         while not rospy.is_shutdown():
             if state == CompetitionState.BeginTask:
@@ -161,33 +159,27 @@ class ExampleNode(object):
                 init_pose_msg.pose.pose = self.start_pose
                 self.initial_pose_pub.publish(init_pose_msg)
                 rospy.loginfo('published initial pose')
-                rate.sleep()
+                rospy.sleep(0.5)
 
-                self.clear_costmaps_srv(EmptyRequest())
                 state = CompetitionState.Pickup
 
             elif state == CompetitionState.Pickup:
                 rospy.loginfo('In Pickup state')
-                if retry_count >= self.retry_threshold:
-                    rospy.logwarn('goal failed to many time, clearing costmaps')
-                    self.clear_costmaps_srv(EmptyRequest())
-                    retry_count = 0
+                self.move_base.cancel_all_goals()
+                rospy.loginfo('clearing costmaps')
+                self.clear_costmaps_srv(EmptyRequest())
+                rospy.sleep(0.5)
                 pickup_goal = self.construct_goal_from_pose(self.pose_from_room_name(pick_up_room))
                 self.move_base.send_goal(pickup_goal)
                 rospy.loginfo('sent goal')
-                retry_count += 1
 
                 self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
-                rospy.loginfo('action result came in')
-                rospy.loginfo(
-                    'got result: Action state is: %s\n success is %d' %
-                    (self.move_base.get_state(), GoalStatus.SUCCEEDED))
+                rospy.loginfo('action timed out in state: %s' % self.move_base.get_state())
                 if self.move_base.get_state() == GoalStatus.SUCCEEDED:
                     if self.guest_name in self.actors_in_range:
                         rospy.loginfo('requesting unfollow')
                         if self.request_follow():
                             state = CompetitionState.DropOff
-                            retry_count = 0
                     else:
                         # pickup point reached but actor not in range
                         # add custom room exploration logic here
@@ -197,37 +189,33 @@ class ExampleNode(object):
 
             elif state == CompetitionState.DropOff:
                 rospy.loginfo('In DropOff state')
-                if retry_count >= self.retry_threshold:
-                    rospy.logwarn('goal failed to many time, clearing costmaps')
-                    self.clear_costmaps_srv(EmptyRequest())
-                    retry_count = 0
+                self.move_base.cancel_all_goals()
+                rospy.loginfo('clearing costmaps')
+                self.clear_costmaps_srv(EmptyRequest())
+                rospy.sleep(0.5)
                 dropoff_goal = self.construct_goal_from_pose(
                     self.pose_from_room_name(drop_off_room))
                 self.move_base.send_goal(dropoff_goal)
-                retry_count += 1
                 self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
                 if self.move_base.get_state() == GoalStatus.SUCCEEDED:
                     self.request_unfollow()
                     state = CompetitionState.ReturnToStart
-                    retry_count = 0
                 else:
                     rospy.loginfo('action timed out in state: %s' % self.move_base.get_state())
 
             elif state == CompetitionState.ReturnToStart:
-                if retry_count >= self.retry_threshold:
-                    rospy.logwarn('goal failed to many time, clearing costmaps')
-                    self.clear_costmaps_srv(EmptyRequest())
-                    retry_count = 0
+                self.move_base.cancel_all_goals()
+                rospy.loginfo('clearing costmaps')
+                self.clear_costmaps_srv(EmptyRequest())
+                rospy.sleep(0.5)
                 rospy.loginfo('In ReturnToStart state')
                 startgoal = self.construct_goal_from_pose(self.start_pose)
                 self.move_base.send_goal(startgoal)
-                retry_count += 1
                 self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
                 if self.move_base.get_state() == GoalStatus.SUCCEEDED:
                     rospy.loginfo('Hooray!')
                     rospy.signal_shutdown('Competition completed!')
                 else:
-                    retry_count = 0
                     rospy.loginfo('action timed out in state: %s' % self.move_base.get_state())
 
             rate.sleep()
