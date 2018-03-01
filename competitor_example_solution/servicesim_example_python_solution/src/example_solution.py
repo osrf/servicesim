@@ -202,7 +202,7 @@ class ExampleNode(object):
                     # If the robot succeeded to reach the pickup point
                     # check that the guest is in range
                     if self.guest_name in self.actors_in_range:
-                        rospy.loginfo('requesting unfollow')
+                        rospy.loginfo('requesting follow')
                         # if the guest is in range, ask the guest to follow the robot
                         if self.request_follow():
                             # the guest is following the robot
