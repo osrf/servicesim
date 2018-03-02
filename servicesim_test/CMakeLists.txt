@@ -42,7 +42,14 @@ if (CATKIN_ENABLE_TESTING)
     ${catkin_LIBRARIES}
     ${GAZEBO_LIBRARIES}
   )
-
+	
+  add_rostest_gtest(new_task-test
+                    new_task/new_task.test
+                    new_task/new_task.cpp)
+  target_link_libraries(new_task-test
+    ${catkin_LIBRARIES}
+  )
+  
   if (ENABLE_DISPLAY_TESTS)
   endif()
 endif()
