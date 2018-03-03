@@ -50,6 +50,14 @@ if (CATKIN_ENABLE_TESTING)
     ${catkin_LIBRARIES}
   )
   
+  add_rostest_gtest(pickup_guest-test
+		    pickup_guest/pickup_guest.test
+            	    pickup_guest/pickup_guest.cpp)
+  target_link_libraries(pickup_guest-test
+    ${catkin_LIBRARIES}
+    ${GAZEBO_LIBRARIES}
+   )
+
   if (ENABLE_DISPLAY_TESTS)
   endif()
 endif()

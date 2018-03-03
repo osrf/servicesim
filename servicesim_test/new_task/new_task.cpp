@@ -23,6 +23,10 @@ TEST(NewTaskTest, Call)
 {
   // Creating ROS node handle
   ros::NodeHandle n;
+  // Setting initial Parameters for the NewTask
+  std::string pick_up_location = "FrontElevator" ;
+  std::string drop_off_location = "PrivateCubicle_32_1";
+  std::string guest_name = "human_86138";
   // Client for the `servicesim/new_task` service
   ros::ServiceClient client= n.serviceClient<servicesim_competition::NewTask>("servicesim/new_task");
   servicesim_competition::NewTask srv;
@@ -31,9 +35,9 @@ TEST(NewTaskTest, Call)
   // Calling the service, the service expects empty request
   EXPECT_TRUE(client.call(srv));
   // Checking for the desired response
-  EXPECT_EQ(srv.response.pick_up_location, "FrontElevator");
-  EXPECT_EQ(srv.response.drop_off_location, "PrivateCubicle_32_1");
-  EXPECT_EQ(srv.response.guest_name, "human_86138");
+  EXPECT_EQ(srv.response.pick_up_location, pick_up_location);
+  EXPECT_EQ(srv.response.drop_off_location, drop_off_location);
+  EXPECT_EQ(srv.response.guest_name, guest_name);
   // Calling the same service again should return false.
   EXPECT_FALSE(client.call(srv));
 }
