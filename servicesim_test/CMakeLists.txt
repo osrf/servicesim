@@ -44,17 +44,10 @@ if (CATKIN_ENABLE_TESTING)
     ${GAZEBO_LIBRARIES}
   )
 
-  add_rostest_gtest(new_task-test
-                    new_task/new_task.test
-                    new_task/new_task.cpp)
-  target_link_libraries(new_task-test
-    ${catkin_LIBRARIES}
-  )
-
-  add_rostest_gtest(pickup_guest-test
-		    pickup_guest/pickup_guest.test
-            	    pickup_guest/pickup_guest.cpp)
-  target_link_libraries(pickup_guest-test
+  add_rostest_gtest(servicesim_tasks-test
+		    servicesim_tasks/servicesim_tasks.test
+            	    servicesim_tasks/servicesim_tasks.cpp)
+  target_link_libraries(servicesim_tasks-test
     ${catkin_LIBRARIES}
     ${GAZEBO_LIBRARIES}
    )
