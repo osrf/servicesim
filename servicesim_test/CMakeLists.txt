@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   servicesim_competition
+  servicebot_description
 )
 
 find_package(gazebo 8.3.0 EXACT REQUIRED)
@@ -42,14 +43,14 @@ if (CATKIN_ENABLE_TESTING)
     ${catkin_LIBRARIES}
     ${GAZEBO_LIBRARIES}
   )
-	
+
   add_rostest_gtest(new_task-test
                     new_task/new_task.test
                     new_task/new_task.cpp)
   target_link_libraries(new_task-test
     ${catkin_LIBRARIES}
   )
-  
+
   add_rostest_gtest(pickup_guest-test
 		    pickup_guest/pickup_guest.test
             	    pickup_guest/pickup_guest.cpp)
