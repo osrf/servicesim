@@ -18,6 +18,7 @@
 #include <ros/ros.h>
 #include <gtest/gtest.h>
 #include <servicesim_competition/NewTask.h>
+#include <servicesim_competition/TaskInfo.h>
 #include <servicesim_competition/PickUpGuest.h>
 #include <servicesim_competition/DropOffGuest.h>
 #include <gazebo_msgs/ModelState.h>
@@ -110,6 +111,23 @@ TEST(ServicesimTasksTest, new_task)
   EXPECT_EQ(new_task_srv.response.guest_name, test_obj.guest_name);
   // Calling the same service again should return false.
   EXPECT_FALSE(new_task_client.call(new_task_srv));
+}
+
+TEST(ServicesimTasksTest, task_info)
+{
+  // Creating the test object
+  servicesim_test::ServicesimTasksTest test_obj;
+  // Start task_info service
+  ros::ServiceClient task_info_client = test_obj.n.serviceClient<servicesim_competition::NewTask>("servicesim/task_info");
+  servicesim_competition::NewTask task_info_srv;
+  // Waiting for the service to be avaialable
+  EXPECT_TRUE(ros::service::waitForService("servicesim/task_info",100000));
+  // Calling the service, the service expects empty request
+  EXPECT_TRUE(task_info_client.call(task_info_srv));
+  // Verifying with the known parameters
+  EXPECT_EQ(task_info_srv.response.pick_up_location, test_obj.pick_up_location);
+  EXPECT_EQ(task_info_srv.response.drop_off_location, test_obj.drop_off_location);
+  EXPECT_EQ(task_info_srv.response.guest_name, test_obj.guest_name);
 }
 
 // Test for pickup_guest task

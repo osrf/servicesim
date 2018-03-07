@@ -61,6 +61,9 @@ class servicesim::CompetitionPluginPrivate
   /// \brief ROS new task service server
   public: ros::ServiceServer newTaskRosService;
 
+  /// \brief ROS task info service server
+  public: ros::ServiceServer taskInfoRosService;
+
   /// \brief ROS room info service server
   public: ros::ServiceServer roomInfoRosService;
 
@@ -127,7 +130,7 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr _world,
           << std::endl;
     return;
   }
-  this->dataPtr->robotStartPose = 
+  this->dataPtr->robotStartPose =
       _sdf->Get<ignition::math::Pose3d>("robot_start_pose");
 
   this->dataPtr->guestName = _sdf->Get<std::string>("guest_name");
@@ -193,6 +196,10 @@ void CompetitionPlugin::Load(gazebo::physics::WorldPtr _world,
   this->dataPtr->newTaskRosService = this->dataPtr->rosNode->advertiseService(
       "/servicesim/new_task", &CompetitionPlugin::OnNewTaskRosService, this);
 
+  // Advertise task info service
+  this->dataPtr->taskInfoRosService = this->dataPtr->rosNode->advertiseService(
+      "/servicesim/task_info", &CompetitionPlugin::OnTaskInfoRosService, this);
+
   // Advertise room info service
   this->dataPtr->roomInfoRosService = this->dataPtr->rosNode->advertiseService(
       "/servicesim/room_info", &CompetitionPlugin::OnRoomInfoRosService, this);
@@ -225,6 +232,28 @@ bool CompetitionPlugin::OnNewTaskRosService(
   this->dataPtr->current = 1;
   this->dataPtr->checkpoints[this->dataPtr->current - 1]->Start();
 
+  // Respond
+  _res.pick_up_location = this->dataPtr->pickUpLocation;
+  _res.drop_off_location = this->dataPtr->dropOffLocation;
+  _res.guest_name = this->dataPtr->guestName;
+  _res.robot_start_pose = convert(this->dataPtr->robotStartPose);
+
+  return true;
+}
+
+/////////////////////////////////////////////////
+bool CompetitionPlugin::OnTaskInfoRosService(
+    servicesim_competition::TaskInfo::Request &_req,
+    servicesim_competition::TaskInfo::Response &_res)
+{
+  if (this->dataPtr->current == 0)
+  {
+    gzerr << "Competition has not been started yet."
+          << " Please call `/servicesim/new_task`"
+          <<   "service to start the competition." << std::endl;
+
+    return false;
+  }
   // Respond
   _res.pick_up_location = this->dataPtr->pickUpLocation;
   _res.drop_off_location = this->dataPtr->dropOffLocation;
@@ -308,4 +337,3 @@ void CompetitionPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   this->dataPtr->scoreRosPub.publish(msg);
   lastScorePubTime = _info.simTime;
 }
-

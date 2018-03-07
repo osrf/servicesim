@@ -26,6 +26,7 @@
 
 #include <servicesim_competition/NewTask.h>
 #include <servicesim_competition/RoomInfo.h>
+#include <servicesim_competition/TaskInfo.h>
 
 namespace servicesim
 {
@@ -47,6 +48,14 @@ namespace servicesim
     private: bool OnNewTaskRosService(
         servicesim_competition::NewTask::Request &_req,
         servicesim_competition::NewTask::Response &_res);
+
+    /// \brief Service when competitor asks about task information.
+    /// \param[in] _req Competitor's request.
+    /// \param[out] _res Response containing information about the task.
+    /// \return False if failed.
+    private: bool OnTaskInfoRosService(
+        servicesim_competition::TaskInfo::Request &_req,
+        servicesim_competition::TaskInfo::Response &_res);
 
     /// \brief Service when competitor asks information about a room.
     /// \param[in] _req Competitor's request.
