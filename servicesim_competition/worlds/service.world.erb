@@ -655,8 +655,7 @@
         $count = $count + 1
         $actor_name = $human_name + '_' + rand(10000..99999).to_s()
 
-        # TODO: collisions for actors with custom trajectories are collapsed in the world origin
-        $enable_collisions = false
+        $enable_collisions = true
 
         # skin
         $actor_skin = nil
@@ -1149,6 +1148,20 @@
     %>
 
     <!-- Guest -->
+    <model name="<%= $guest_name %>_collision_model">
+      <pose>0 0 -100 0 0 0</pose>
+      <static>true</static>
+      <link name="link">
+        <collision name="link">
+          <pose>0 -0.18 0.05 0 <%= -$pi * 0.5 %> 0</pose>
+          <geometry>
+            <box>
+              <size>0.44 1.62 0.60</size>
+            </box>
+          </geometry>
+        </collision>
+      </link>
+    </model>
     <actor name="<%= $guest_name %>">
 
       <!-- Starting pose, nice for when the world is reset -->
@@ -1203,10 +1216,14 @@
 
       </plugin>
 
-      <%=
-        # TODO: Fix collision for actors with custom trajectories
-        #fromFile(DIR + "/actor_collisions.erb")
-      %>
+      <plugin name="attach_model" filename="libAttachModelPlugin.so">
+        <link>
+          <link_name><%= $guest_name %>_pose</link_name>
+          <model>
+            <model_name><%= $guest_name %>_collision_model</model_name>
+          </model>
+        </link>
+      </plugin>
 
     </actor>
 
