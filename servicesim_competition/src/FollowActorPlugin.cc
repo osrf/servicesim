@@ -100,17 +100,14 @@ class servicesim::FollowActorPluginPrivate
   /// \brief ROS drift cheat service server
   public: ros::ServiceServer driftService;
 
-  /// \brief flag to enable drift when requested
-  public: bool drift_flag;
+  /// \brief Flag to enable drift when requested via ROS
+  public: bool driftFlag = false;
 };
 
 /////////////////////////////////////////////////
 FollowActorPlugin::FollowActorPlugin()
     : dataPtr(new FollowActorPluginPrivate)
 {
-  // // // Advertise drift cheat service
-  this->dataPtr->driftService = this->dataPtr->rosNode.advertiseService(
-      "/servicesim/drift", &FollowActorPlugin::OnDriftRosService, this);
 }
 
 /////////////////////////////////////////////////
@@ -214,9 +211,9 @@ void FollowActorPlugin::Load(gazebo::physics::ModelPtr _model,
       this->dataPtr->ignNode.Advertise<ignition::msgs::UInt32>(
       this->dataPtr->ns + "/" + this->dataPtr->actor->GetName() + "/drift");
 
-  // Initializing Drift Cheat flag to false
-  this->dataPtr->drift_flag = false;
-
+  // Advertise drift cheat service
+  this->dataPtr->driftService = this->dataPtr->rosNode.advertiseService(
+      "/servicesim/drift", &FollowActorPlugin::OnDriftRosService, this);
 }
 
 /////////////////////////////////////////////////
@@ -350,7 +347,7 @@ void FollowActorPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
   ignition::math::Angle yaw = atan2(dir.Y(), dir.X()) + IGN_PI_2;
 
   // Drift
-  if (driftTime != gazebo::common::Time::Zero)
+  if (driftTime != gazebo::common::Time::Zero || this->dataPtr->driftFlag)
   {
     // Change direction a bit
     yaw += ignition::math::Rand::DblUniform(-1, 1) *
@@ -365,22 +362,18 @@ void FollowActorPlugin::OnUpdate(const gazebo::common::UpdateInfo &_info)
     msg.set_data(2);
     this->dataPtr->driftIgnPub.Publish(msg);
 
-    gzwarn << "Actor [" << this->dataPtr->actor->GetName()
-           <<  "] drifting due to scheduled time: " << driftTime << std::endl;
+    if (!this->dataPtr->driftFlag)
+    {
+      gzwarn << "Actor [" << this->dataPtr->actor->GetName()
+             <<  "] drifting due to scheduled time: " << driftTime << std::endl;
+    }
+    else
+    {
+      gzwarn << "Actor [" << this->dataPtr->actor->GetName()
+             <<  "] drifted as requested! (cheat)" << std::endl;
+      this->dataPtr->driftFlag = false;
+    }
     // Don't return yet, so the actor moves away
-  }
-
-  // Drift cheat
-  if (this->dataPtr->drift_flag)
-  {
-    // Change direction a bit
-    yaw += ignition::math::Rand::DblUniform(-1, 1) *
-        this->dataPtr->maxDriftAngle;
-
-    this->dataPtr->target = nullptr;
-    gzwarn << "Actor Stopped Following [" << this->dataPtr->actor->GetName()
-           <<  "] Drift Requested " << std::endl;
-    this->dataPtr->drift_flag = false; // Resetting the drift flag
   }
   yaw.Normalize();
 
@@ -469,17 +462,9 @@ void FollowActorPlugin::OnUnfollow(ignition::msgs::Boolean &_res,
 
 /////////////////////////////////////////////////
 bool FollowActorPlugin::OnDriftRosService(
-  servicesim_competition::Drift::Request &_req,
+  servicesim_competition::Drift::Request &/*_req*/,
   servicesim_competition::Drift::Response &_res)
 {
-  // if (_req.drift_request)
-  // {
-    _res.drift = true;
-    this->dataPtr->drift_flag = true;
-  // }
-  // else
-  // {
-  //   _res.drift = false;
-  //   this->dataPtr->drift_flag = false;
-  // }
+  _res.drift = true;
+  this->dataPtr->driftFlag = true;
 }
