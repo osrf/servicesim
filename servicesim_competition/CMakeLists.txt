@@ -25,6 +25,7 @@ add_service_files(
     PickUpGuest.srv
     RoomInfo.srv
     TaskInfo.srv
+    Drift.srv
 )
 
 # Generate added messages and services with any dependencies listed here
@@ -89,6 +90,7 @@ add_library(${follow_actor_plugin_name} SHARED
 target_link_libraries(${follow_actor_plugin_name}
   ${GAZEBO_LIBRARIES}
   ${roscpp_LIBRARIES}
+  ${catkin_LIBRARIES}
 )
 add_dependencies(${follow_actor_plugin_name}
   ${PROJECT_NAME}_generate_messages_cpp

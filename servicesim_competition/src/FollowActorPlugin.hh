@@ -21,6 +21,7 @@
 #include <memory>
 
 #include <gazebo/common/Plugin.hh>
+#include <servicesim_competition/Drift.h>
 
 namespace servicesim
 {
@@ -126,6 +127,14 @@ namespace servicesim
     /// \param[out] _res Response with true for success
     /// \param[out] _result True for success
     private: void OnUnfollow(ignition::msgs::Boolean &_res, bool &_result);
+
+    /// \brief Service when the drift service is requested
+    /// \param[in] _req Empty request
+    /// \param[out] _res Response with true for success
+    /// \param[out] _result True for success
+    private: bool OnDriftRosService(
+        servicesim_competition::Drift::Request &_req,
+        servicesim_competition::Drift::Response &_res);
 
     /// \internal
     private: std::unique_ptr<FollowActorPluginPrivate> dataPtr;
