@@ -22,7 +22,7 @@ import actionlib
 
 from actionlib_msgs.msg import GoalStatus
 
-from geometry_msgs.msg import Point, Pose, PoseWithCovarianceStamped, Quaternion
+from geometry_msgs.msg import Point, Pose, PoseWithCovarianceStamped, Quaternion , Twist
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
@@ -36,6 +36,11 @@ from servicesim_competition.srv import PickUpGuest, PickUpGuestRequest, RoomInfo
 
 from std_srvs.srv import Empty, EmptyRequest
 
+from servicesim_example_python_solution.msg import Contour
+
+import tf
+import tf2_ros
+import math
 
 class CompetitionState(Enum):
     BeginTask = 0
@@ -48,9 +53,9 @@ class ExampleNode(object):
     def __init__(self):
         self.robot_name = 'servicebot'
         self.guest_name = ''
-        self.action_timeout = 10
+        self.action_timeout = 3
         self.actors_in_range = []
-
+        self.drift_flag = False
         rospy.init_node('example_solution')
         rospy.loginfo('node created')
         # create service proxies
@@ -75,6 +80,7 @@ class ExampleNode(object):
         rospy.loginfo('create subs')
         rospy.Subscriber('/servicebot/rfid', ActorNames, self.rfid_callback)
         rospy.Subscriber('/servicebot/camera_front/image_raw', Image, self.image_callback)
+        rospy.Subscriber('/servicebot/bbox_distance', Contour, self.get_new_pickup_distance_callback)
         rospy.loginfo('done creating subs')
 
         # create publisher
@@ -87,11 +93,23 @@ class ExampleNode(object):
         self.move_base.wait_for_server(rospy.Duration(self.action_timeout))
         rospy.loginfo('done waiting for move base action server')
 
+        # creating a publisher to publish cmd_vel to the robot
+        self.cmd_vel_pub = rospy.Publisher(
+            '/servicebot/cmd_vel', Twist , queue_size = 1 )
+        self.distance = 0
+        self.center_bbox = 0
+        self.new_pickup_goal_set = False
+
     def rfid_callback(self, msg):
         # this function will be called periodically with the list of RFID tags
         # around the robot
         if msg.actor_names != self.actors_in_range:
             rospy.loginfo(msg.actor_names)
+        # checking if the guest is in the range of the robot
+        if self.guest_name in self.actors_in_range:
+            self.drift_flag = False
+        else:
+            self.drift_flag = True
         self.actors_in_range = msg.actor_names
         return True
 
@@ -156,13 +174,69 @@ class ExampleNode(object):
         goal.target_pose.pose.position.y += dy / 100.
         return goal
 
+        # Requested for new pickup goal
+    def construct_new_pickup_goal(self):
+         # Locate the guest by turning and looking around
+         cmd_vel_msg = Twist()
+         while not (310<self.center_bbox<330):
+             cmd_vel_msg.linear.x = 0
+             cmd_vel_msg.linear.y = 0
+             cmd_vel_msg.linear.z = 0
+             cmd_vel_msg.angular.x = 0
+             cmd_vel_msg.angular.y = 0
+             cmd_vel_msg.angular.z = 0.3
+             self.cmd_vel_pub.publish(cmd_vel_msg)
+         cmd_vel_msg.angular.z = 0
+         self.cmd_vel_pub.publish(cmd_vel_msg)
+
+         print("constructing new goal")
+         tflistener = tf.TransformListener()
+         r = rospy.Rate(10)
+         count = 0
+         while count< 100:
+             count = count +1
+             # print("checking transform")
+             now = rospy.Time(0)
+             # rospy.loginfo('waiting for transform')
+             try:
+                 tflistener.waitForTransform('map','base_footprint', now, rospy.Duration(5))
+                 (trans,rot) = tflistener.lookupTransform('map', 'base_footprint', now)
+                 quaternion = (rot[0], rot[1], rot[2], rot[3])
+                 euler = tf.transformations.euler_from_quaternion(quaternion)
+                 roll = euler[0]
+                 pitch = euler[1]
+                 yaw = euler[2]
+                 if(self.distance):
+                     d = self.distance - 1.3 # 1.3 mts away from the person
+                     x_delta = trans[0] + d*math.cos(yaw)
+                     y_delta = trans[1] + d*math.sin(yaw)
+             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException, tf2_ros.TransformException):
+                 continue
+         new_pickup_goal_pose = Pose()
+         new_pickup_goal_pose.position.x = trans[0] + x_delta
+         new_pickup_goal_pose.position.y = trans[1] + y_delta
+         new_pickup_goal_pose.position.z = 0
+         new_pickup_goal_pose.orientation.x = rot[0]
+         new_pickup_goal_pose.orientation.y = rot[1]
+         new_pickup_goal_pose.orientation.z = rot[2]
+         new_pickup_goal_pose.orientation.w = rot[3]
+         print("sending new goal..")
+         print new_pickup_goal_pose
+         goal = self.construct_goal_from_pose(new_pickup_goal_pose)
+         self.new_pickup_goal_set = True
+         return goal
+
+    def get_new_pickup_distance_callback(self, msg):
+        self.center_bbox = (msg.x_min + msg.x_max)/2
+        self.distance = msg.distance
+
     def example_solution(self):
         # This handles the competition logic
         # A state maching that gives goals to the robot and calls the competition services
         # to complete the checkpoints
         state = CompetitionState.BeginTask
 
-        rate = rospy.Rate(1)
+        rate = rospy.Rate(60)
 
         while not rospy.is_shutdown():
             if state == CompetitionState.BeginTask:
@@ -215,7 +289,26 @@ class ExampleNode(object):
                 else:
                     rospy.loginfo('action timed out in state: %s' % self.move_base.get_state())
 
-            elif state == CompetitionState.DropOff:
+            # when the guest is lost or drifted away
+            elif state == CompetitionState.DropOff and self.drift_flag == True and self.new_pickup_goal_set ==False:
+                # Change the goals, pickup guest and then dropoff
+                rospy.loginfo('Guest Lost, locating guest...')
+                # Cancel the previous goals
+                self.move_base.cancel_all_goals()
+                # Clears the obstacle maps
+                rospy.loginfo('clearing costmaps')
+                self.clear_costmaps_srv(EmptyRequest())
+                rospy.sleep(0.5)
+                new_pickup_goal = self.construct_new_pickup_goal()
+                self.move_base.send_goal(new_pickup_goal)
+                self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
+                # If the robot succeeded to reach the new pickup point
+                if self.move_base.get_state()==GoalStatus.SUCCEEDED:
+                    state = CompetitionState.Pickup
+                    # Setting the drift_flag to false
+                    self.drift_flag = False
+
+            elif state == CompetitionState.DropOff and self.drift_flag == False:
                 # Go to drop off point
                 rospy.loginfo('In DropOff state')
                 # Cancel previous navigation goals
