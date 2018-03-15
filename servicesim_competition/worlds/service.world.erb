@@ -270,9 +270,13 @@
   # Skin files under model://actor/meshes
   skins =
   [
-    "SKIN_man_blue_shirt.dae",
     "SKIN_man_green_shirt.dae",
     "SKIN_man_red_shirt.dae"
+  ]
+  skins_guest =
+  [
+    "SKIN_man_blue_shirt.dae",
+
   ]
 
   # Idling animation files under model://actor/meshes
@@ -357,7 +361,7 @@
   if config and config.key?('guest') and config['guest'].key?('skin')
     guest_skin = config['guest']['skin']
   else
-    guest_skin = skins.sample
+    guest_skin = skins_guest.sample
   end
 
   $guest_name = $human_name + '_' + rand(10000..99999).to_s()

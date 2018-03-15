@@ -24,14 +24,14 @@ import rospy
 from servicesim_example_python_solution.msg import Contour
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float64
-class ColorSegmentator(object):
+class BboxDetector(object):
     def __init__(self):
         # create an instance of CVBridge, this will allow to convert ROS messages
         #  to OpenCV CVMat and vice versa
         self.bridge = CvBridge()
         # create a publisher to publish the modified image to
         self.segmented_img_pub = rospy.Publisher(
-            '/servicebot/camera_front/segmented_image', Image, queue_size=1)
+            '/servicebot/camera_front/guest_bbox_detection', Image, queue_size=1)
         # create a publisher to publish the height, width and area of the contourArea
         self.pub = rospy.Publisher(
         '/servicebot/bbox_distance', Contour, queue_size=1)
@@ -48,8 +48,9 @@ class ColorSegmentator(object):
             # ([5, 5, 50], [25, 25, 145])
             #head color
             # ([155,105, 75], [165, 115, 85])
-            #pant color
-            ([95,95, 95], [110, 110, 110])
+            #pant color- red
+            # ([95,95, 95], [110, 110, 110])
+            ([90, 0, 0], [115, 10, 10])
 
 
         ]
@@ -102,57 +103,59 @@ class ColorSegmentator(object):
 
         boundaries_shirt = [
             # keep only blue pixels
+            # ([15, 15, 50], [25, 25, 80])]
             ([5, 5, 50], [25, 25, 145])   ]
         # define a range of color to detect guest shirts
         boundaries_pants = [
-            #pants color
-            ([95,95, 95], [110, 110, 110]) ]
+            #pants color -red
+            ([90, 0, 0], [115, 10, 10])]
+            # ([95,95, 95], [110, 110, 110]) ]
 
         coordinates_pants = self.get_bbox_coordinates(boundaries_pants,cv_image)
         coordinates_shirts = self.get_bbox_coordinates(boundaries_shirt,cv_image)
-
         if (coordinates_pants and coordinates_shirts):
-            x_min = min(coordinates_shirts[0], coordinates_pants[0])
-            x_max = max(coordinates_shirts[1], coordinates_pants[1])
-            y_min = min(coordinates_shirts[2], coordinates_pants[2])
-            y_max = max(coordinates_shirts[3], coordinates_pants[3])
-            extLeft = (x_min, y_min)
-            extRight = (x_min, y_max)
-            extTop = (x_max, y_min)
-            extBot = (x_max, y_max)
+            if (coordinates_pants[3]>coordinates_shirts[3] and coordinates_shirts[2]<coordinates_pants[2]):
+                x_min = min(coordinates_shirts[0], coordinates_pants[0])
+                x_max = max(coordinates_shirts[1], coordinates_pants[1])
+                y_min = min(coordinates_shirts[2], coordinates_pants[2])
+                y_max = max(coordinates_shirts[3], coordinates_pants[3])
+                extLeft = (x_min, y_min)
+                extRight = (x_min, y_max)
+                extTop = (x_max, y_min)
+                extBot = (x_max, y_max)
 
-            cv2.circle(cv_image, extLeft, 8, (0, 0, 255), -1)
-            cv2.circle(cv_image, extRight, 8, (0, 255, 0), -1)
-            cv2.circle(cv_image, extTop, 8, (255, 0, 0), -1)
-            cv2.circle(cv_image, extBot, 8, (255, 255, 0), -1)
+                cv2.circle(cv_image, extLeft, 8, (0, 0, 255), -1)
+                cv2.circle(cv_image, extRight, 8, (0, 255, 0), -1)
+                cv2.circle(cv_image, extTop, 8, (255, 0, 0), -1)
+                cv2.circle(cv_image, extBot, 8, (255, 255, 0), -1)
 
-            # getting the height and width of the bounding box enclosing the contour
-            width = x_max - x_min
-            height = y_max - y_min
-            # print(x_min, x_max, y_min, y_max)
-            # print(width, height)
+                # getting the height and width of the bounding box enclosing the contour
+                width = x_max - x_min
+                height = y_max - y_min
+                # print(x_min, x_max, y_min, y_max)
+                # print(width, height)
 
-            ### calculating the distance
-            # height of the person
-            H = 1.5
-            # focal length of the camera
-            F = 550
-            # Pixel value of the height
-            P = height
-            # distance of the person from the camera
-            D = (F*H)/P
-            contour_msg = Contour()
-            contour_msg.distance = D
-            contour_msg.width = width
-            contour_msg.height = height
-            contour_msg.x_min = x_min
-            contour_msg.y_min = y_min
-            contour_msg.x_max = x_max
-            contour_msg.y_max = y_max
+                ### calculating the distance
+                # height of the person
+                H = 1.5
+                # focal length of the camera
+                F = 550
+                # Pixel value of the height
+                P = height
+                # distance of the person from the camera
+                D = (F*H)/P
+                contour_msg = Contour()
+                contour_msg.distance = D
+                contour_msg.width = width
+                contour_msg.height = height
+                contour_msg.x_min = x_min
+                contour_msg.y_min = y_min
+                contour_msg.x_max = x_max
+                contour_msg.y_max = y_max
 
-            # publish the contour details
-            if (contour_msg.distance):
-                self.pub.publish(contour_msg)
+                # publish the contour details
+                if (contour_msg.distance):
+                    self.pub.publish(contour_msg)
 
         try:
             # convert the resulting image to a ros Image message
@@ -164,11 +167,11 @@ class ColorSegmentator(object):
         self.segmented_img_pub.publish(image_with_msg)
 
 
-def blob_detector():
-    rospy.init_node('blob_detector')
-    node = ColorSegmentator()
+def get_bbox_distance():
+    rospy.init_node('bbox_detector')
+    node = BboxDetector()
     rospy.spin()
 
 
 if __name__ == '__main__':
-    blob_detector()
+    get_bbox_distance()

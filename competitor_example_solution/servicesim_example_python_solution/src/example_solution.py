@@ -47,13 +47,13 @@ class CompetitionState(Enum):
     Pickup = 1
     DropOff = 2
     ReturnToStart = 3
-
+    RePickUp = 4
 
 class ExampleNode(object):
     def __init__(self):
         self.robot_name = 'servicebot'
         self.guest_name = ''
-        self.action_timeout = 3
+        self.action_timeout = 6
         self.actors_in_range = []
         self.drift_flag = False
         rospy.init_node('example_solution')
@@ -99,6 +99,7 @@ class ExampleNode(object):
         self.distance = 0
         self.center_bbox = 0
         self.new_pickup_goal_set = False
+        self.new_pick_success = False
 
     def rfid_callback(self, msg):
         # this function will be called periodically with the list of RFID tags
@@ -184,7 +185,7 @@ class ExampleNode(object):
              cmd_vel_msg.linear.z = 0
              cmd_vel_msg.angular.x = 0
              cmd_vel_msg.angular.y = 0
-             cmd_vel_msg.angular.z = 0.3
+             cmd_vel_msg.angular.z = 0.5
              self.cmd_vel_pub.publish(cmd_vel_msg)
          cmd_vel_msg.angular.z = 0
          self.cmd_vel_pub.publish(cmd_vel_msg)
@@ -207,9 +208,9 @@ class ExampleNode(object):
                  pitch = euler[1]
                  yaw = euler[2]
                  if(self.distance):
-                     d = self.distance - 1.3 # 1.3 mts away from the person
-                     x_delta = trans[0] + d*math.cos(yaw)
-                     y_delta = trans[1] + d*math.sin(yaw)
+                     d = self.distance - 1.6 # 1.3 mts away from the person
+                     x_delta =  d*math.cos(yaw)
+                     y_delta =  d*math.sin(yaw)
              except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException, tf2_ros.TransformException):
                  continue
          new_pickup_goal_pose = Pose()
@@ -222,9 +223,12 @@ class ExampleNode(object):
          new_pickup_goal_pose.orientation.w = rot[3]
          print("sending new goal..")
          print new_pickup_goal_pose
-         goal = self.construct_goal_from_pose(new_pickup_goal_pose)
+         new_goal = MoveBaseGoal()
+         new_goal.target_pose.pose = new_pickup_goal_pose
+         new_goal.target_pose.header.frame_id = 'map'
+         new_goal.target_pose.header.stamp = rospy.Time.now()
          self.new_pickup_goal_set = True
-         return goal
+         return new_goal
 
     def get_new_pickup_distance_callback(self, msg):
         self.center_bbox = (msg.x_min + msg.x_max)/2
@@ -279,6 +283,7 @@ class ExampleNode(object):
                         rospy.loginfo('requesting follow')
                         # if the guest is in range, ask the guest to follow the robot
                         if self.request_follow():
+                            self.new_pick_success= True
                             # the guest is following the robot
                             # Switch to the DropOff state
                             state = CompetitionState.DropOff
@@ -290,7 +295,8 @@ class ExampleNode(object):
                     rospy.loginfo('action timed out in state: %s' % self.move_base.get_state())
 
             # when the guest is lost or drifted away
-            elif state == CompetitionState.DropOff and self.drift_flag == True and self.new_pickup_goal_set ==False:
+            # elif state == CompetitionState.DropOff and self.drift_flag == True and self.new_pickup_goal_set ==False and self.new_pick_success==False:
+            elif state == CompetitionState.RePickUp and self.drift_flag==True:
                 # Change the goals, pickup guest and then dropoff
                 rospy.loginfo('Guest Lost, locating guest...')
                 # Cancel the previous goals
@@ -304,11 +310,21 @@ class ExampleNode(object):
                 self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
                 # If the robot succeeded to reach the new pickup point
                 if self.move_base.get_state()==GoalStatus.SUCCEEDED:
-                    state = CompetitionState.Pickup
                     # Setting the drift_flag to false
                     self.drift_flag = False
+                    # if the robot succeeded to reach the pickup point
+                    if self.guest_name in self.actors_in_range:
+                        rospy.loginfo('requesting follow')
+                        # if the guest is in range, ask the guest to follow the robot
+                        if self.request_follow():
+                            # the guest is following the robot
+                            # switch state to DropOff state
+                            state = CompetitionState.DropOff
+                    else:
+                        rospy.logwarn('robot reached new pickup point but guest is not in range! ')
 
-            elif state == CompetitionState.DropOff and self.drift_flag == False:
+            # elif state == CompetitionState.DropOff and self.drift_flag == False:
+            elif state == CompetitionState.DropOff:
                 # Go to drop off point
                 rospy.loginfo('In DropOff state')
                 # Cancel previous navigation goals
@@ -321,6 +337,8 @@ class ExampleNode(object):
                 dropoff_goal = self.construct_goal_from_pose(
                     self.pose_from_room_name(drop_off_room))
                 self.move_base.send_goal(dropoff_goal)
+                if self.drift_flag == True:
+                    state = CompetitionState.RePickUp
                 self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
                 # If the robot succeeded to reach the dropoff point
                 if self.move_base.get_state() == GoalStatus.SUCCEEDED:
