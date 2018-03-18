@@ -74,8 +74,8 @@ class ColorSegmentator(object):
 
 
 def blob_detector():
-    node = ColorSegmentator()
     rospy.init_node('blob_detector')
+    node = ColorSegmentator()
     rospy.spin()
 
 
