@@ -124,6 +124,28 @@ install(TARGETS ${collision_actor_plugin_name}
 )
 
 #############################
+## Attach Model plugin ##
+#############################
+
+# Create the libAttachModelPlugin.so library.
+set(attach_model_plugin_name AttachModelPlugin)
+add_library(${attach_model_plugin_name} SHARED
+  src/AttachModelPlugin.cc
+)
+target_link_libraries(${attach_model_plugin_name}
+  ${GAZEBO_LIBRARIES}
+  ${roscpp_LIBRARIES}
+)
+add_dependencies(${attach_model_plugin_name}
+  ${PROJECT_NAME}_generate_messages_cpp
+)
+install(TARGETS ${attach_model_plugin_name}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+)
+
+#############################
 ###### Vicinity plugin ######
 #############################
 
