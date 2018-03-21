@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 # Gazebo
-find_package(gazebo 8.3.0 EXACT REQUIRED)
+find_package(gazebo 8.4.0 EXACT REQUIRED)
 
 add_message_files(
   FILES
