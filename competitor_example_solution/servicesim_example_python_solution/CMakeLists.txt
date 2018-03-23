@@ -2,28 +2,19 @@ cmake_minimum_required(VERSION 2.8.3)
 project(servicesim_example_python_solution)
 
 find_package(catkin REQUIRED COMPONENTS
-   roscpp
    rospy
-   message_generation
-   std_msgs)
+   message_generation)
 
 add_message_files(
-  FILES 
+  FILES
   Contour.msg
 )
 
-generate_messages(
- DEPENDENCIES
-   std_msgs
-)
+generate_messages()
 
 catkin_package(
   CATKIN_DEPENDS
-  message_runtime
-  std_msgs
-  gazebo_msgs
-  roscpp)
-
+  message_runtime)
 
 #############
 ## Install ##

@@ -26,8 +26,6 @@ from servicesim_example_python_solution.msg import Contour
 
 from sensor_msgs.msg import Image
 
-from std_msgs.msg import Float64
-
 
 class BboxDetector(object):
     def __init__(self):
