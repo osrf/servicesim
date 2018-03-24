@@ -40,7 +40,9 @@ from std_srvs.srv import Empty, EmptyRequest
 from servicesim_example_python_solution.msg import Contour
 
 import tf
+
 import tf2_ros
+
 
 class CompetitionState(Enum):
     BeginTask = 0
@@ -231,7 +233,7 @@ class ExampleNode(object):
          return new_goal
 
     def get_new_pickup_distance_callback(self, msg):
-        self.center_bbox = msg.bbox.center.x 
+        self.center_bbox = msg.bbox.center.x
         self.distance = msg.distance
 
     def example_solution(self):
@@ -294,11 +296,10 @@ class ExampleNode(object):
                 else:
                     rospy.loginfo('action timed out in state: %s' % self.move_base.get_state())
 
-            # when the guest is lost or drifted away
-            # elif state == CompetitionState.DropOff and self.drift_flag == True and self.new_pickup_goal_set ==False and self.new_pick_success==False:
-            elif state == CompetitionState.RePickUp and self.drift_flag==True:
+            elif state == CompetitionState.RePickUp:
+                # When the guest is lost or drifted away
                 # Change the goals, pickup guest and then dropoff
-                rospy.loginfo('Guest Lost, locating guest...')
+                rospy.loginfo('In RePickUp state')
                 # Cancel the previous goals
                 self.move_base.cancel_all_goals()
                 # Clears the obstacle maps
@@ -309,7 +310,7 @@ class ExampleNode(object):
                 self.move_base.send_goal(new_pickup_goal)
                 self.move_base.wait_for_result(rospy.Duration(self.action_timeout))
                 # If the robot succeeded to reach the new pickup point
-                if self.move_base.get_state()==GoalStatus.SUCCEEDED:
+                if self.move_base.get_state() == GoalStatus.SUCCEEDED:
                     # Setting the drift_flag to false
                     self.drift_flag = False
                     # if the robot succeeded to reach the pickup point
@@ -323,7 +324,6 @@ class ExampleNode(object):
                     else:
                         rospy.logwarn('robot reached new pickup point but guest is not in range! ')
 
-            # elif state == CompetitionState.DropOff and self.drift_flag == False:
             elif state == CompetitionState.DropOff:
                 # Go to drop off point
                 rospy.loginfo('In DropOff state')
