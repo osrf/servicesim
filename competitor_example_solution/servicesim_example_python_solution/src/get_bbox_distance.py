@@ -131,6 +131,10 @@ class BboxDetector(object):
                 width = x_max - x_min
                 height = y_max - y_min
 
+                # getting the center of the bounding box enclosing the contour
+                x_center = int((x_max + x_min)/2)
+                y_center = int((y_max + y_min)/2)
+
                 ### Calculating the distance of the person from the robot's camera
                 # height of the person/guest
                 H = 1.5
@@ -144,14 +148,12 @@ class BboxDetector(object):
 
                 # populating the contour msg with guest's distance and bbox coordinates
                 contour_msg.distance = D
-                contour_msg.width = width
-                contour_msg.height = height
-                contour_msg.x_min = x_min
-                contour_msg.y_min = y_min
-                contour_msg.x_max = x_max
-                contour_msg.y_max = y_max
+                contour_msg.bbox.center.x = x_center
+                contour_msg.bbox.center.y = y_center
+                contour_msg.bbox.size_x = width
+                contour_msg.bbox.size_y = height
 
-                # publish the contour details
+                # publish the contour details 
                 if (contour_msg.distance):
                     self.pub.publish(contour_msg)
 

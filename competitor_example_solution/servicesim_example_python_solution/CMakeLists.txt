@@ -3,6 +3,7 @@ project(servicesim_example_python_solution)
 
 find_package(catkin REQUIRED COMPONENTS
    rospy
+   vision_msgs
    message_generation)
 
 add_message_files(
@@ -10,7 +11,10 @@ add_message_files(
   Contour.msg
 )
 
-generate_messages()
+generate_messages(
+  DEPENDENCIES
+  vision_msgs
+)
 
 catkin_package(
   CATKIN_DEPENDS

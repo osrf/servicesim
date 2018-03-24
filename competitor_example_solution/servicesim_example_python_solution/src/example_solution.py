@@ -16,6 +16,7 @@
 
 import copy
 import random
+import math
 from enum import Enum
 
 import actionlib
@@ -40,7 +41,6 @@ from servicesim_example_python_solution.msg import Contour
 
 import tf
 import tf2_ros
-import math
 
 class CompetitionState(Enum):
     BeginTask = 0
@@ -231,7 +231,7 @@ class ExampleNode(object):
          return new_goal
 
     def get_new_pickup_distance_callback(self, msg):
-        self.center_bbox = (msg.x_min + msg.x_max)/2
+        self.center_bbox = msg.bbox.center.x 
         self.distance = msg.distance
 
     def example_solution(self):

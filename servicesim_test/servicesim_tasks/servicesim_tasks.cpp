@@ -55,7 +55,7 @@ namespace servicesim_test
       /// \brief Parameters for the new task
       std::string pick_up_location = "FrontElevator" ;
       std::string drop_off_location = "PrivateCubicle_32_1";
-      std::string guest_name = "human_86138";
+      std::string guest_name = "human_95424";
       std::string robot_name = "servicebot";
 
       /// \brief Robot Start pose
