@@ -293,7 +293,7 @@ class ExampleNode(object):
                 else:
                     rospy.loginfo('Action failed in state: %s' % self.move_base.get_state())
 
-            # when the guest is lost or drifted away
+            # When the guest is lost or drifted away
             elif self.state == CompetitionState.RePickup:
                 # Change the goals, pickup guest and then dropoff
                 rospy.loginfo('-- State: RePickup')
