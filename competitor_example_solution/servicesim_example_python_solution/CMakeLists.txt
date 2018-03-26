@@ -2,9 +2,8 @@ cmake_minimum_required(VERSION 2.8.3)
 project(servicesim_example_python_solution)
 
 find_package(catkin REQUIRED COMPONENTS
-   rospy
-   vision_msgs
-   message_generation)
+   message_generation
+   vision_msgs)
 
 add_message_files(
   FILES

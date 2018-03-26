@@ -15,21 +15,19 @@
 # limitations under the License.
 
 import copy
-import random
 import math
+import random
 from enum import Enum
 
 import actionlib
 
 from actionlib_msgs.msg import GoalStatus
 
-from geometry_msgs.msg import Point, Pose, PoseWithCovarianceStamped, Quaternion , Twist
+from geometry_msgs.msg import Point, Pose, PoseWithCovarianceStamped, Quaternion, Twist
 
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 import rospy
-
-from sensor_msgs.msg import Image
 
 from servicesim_competition.msg import ActorNames
 from servicesim_competition.srv import DropOffGuest, DropOffGuestRequest, NewTask
@@ -42,12 +40,14 @@ from servicesim_example_python_solution.msg import Contour
 import tf
 import tf2_ros
 
+
 class CompetitionState(Enum):
     BeginTask = 0
     Pickup = 1
     DropOff = 2
     ReturnToStart = 3
     RePickup = 4
+
 
 class ExampleNode(object):
     def __init__(self):
@@ -56,6 +56,10 @@ class ExampleNode(object):
         self.action_timeout = 6
         self.actors_in_range = []
         self.state = CompetitionState.BeginTask
+        self.distance = 0
+        self.center_bbox = 0
+        self.new_pickup_goal_set = False
+
         rospy.init_node('example_solution')
         rospy.loginfo('node created')
         # create service proxies
@@ -76,6 +80,7 @@ class ExampleNode(object):
         rospy.wait_for_service('/servicebot/move_base/clear_costmaps')
         self.clear_costmaps_srv = rospy.ServiceProxy(
             '/servicebot/move_base/clear_costmaps', Empty)
+
         # create subscribers
         rospy.loginfo('create subs')
         rospy.Subscriber('/servicebot/rfid', ActorNames, self.rfid_callback)
@@ -87,17 +92,12 @@ class ExampleNode(object):
         # provided by the competition
         self.initial_pose_pub = rospy.Publisher(
             '/servicebot/initialpose', PoseWithCovarianceStamped, latch=True)
+        # creating a publisher to publish cmd_vel to the robot
+        self.cmd_vel_pub = rospy.Publisher('/servicebot/cmd_vel', Twist, queue_size=1)
         # create action client
         self.move_base = actionlib.SimpleActionClient('/servicebot/move_base', MoveBaseAction)
         self.move_base.wait_for_server(rospy.Duration(self.action_timeout))
         rospy.loginfo('done waiting for move base action server')
-
-        # creating a publisher to publish cmd_vel to the robot
-        self.cmd_vel_pub = rospy.Publisher(
-            '/servicebot/cmd_vel', Twist , queue_size = 1 )
-        self.distance = 0
-        self.center_bbox = 0
-        self.new_pickup_goal_set = False
 
     # This function will be called periodically with the list of RFID tags
     # detected around the robot
@@ -108,7 +108,7 @@ class ExampleNode(object):
             rospy.loginfo(msg.actor_names)
 
         # Cancel navigation in case of drift during drop-off
-        if self.state == CompetitionState.DropOff and not self.guest_name in msg.actor_names:
+        if self.state == CompetitionState.DropOff and self.guest_name not in msg.actor_names:
             self.move_base.cancel_all_goals()
 
         self.actors_in_range = msg.actor_names
@@ -176,59 +176,49 @@ class ExampleNode(object):
     # Requested for new pickup goal
     # COMPETITOR: replace with custom logic
     def construct_new_pickup_goal(self):
-         # Locate the guest by rotating until the guest is in the center of the
-         # front camera
-         rospy.loginfo('Rotating to find guest...')
-         cmd_vel_msg = Twist()
-         while not (310 < self.center_bbox < 330):
-             cmd_vel_msg.linear.x = 0
-             cmd_vel_msg.linear.y = 0
-             cmd_vel_msg.linear.z = 0
-             cmd_vel_msg.angular.x = 0
-             cmd_vel_msg.angular.y = 0
-             cmd_vel_msg.angular.z = 0.5
-             self.cmd_vel_pub.publish(cmd_vel_msg)
-         rospy.loginfo('Guest located')
-         cmd_vel_msg.angular.z = 0
-         self.cmd_vel_pub.publish(cmd_vel_msg)
+        # Locate the guest by rotating until the guest is in the center of the
+        # front camera
+        rospy.loginfo('Rotating to find guest...')
+        cmd_vel_msg = Twist()
+        while not 310 < self.center_bbox < 330:
+            # turn around until the X_coordinate of center of bbox  \
+            # lies within a range of the X_coordinate of center of the image
+            cmd_vel_msg.angular.z = 0.5
+            self.cmd_vel_pub.publish(cmd_vel_msg)
+        rospy.loginfo('Guest located')
+        cmd_vel_msg.angular.z = 0
+        self.cmd_vel_pub.publish(cmd_vel_msg)
 
-         rospy.loginfo("Constructing new goal")
-         tflistener = tf.TransformListener()
-         r = rospy.Rate(10)
-         count = 0
-         while count< 100:
-             count = count +1
-             now = rospy.Time(0)
-             try:
-                 tflistener.waitForTransform('map','base_footprint', now, rospy.Duration(5))
-                 (trans,rot) = tflistener.lookupTransform('map', 'base_footprint', now)
-                 quaternion = (rot[0], rot[1], rot[2], rot[3])
-                 euler = tf.transformations.euler_from_quaternion(quaternion)
-                 roll = euler[0]
-                 pitch = euler[1]
-                 yaw = euler[2]
-                 if(self.distance):
-                     d = self.distance - 1.6 # 1.3 mts away from the person
-                     x_delta =  d*math.cos(yaw)
-                     y_delta =  d*math.sin(yaw)
-             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException, tf2_ros.TransformException):
-                 continue
-         new_pickup_goal_pose = Pose()
-         new_pickup_goal_pose.position.x = trans[0] + x_delta
-         new_pickup_goal_pose.position.y = trans[1] + y_delta
-         new_pickup_goal_pose.position.z = 0
-         new_pickup_goal_pose.orientation.x = rot[0]
-         new_pickup_goal_pose.orientation.y = rot[1]
-         new_pickup_goal_pose.orientation.z = rot[2]
-         new_pickup_goal_pose.orientation.w = rot[3]
-         rospy.loginfo("Sending new goal:")
-         rospy.loginfo(new_pickup_goal_pose)
-         new_goal = MoveBaseGoal()
-         new_goal.target_pose.pose = new_pickup_goal_pose
-         new_goal.target_pose.header.frame_id = 'map'
-         new_goal.target_pose.header.stamp = rospy.Time.now()
-         self.new_pickup_goal_set = True
-         return new_goal
+        rospy.loginfo("Constructing new goal")
+        tflistener = tf.TransformListener()
+        r = rospy.Rate(10)
+        for i in range(100):
+            now = rospy.Time(0)
+            try:
+                tflistener.waitForTransform('map', 'base_footprint', now, rospy.Duration(5))
+                (trans, rot) = tflistener.lookupTransform('map', 'base_footprint', now)
+                quaternion = (rot[0], rot[1], rot[2], rot[3])
+                euler = tf.transformations.euler_from_quaternion(quaternion)
+                roll = euler[0]
+                pitch = euler[1]
+                yaw = euler[2]
+                if(self.distance):
+                    d = self.distance - 1.6   # 1.6 mts away from the person
+                    x_delta = d*math.cos(yaw)
+                    y_delta = d*math.sin(yaw)
+            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException, tf2_ros.TransformException):
+                continue
+        new_pickup_goal_pose = Pose()
+        new_pickup_goal_pose.position = Point(trans[0] + x_delta, trans[1] + y_delta, 0)
+        new_pickup_goal_pose.orientation = Quaternion(rot[0], rot[1], rot[2], rot[3])
+        rospy.loginfo("Sending new goal:")
+        rospy.loginfo(new_pickup_goal_pose)
+        new_goal = MoveBaseGoal()
+        new_goal.target_pose.pose = new_pickup_goal_pose
+        new_goal.target_pose.header.frame_id = 'map'
+        new_goal.target_pose.header.stamp = rospy.Time.now()
+        self.new_pickup_goal_set = True
+        return new_goal
 
     def get_new_pickup_distance_callback(self, msg):
         self.center_bbox = msg.bbox.center.x
@@ -280,9 +270,9 @@ class ExampleNode(object):
                         rospy.loginfo('Requesting follow')
                         # if the guest is in range, ask the guest to follow the robot
                         if self.request_follow():
-                          # The guest is following the robot
-                          # Switch to the DropOff state
-                          self.state = CompetitionState.DropOff
+                            # The guest is following the robot
+                            # Switch to the DropOff state
+                            self.state = CompetitionState.DropOff
                     else:
                         # pickup point reached but the guest is not in range
                         # COMPETITOR: add custom room exploration logic here
@@ -309,9 +299,9 @@ class ExampleNode(object):
                         rospy.loginfo('Requesting follow')
                         # if the guest is in range, ask the guest to follow the robot
                         if self.request_follow():
-                          # The guest is following the robot
-                          # Switch to the DropOff state
-                          self.state = CompetitionState.DropOff
+                            # The guest is following the robot
+                            # Switch to the DropOff state
+                            self.state = CompetitionState.DropOff
                     else:
                         rospy.logwarn('robot reached new pickup point but guest is not in range! ')
                 else:
@@ -321,7 +311,7 @@ class ExampleNode(object):
                 # Go to drop off point
                 rospy.loginfo('-- State: DropOff')
                 # If guest drifted
-                if not self.guest_name in self.actors_in_range:
+                if self.guest_name not in self.actors_in_range:
                     rospy.loginfo('Guest out of range')
                     self.state = CompetitionState.RePickup
                     continue
@@ -364,6 +354,7 @@ class ExampleNode(object):
                     rospy.loginfo('Action failed in state: %s' % self.move_base.get_state())
 
             rate.sleep()
+
 
 if __name__ == '__main__':
     node = ExampleNode()
