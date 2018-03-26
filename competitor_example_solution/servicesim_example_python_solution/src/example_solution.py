@@ -182,8 +182,9 @@ class ExampleNode(object):
     # Requested for new pickup goal
     # COMPETITOR: replace with custom logic
     def construct_new_pickup_goal(self):
-         # Locate the guest by turning and looking around
-         rospy.loginfo('Doing a 360 turn to look around...')
+         # Locate the guest by rotating until the guest is in the center of the
+         # front camera
+         rospy.loginfo('Rotating to find guest...')
          cmd_vel_msg = Twist()
          while not (310 < self.center_bbox < 330):
              cmd_vel_msg.linear.x = 0
@@ -193,8 +194,7 @@ class ExampleNode(object):
              cmd_vel_msg.angular.y = 0
              cmd_vel_msg.angular.z = 0.5
              self.cmd_vel_pub.publish(cmd_vel_msg)
-         rospy.loginfo('Finished looking around')
-         self.center_bbox = 0
+         rospy.loginfo('Guest located')
          cmd_vel_msg.angular.z = 0
          self.cmd_vel_pub.publish(cmd_vel_msg)
 

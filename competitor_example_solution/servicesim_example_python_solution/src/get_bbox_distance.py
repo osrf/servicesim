@@ -37,13 +37,13 @@ class BboxDetector(object):
             '/servicebot/camera_front/guest_bbox_detection', Image, queue_size=1)
         # create a publisher to publish the height, width and area of the contourArea
         self.pub = rospy.Publisher(
-        '/servicebot/bbox_distance', Contour, queue_size=1)
+            '/servicebot/bbox_distance', Contour, queue_size=1)
         # create a subscriber to receive the robots front camera image
         self.image_sub = rospy.Subscriber(
             '/servicebot/camera_front/image_raw', Image, self.image_callback)
 
     # Returns the bounding box coordinates of the detected contour area,
-    #  given the threshold of the color of contour to be detected
+    # given the threshold of the color of contour to be detected
     def get_bbox_coordinates(self, boundaries, cv_image):
         for (lower, upper) in boundaries:
             # create NumPy arrays from the boundaries
@@ -153,7 +153,7 @@ class BboxDetector(object):
                 contour_msg.bbox.size_x = width
                 contour_msg.bbox.size_y = height
 
-                # publish the contour details 
+                # publish the contour details
                 if (contour_msg.distance):
                     self.pub.publish(contour_msg)
 
