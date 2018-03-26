@@ -109,9 +109,7 @@ class ExampleNode(object):
 
         # Cancel navigation in case of drift during drop-off
         if self.state == CompetitionState.DropOff and not self.guest_name in msg.actor_names:
-            rospy.loginfo('Guest out of range')
             self.move_base.cancel_all_goals()
-            self.state = CompetitionState.RePickup
 
         self.actors_in_range = msg.actor_names
         return True
@@ -131,10 +129,6 @@ class ExampleNode(object):
         req.guest_name = self.guest_name
         resp = self.pickup_guest_srv(req)
         rospy.loginfo(resp)
-        if resp.success:
-            # The guest is following the robot
-            # Switch to the DropOff state
-            self.state = CompetitionState.DropOff
         return [resp.success]
 
     # Calls the service to request a specific guest to stop followingthe robot
@@ -285,7 +279,10 @@ class ExampleNode(object):
                     if self.guest_name in self.actors_in_range:
                         rospy.loginfo('Requesting follow')
                         # if the guest is in range, ask the guest to follow the robot
-                        self.request_follow()
+                        if self.request_follow():
+                          # The guest is following the robot
+                          # Switch to the DropOff state
+                          self.state = CompetitionState.DropOff
                     else:
                         # pickup point reached but the guest is not in range
                         # COMPETITOR: add custom room exploration logic here
@@ -311,7 +308,10 @@ class ExampleNode(object):
                     if self.guest_name in self.actors_in_range:
                         rospy.loginfo('Requesting follow')
                         # if the guest is in range, ask the guest to follow the robot
-                        self.request_follow()
+                        if self.request_follow():
+                          # The guest is following the robot
+                          # Switch to the DropOff state
+                          self.state = CompetitionState.DropOff
                     else:
                         rospy.logwarn('robot reached new pickup point but guest is not in range! ')
                 else:
@@ -320,6 +320,11 @@ class ExampleNode(object):
             elif self.state == CompetitionState.DropOff:
                 # Go to drop off point
                 rospy.loginfo('-- State: DropOff')
+                # If guest drifted
+                if not self.guest_name in self.actors_in_range:
+                    rospy.loginfo('Guest out of range')
+                    self.state = CompetitionState.RePickup
+                    continue
                 # Cancel previous navigation goals
                 self.move_base.cancel_all_goals()
                 # Clears the obstacle maps
