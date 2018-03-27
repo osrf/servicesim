@@ -412,6 +412,11 @@
   ###############################################
 
   $robot_name = 'servicebot'
+  if config and config.key?('robot')
+    if config['robot'].key?('name')
+      $robot_name = config['robot']['name']
+    end
+  end
 %>
 <?xml version="1.0" ?>
 <!--
@@ -1211,12 +1216,9 @@
 
         <namespace>servicesim</namespace>
 
-        <!-- FIXME: currently not avoiding obstacles -->
         <ignore_obstacle>walls</ignore_obstacle>
         <ignore_obstacle>floor</ignore_obstacle>
-
-        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
-        <ignore_obstacle>servicebot</ignore_obstacle>
+        <ignore_obstacle><%= $robot_name %></ignore_obstacle>
 
         <% for time in drift_times %>
           <drift_time><%= time.to_s %></drift_time>

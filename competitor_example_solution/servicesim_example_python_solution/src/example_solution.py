@@ -320,7 +320,7 @@ class ExampleNode(object):
                 # Go to drop off point
                 rospy.loginfo('-- State: DropOff')
                 # If guest drifted, or when the rfid is not updated because there is no one in range for greater than 2secs
-                if self.guest_name not in self.actors_in_range or (rospy.get_time()-self.last_rfid_update)>2:
+                if self.guest_name not in self.actors_in_range or (rospy.get_time()-self.last_rfid_update) > 2:
                     rospy.loginfo('Guest out of range')
                     self.state = CompetitionState.RePickup
                     continue
