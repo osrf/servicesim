@@ -59,6 +59,9 @@ class ExampleNode(object):
         self.distance = 0
         self.center_bbox = 0
         self.new_pickup_goal_set = False
+        self.last_rfid_update = None
+        self.thresh_distance = 1.6    #  the distance from guest where the new pickup_goal is generated.
+        self.transform_flag = False
 
         rospy.init_node('example_solution')
         rospy.loginfo('node created')
@@ -102,16 +105,17 @@ class ExampleNode(object):
     # This function will be called periodically with the list of RFID tags
     # detected around the robot
     def rfid_callback(self, msg):
-
         # Print when there is a change
         if msg.actor_names != self.actors_in_range:
             rospy.loginfo(msg.actor_names)
 
+        self.actors_in_range = msg.actor_names
+        self.last_rfid_update = rospy.get_time()
         # Cancel navigation in case of drift during drop-off
-        if self.state == CompetitionState.DropOff and self.guest_name not in msg.actor_names:
+        if self.state == CompetitionState.DropOff and self.guest_name not in self.actors_in_range:
             self.move_base.cancel_all_goals()
 
-        self.actors_in_range = msg.actor_names
+
         return True
 
     # Calls the service to start the competition and receive a new task
@@ -197,28 +201,33 @@ class ExampleNode(object):
             try:
                 tflistener.waitForTransform('map', 'base_footprint', now, rospy.Duration(5))
                 (trans, rot) = tflistener.lookupTransform('map', 'base_footprint', now)
-                quaternion = (rot[0], rot[1], rot[2], rot[3])
-                euler = tf.transformations.euler_from_quaternion(quaternion)
-                roll = euler[0]
-                pitch = euler[1]
-                yaw = euler[2]
-                if(self.distance):
-                    d = self.distance - 1.6   # 1.6 mts away from the person
-                    x_delta = d*math.cos(yaw)
-                    y_delta = d*math.sin(yaw)
+                self.transform_flag = True
+                break
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException, tf2_ros.TransformException):
                 continue
-        new_pickup_goal_pose = Pose()
-        new_pickup_goal_pose.position = Point(trans[0] + x_delta, trans[1] + y_delta, 0)
-        new_pickup_goal_pose.orientation = Quaternion(rot[0], rot[1], rot[2], rot[3])
-        rospy.loginfo("Sending new goal:")
-        rospy.loginfo(new_pickup_goal_pose)
-        new_goal = MoveBaseGoal()
-        new_goal.target_pose.pose = new_pickup_goal_pose
-        new_goal.target_pose.header.frame_id = 'map'
-        new_goal.target_pose.header.stamp = rospy.Time.now()
-        self.new_pickup_goal_set = True
-        return new_goal
+        # if the transform if found
+        if self.transform_flag:
+            quaternion = (rot[0], rot[1], rot[2], rot[3])
+            euler = tf.transformations.euler_from_quaternion(quaternion)
+            yaw = euler[2]
+            if(self.distance):
+                d = self.distance - self.thresh_distance   # thresh_distance away from the guest
+                x_delta = d*math.cos(yaw)
+                y_delta = d*math.sin(yaw)
+            new_pickup_goal_pose = Pose()
+            new_pickup_goal_pose.position = Point(trans[0] + x_delta, trans[1] + y_delta, 0)
+            new_pickup_goal_pose.orientation = Quaternion(rot[0], rot[1], rot[2], rot[3])
+            rospy.loginfo("Sending new goal:")
+            rospy.loginfo(new_pickup_goal_pose)
+            new_goal = MoveBaseGoal()
+            new_goal.target_pose.pose = new_pickup_goal_pose
+            new_goal.target_pose.header.frame_id = 'map'
+            new_goal.target_pose.header.stamp = rospy.Time.now()
+            self.new_pickup_goal_set = True
+            self.transform_flag = False
+            return new_goal
+        else:
+            rospy.loginfo(" Robot transform to map not found")
 
     def get_new_pickup_distance_callback(self, msg):
         self.center_bbox = msg.bbox.center.x
@@ -310,8 +319,8 @@ class ExampleNode(object):
             elif self.state == CompetitionState.DropOff:
                 # Go to drop off point
                 rospy.loginfo('-- State: DropOff')
-                # If guest drifted
-                if self.guest_name not in self.actors_in_range:
+                # If guest drifted, or when the rfid is not updated because there is no one in range for greater than 2secs
+                if self.guest_name not in self.actors_in_range or (rospy.get_time()-self.last_rfid_update)>2:
                     rospy.loginfo('Guest out of range')
                     self.state = CompetitionState.RePickup
                     continue
