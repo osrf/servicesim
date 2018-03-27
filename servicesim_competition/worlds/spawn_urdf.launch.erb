@@ -3,6 +3,7 @@
   #
   # Requires:
   # $start_location {} Contains information about start location
+  # $robot_name (string)  Name of robot
 %>
 <!--
   Generated from spawn_urdf.launch.erb
@@ -11,7 +12,7 @@
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="
     -urdf
     -param robot_description
-    -model servicebot
+    -model <%= $robot_name %>
     -x <%= $start_location[:pivot][0] %>
     -y <%= $start_location[:pivot][1] %>
     -z <%= $start_location[:pivot][2] %>
