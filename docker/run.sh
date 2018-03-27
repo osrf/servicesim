@@ -6,7 +6,7 @@
 #   nvidia-docker
 #   an X server
 
-until sudo nvidia-docker ps
+until nvidia-docker ps
 do
     echo "Waiting for docker server"
     sleep 1
@@ -28,7 +28,7 @@ then
     chmod a+r $XAUTH
 fi
 
-sudo nvidia-docker run -it \
+nvidia-docker run -it \
   -e DISPLAY \
   -e QT_X11_NO_MITSHM=1 \
   -e XAUTHORITY=$XAUTH \

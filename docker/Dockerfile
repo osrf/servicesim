@@ -5,7 +5,6 @@ RUN apt-get update \
  && apt-get install -y \
     wget \
     lsb-release \
-    sudo \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -17,16 +16,12 @@ RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu `lsb_release -cs` 
     gazebo8 \
     libgazebo8-dev \
     ros-kinetic-gazebo8-ros-pkgs \
-    ros-kinetic-fake-localization \
     ros-kinetic-gazebo8-ros-control \
+    ros-kinetic-servicesim \
+    ros-kinetic-servicesim-example-python-solution \
     mesa-utils \
+    vim \
     terminator \
-    nano \
-    ros-kinetic-teleop-twist-keyboard \
-    ros-kinetic-joint-state-controller \
-    ros-kinetic-effort-controllers \
-    ros-kinetic-servicesim* \
-    ros-kinetic-servicebot* \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
