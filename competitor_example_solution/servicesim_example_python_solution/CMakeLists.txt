@@ -17,7 +17,8 @@ generate_messages(
 
 catkin_package(
   CATKIN_DEPENDS
-  message_runtime)
+  message_runtime
+  vision_msgs)
 
 #############
 ## Install ##

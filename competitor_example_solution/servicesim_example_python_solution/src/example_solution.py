@@ -228,6 +228,7 @@ class ExampleNode(object):
             return new_goal
         else:
             rospy.loginfo(" Robot transform to map not found")
+            return None
 
     def get_new_pickup_distance_callback(self, msg):
         self.center_bbox = msg.bbox.center.x
