@@ -6,7 +6,8 @@ RUN apt-get update \
     wget \
     lsb-release \
     sudo \
- && apt-get clean
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 #Install gazebo8 latest version
 RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list \
@@ -26,7 +27,8 @@ RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu `lsb_release -cs` 
     ros-kinetic-effort-controllers \
     ros-kinetic-servicesim* \
     ros-kinetic-servicebot* \
- && apt-get clean
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
  LABEL com.nvidia.volumes.needed="nvidia_driver"
  ENV PATH /usr/local/nvidia/bin:${PATH}
