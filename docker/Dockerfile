@@ -3,8 +3,10 @@ FROM osrf/ros:kinetic-desktop
 
 RUN apt-get update \
  && apt-get install -y \
-    wget \
     lsb-release \
+    terminator \
+    vim \
+    wget \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -19,9 +21,6 @@ RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu `lsb_release -cs` 
     ros-kinetic-gazebo8-ros-control \
     ros-kinetic-servicesim \
     ros-kinetic-servicesim-example-python-solution \
-    mesa-utils \
-    vim \
-    terminator \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -29,5 +28,8 @@ RUN echo "deb http://packages.osrfoundation.org/gazebo/ubuntu `lsb_release -cs` 
  ENV PATH /usr/local/nvidia/bin:${PATH}
  ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
 
+ # setup entrypoint
+ COPY ./ros_entrypoint.sh /
 
- CMD ["/bin/bash", "-c", "source /opt/ros/kinetic/setup.bash && bash"]
+ ENTRYPOINT ["/ros_entrypoint.sh"]
+ CMD ["bash"]
