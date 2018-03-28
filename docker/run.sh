@@ -37,6 +37,5 @@ nvidia-docker run -it \
   -v "/etc/localtime:/etc/localtime:ro" \
   -v "/var/run/spnav.sock:/var/run/spnav.sock" \
   -v "/dev/input:/dev/input" \
-  --privileged \
   --rm=true \
   osrf/servicesim
