@@ -4,7 +4,6 @@ FROM osrf/ros:kinetic-desktop
 RUN apt-get update \
     && apt-get install -y \
     lsb-release \
-    terminator \
     vim \
     wget \
     && apt-get clean \
