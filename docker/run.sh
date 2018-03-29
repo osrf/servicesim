@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-# Runs a docker container with the image created by build.bash
+# Runs a docker container with the image created by build.sh
 # Requires
 #   docker
 #   nvidia-docker
