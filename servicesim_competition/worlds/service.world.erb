@@ -260,7 +260,7 @@
 
   ###############################################
   #                                             #
-  #                NON-GUEST HUMANS             #
+  #                    ACTORS                   #
   #                                             #
   ###############################################
 
@@ -275,6 +275,12 @@
     "SKIN_man_red_shirt.dae"
   ]
 
+  # Trajectory animation files under model://actor/meshes
+  animations_trajectory =
+  [
+    "ANIMATION_walking.dae",
+    "ANIMATION_running.dae"
+  ]
   # Idling animation files under model://actor/meshes
   animations_idle_standing =
   [
@@ -286,13 +292,6 @@
   animations_idle_sitting =
   [
     "ANIMATION_sitting.dae",
-  ]
-
-  # Trajectory animation files under model://actor/meshes
-  animations_trajectory =
-  [
-    "ANIMATION_walking.dae",
-    "ANIMATION_running.dae"
   ]
 
   # Trajectories
@@ -312,53 +311,19 @@
     "trajectory_middle.erb"
   ]
 
-  # List of idle actors to be inserted
-  # Using static humans instead of idle actors for performance
-  actors_idle =
-  [
-    # Example randomizing skin and animation
-    # {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
-    # Example using skin and animation from config
-    # {:config_file => 'idle_near_fridge.erb'},
-    # {:config_file => 'idle_sitting_couch.erb'},
-    # {:config_file => 'idle_back.erb'}
-  ]
-
-  # List of trajectory actors to be inserted
-  actors_trajectory = []
-  $traj_start_poses = []
-
-  # Total number of trajectory actors
-  traj_actor_count = 10
-  if config and config.key?('humans')
-
-    if config['humans'].key?('walking_count')
-      traj_actor_count = config['humans']['walking_count']
-    end
-  end
-
-  for i in (1..traj_actor_count)
-
-    actors_trajectory.push(
-    {
-      :skin => skins.sample,
-      :velocity => rand(0.9..1.2),
-      :config_file => trajectories.sample,
-      :offset => rand(0..20)
-    })
-  end
-
   ###############################################
   #                                             #
   #                   GUEST                     #
   #                                             #
   ###############################################
 
+
   if config and config.key?('guest') and config['guest'].key?('skin')
     guest_skin = config['guest']['skin']
   else
     guest_skin = skins.sample
   end
+  skins.delete(guest_skin)
 
   $guest_name = $human_name + '_' + rand(10000..99999).to_s()
   guest_anim = animations_trajectory[0]
@@ -399,11 +364,59 @@
 
   ###############################################
   #                                             #
+  #                NON-GUEST HUMANS             #
+  #                                             #
+  ###############################################
+
+
+  # List of idle actors to be inserted
+  # Using static humans instead of idle actors for performance
+  actors_idle =
+  [
+    # Example randomizing skin and animation
+    # {:skin => skins.sample, :anim => animations_idle_standing.sample, :config_file => 'idle_near_entrance.erb'},
+    # Example using skin and animation from config
+    # {:config_file => 'idle_near_fridge.erb'},
+    # {:config_file => 'idle_sitting_couch.erb'},
+    # {:config_file => 'idle_back.erb'}
+  ]
+
+  # List of trajectory actors to be inserted
+  actors_trajectory = []
+  $traj_start_poses = []
+
+  # Total number of trajectory actors
+  traj_actor_count = 10
+  if config and config.key?('humans')
+
+    if config['humans'].key?('walking_count')
+      traj_actor_count = config['humans']['walking_count']
+    end
+  end
+
+  for i in (1..traj_actor_count)
+
+    actors_trajectory.push(
+    {
+      :skin => skins.sample,
+      :velocity => rand(0.9..1.2),
+      :config_file => trajectories.sample,
+      :offset => rand(0..20)
+    })
+  end
+
+  ###############################################
+  #                                             #
   #                   ROBOT                     #
   #                                             #
   ###############################################
 
   $robot_name = 'servicebot'
+  if config and config.key?('robot')
+    if config['robot'].key?('name')
+      $robot_name = config['robot']['name']
+    end
+  end
 %>
 <?xml version="1.0" ?>
 <!--
@@ -1203,12 +1216,9 @@
 
         <namespace>servicesim</namespace>
 
-        <!-- FIXME: currently not avoiding obstacles -->
         <ignore_obstacle>walls</ignore_obstacle>
         <ignore_obstacle>floor</ignore_obstacle>
-
-        <!-- FIXME: servicebot's bounding box is huge and always colliding -->
-        <ignore_obstacle>servicebot</ignore_obstacle>
+        <ignore_obstacle><%= $robot_name %></ignore_obstacle>
 
         <% for time in drift_times %>
           <drift_time><%= time.to_s %></drift_time>
