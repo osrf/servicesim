@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   servicebot_description
 )
 
-find_package(gazebo 8.4.0 EXACT REQUIRED)
+find_package(gazebo 8 REQUIRED)
 
 catkin_package(
 )
