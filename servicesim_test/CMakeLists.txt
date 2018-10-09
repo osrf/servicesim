@@ -9,7 +9,10 @@ find_package(catkin REQUIRED COMPONENTS
   servicebot_description
 )
 
-find_package(gazebo 8 REQUIRED)
+find_package(gazebo 8 QUIET)
+if(NOT GAZEBO_FOUND)
+  find_package(gazebo 9 REQUIRED)
+endif()
 
 catkin_package(
 )
