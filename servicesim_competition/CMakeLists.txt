@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 # Gazebo
 find_package(gazebo 8 QUIET)
-if(NOT GAZEBO_FOUND)
+if(NOT gazebo_FOUND)
   find_package(gazebo 9 REQUIRED)
 endif()
 
